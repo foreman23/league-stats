@@ -267,9 +267,20 @@ const SummonerProfile = () => {
           <Typography>Last Updated: {timeLastUpdated}</Typography>
         </Grid>
 
-        <Grid xs={12} display={'flex'} justifyContent={'center'}>
-          <Typography>Match 1: {matchData[0].info.gameName}</Typography>
-        </Grid>
+        <Box justifyContent={'center'} width={'25vw'} margin={'auto'} backgroundColor={'#d2d2d2d2'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'10px'}>
+          <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} >
+            <Typography style={{ textDecoration: 'underline', fontWeight: 'bold' }}>{matchData[0].info.gameName}</Typography>
+            <Typography>{matchData[0].info.queueId === 420 ? 'Ranked' : 'Normal'}</Typography>
+          </Grid>
+          <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
+            {matchData[0].info.participants.map(player => (
+              <Grid display={'flex'}>
+                <Typography><b>{player.summonerName}</b> as {player.championName}</Typography>
+                <img style={{ borderRadius: '100%', width: '54px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}></img>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
 
         {/* <Footer></Footer> */}
       </Box>
