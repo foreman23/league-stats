@@ -14,6 +14,7 @@ function SummonerSearch() {
   // const [summonerNotFound, setSummonerNotFound] = useState(false);
   const [summonerName, setSummonerName] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState('na1');
+  const [riotTag, setRiotTag] = useState(null);
   const [dataDragonVersion, setDataDragonVersion] = useState(null);
 
   // Init navigate
@@ -45,7 +46,32 @@ function SummonerSearch() {
   }
 
   const handleSearchSubmit = async () => {
-    navigate(`/${selectedRegion}/${summonerName}/${dataDragonVersion}`);
+    // Extract riot tag from summoner name
+    let summonerNamePayload = null;
+    let riotTagPayload = null;
+
+    // If last character is #
+    if (summonerName[summonerName.length - 1] == "#") {
+      summonerNamePayload = summonerName.split("#")[0];
+      riotTagPayload = selectedRegion;
+    }
+
+    // Else if contains # but not last character (contains riot tag)
+    else if (summonerName.includes("#")) {
+      summonerNamePayload = summonerName.split("#")[0];
+      riotTagPayload = summonerName.split("#")[1];
+      console.log(summonerNamePayload, riotTagPayload)
+      if (riotTagPayload === undefined || riotTagPayload === null) {
+      }
+    }
+
+    // If no # riot tag is provided
+    else {
+      summonerNamePayload = summonerName;
+      riotTagPayload = selectedRegion;
+    }
+
+    navigate(`/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`);
   }
 
   // Get data dragon version on initial load
@@ -72,7 +98,7 @@ function SummonerSearch() {
               }
             }}
               onChange={updateSummonerNameState}
-              placeholder='Search for a Summoner'
+              placeholder='Search by Riot ID (eg. Teemo#NA1)'
               style={{ width: '30%' }}
               fullWidth>
             </TextField>

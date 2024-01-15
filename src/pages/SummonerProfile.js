@@ -3,6 +3,7 @@ import React from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Unstable_Grid2';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -23,15 +24,34 @@ const SummonerProfile = () => {
   const [timeLastUpdated, setTimeLastUpdated] = useState(null);
   const [disableUpdateButton, setDisableUpdateButton] = useState(false);
 
+  const [dataDragonVersion, setDataDragonVersion] = useState(null);
+
+  // Init navigate
+  const navigate = useNavigate();
+
+  // Set the current ddragon version
+  const getDataDragonVersion = async () => {
+    axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
+      .then(function (response) {
+        // console.log(response.data[0])
+        const currentVersion = response.data[0];
+        setDataDragonVersion(currentVersion);
+      })
+      .catch(function (response) {
+        console.log('Error: Error fetching datadragon version')
+      })
+  }
+
   // Get summoner name from url
-  let { selectedRegion, summonerName, dataDragonVersion } = useParams();
+  let { selectedRegion, summonerName, riotId } = useParams();
   summonerName = summonerName.toLowerCase();
+  riotId = riotId.toUpperCase();
 
   // Get summoner data from firestore
   const getUserFromFirestore = async () => {
 
     // Check if user exists in firestore
-    const docRef = doc(firestore, "users", `${summonerName}-${selectedRegion}`);
+    const docRef = doc(firestore, `${selectedRegion}-users`, `${summonerName}-${riotId}`);
     const docSnap = await getDoc(docRef); // ******* CLOSE THIS SNAP
 
     // Load summoner profile from firestore
@@ -43,17 +63,35 @@ const SummonerProfile = () => {
     }
     // Create new summoner profile on firestore
     else {
-      console.log('no such user exists in firestore')
       try {
-        console.log('CALLING RIOT API')
-        const summonerResponse = await axios.get(`https://${selectedRegion}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${process.env.REACT_APP_RIOT_API_KEY}`);
+        console.log('CALLING RIOT API 4 times')
+        const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
+        const puuidData = puuidResponse.data;
+
+        // If summoner does not exist anywhere
+        if (puuidData.status === 404) {
+          console.log(`summoner does not exist :(`)
+          navigate(`/nosummoner`)
+        }
+
+        console.log(puuidResponse)
+
+        const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
         const summonerData = summonerResponse.data;
-        const rankedResponse = await axios.get(`https://${selectedRegion}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerData.id}?api_key=${process.env.REACT_APP_RIOT_API_KEY}`);
+
+        // If summoner not found return 404
+        if (summonerData.status === 404) {
+          console.log(`summoner not found in region ${selectedRegion} :(`)
+        }
+
+        const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`);
         const rankedData = rankedResponse.data;
-        const historyResponse = await axios.get(`https://${'americas'}.api.riotgames.com/lol/match/v5/matches/by-puuid/${summonerData.puuid}/ids?api_key=${process.env.REACT_APP_RIOT_API_KEY}`); 
+
+        const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${alternateRegion}&puuid=${puuidData.puuid}`); 
         const historyData = historyResponse.data;
+
         let lastUpdated = new Date();
-        const newDocRef = doc(collection(firestore, "users"), `${summonerName}-${selectedRegion}`);
+        const newDocRef = doc(collection(firestore, `${selectedRegion}-users`), `${summonerName}-${riotId}`);
         const data = {
           lastUpdated: lastUpdated,
           summonerData: summonerData,
@@ -80,15 +118,22 @@ const SummonerProfile = () => {
   // Update user document in firestore **** IMPLEMENT GETTING RANKED DATA AS WELL
   const updateUserFirestore = async () => {
     try {
-      console.log('CALLING RIOT API 3 times (ranked and summoner profile info and match history')
-      const summonerResponse = await axios.get(`https://${selectedRegion}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${process.env.REACT_APP_RIOT_API_KEY}`);
+      console.log('CALLING RIOT API 4 times')
+
+      const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
+      const puuidData = puuidResponse.data;
+
+      const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
       const summonerData = summonerResponse.data;
-      const rankedResponse = await axios.get(`https://${selectedRegion}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerData.id}?api_key=${process.env.REACT_APP_RIOT_API_KEY}`);
+
+      const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`);
       const rankedData = rankedResponse.data;
-      const historyResponse = await axios.get(`https://${alternateRegion}.api.riotgames.com/lol/match/v5/matches/by-puuid/${summonerData.puuid}/ids?api_key=${process.env.REACT_APP_RIOT_API_KEY}`); 
+
+      const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${alternateRegion}&puuid=${summonerData.puuid}`); 
       const historyData = historyResponse.data;
+      
       let lastUpdated = new Date()
-      const docRef = doc(firestore, "users", `${summonerName}-${selectedRegion}`);
+      const docRef = doc(firestore, `${selectedRegion}-users`, `${summonerName}-${riotId}`);
       const data = {
         lastUpdated: lastUpdated,
         summonerData: summonerData,
@@ -129,15 +174,13 @@ const SummonerProfile = () => {
         const docSnap = await getDoc(docRef); // ******* CLOSE THIS SNAP
         if (docSnap.exists()) {
           console.log('match already exists')
-          console.log(docSnap.data())
           newMatchDataArray.push(docSnap.data().matchData);
         }
         else {
           let dateRetrieved = new Date()
-          const matchResponse = await axios.get(`https://${alternateRegion}.api.riotgames.com/lol/match/v5/matches/${historyData[i]}?api_key=${process.env.REACT_APP_RIOT_API_KEY}`);
+          const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${alternateRegion}&matchId=${historyData[i]}`);
           riotApiCallCount += 1;
           const matchData = matchResponse.data;
-          console.log(matchData)
           const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyData[i]);
           await setDoc(newDocRef, {
             dateRetrieved: dateRetrieved,
@@ -183,6 +226,11 @@ const SummonerProfile = () => {
 
   }
 
+  // Get data dragon version on initial load
+  useEffect(() => {
+    getDataDragonVersion();
+  }, [dataDragonVersion])
+
   // Get summoner data on page load
   useEffect(() => {
 
@@ -193,25 +241,20 @@ const SummonerProfile = () => {
     const seaServer = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2']
 
     if (americasServers.includes(selectedRegion) && alternateRegion === null) {
-      console.log('alternate route: americas')
       setAlternateRegion('americas')
     }
     if (asiaServers.includes(selectedRegion) && alternateRegion === null) {
-      console.log('alternate route: asia')
       setAlternateRegion('asia')
     }
     if (europeServer.includes(selectedRegion) && alternateRegion === null) {
-      console.log('alternate route: europe')
       setAlternateRegion('europe')
     }
     if (seaServer.includes(selectedRegion) && alternateRegion === null) {
-      console.log('alternate route: sea')
       setAlternateRegion('sea')
     }
 
     // Get summonerData from firestore
     if (summonerName !== null && selectedRegion !== null && alternateRegion !== null) {
-      console.log(summonerName, selectedRegion, alternateRegion)
       getUserFromFirestore();
     }
 
@@ -249,7 +292,7 @@ const SummonerProfile = () => {
 
           <Grid alignItems={'center'} display={'flex'}>
             <List>
-              <ListItem>{summonerData.summonerData.name} ({selectedRegion})</ListItem>
+              <ListItem>{summonerData.summonerData.name}#{riotId} ({selectedRegion})</ListItem>
               <ListItem>level: {summonerData.summonerData.summonerLevel}</ListItem>
               {summonerData.rankedData.length > 0 ? (
                 <>
