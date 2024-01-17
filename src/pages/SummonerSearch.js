@@ -54,6 +54,10 @@ function SummonerSearch() {
     if (summonerName[summonerName.length - 1] == "#") {
       summonerNamePayload = summonerName.split("#")[0];
       riotTagPayload = selectedRegion;
+      // Change tag to #OCE for oc1
+      if (riotTagPayload === 'oc1') {
+        riotTagPayload = 'oce';
+      }
     }
 
     // Else if contains # but not last character (contains riot tag)
@@ -69,6 +73,10 @@ function SummonerSearch() {
     else {
       summonerNamePayload = summonerName;
       riotTagPayload = selectedRegion;
+      // Change tag to #OCE for oc1
+      if (riotTagPayload === 'oc1') {
+        riotTagPayload = 'oce';
+      }
     }
 
     navigate(`/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`);

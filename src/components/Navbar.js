@@ -9,11 +9,11 @@ function Navbar() {
                 <Toolbar>
                     <a href='/' style={{ textDecoration: 'none' }}>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            League Stats Site
+                            lolScroll.com
                         </Typography>
                     </a>
                     <TextField placeholder='Search for a Summoner'></TextField>
-                    <Button color="inherit">Login</Button>
+                    <Button color="inherit">Search</Button>
                 </Toolbar>
             </AppBar>
         </Box>

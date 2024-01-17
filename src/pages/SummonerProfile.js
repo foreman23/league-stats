@@ -19,6 +19,7 @@ const SummonerProfile = () => {
   const [matchesLoaded, setMatchesLoaded] = useState(false);
 
   const [alternateRegion, setAlternateRegion] = useState(null);
+  const [matchRegion, setMatchRegion] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
   const [timeLastUpdated, setTimeLastUpdated] = useState(null);
@@ -64,6 +65,8 @@ const SummonerProfile = () => {
     // Create new summoner profile on firestore
     else {
       try {
+        console.log(alternateRegion)
+
         console.log('CALLING RIOT API 4 times')
         const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
         const puuidData = puuidResponse.data;
@@ -84,11 +87,24 @@ const SummonerProfile = () => {
           console.log(`summoner not found in region ${selectedRegion} :(`)
         }
 
+        console.log(selectedRegion)
+
         const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`);
         const rankedData = rankedResponse.data;
 
-        const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${alternateRegion}&puuid=${puuidData.puuid}`); 
+        console.log(selectedRegion)
+        console.log(rankedData)
+        console.log(matchRegion)
+
+        const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`); 
         const historyData = historyResponse.data;
+
+        console.log(historyResponse)
+
+        // if match history is empty set matchesLoaded to true
+        if (historyData.length < 1) {
+          setMatchesLoaded(true);
+        }
 
         let lastUpdated = new Date();
         const newDocRef = doc(collection(firestore, `${selectedRegion}-users`), `${summonerName}-${riotId}`);
@@ -129,7 +145,7 @@ const SummonerProfile = () => {
       const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`);
       const rankedData = rankedResponse.data;
 
-      const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${alternateRegion}&puuid=${summonerData.puuid}`); 
+      const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${summonerData.puuid}`); 
       const historyData = historyResponse.data;
       
       let lastUpdated = new Date()
@@ -166,9 +182,12 @@ const SummonerProfile = () => {
 
     if (historyData.length < 1) {
       setMatchData(null)
+      setMatchesLoaded(true);
     }
+
     else {
       for (let i = 0; i < 1; i++) {
+        console.log(historyData)
         // check if match already exists
         const docRef = doc(firestore, `${selectedRegion}-matches`, historyData[i]);
         const docSnap = await getDoc(docRef); // ******* CLOSE THIS SNAP
@@ -178,7 +197,7 @@ const SummonerProfile = () => {
         }
         else {
           let dateRetrieved = new Date()
-          const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${alternateRegion}&matchId=${historyData[i]}`);
+          const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyData[i]}`);
           riotApiCallCount += 1;
           const matchData = matchResponse.data;
           const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyData[i]);
@@ -234,24 +253,33 @@ const SummonerProfile = () => {
   // Get summoner data on page load
   useEffect(() => {
 
+    console.log(selectedRegion, summonerName, riotId)
+
     // set alternate routing value
     const americasServers = ['na1', 'br1', 'la1', 'la2'];
-    const asiaServers = ['kr', 'jp1'];
+    const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
     const europeServer = ['eun1', 'euw1', 'tr1', 'ru'];
-    const seaServer = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2']
 
     if (americasServers.includes(selectedRegion) && alternateRegion === null) {
-      setAlternateRegion('americas')
+      setAlternateRegion('americas');
+      setMatchRegion('americas');
     }
     if (asiaServers.includes(selectedRegion) && alternateRegion === null) {
-      setAlternateRegion('asia')
+      const seaServer = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2']
+      if (seaServer.includes(selectedRegion)) {
+        setMatchRegion('sea');
+      }
+      else {
+        setMatchRegion('asia');
+      }
+      setAlternateRegion('asia');
     }
     if (europeServer.includes(selectedRegion) && alternateRegion === null) {
-      setAlternateRegion('europe')
+      setAlternateRegion('europe');
+      setMatchRegion('europe');
     }
-    if (seaServer.includes(selectedRegion) && alternateRegion === null) {
-      setAlternateRegion('sea')
-    }
+
+    console.log(alternateRegion, matchRegion)
 
     // Get summonerData from firestore
     if (summonerName !== null && selectedRegion !== null && alternateRegion !== null) {
@@ -311,18 +339,29 @@ const SummonerProfile = () => {
         </Grid>
 
         <Box justifyContent={'center'} width={'25vw'} margin={'auto'} backgroundColor={'#d2d2d2d2'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'10px'}>
-          <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} >
-            <Typography style={{ textDecoration: 'underline', fontWeight: 'bold' }}>{matchData[0].info.gameName}</Typography>
-            <Typography>{matchData[0].info.queueId === 420 ? 'Ranked' : 'Normal'}</Typography>
-          </Grid>
-          <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
-            {matchData[0].info.participants.map(player => (
-              <Grid display={'flex'}>
-                <Typography><b>{player.summonerName}</b> as {player.championName}</Typography>
-                <img style={{ borderRadius: '100%', width: '54px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}></img>
+          {matchData !== null ? (
+            <div>
+              <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} >
+                <Typography style={{ textDecoration: 'underline', fontWeight: 'bold' }}>{matchData[0].info.gameName}</Typography>
+                <Typography>{matchData[0].info.queueId === 420 ? 'Ranked' : 'Normal'}</Typography>
               </Grid>
-            ))}
-          </Grid>
+              <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
+                {matchData[0].info.participants.map(player => (
+                  <Grid display={'flex'}>
+                    <Typography><b>{player.summonerName}</b> as {player.championName}</Typography>
+                    <img style={{ borderRadius: '100%', width: '54px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}></img>
+                  </Grid>
+                ))}
+              </Grid>
+            </div>
+          ) : (
+            <div>
+              <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} >
+                <Typography style={{ textAlign: 'center' }}>No recent matches!</Typography>
+              </Grid>
+            </div>
+          )}
+
         </Box>
 
         {/* <Footer></Footer> */}
