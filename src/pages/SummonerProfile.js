@@ -1,14 +1,13 @@
 import { Box, List, ListItem, LinearProgress, Button, Typography } from '@mui/material';
-import React from 'react'
+import React, { useCallback } from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Unstable_Grid2';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import { firestore } from '../FirebaseConfig';
-import { collection, addDoc, query, where, getDocs, updateDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, updateDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import SyncIcon from '@mui/icons-material/Sync';
 
 const SummonerProfile = () => {
@@ -30,6 +29,11 @@ const SummonerProfile = () => {
   // Init navigate
   const navigate = useNavigate();
 
+  // Get summoner name from url
+  let { selectedRegion, summonerName, riotId } = useParams();
+  summonerName = summonerName.toLowerCase();
+  riotId = riotId.toUpperCase();
+
   // Set the current ddragon version
   const getDataDragonVersion = async () => {
     axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
@@ -43,17 +47,53 @@ const SummonerProfile = () => {
       })
   }
 
-  // Get summoner name from url
-  let { selectedRegion, summonerName, riotId } = useParams();
-  summonerName = summonerName.toLowerCase();
-  riotId = riotId.toUpperCase();
+  // Update matches involving user (for first 1) ***can increase limit later
+  const updateUserMatchInfo = useCallback(async (data) => {
+    let historyData = data.historyData
+    let newMatchDataArray = [];
+    let riotApiCallCount = 0;
+
+    if (historyData.length < 1) {
+      setMatchData(null)
+      setMatchesLoaded(true);
+    }
+
+    else {
+      for (let i = 0; i < 1; i++) {
+        console.log(historyData)
+        // check if match already exists
+        const docRef = doc(firestore, `${selectedRegion}-matches`, historyData[i]);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          console.log('match already exists')
+          newMatchDataArray.push(docSnap.data().matchData);
+        }
+        else {
+          let dateRetrieved = new Date()
+          const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyData[i]}`);
+          riotApiCallCount += 1;
+          const matchData = matchResponse.data;
+          const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyData[i]);
+          await setDoc(newDocRef, {
+            dateRetrieved: dateRetrieved,
+            matchData: matchData
+          });
+          setMatchData(matchData);
+          newMatchDataArray.push(matchData);
+        }
+      }
+      console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
+      setMatchData(newMatchDataArray);
+      setMatchesLoaded(true);
+    }
+  }, [matchRegion, selectedRegion])
 
   // Get summoner data from firestore
-  const getUserFromFirestore = async () => {
+  const getUserFromFirestore = useCallback(async () => {
 
     // Check if user exists in firestore
     const docRef = doc(firestore, `${selectedRegion}-users`, `${summonerName}-${riotId}`);
-    const docSnap = await getDoc(docRef); // ******* CLOSE THIS SNAP
+    const docSnap = await getDoc(docRef);
 
     // Load summoner profile from firestore
     if (docSnap.exists()) {
@@ -96,7 +136,7 @@ const SummonerProfile = () => {
         console.log(rankedData)
         console.log(matchRegion)
 
-        const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`); 
+        const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`);
         const historyData = historyResponse.data;
 
         console.log(historyResponse)
@@ -129,9 +169,9 @@ const SummonerProfile = () => {
       }
     }
     return;
-  }
+  }, [alternateRegion, matchRegion, navigate, riotId, selectedRegion, summonerName, updateUserMatchInfo])
 
-  // Update user document in firestore **** IMPLEMENT GETTING RANKED DATA AS WELL
+  // Update user document in firestore
   const updateUserFirestore = async () => {
     try {
       console.log('CALLING RIOT API 4 times')
@@ -145,9 +185,9 @@ const SummonerProfile = () => {
       const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`);
       const rankedData = rankedResponse.data;
 
-      const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${summonerData.puuid}`); 
+      const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${summonerData.puuid}`);
       const historyData = historyResponse.data;
-      
+
       let lastUpdated = new Date()
       const docRef = doc(firestore, `${selectedRegion}-users`, `${summonerName}-${riotId}`);
       const data = {
@@ -173,48 +213,6 @@ const SummonerProfile = () => {
     }
     return;
   }
-
-  // Update matches involving user (for first 1) ***can increase limit later
-  const updateUserMatchInfo = async (data) => {
-    let historyData = data.historyData
-    let newMatchDataArray = [];
-    let riotApiCallCount = 0;
-
-    if (historyData.length < 1) {
-      setMatchData(null)
-      setMatchesLoaded(true);
-    }
-
-    else {
-      for (let i = 0; i < 1; i++) {
-        console.log(historyData)
-        // check if match already exists
-        const docRef = doc(firestore, `${selectedRegion}-matches`, historyData[i]);
-        const docSnap = await getDoc(docRef); // ******* CLOSE THIS SNAP
-        if (docSnap.exists()) {
-          console.log('match already exists')
-          newMatchDataArray.push(docSnap.data().matchData);
-        }
-        else {
-          let dateRetrieved = new Date()
-          const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyData[i]}`);
-          riotApiCallCount += 1;
-          const matchData = matchResponse.data;
-          const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyData[i]);
-          await setDoc(newDocRef, {
-            dateRetrieved: dateRetrieved,
-            matchData: matchData
-          });
-          setMatchData(matchData);
-          newMatchDataArray.push(matchData);
-        }
-      }
-      console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
-      setMatchData(newMatchDataArray);
-      setMatchesLoaded(true);
-    }
-  }
-
 
   // Sets time since summoner profile last updated
   const setTimeSinceUpdated = (timestampSeconds) => {
@@ -287,7 +285,7 @@ const SummonerProfile = () => {
     }
 
 
-  }, [summonerName, selectedRegion, alternateRegion])
+  }, [summonerName, selectedRegion, alternateRegion, matchRegion, riotId, getUserFromFirestore])
 
   // Render page once data is loaded
   useEffect(() => {
@@ -296,7 +294,7 @@ const SummonerProfile = () => {
       console.log(matchData)
       setIsLoading(false);
     }
-  }, [summonerData, matchData])
+  }, [summonerData, matchData, matchesLoaded])
 
   if (isLoading) {
     return (
@@ -349,7 +347,7 @@ const SummonerProfile = () => {
                 {matchData[0].info.participants.map(player => (
                   <Grid display={'flex'}>
                     <Typography><b>{player.summonerName}</b> as {player.championName}</Typography>
-                    <img style={{ borderRadius: '100%', width: '54px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}></img>
+                    <img style={{ borderRadius: '100%', width: '54px' }} alt='champion icon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}></img>
                   </Grid>
                 ))}
               </Grid>

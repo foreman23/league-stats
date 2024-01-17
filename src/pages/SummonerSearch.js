@@ -2,19 +2,15 @@ import '../App.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, TextField, Box, ButtonGroup, Typography, Divider } from '@mui/material';
+import { Button, TextField, Box, ButtonGroup, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import { firestore } from '../FirebaseConfig';
-import { collection, addDoc, query, where, getDocs, updateDoc, doc, getDoc, setDoc } from "firebase/firestore";
 
 function SummonerSearch() {
 
   // const [summonerNotFound, setSummonerNotFound] = useState(false);
   const [summonerName, setSummonerName] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState('na1');
-  const [riotTag, setRiotTag] = useState(null);
   const [dataDragonVersion, setDataDragonVersion] = useState(null);
 
   // Init navigate
@@ -51,7 +47,7 @@ function SummonerSearch() {
     let riotTagPayload = null;
 
     // If last character is #
-    if (summonerName[summonerName.length - 1] == "#") {
+    if (summonerName[summonerName.length - 1] === "#") {
       summonerNamePayload = summonerName.split("#")[0];
       riotTagPayload = selectedRegion;
       // Change tag to #OCE for oc1
@@ -96,7 +92,7 @@ function SummonerSearch() {
         <Grid style={{ alignItems: 'center', display: 'flex', marginTop: '125px' }} container>
 
           <Grid xs={12} display={'flex'} justifyContent={'center'}>
-            <img style={{ width: '10%', margin: '20px' }} src='../logo512.png'></img>
+            <img style={{ width: '10%', margin: '20px' }} alt='site logo' src='../logo512.png'></img>
           </Grid>
 
           <Grid xs={12} display={'flex'} justifyContent={'center'}>
