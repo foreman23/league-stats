@@ -334,9 +334,9 @@ const SummonerProfile = () => {
 
         </Grid>
 
-        <Grid xs={12} display={'flex'} justifyContent={'center'}>
+        <Grid xs={12} display={'flex'} justifyContent={'center'} alignItems={'center'}>
           <Button disabled={disableUpdateButton} onClick={updateUserFirestore} variant='contained' endIcon={<SyncIcon></SyncIcon>}>Update</Button>
-          <Typography>Last Updated: {timeLastUpdated}</Typography>
+          <Typography style={{ marginLeft: '15px' }}>Last Updated: {timeLastUpdated}</Typography>
         </Grid>
 
         <Box justifyContent={'center'} width={'35vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'10px'}>
