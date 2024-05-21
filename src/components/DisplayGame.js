@@ -5,15 +5,77 @@ import summonerSpells from '../jsonData/summonerSpells.json'
 
 const DisplayGame = (props) => {
 
+    // Find participant
     const participants = props.gameData.info.participants;
     const participant = props.gameData.info.participants.find(participant => participant.puuid === props.puuid);
 
-    const summonerSpellsObj = Object.values(summonerSpells.data)
-    const summonerSpell1 = summonerSpellsObj.find(spell => spell.key === participant.summoner1Id.toString())
-    const summonerSpell2 = summonerSpellsObj.find(spell => spell.key === participant.summoner2Id.toString())
+    // Find summoner spells
+    const summonerSpellsObj = Object.values(summonerSpells.data);
+    const summonerSpell1 = summonerSpellsObj.find(spell => spell.key === participant.summoner1Id.toString());
+    const summonerSpell2 = summonerSpellsObj.find(spell => spell.key === participant.summoner2Id.toString());
 
+    // Find opposing laner
+    const opposingLaner = props.gameData.info.participants.find(laner => laner.teamPosition === participant.teamPosition && laner.summonerId !== participant.summonerId)
+
+    // Find gold difference between opposing laner
+    const participantGold = participant.goldEarned;
+    const opposingGold = opposingLaner.goldEarned;
+    const goldDifference = participantGold - opposingGold;
+
+    // Generate gold difference descriptor
+    let differenceDesc = null;
+
+    if (goldDifference > 4000) {
+        differenceDesc = "Obliterated"
+    }
+    else if (goldDifference > 3000) {
+        differenceDesc = "Dominated"
+    }
+    else if (goldDifference > 0) {
+        differenceDesc = "Won against"
+    }
+    else if (goldDifference == 0) {
+        differenceDesc = "Tied"
+    }
+    else if (goldDifference < -4000) {
+        differenceDesc = "Obliterated by"
+    }
+    else if (goldDifference < -3000) {
+        differenceDesc = "Dominated by"
+    }
+    else if (goldDifference < 0 ) {
+        differenceDesc = "Lost to"
+    }
+
+    // Set lane titles
+    let participantLane = participant.teamPosition.toLowerCase()
+    if (participantLane === 'utility') {
+        participantLane = 'support'
+    }
+    if (participantLane === 'middle') {
+        participantLane = 'mid'
+    }
+
+    // Find queue title
     const queue = queues.find(queue => queue.queueId === props.gameData.info.queueId)
-
+    let queueTitle = queue.description;
+    let isLaning = true; // set to false for non summoners rift modes
+    if (queueTitle === '5v5 Ranked Solo games') {
+        queueTitle = 'Ranked Solo';
+    }
+    if (queueTitle === '5v5 Ranked Flex games') {
+        queueTitle = 'Ranked Flex'
+    }
+    if (queueTitle === '5v5 Draft Pick games') {
+        queueTitle = 'Normal'
+    }
+    else if (queueTitle === '5v5 ARAM games') {
+        queueTitle = 'ARAM';
+        isLaning = false;
+    }
+    else if (queueTitle === 'Arena') {
+        isLaning = false;
+    }
 
     const [timeSinceMatch, setTimeSinceMatch] = useState(null);
     const [matchType, setMatchType] = useState(null);
@@ -22,6 +84,7 @@ const DisplayGame = (props) => {
     
         // props.ddragonVersion, props.gameData, props.puuid
         console.log(props)
+        
 
         // Set time since match was played
         const timeMatchStarted = new Date(props.gameData.info.gameEndTimestamp);
@@ -58,7 +121,7 @@ const DisplayGame = (props) => {
 
             {/* Match Information */}
             <Grid xs={2} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'center'}>
-                <Typography style={{ fontWeight: 'bold', color: `${participant.win === true ? '#3374ff' : '#ff3352'}`}} >{queue.description === '5v5 Ranked Solo games' ? 'Ranked Solo' : queue.description === '5v5 ARAM games' ? 'ARAM' : 'Normal'}</Typography>
+                <Typography style={{ fontWeight: 'bold', color: `${participant.win === true ? '#3374ff' : '#ff3352'}`}} >{queueTitle}</Typography>
                 <Typography style={{ fontSize: '14px' }}>{participant.win === true ? 'Victory' : 'Defeat'}</Typography>
                 <Typography style={{ fontSize: '12px' }}>{timeSinceMatch}</Typography>
             </Grid>
@@ -79,7 +142,12 @@ const DisplayGame = (props) => {
 
             {/* Laning Descriptor */}
             <Grid xs={6} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'start'}>
-                <Typography style={{ fontSize: '18px' }}>{`${participant.win === true ? 'Won' : 'Lost'} vs Maokai as ${participant.teamPosition} lane with gold difference of xxxx`}</Typography>
+                {isLaning && 
+                    <Typography style={{ fontSize: '18px' }}>{`${differenceDesc} ${opposingLaner.championName} as ${participantLane} with gold difference of ${goldDifference.toLocaleString()}g at end of game.`}</Typography>
+                }
+                {!isLaning &&
+                    <Typography style={{ fontSize: '18px' }}>{`${participant.win ? 'Won' : 'Lost'} ${queueTitle} with ${participantGold.toLocaleString()}g at end of game.`}</Typography>
+                }
             </Grid>
 
 

@@ -72,13 +72,17 @@ const SummonerProfile = () => {
         }
         else {
           let dateRetrieved = new Date()
+          // get match information
           const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyData[i]}`);
+          // get match timeline
+          const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${matchRegion}&matchId=${historyData[i]}`)
           riotApiCallCount += 1;
           const matchData = matchResponse.data;
           const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyData[i]);
           await setDoc(newDocRef, {
             dateRetrieved: dateRetrieved,
             matchData: matchData
+            // timelineData: timelineData
           });
           setMatchData(matchData);
           newMatchDataArray.push(matchData);
@@ -321,7 +325,7 @@ const SummonerProfile = () => {
 
           <Grid alignItems={'center'} display={'flex'}>
             <List>
-              <ListItem>{summonerData.summonerData.name}#{riotId} ({selectedRegion})</ListItem>
+              <ListItem>{summonerName.toUpperCase()}#{riotId} ({selectedRegion})</ListItem>
               <ListItem>level: {summonerData.summonerData.summonerLevel}</ListItem>
               {summonerData.rankedData.length > 0 ? (
                 <>
