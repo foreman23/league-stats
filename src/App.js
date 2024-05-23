@@ -4,6 +4,7 @@ import SummonerSearch from './pages/SummonerSearch';
 import SummonerProfile from './pages/SummonerProfile';
 import PageNotFound from './pages/PageNotFound';
 import SummonerNotFound from './pages/SummonerNotFound';
+import GameDetails from './pages/GameDetails';
 
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<SummonerSearch></SummonerSearch>}></Route>
-        <Route path='/:selectedRegion/:summonerName/:riotId' element={<SummonerProfile></SummonerProfile>}></Route>
+        <Route path='/profile/:selectedRegion/:summonerName/:riotId' element={<SummonerProfile></SummonerProfile>}></Route>
+        <Route path='/match/:matchId/:summonerName/:riotId' element={<GameDetails></GameDetails>}></Route>
         <Route path='/nosummoner' element={<SummonerNotFound></SummonerNotFound>}></Route>
         <Route path='/*' element={<PageNotFound></PageNotFound>}></Route>
       </Routes>

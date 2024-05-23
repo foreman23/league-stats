@@ -124,8 +124,6 @@ const SummonerProfile = () => {
           navigate(`/nosummoner`)
         }
 
-        //console.log(puuidResponse)
-
         const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
         const summonerData = summonerResponse.data;
 
@@ -134,19 +132,11 @@ const SummonerProfile = () => {
           console.log(`summoner not found in region ${selectedRegion} :(`)
         }
 
-        //console.log(selectedRegion)
-
         const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`);
         const rankedData = rankedResponse.data;
 
-        //console.log(selectedRegion)
-        //console.log(rankedData)
-        //console.log(matchRegion)
-
         const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`);
         const historyData = historyResponse.data;
-
-        //console.log(historyResponse)
 
         // if match history is empty set matchesLoaded to true
         if (historyData.length < 1) {
@@ -346,7 +336,7 @@ const SummonerProfile = () => {
         <Box justifyContent={'center'} width={'35vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'10px'}>
           {matchData !== null && matchData.length > 0 ? (
             matchData.map((gameData, index) => (
-              <div key={index}>
+              <div className='DisplayGameContainer' onClick={() => navigate(`/match/${gameData.metadata.matchId}/${summonerName}/${riotId}`)} key={index}>
                 <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid}></DisplayGame>
               </div>
             ))

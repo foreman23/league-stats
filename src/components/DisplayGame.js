@@ -108,12 +108,6 @@ const DisplayGame = (props) => {
             setTimeSinceMatch(`${days} day${days !== 1 ? 's' : ''} ago`);
         }
 
-        // Set laning descriptor
-
-        // // Set match type from json
-        // const matchQuery = queues.find(queue => queue.queueId === props.gameData.info.queueId);
-        // console.log(matchQuery)
-        // setMatchType(matchQuery);
     }, [])
 
     return (

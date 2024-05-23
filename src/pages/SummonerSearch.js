@@ -75,7 +75,7 @@ function SummonerSearch() {
       }
     }
 
-    navigate(`/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`);
+    navigate(`/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`);
   }
 
   // Get data dragon version on initial load
