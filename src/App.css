@@ -1,3 +1,7 @@
 .DisplayGameContainer:hover {
     cursor: pointer;
 }
+
+.GameDetailsCatBtn {
+    margin: 3px !important;
+}
