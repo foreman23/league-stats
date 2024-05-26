@@ -284,6 +284,11 @@ const SummonerProfile = () => {
 
   }, [summonerName, selectedRegion, alternateRegion, matchRegion, riotId, getUserFromFirestore])
 
+  // Handle match click
+  const handleMatchClick = (gameData) => {
+    navigate(`/match/${gameData.metadata.matchId}/${summonerName}/${riotId}`, { state: { gameData } });
+  };
+
   // Render page once data is loaded
   useEffect(() => {
     if (summonerData !== null && matchesLoaded === true) {
@@ -336,7 +341,7 @@ const SummonerProfile = () => {
         <Box justifyContent={'center'} width={'35vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'10px'}>
           {matchData !== null && matchData.length > 0 ? (
             matchData.map((gameData, index) => (
-              <div className='DisplayGameContainer' onClick={() => navigate(`/match/${gameData.metadata.matchId}/${summonerName}/${riotId}`)} key={index}>
+              <div className='DisplayGameContainer' onClick={ () => handleMatchClick(gameData)} key={index}>
                 <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid}></DisplayGame>
               </div>
             ))
