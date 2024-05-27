@@ -12,7 +12,7 @@ function GameDetails() {
   const location = useLocation();
   const { gameId, summonerName, riotId } = useParams();
   const { gameData } = location.state;
-  // console.log(gameData)
+  console.log(gameData)
   // console.log(gameId, summonerName, riotId)
 
   // Find player data
@@ -366,25 +366,25 @@ function GameDetails() {
                 <ListItem style={{ backgroundColor: 'white', padding: '2px' }}>
                   <div style={{ backgroundColor: 'white', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <Typography style={{ width: '75px' }} fontSize={'14px'}>Top</Typography>
-                    <Box style={{ flex: '1', backgroundColor: '#FF8B8B', height: '25px', width: `100px` }}></Box>
+                    <Box style={{ flex: '1', backgroundColor: '#FF8B8B', height: '25px', width: `100px`, borderRadius: '2px' }}></Box>
                   </div>
                 </ListItem>
                 <ListItem style={{ backgroundColor: 'white', padding: '2px' }}>
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <Typography style={{ width: '75px' }} fontSize={'14px'}>Jungle</Typography>
-                    <Box style={{ flex: '1', backgroundColor: '#FF3F3F', height: '25px', width: `50px` }}></Box>
+                    <Box style={{ flex: '1', backgroundColor: '#FF3F3F', height: '25px', width: `50px`, borderRadius: '2px' }}></Box>
                   </div>
                 </ListItem>
                 <ListItem style={{ backgroundColor: 'white', padding: '2px' }}>
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <Typography style={{ width: '75px' }} fontSize={'14px'}>Mid</Typography>
-                    <Box style={{ backgroundColor: '#ABE1FF', height: '25px', width: `150px` }}></Box>
+                    <Box style={{ backgroundColor: '#ABE1FF', height: '25px', width: `150px`, borderRadius: '2px' }}></Box>
                   </div>
                 </ListItem>
                 <ListItem style={{ backgroundColor: 'white', padding: '2px' }}>
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <Typography style={{ width: '75px' }} fontSize={'14px'}>Bot</Typography>
-                    <Box style={{ backgroundColor: '#37B7FF', height: '25px', width: `300px` }}></Box>
+                    <Box style={{ backgroundColor: '#37B7FF', height: '25px', width: `300px`, borderRadius: '2px' }}></Box>
                   </div>
                 </ListItem>
               </List>
@@ -421,7 +421,7 @@ function GameDetails() {
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/SummonerCherryFlash.png`}></img>
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/SummonerTeleport.png`}></img>
                         </div>
-                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.riotIdGameName} {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
+                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
                       </div>
                     </TableCell>
                     <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase()}</Typography></TableCell>
@@ -465,7 +465,7 @@ function GameDetails() {
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/SummonerCherryFlash.png`}></img>
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/SummonerTeleport.png`}></img>
                         </div>
-                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.riotIdGameName} {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
+                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
                       </div>
                     </TableCell>
                     <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase()}</Typography></TableCell>

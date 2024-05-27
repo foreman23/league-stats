@@ -5,3 +5,7 @@
 .GameDetailsCatBtn {
     margin: 3px !important;
 }
+
+.summonerNameTable:hover {
+    cursor: pointer;
+}
