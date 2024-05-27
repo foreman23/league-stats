@@ -144,6 +144,8 @@ function GameDetails() {
         const oppSupp = playersWithOpScores.find((player => player.teamPosition === `UTILITY` && player.teamId !== playerData.teamId))
         let scoreDiff = null;
         let winner = null;
+        let allies = [allyADC, allySupp];
+        let opps = [oppADC, oppSupp];
         if (allyADC && allySupp && oppSupp && oppADC) {
           let allyCombinedScore = allyADC.score + allySupp.score;
           let oppCombinedScore = oppADC.score + oppSupp.score;
@@ -184,10 +186,11 @@ function GameDetails() {
 
         // Calculate win/loss tag
         console.log(roles[i], scoreDiff)
+        console.log(winner)
 
         if (winner[0] === allyADC || winner[1] === allyADC) {
           if (winner[0].puuid === playerData.puuid || winner[1].puuid === playerData.puuid) {
-            descEndGame = `${playerData.riotIdGameName} ${resTag} alongside ${winner.find(player => player.puuid !== playerData.puuid).championName} in bot lane against ${oppADC.championName} and ${oppSupp.championName}`
+            descEndGame = `${playerData.riotIdGameName} ${resTag} alongside ${allies.find(player => player.puuid !== playerData.puuid).championName} in bot lane against ${oppADC.championName} and ${oppSupp.championName}`
           }
           else {
             descEndGame = `${resTag} in bot`;
@@ -195,7 +198,7 @@ function GameDetails() {
         }
         else if (winner[0] === oppADC || winner[1] === oppADC) {
           if (winner[0].teamPosition === playerData.teamPosition || winner[1].teamPosition === playerData.teamPosition) {
-            descEndGame = `${playerData.riotIdGameName} ${resTag} alongside ${winner.find(player => player.puuid !== playerData.puuid).championName} in bot lane against ${oppADC.championName} and ${oppSupp.championName}`
+            descEndGame = `${playerData.riotIdGameName} ${resTag} alongside ${allies.find(player => player.puuid !== playerData.puuid).championName} in bot lane against ${oppADC.championName} and ${oppSupp.championName}`
           }
           else {
             descEndGame = `${resTag} in bot`;
