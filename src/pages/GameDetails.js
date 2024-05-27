@@ -356,7 +356,7 @@ function GameDetails() {
 
 
           {/* Section 2 */}
-          <Grid container marginTop={'20px'}>
+          <Grid container marginTop={'40px'}>
             <Grid style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} paddingLeft={'70px'} paddingRight={'20px'} item xs={7}>
               <Typography fontSize={20} fontWeight={600}>Match Summary</Typography>
               <Typography style={{ marginRight: '15%' }} fontSize={16}>{matchSummaryDesc}</Typography>
@@ -392,7 +392,7 @@ function GameDetails() {
           </Grid>
 
           {/* Section 3 */}
-          <Grid marginLeft={'50px'} marginRight={'50px'} marginTop={'20px'} backgroundColor={gameData.info.teams[0].win ? '#EDF8FF' : '#FFF1F3'} item xs={12}>
+          <Grid marginLeft={'50px'} marginRight={'50px'} marginTop={'40px'} backgroundColor={gameData.info.teams[0].win ? '#EDF8FF' : '#FFF1F3'} item xs={12}>
             <TableContainer>
               <Table size='small'>
                 <TableHead>
