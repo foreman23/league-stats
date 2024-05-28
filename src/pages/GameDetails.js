@@ -49,6 +49,10 @@ function GameDetails() {
     isLaning = false;
   }
 
+  // Find summoner spells
+  const summonerSpellsObj = Object.values(summonerSpells.data);
+  console.log(summonerSpellsObj)
+
   // Find duration and date of game start
   let gameStartDate = new Date(gameData.info.gameCreation);
   console.log(gameStartDate)
@@ -372,11 +376,11 @@ function GameDetails() {
         <Grid className='GameDetailsContainer' style={{ margin: 'auto' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
           {/* Section 1 */}
-          <Grid container marginTop={'3%'}>
+          <Grid container marginLeft={'2%'} marginRight={'2%'} marginTop={'3%'}>
             <Grid style={{ textAlign: 'center', display: 'flex', alignItems: 'center' }} justifyContent={'center'} item xs={5}>
-              <img style={{ margin: '20px', width: '120px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${playerData.championName}.png`} alt=''></img>
+              <img style={{ margin: '20px', width: '110px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${playerData.championName}.png`} alt=''></img>
               <img style={{ width: '30px' }} src='/images/swords.svg'></img>
-              <img style={{ margin: '20px', width: '120px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${opposingLaner.championName}.png`} alt=''></img>
+              <img style={{ margin: '20px', width: '110px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${opposingLaner.championName}.png`} alt=''></img>
             </Grid>
             <Grid justifyContent={'center'} item xs={7}>
               <Typography style={{ paddingTop: '10px' }} fontSize={26} fontWeight={600}>{playerData.riotIdGameName} <span style={{ color: playerData.win ? 'blue' : 'red' }}>{playerData.win ? 'won' : 'lost'}</span> playing {playerData.championName} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.</Typography>
@@ -391,9 +395,8 @@ function GameDetails() {
             </Grid>
           </Grid>
 
-
           {/* Section 2 */}
-          <Grid container marginTop={'3%'}>
+          <Grid marginLeft={'2%'} marginRight={'2%'} container marginTop={'3%'}>
             <Grid style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} paddingLeft={'10%'} paddingRight={'10%'} item xs={7}>
               <Typography fontSize={20} fontWeight={600}>Match Summary</Typography>
               <Typography style={{ marginRight: '15%' }} fontSize={16}>{matchSummaryDesc}</Typography>
@@ -455,8 +458,8 @@ function GameDetails() {
                       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <img style={{ width: '38px', borderRadius: '100%', marginRight: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${player.championName}.png`}></img>
                         <div style={{ display: 'flex', flexDirection: 'column', marginRight: '10px' }}>
-                          <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/SummonerCherryFlash.png`}></img>
-                          <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/SummonerTeleport.png`}></img>
+                          <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                          <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
                         </div>
                         <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
                       </div>
@@ -499,8 +502,8 @@ function GameDetails() {
                       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <img style={{ width: '38px', borderRadius: '100%', marginRight: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${player.championName}.png`}></img>
                         <div style={{ display: 'flex', flexDirection: 'column', marginRight: '10px' }}>
-                          <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/SummonerCherryFlash.png`}></img>
-                          <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/SummonerTeleport.png`}></img>
+                          <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                          <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
                         </div>
                         <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
                       </div>
