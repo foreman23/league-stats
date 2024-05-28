@@ -461,24 +461,24 @@ function GameDetails() {
               <Table size='small'>
                 <TableHead>
                   <TableRow style={{ alignItems: 'center' }}>
-                    <TableCell>
+                    <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <Typography color={gameData.info.teams[0].win ? '#3374FF' : '#FF3F3F'} fontWeight={'bold'} fontSize={'18px'}>{gameData.info.teams[0].win ? "Victory" : "Defeat"}</Typography>
                         <Typography style={{ marginLeft: '10px', fontWeight: '600' }} fontSize={'14px'}>(Blue Team)</Typography>
                       </div>
                     </TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>Role</TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>KDA</TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>Damage</TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>Gold</TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>CS</TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>Wards</TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>Build</TableCell>
+                    <TableCell align='center' style={{ fontWeight: '600' }}>Role</TableCell>
+                    <TableCell align='center' style={{ fontWeight: '600' }}>KDA</TableCell>
+                    <TableCell align='center' style={{ fontWeight: '600' }}>Damage</TableCell>
+                    <TableCell align='center' style={{ fontWeight: '600' }}>Gold</TableCell>
+                    <TableCell align='center' style={{ fontWeight: '600' }}>CS</TableCell>
+                    <TableCell align='center' style={{ fontWeight: '600' }}>Wards</TableCell>
+                    <TableCell align='left' style={{ fontWeight: '600' }}>Build</TableCell>
                   </TableRow>
                 </TableHead>
                 {gameData.info.participants.filter(player => player.teamId === 100).map((player, index) => (
                   <TableRow key={index}>
-                    <TableCell>
+                    <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <img style={{ width: '38px', borderRadius: '100%', marginRight: '3px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${player.championName}.png`}></img>
                         <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
@@ -492,13 +492,13 @@ function GameDetails() {
                         <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
                       </div>
                     </TableCell>
-                    <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase()}</Typography></TableCell>
-                    <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography></TableCell>
-                    <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography></TableCell>
-                    <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
-                    <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography></TableCell>
-                    <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
-                    <TableCell>
+                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase()}</Typography></TableCell>
+                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography></TableCell>
+                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography></TableCell>
+                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
+                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography></TableCell>
+                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
+                    <TableCell align='center'>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
                           <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
@@ -537,24 +537,24 @@ function GameDetails() {
               <Table size='small'>
                 <TableHead>
                   <TableRow>
-                    <TableCell>
+                    <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <Typography color={gameData.info.teams[1].win ? '#3374FF' : '#FF3F3F'} fontWeight={'bold'} fontSize={'18px'}>{gameData.info.teams[1].win ? "Victory" : "Defeat"}</Typography>
                         <Typography style={{ marginLeft: '10px', fontWeight: '600' }} fontSize={'14px'}>(Red Team)</Typography>
                       </div>
                     </TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>Role</TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>KDA</TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>Damage</TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>Gold</TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>CS</TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>Wards</TableCell>
-                    <TableCell style={{ fontWeight: '600' }}>Build</TableCell>
+                    <TableCell align='center' style={{ fontWeight: '600' }}>Role</TableCell>
+                    <TableCell align='center' style={{ fontWeight: '600' }}>KDA</TableCell>
+                    <TableCell align='center' style={{ fontWeight: '600' }}>Damage</TableCell>
+                    <TableCell align='center' style={{ fontWeight: '600' }}>Gold</TableCell>
+                    <TableCell align='center' style={{ fontWeight: '600' }}>CS</TableCell>
+                    <TableCell align='center' style={{ fontWeight: '600' }}>Wards</TableCell>
+                    <TableCell align='left' style={{ fontWeight: '600' }}>Build</TableCell>
                   </TableRow>
                 </TableHead>
                 {gameData.info.participants.filter(player => player.teamId === 200).map((player, index) => (
                   <TableRow key={index}>
-                    <TableCell>
+                    <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <img style={{ width: '38px', borderRadius: '100%', marginRight: '3px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${player.championName}.png`}></img>
                         <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
@@ -568,13 +568,13 @@ function GameDetails() {
                         <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
                       </div>
                     </TableCell>
-                    <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase()}</Typography></TableCell>
-                    <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography></TableCell>
-                    <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography></TableCell>
-                    <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
-                    <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography></TableCell>
-                    <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
-                    <TableCell>
+                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase()}</Typography></TableCell>
+                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography></TableCell>
+                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography></TableCell>
+                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
+                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography></TableCell>
+                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
+                    <TableCell align='center'>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
                           <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
