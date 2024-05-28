@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar';
 import { useParams, useLocation } from 'react-router-dom';
+import queues from '../jsonData/queues.json'
 import summonerSpells from '../jsonData/summonerSpells.json';
 
 function GameDetails() {
@@ -26,6 +27,41 @@ function GameDetails() {
   const participantGold = playerData.goldEarned;
   const opposingGold = opposingLaner.goldEarned;
   const goldDifference = participantGold - opposingGold;
+
+  // Find queue title
+  const queue = queues.find(queue => queue.queueId === gameData.info.queueId)
+  let queueTitle = queue.description;
+  let isLaning = true; // set to false for non summoners rift modes
+  if (queueTitle === '5v5 Ranked Solo games') {
+    queueTitle = 'Ranked Solo';
+  }
+  if (queueTitle === '5v5 Ranked Flex games') {
+    queueTitle = 'Ranked Flex'
+  }
+  if (queueTitle === '5v5 Draft Pick games') {
+    queueTitle = 'Normal'
+  }
+  else if (queueTitle === '5v5 ARAM games') {
+    queueTitle = 'ARAM';
+    isLaning = false;
+  }
+  else if (queueTitle === 'Arena') {
+    isLaning = false;
+  }
+
+  // Find duration and date of game start
+  let gameStartDate = new Date(gameData.info.gameCreation);
+  console.log(gameStartDate)
+  let gameDuration = gameData.info.gameDuration;
+  if (gameDuration >= 3600) {
+    gameDuration = `${(gameDuration / 3600).toFixed(1)} hrs`
+    if (gameDuration === '1.0 hrs') {
+      gameDuration = '1 hr';
+    }
+  }
+  else {
+    gameDuration = `${Math.floor((gameDuration / 60))} mins`
+  }
 
   // Calculate individual player scores
   const [playersWithScores, setPlayersWithScore] = useState([]);
@@ -296,7 +332,7 @@ function GameDetails() {
     else if (playerData.teamPosition === 'BOTTOM' || playerData.teamPosition === 'UTILITY') {
       matchSummaryText = `${botDescEndGame} while their team ${topDescEndGame}, ${jgDescEndGame}, and ${midDescEndGame}.`
     }
-    
+
     setMatchSummaryDesc(matchSummaryText);
 
     // Update the gameData object with the new opScores
@@ -333,17 +369,18 @@ function GameDetails() {
         <Navbar></Navbar>
         {/* <Button color={'primary'} variant={'contained'} onClick={() => navigate(-1)}>Back</Button> */}
 
-        <Grid style={{ margin: 'auto' }} container maxWidth={'75%'} rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid className='GameDetailsContainer' style={{ margin: 'auto' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
           {/* Section 1 */}
-          <Grid container marginTop={'20px'}>
+          <Grid container marginTop={'3%'}>
             <Grid style={{ textAlign: 'center', display: 'flex', alignItems: 'center' }} justifyContent={'center'} item xs={5}>
-              <img style={{ margin: '20px', width: '100px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${playerData.championName}.png`} alt=''></img>
+              <img style={{ margin: '20px', width: '120px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${playerData.championName}.png`} alt=''></img>
               <img style={{ width: '30px' }} src='/images/swords.svg'></img>
-              <img style={{ margin: '20px', width: '100px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${opposingLaner.championName}.png`} alt=''></img>
+              <img style={{ margin: '20px', width: '120px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${opposingLaner.championName}.png`} alt=''></img>
             </Grid>
             <Grid justifyContent={'center'} item xs={7}>
               <Typography style={{ paddingTop: '10px' }} fontSize={26} fontWeight={600}>{playerData.riotIdGameName} <span style={{ color: playerData.win ? 'blue' : 'red' }}>{playerData.win ? 'won' : 'lost'}</span> playing {playerData.championName} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.</Typography>
+              <Typography style={{ paddingTop: '10px', paddingBottom: '10px' }} fontSize={14}>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
               <span style={{ textAlign: 'start' }}>
                 <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Overview</Button>
                 <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Laning</Button>
@@ -356,8 +393,8 @@ function GameDetails() {
 
 
           {/* Section 2 */}
-          <Grid container marginTop={'40px'}>
-            <Grid style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} paddingLeft={'70px'} paddingRight={'20px'} item xs={7}>
+          <Grid container marginTop={'3%'}>
+            <Grid style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} paddingLeft={'10%'} paddingRight={'10%'} item xs={7}>
               <Typography fontSize={20} fontWeight={600}>Match Summary</Typography>
               <Typography style={{ marginRight: '15%' }} fontSize={16}>{matchSummaryDesc}</Typography>
             </Grid>
@@ -392,8 +429,8 @@ function GameDetails() {
           </Grid>
 
           {/* Section 3 */}
-          <Grid marginLeft={'50px'} marginRight={'50px'} marginTop={'40px'} backgroundColor={gameData.info.teams[0].win ? '#EDF8FF' : '#FFF1F3'} item xs={12}>
-            <TableContainer>
+          <Grid marginLeft={'10%'} marginRight={'10%'} marginTop={'4%'} backgroundColor={gameData.info.teams[0].win ? '#EDF8FF' : '#FFF1F3'} item xs={12}>
+            <TableContainer >
               <Table size='small'>
                 <TableHead>
                   <TableRow style={{ alignItems: 'center' }}>
@@ -436,7 +473,7 @@ function GameDetails() {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid marginLeft={'50px'} marginRight={'50px'} marginTop={'10px'} backgroundColor={gameData.info.teams[1].win ? '#EDF8FF' : '#FFF1F3'} item xs={12}>
+          <Grid marginLeft={'10%'} marginRight={'10%'} marginTop={'10px'} backgroundColor={gameData.info.teams[1].win ? '#EDF8FF' : '#FFF1F3'} item xs={12}>
             <TableContainer>
               <Table size='small'>
                 <TableHead>

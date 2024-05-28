@@ -9,3 +9,7 @@
 .summonerNameTable:hover {
     cursor: pointer;
 }
+
+.GameDetailsContainer {
+    width: 60% !important;
+}
