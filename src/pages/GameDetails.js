@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import { useParams, useLocation } from 'react-router-dom';
 import queues from '../jsonData/queues.json'
 import summonerSpells from '../jsonData/summonerSpells.json';
+import runes from '../jsonData/runes.json';
 
 function GameDetails() {
 
@@ -49,9 +50,12 @@ function GameDetails() {
     isLaning = false;
   }
 
-  // Find summoner spells
+  // Create summoner spells object
   const summonerSpellsObj = Object.values(summonerSpells.data);
   console.log(summonerSpellsObj)
+
+  // Create runes object
+  const runesObj = Object.values(runes);
 
   // Find duration and date of game start
   let gameStartDate = new Date(gameData.info.gameCreation);
@@ -66,6 +70,26 @@ function GameDetails() {
   else {
     gameDuration = `${Math.floor((gameDuration / 60))} mins`
   }
+
+  const getKeystoneIconUrl = (player, runesObj) => {
+    const styleId = player.perks.styles[0].style;
+    const keystoneId = player.perks.styles[0].selections[0].perk;
+
+    const style = runesObj.find(rune => rune.id === styleId);
+    if (style) {
+      const keystone = style.slots[0].runes.find(rune => rune.id === keystoneId);
+      if (keystone) {
+        console.log(keystone.icon)
+        return `https://ddragon.canisback.com/img/${keystone.icon}`;
+      } else {
+        console.error(`Keystone with ID ${keystoneId} not found in style ${styleId}`);
+        return '';
+      }
+    } else {
+      console.error(`Style with ID ${styleId} not found`);
+      return '';
+    }
+  };
 
   // Calculate individual player scores
   const [playersWithScores, setPlayersWithScore] = useState([]);
@@ -457,9 +481,13 @@ function GameDetails() {
                     <TableCell>
                       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <img style={{ width: '38px', borderRadius: '100%', marginRight: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${player.championName}.png`}></img>
-                        <div style={{ display: 'flex', flexDirection: 'column', marginRight: '10px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
+                          <img style={{ width: '19px', borderRadius: '2px' }} src={getKeystoneIconUrl(player, runesObj)} alt="Keystone"></img>
+                          <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                         </div>
                         <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
                       </div>
@@ -501,9 +529,13 @@ function GameDetails() {
                     <TableCell>
                       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <img style={{ width: '38px', borderRadius: '100%', marginRight: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${player.championName}.png`}></img>
-                        <div style={{ display: 'flex', flexDirection: 'column', marginRight: '10px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
+                          <img style={{ width: '19px', borderRadius: '2px' }} src={getKeystoneIconUrl(player, runesObj)} alt="Keystone"></img>
+                          <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                         </div>
                         <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
                       </div>
