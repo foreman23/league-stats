@@ -52,14 +52,14 @@ function GameDetails() {
 
   // Create summoner spells object
   const summonerSpellsObj = Object.values(summonerSpells.data);
-  console.log(summonerSpellsObj)
+  // console.log(summonerSpellsObj)
 
   // Create runes object
   const runesObj = Object.values(runes);
 
   // Find duration and date of game start
   let gameStartDate = new Date(gameData.info.gameCreation);
-  console.log(gameStartDate)
+  // console.log(gameStartDate)
   let gameDuration = gameData.info.gameDuration;
   if (gameDuration >= 3600) {
     gameDuration = `${(gameDuration / 3600).toFixed(1)} hrs`
@@ -79,7 +79,7 @@ function GameDetails() {
     if (style) {
       const keystone = style.slots[0].runes.find(rune => rune.id === keystoneId);
       if (keystone) {
-        console.log(keystone.icon)
+        // console.log(keystone.icon)
         return `https://ddragon.canisback.com/img/${keystone.icon}`;
       } else {
         console.error(`Keystone with ID ${keystoneId} not found in style ${styleId}`);
@@ -226,7 +226,7 @@ function GameDetails() {
         let descEndGame = null;
 
         // Calculate win/loss tag
-        console.log(roles[i], scoreDiff)
+        // console.log(roles[i], scoreDiff)
         let resTag = null;
         if (scoreDiff > 2) {
           if (winner[0] === allyADC || winner[1] === allyADC) {
@@ -249,8 +249,8 @@ function GameDetails() {
         }
 
         // Calculate win/loss tag
-        console.log(roles[i], scoreDiff)
-        console.log(winner)
+        // console.log(roles[i], scoreDiff)
+        // console.log(winner)
 
         if (winner[0] === allyADC || winner[1] === allyADC) {
           if (winner[0].puuid === playerData.puuid || winner[1].puuid === playerData.puuid) {
@@ -291,7 +291,7 @@ function GameDetails() {
         let descEndGame = null;
 
         // Calculate win/loss tag
-        console.log(roles[i], scoreDiff)
+        // console.log(roles[i], scoreDiff)
         let resTag = null;
         if (scoreDiff > 2) {
           if (winner === ally) {
@@ -480,7 +480,7 @@ function GameDetails() {
                   <TableRow key={index}>
                     <TableCell>
                       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <img style={{ width: '38px', borderRadius: '100%', marginRight: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${player.championName}.png`}></img>
+                        <img style={{ width: '38px', borderRadius: '100%', marginRight: '3px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${player.championName}.png`}></img>
                         <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
@@ -498,7 +498,35 @@ function GameDetails() {
                     <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
                     <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography></TableCell>
                     <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
-                    <TableCell>ITEMS..</TableCell>
+                    <TableCell>
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                            src={player.item0 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item0}.png`}
+                            alt="Item1"></img>
+                          <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                            src={player.item1 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item1}.png`}
+                            alt="Item2"></img>
+                          <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                            src={player.item2 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item2}.png`}
+                            alt="Item3"></img>
+                          <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
+                            src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item6}.png`}
+                            alt="Item4"></img>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <img style={{ width: '24px', borderRadius: '2px', marginRight: '1px' }}
+                            src={player.item3 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item3}.png`}
+                            alt="Item5"></img>
+                          <img style={{ width: '24px', borderRadius: '2px', marginRight: '1px' }}
+                            src={player.item4 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item4}.png`}
+                            alt="Item6"></img>
+                          <img style={{ width: '24px', borderRadius: '2px', marginRight: '1px' }}
+                            src={player.item5 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item5}.png`}
+                            alt="Item7"></img>
+                        </div>
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))}
               </Table>
@@ -528,7 +556,7 @@ function GameDetails() {
                   <TableRow key={index}>
                     <TableCell>
                       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <img style={{ width: '38px', borderRadius: '100%', marginRight: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${player.championName}.png`}></img>
+                        <img style={{ width: '38px', borderRadius: '100%', marginRight: '3px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${player.championName}.png`}></img>
                         <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
@@ -546,7 +574,35 @@ function GameDetails() {
                     <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
                     <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography></TableCell>
                     <TableCell><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
-                    <TableCell>ITEMS..</TableCell>
+                    <TableCell>
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                            src={player.item0 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item0}.png`}
+                            alt="Item1"></img>
+                          <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                            src={player.item1 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item1}.png`}
+                            alt="Item2"></img>
+                          <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                            src={player.item2 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item2}.png`}
+                            alt="Item3"></img>
+                          <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
+                            src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item6}.png`}
+                            alt="Item4"></img>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <img style={{ width: '24px', borderRadius: '2px', marginRight: '1px' }}
+                            src={player.item3 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item3}.png`}
+                            alt="Item5"></img>
+                          <img style={{ width: '24px', borderRadius: '2px', marginRight: '1px' }}
+                            src={player.item4 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item4}.png`}
+                            alt="Item6"></img>
+                          <img style={{ width: '24px', borderRadius: '2px', marginRight: '1px' }}
+                            src={player.item5 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/item/${player.item5}.png`}
+                            alt="Item7"></img>
+                        </div>
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))}
               </Table>
