@@ -294,6 +294,7 @@ const SummonerProfile = () => {
     if (summonerData !== null && matchesLoaded === true) {
       console.log(summonerData)
       console.log(matchData)
+      document.title = `${summonerName}#${riotId} - ${selectedRegion}`;
       setIsLoading(false);
     }
   }, [summonerData, matchData, matchesLoaded])

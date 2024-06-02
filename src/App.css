@@ -13,3 +13,19 @@
 .GameDetailsContainer {
     width: 70% !important;
 }
+
+.MatchSummaryGrid {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+@media (max-width: 1440px) {
+    .MatchSummaryGrid {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    .GameDetailsCatBtn {
+        max-width: 100px;
+        font-size: 12px !important;
+    }
+}

@@ -96,6 +96,7 @@ function GameDetails() {
   const [matchSummaryDesc, setMatchSummaryDesc] = useState(null);
 
   useEffect(() => {
+    document.title = `${playerData.riotIdGameName}#${playerData.riotIdTagline} - ${new Date(gameData.info.gameCreation).toLocaleDateString()} @${new Date(gameData.info.gameCreation).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase().replace(/\s/g, '')}`
     calculateOpScores();
   }, [gameData]);
 
@@ -421,11 +422,11 @@ function GameDetails() {
 
           {/* Section 2 */}
           <Grid style={{ overflow: 'clip' }} marginLeft={'2%'} marginRight={'2%'} container marginTop={'3%'}>
-            <Grid style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} paddingLeft={'10%'} paddingRight={'10%'} item xs={7}>
+            <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={7}>
               <Typography fontSize={20} fontWeight={600}>Match Summary</Typography>
               <Typography style={{ marginRight: '15%' }} fontSize={16}>{matchSummaryDesc}</Typography>
             </Grid>
-            <Grid backgroundColor='white' item xs={5}>
+            <Grid className='MatchScoreGraphGrid' backgroundColor='white' item xs={5}>
               <List>
                 <ListItem style={{ backgroundColor: 'white', padding: '2px' }}>
                   <div style={{ backgroundColor: 'white', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -448,7 +449,7 @@ function GameDetails() {
                 <ListItem style={{ backgroundColor: 'white', padding: '2px' }}>
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <Typography style={{ width: '75px' }} fontSize={'14px'}>Bot</Typography>
-                    <Box style={{ backgroundColor: '#37B7FF', height: '25px', width: `300px`, borderRadius: '2px' }}></Box>
+                    <Box style={{ backgroundColor: '#37B7FF', height: '25px', width: `250px`, borderRadius: '2px' }}></Box>
                   </div>
                 </ListItem>
               </List>
