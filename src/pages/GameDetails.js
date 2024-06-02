@@ -397,7 +397,7 @@ function GameDetails() {
         <Navbar></Navbar>
         {/* <Button color={'primary'} variant={'contained'} onClick={() => navigate(-1)}>Back</Button> */}
 
-        <Grid className='GameDetailsContainer' style={{ margin: 'auto' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
           {/* Section 1 */}
           <Grid container marginLeft={'2%'} marginRight={'2%'} marginTop={'3%'}>
@@ -420,7 +420,7 @@ function GameDetails() {
           </Grid>
 
           {/* Section 2 */}
-          <Grid marginLeft={'2%'} marginRight={'2%'} container marginTop={'3%'}>
+          <Grid style={{ overflow: 'clip' }} marginLeft={'2%'} marginRight={'2%'} container marginTop={'3%'}>
             <Grid style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} paddingLeft={'10%'} paddingRight={'10%'} item xs={7}>
               <Typography fontSize={20} fontWeight={600}>Match Summary</Typography>
               <Typography style={{ marginRight: '15%' }} fontSize={16}>{matchSummaryDesc}</Typography>
@@ -456,8 +456,8 @@ function GameDetails() {
           </Grid>
 
           {/* Section 3 */}
-          <Grid marginLeft={'10%'} marginRight={'10%'} marginTop={'4%'} backgroundColor={gameData.info.teams[0].win ? '#EDF8FF' : '#FFF1F3'} item xs={12}>
-            <TableContainer >
+          <Grid style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginTop: '4%', maxWidth: '90%', textAlign: 'center' }} justifyContent={'center'} backgroundColor={gameData.info.teams[0].win ? '#EDF8FF' : '#FFF1F3'} item xs={12}>
+            <TableContainer justifyContent='center'>
               <Table size='small'>
                 <TableHead>
                   <TableRow style={{ alignItems: 'center' }}>
@@ -532,8 +532,8 @@ function GameDetails() {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid marginLeft={'10%'} marginRight={'10%'} marginTop={'10px'} backgroundColor={gameData.info.teams[1].win ? '#EDF8FF' : '#FFF1F3'} item xs={12}>
-            <TableContainer>
+          <Grid style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginLeft: '0%', marginRight: '0%', marginTop: '2%', maxWidth: '90%' }} marginLeft={'10%'} marginRight={'10%'} marginTop={'10px'} backgroundColor={gameData.info.teams[1].win ? '#EDF8FF' : '#FFF1F3'} item xs={12}>
+            <TableContainer justifyContent='center'>
               <Table size='small'>
                 <TableHead>
                   <TableRow>
@@ -565,7 +565,7 @@ function GameDetails() {
                           <img style={{ width: '19px', borderRadius: '2px' }} src={getKeystoneIconUrl(player, runesObj)} alt="Keystone"></img>
                           <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                         </div>
-                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
+                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'} className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
                       </div>
                     </TableCell>
                     <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase()}</Typography></TableCell>
