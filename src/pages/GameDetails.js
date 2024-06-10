@@ -15,11 +15,15 @@ function GameDetails() {
   const { gameId, summonerName, riotId } = useParams();
   const { gameData } = location.state;
   console.log(gameData)
-  // console.log(gameId, summonerName, riotId)
+
+  // Card states (lane summaries)
+  const [topSummaryCardStatus, setTopSummaryCardStatus] = useState(false);
+  const [jgSummaryCardStatus, setJgSummaryCardStatus] = useState(false);
+  const [midSummaryCardStatus, setMidSummaryCardStatus] = useState(false);
+  const [botSummaryCardStatus, setBotSummaryCardStatus] = useState(false);
 
   // Find player data
   const playerData = gameData.info.participants.find(player => player.riotIdGameName.toLowerCase() === summonerName)
-  // console.log(playerData)
 
   // Find opposing laner
   const opposingLaner = gameData.info.participants.find(laner => laner.teamPosition === playerData.teamPosition && laner.summonerId !== playerData.summonerId)
@@ -71,6 +75,7 @@ function GameDetails() {
     gameDuration = `${Math.floor((gameDuration / 60))} mins`
   }
 
+  // Returns keystone url
   const getKeystoneIconUrl = (player, runesObj) => {
     const styleId = player.perks.styles[0].style;
     const keystoneId = player.perks.styles[0].selections[0].perk;
@@ -90,6 +95,58 @@ function GameDetails() {
       return '';
     }
   };
+
+  // Handle lane summary card active status
+  const [lastButtonPressedTop, setLastButtonPressedTop] = useState(null);
+  const [lastButtonPressedJg, setLastButtonPressedJg] = useState(null);
+  const [lastButtonPressedMid, setLastButtonPressedMid] = useState(null);
+  const [lastButtonPressedBot, setLastButtonPressedBot] = useState(null);
+  const handleLaneCard = (lane, btnName) => {
+    if (lane === 'top') {
+      setLastButtonPressedTop(btnName)
+      if (topSummaryCardStatus === false) {
+        setTopSummaryCardStatus(true);
+      }
+      else if (btnName === lastButtonPressedTop) {
+        setTopSummaryCardStatus(false);
+        setLastButtonPressedTop(null);
+      }
+    };
+
+    if (lane === 'mid') {
+      setLastButtonPressedMid(btnName)
+      if (midSummaryCardStatus === false) {
+        setMidSummaryCardStatus(true);
+      }
+      else if (btnName === lastButtonPressedMid) {
+        setMidSummaryCardStatus(false);
+        setLastButtonPressedMid(null);
+      }
+    };
+
+    if (lane === 'jg') {
+      setLastButtonPressedJg(btnName)
+      if (jgSummaryCardStatus === false) {
+        setJgSummaryCardStatus(true);
+      }
+      else if (btnName === lastButtonPressedJg) {
+        setJgSummaryCardStatus(false);
+        setLastButtonPressedJg(null);
+      }
+    };
+
+    if (lane === 'bot') {
+      setLastButtonPressedBot(btnName)
+      if (botSummaryCardStatus === false) {
+        setBotSummaryCardStatus(true);
+      }
+      else if (btnName === lastButtonPressedBot) {
+        setBotSummaryCardStatus(false);
+        setLastButtonPressedBot(null);
+      }
+    };
+
+  }
 
   // Calculate individual player scores
   const [playersWithScores, setPlayersWithScore] = useState([]);
@@ -401,7 +458,7 @@ function GameDetails() {
         <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
           {/* Section 1 */}
-          <Grid container marginLeft={'2%'} marginRight={'2%'} marginTop={'3%'}>
+          <Grid container marginLeft={'2%'} marginRight={'2%'} marginTop={'3%'} maxWidth={'90%'}>
             <Grid style={{ textAlign: 'center', display: 'flex', alignItems: 'center' }} justifyContent={'center'} item xs={5}>
               <img style={{ margin: '20px', width: '110px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${playerData.championName}.png`} alt=''></img>
               <img style={{ width: '30px' }} src='/images/swords.svg'></img>
@@ -457,7 +514,7 @@ function GameDetails() {
           </Grid>
 
           {/* Section 3 */}
-          <Grid style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginTop: '4%', maxWidth: '90%', textAlign: 'center' }} justifyContent={'center'} backgroundColor={gameData.info.teams[0].win ? '#EDF8FF' : '#FFF1F3'} item xs={12}>
+          <Grid className='GameOverviewTable' style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginTop: '4%', textAlign: 'center' }} justifyContent={'center'} backgroundColor='#EDF8FF' item xs={12}>
             <TableContainer justifyContent='center'>
               <Table size='small'>
                 <TableHead>
@@ -495,10 +552,15 @@ function GameDetails() {
                     </TableCell>
                     <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase()}</Typography></TableCell>
                     <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography></TableCell>
-                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography></TableCell>
+                    <TableCell align='center'>
+                      <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
+                      <LinearProgress variant='determinate' value={50} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#37B7FF' }, width: '50%', height: '10px' }}></LinearProgress>
+                    </TableCell>
                     <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
-                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography></TableCell>
-                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
+                    <TableCell align='center'>
+                      <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography>
+                      <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.totalMinionsKilled + player.neutralMinionsKilled) / (gameData.info.gameDuration / 60)).toFixed(1)}/m</Typography>
+                    </TableCell>                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
                     <TableCell align='center'>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -533,7 +595,7 @@ function GameDetails() {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginLeft: '0%', marginRight: '0%', marginTop: '2%', maxWidth: '90%' }} marginLeft={'10%'} marginRight={'10%'} marginTop={'10px'} backgroundColor={gameData.info.teams[1].win ? '#EDF8FF' : '#FFF1F3'} item xs={12}>
+          <Grid className='GameOverviewTable' style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginLeft: '0%', marginRight: '0%', marginTop: '2%' }} marginLeft={'10%'} marginRight={'10%'} marginTop={'10px'} backgroundColor='#FFF1F3' item xs={12}>
             <TableContainer justifyContent='center'>
               <Table size='small'>
                 <TableHead>
@@ -571,9 +633,15 @@ function GameDetails() {
                     </TableCell>
                     <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase()}</Typography></TableCell>
                     <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography></TableCell>
-                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography></TableCell>
+                    <TableCell align='center'>
+                      <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
+                      <LinearProgress variant='determinate' value={50} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#FF3F3F' }, width: '50%', height: '10px' }}></LinearProgress>
+                    </TableCell>
                     <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
-                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography></TableCell>
+                    <TableCell align='center'>
+                      <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography>
+                      <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.totalMinionsKilled + player.neutralMinionsKilled) / (gameData.info.gameDuration / 60)).toFixed(1)}/m</Typography>
+                    </TableCell>
                     <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
                     <TableCell align='center'>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -608,6 +676,137 @@ function GameDetails() {
                 ))}
               </Table>
             </TableContainer>
+          </Grid>
+
+          {/* Section 4 */}
+          <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginTop: '4%', textAlign: 'center', marginBottom: '150px' }}>
+            <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
+              <Typography fontSize={20} fontWeight={600}>Laning Phase Summary</Typography>
+              <Typography>How each lane was performing @ 15 minutes</Typography>
+
+              <Grid
+                className={topSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'}
+                container
+                style={{ marginBottom: '20px', marginTop: '25px' }}
+              >
+                <Grid item xs={12} style={{ display: 'inline-flex', alignItems: 'center' }}>
+                  <Grid item style={{ marginRight: '35px' }} xs={6}>
+                    <Typography fontWeight={'bold'}>Blue won top lane</Typography>
+                  </Grid>
+                  <Grid item xs={6} style={{ display: 'inline-flex', marginRight: '50px' }}>
+                    <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#FF8B8B', height: '40px', width: '40px', borderRadius: '100%' }}></Box>
+                    <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#FF8B8B', height: '40px', width: '40px', borderRadius: '100%' }}></Box>
+                    <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#FF8B8B', height: '40px', width: '40px', borderRadius: '100%' }}></Box>
+                    <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: '40px', borderRadius: '100%' }}></Box>
+                    <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: '40px', borderRadius: '100%' }}></Box>
+                  </Grid>
+                  <Grid item xs={6} style={{ display: 'inline-flex' }}>
+                    <Button className={lastButtonPressedTop === 'laneSumTop1' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'} onClick={() => handleLaneCard('top', 'laneSumTop1')} style={{ marginRight: '20px', width: '125px', height: '50px' }} color='grey' size='small' variant='contained'>Summary</Button>
+                    <Button className={lastButtonPressedTop === 'laneSumTop2' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'} onClick={() => handleLaneCard('top', 'laneSumTop2')} style={{ marginRight: '20px', width: '125px' }} color='grey' size='small' variant='contained'>Bloodshed</Button>
+                    <Button className={lastButtonPressedTop === 'laneSumTop3' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'} onClick={() => handleLaneCard('top', 'laneSumTop3')} style={{ marginRight: '20px', width: '125px' }} color='grey' size='small' variant='contained'>CS Graph</Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid className={topSummaryCardStatus ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+                <Grid xs={6}>
+                  <Typography><span style={{ color: '#FF1616', fontWeight: 'bold' }}>DJFLUFFY22</span> (4/2/0, 73 CS) in the top lane averaged 478 more gold than <span style={{ color: '#0089D6', fontWeight: 'bold' }}>ZuesXTC</span> (4/3/0, 61 CS) at the end of 15 minutes, giving blue an advantage entering the mid phase.</Typography>
+                </Grid>
+                <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
+                  <img style={{ margin: '20px', width: '75px' }} src='https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/Maokai.png'></img>
+                  <img style={{ width: '30px' }} src='/images/swords.svg'></img>    
+                  <img style={{ margin: '20px', width: '75px' }} src='https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/TwistedFate.png'></img>
+                  <img style={{ margin: '20px', width: '75px' }} src='/images/laneIcons/TopLane.png'></img>
+                </Grid>
+              </Grid>
+
+              <Grid className={jgSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'} style={{ flexDirection: 'row', display: 'inline-flex', alignItems: 'center' }}>
+                <Grid style={{ marginRight: '35px' }} xs={6}>
+                  <Typography fontWeight={'bold'}>Red won jungle</Typography>
+                </Grid>
+                <Grid xs={6} style={{ flexDirection: 'row', display: 'inline-flex', marginRight: '50px' }}>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                </Grid>
+                <Grid xs={6} style={{ flexDirection: 'row', display: 'inline-flex' }}>
+                  <Button className={lastButtonPressedJg === 'laneSumJg1' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'} onClick={() => handleLaneCard('jg', 'laneSumJg1')} style={{ marginRight: '20px', width: '125px', height: '50px' }} color='grey' size='small' variant='contained'>Summary</Button>
+                  <Button className={lastButtonPressedJg === 'laneSumJg2' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'} onClick={() => handleLaneCard('jg', 'laneSumJg2')} style={{ marginRight: '20px', width: '125px' }} color='grey' size='small' variant='contained'>Bloodshed</Button>
+                  <Button className={lastButtonPressedJg === 'laneSumJg3' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'} onClick={() => handleLaneCard('jg', 'laneSumJg3')} style={{ marginRight: '20px', width: '125px' }} color='grey' size='small' variant='contained'>CS Graph</Button>
+                </Grid>
+              </Grid>
+              <Grid className={jgSummaryCardStatus ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+                <Grid xs={6}>
+                  <Typography><span style={{ color: '#FF1616', fontWeight: 'bold' }}>DJFLUFFY22</span> (4/2/0, 73 CS) in the top lane averaged 478 more gold than <span style={{ color: '#0089D6', fontWeight: 'bold' }}>ZuesXTC</span> (4/3/0, 61 CS) at the end of 15 minutes, giving blue an advantage entering the mid phase.</Typography>
+                </Grid>
+                <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
+                  <img style={{ margin: '20px', width: '75px' }} src='https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/Maokai.png'></img>
+                  <img style={{ width: '30px' }} src='/images/swords.svg'></img>    
+                  <img style={{ margin: '20px', width: '75px' }} src='https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/TwistedFate.png'></img>
+                  <img style={{ margin: '20px', width: '75px' }} src='/images/laneIcons/TopLane.png'></img>
+                </Grid>
+              </Grid>
+
+              <Grid className={midSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'} style={{ flexDirection: 'row', display: 'inline-flex', alignItems: 'center'}}>
+                <Grid style={{ marginRight: '35px' }} xs={6}>
+                  <Typography fontWeight={'bold'}>Red dominates mid lane</Typography>
+                </Grid>
+                <Grid xs={6} style={{ flexDirection: 'row', display: 'inline-flex', marginRight: '50px' }}>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                </Grid>
+                <Grid xs={6} style={{ flexDirection: 'row', display: 'inline-flex' }}>
+                  <Button className={lastButtonPressedMid === 'laneSumMid1' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'} onClick={() => handleLaneCard('mid', 'laneSumMid1')} style={{ marginRight: '20px', width: '125px', height: '50px' }} color='grey' size='small' variant='contained'>Summary</Button>
+                  <Button className={lastButtonPressedMid === 'laneSumMid2' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'} onClick={() => handleLaneCard('mid', 'laneSumMid2')} style={{ marginRight: '20px', width: '125px' }} color='grey' size='small' variant='contained'>Bloodshed</Button>
+                  <Button className={lastButtonPressedMid === 'laneSumMid3' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'} onClick={() => handleLaneCard('mid', 'laneSumMid3')} style={{ marginRight: '20px', width: '125px' }} color='grey' size='small' variant='contained'>CS Graph</Button>
+                </Grid>
+              </Grid>
+              <Grid className={midSummaryCardStatus ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+                <Grid xs={6}>
+                  <Typography><span style={{ color: '#FF1616', fontWeight: 'bold' }}>DJFLUFFY22</span> (4/2/0, 73 CS) in the top lane averaged 478 more gold than <span style={{ color: '#0089D6', fontWeight: 'bold' }}>ZuesXTC</span> (4/3/0, 61 CS) at the end of 15 minutes, giving blue an advantage entering the mid phase.</Typography>
+                </Grid>
+                <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
+                  <img style={{ margin: '20px', width: '75px' }} src='https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/Maokai.png'></img>
+                  <img style={{ width: '30px' }} src='/images/swords.svg'></img>    
+                  <img style={{ margin: '20px', width: '75px' }} src='https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/TwistedFate.png'></img>
+                  <img style={{ margin: '20px', width: '75px' }} src='/images/laneIcons/TopLane.png'></img>
+                </Grid>
+              </Grid>
+
+              <Grid className={botSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'} style={{ flexDirection: 'row', display: 'inline-flex', alignItems: 'center' }}>
+                <Grid style={{ marginRight: '35px' }} xs={6}>
+                  <Typography fontWeight={'bold'}>Bot lane was a draw</Typography>
+                </Grid>
+                <Grid xs={6} style={{ flexDirection: 'row', display: 'inline-flex', marginRight: '50px' }}>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                  <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                </Grid>
+                <Grid xs={6} style={{ flexDirection: 'row', display: 'inline-flex' }}>
+                  <Button className={lastButtonPressedBot === 'laneSumBot1' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'} onClick={() => handleLaneCard('bot', 'laneSumBot1')} style={{ marginRight: '20px', width: '125px', height: '50px' }} color='grey' size='small' variant='contained'>Summary</Button>
+                  <Button className={lastButtonPressedBot === 'laneSumBot2' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'} onClick={() => handleLaneCard('bot', 'laneSumBot2')} style={{ marginRight: '20px', width: '125px' }} color='grey' size='small' variant='contained'>Bloodshed</Button>
+                  <Button className={lastButtonPressedBot === 'laneSumBot3' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'} onClick={() => handleLaneCard('bot', 'laneSumBot3')} style={{ marginRight: '20px', width: '125px' }} color='grey' size='small' variant='contained'>CS Graph</Button>
+                </Grid>
+              </Grid>
+              <Grid className={botSummaryCardStatus ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+                <Grid xs={6}>
+                  <Typography><span style={{ color: '#FF1616', fontWeight: 'bold' }}>DJFLUFFY22</span> (4/2/0, 73 CS) in the top lane averaged 478 more gold than <span style={{ color: '#0089D6', fontWeight: 'bold' }}>ZuesXTC</span> (4/3/0, 61 CS) at the end of 15 minutes, giving blue an advantage entering the mid phase.</Typography>
+                </Grid>
+                <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
+                  <img style={{ margin: '20px', width: '75px' }} src='https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/Maokai.png'></img>
+                  <img style={{ width: '30px' }} src='/images/swords.svg'></img>    
+                  <img style={{ margin: '20px', width: '75px' }} src='https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/TwistedFate.png'></img>
+                  <img style={{ margin: '20px', width: '75px' }} src='/images/laneIcons/TopLane.png'></img>
+                </Grid>
+              </Grid>
+
+            </Grid>
           </Grid>
 
         </Grid>

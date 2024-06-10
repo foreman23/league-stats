@@ -15,8 +15,12 @@
 }
 
 .MatchSummaryGrid {
-    padding-left: 10%;
-    padding-right: 10%;
+    padding-left: 12%;
+    padding-right: 12%;
+}
+
+.GameOverviewTable {
+    max-width: 75% !important;
 }
 
 @media (max-width: 1440px) {
@@ -28,4 +32,52 @@
         max-width: 100px;
         font-size: 12px !important;
     }
+    .GameOverviewTable {
+        max-width: 90% !important;
+    }
+}
+
+.LanePhaseSummaryBubble {
+    margin-left: 3px;
+}
+
+.LanePhaseSummaryBtn {
+    background-color: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-transform: none !important;
+}
+
+.LanePhaseSummaryBtnClicked {
+    background-color: #FF3F3F !important;
+    color: white !important;
+    box-shadow: none !important;
+    text-transform: none !important;
+}
+
+.LanePhaseSummaryBtn:hover {
+    background-color: #FF3F3F !important;
+    color: white !important;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px !important;}
+
+.LanePhaseSummaryCardActive {
+    padding: 10px;
+    background-color: #EDEDED;
+    margin-bottom: 0px !important;
+    margin-top: 25px !important;
+}
+
+.LanePhaseSummaryCardInActive {
+    padding: 10px;
+    margin-bottom: 15px !important;
+    margin-top: 25px !important;
+}
+
+.LanePhaseSummaryDetailsActive {
+    background-color: #EDEDED;
+    padding: 10px;
+}
+
+.LanePhaseSummaryDetailsInActive {
+    display: none !important;
 }
