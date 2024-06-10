@@ -4,6 +4,9 @@
 
 .GameDetailsCatBtn {
     margin: 3px !important;
+    text-transform: none !important;
+    background-color: #CCCCCC !important;
+    color: #333333 !important;
 }
 
 .summonerNameTable:hover {
@@ -44,38 +47,42 @@
 .LanePhaseSummaryBtn {
     background-color: white !important;
     color: black !important;
-    box-shadow: none !important;
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
     text-transform: none !important;
 }
 
 .LanePhaseSummaryBtnClicked {
     background-color: #FF3F3F !important;
     color: white !important;
-    box-shadow: none !important;
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
     text-transform: none !important;
 }
 
 .LanePhaseSummaryBtn:hover {
     background-color: #FF3F3F !important;
     color: white !important;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px !important;}
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
+}
 
 .LanePhaseSummaryCardActive {
     padding: 10px;
+    padding-left: 20px;
     background-color: #EDEDED;
     margin-bottom: 0px !important;
-    margin-top: 25px !important;
+    margin-top: 0px !important;
 }
 
 .LanePhaseSummaryCardInActive {
     padding: 10px;
+    padding-left: 20px;
     margin-bottom: 15px !important;
-    margin-top: 25px !important;
+    margin-top: 5px !important;
 }
 
 .LanePhaseSummaryDetailsActive {
     background-color: #EDEDED;
     padding: 10px;
+    padding-left: 20px;
 }
 
 .LanePhaseSummaryDetailsInActive {

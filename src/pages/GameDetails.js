@@ -452,16 +452,17 @@ function GameDetails() {
   else {
     return (
       <div>
+        <div style={{ backgroundColor: 'white' }}>
         <Navbar></Navbar>
         {/* <Button color={'primary'} variant={'contained'} onClick={() => navigate(-1)}>Back</Button> */}
 
-        <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '20px' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
           {/* Section 1 */}
-          <Grid container marginLeft={'2%'} marginRight={'2%'} marginTop={'3%'} maxWidth={'90%'}>
+          <Grid container marginLeft={'2%'} marginRight={'2%'} marginTop={'2%'} maxWidth={'90%'}>
             <Grid style={{ textAlign: 'center', display: 'flex', alignItems: 'center' }} justifyContent={'center'} item xs={5}>
               <img style={{ margin: '20px', width: '110px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${playerData.championName}.png`} alt=''></img>
-              <img style={{ width: '30px' }} src='/images/swords.svg'></img>
+              <img style={{ width: '55px' }} src='/images/swords.svg'></img>
               <img style={{ margin: '20px', width: '110px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${opposingLaner.championName}.png`} alt=''></img>
             </Grid>
             <Grid justifyContent={'center'} item xs={7}>
@@ -478,7 +479,7 @@ function GameDetails() {
           </Grid>
 
           {/* Section 2 */}
-          <Grid style={{ overflow: 'clip' }} marginLeft={'2%'} marginRight={'2%'} container marginTop={'3%'}>
+          <Grid style={{ overflow: 'clip' }} marginLeft={'2%'} marginRight={'2%'} container marginTop={'20px'}>
             <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={7}>
               <Typography fontSize={20} fontWeight={600}>Match Summary</Typography>
               <Typography style={{ marginRight: '15%' }} fontSize={16}>{matchSummaryDesc}</Typography>
@@ -512,9 +513,13 @@ function GameDetails() {
               </List>
             </Grid>
           </Grid>
+          </Grid>
+          </div>
 
           {/* Section 3 */}
-          <Grid className='GameOverviewTable' style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginTop: '4%', textAlign: 'center' }} justifyContent={'center'} backgroundColor='#EDF8FF' item xs={12}>
+          <div style={{ backgroundColor: '#f2f2f2' }}>
+          <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '30px', paddingTop: '30px' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid className='GameOverviewTable' style={{ display: 'flex', justifyContent: 'center', margin: 'auto', textAlign: 'center' }} justifyContent={'center'} backgroundColor='#EDF8FF' item xs={12}>
             <TableContainer justifyContent='center'>
               <Table size='small'>
                 <TableHead>
@@ -595,7 +600,7 @@ function GameDetails() {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid className='GameOverviewTable' style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginLeft: '0%', marginRight: '0%', marginTop: '2%' }} marginLeft={'10%'} marginRight={'10%'} marginTop={'10px'} backgroundColor='#FFF1F3' item xs={12}>
+          <Grid className='GameOverviewTable' style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginLeft: '0%', marginRight: '0%', marginTop: '10px' }} marginLeft={'10%'} marginRight={'10%'} marginTop={'10px'} backgroundColor='#FFF1F3' item xs={12}>
             <TableContainer justifyContent='center'>
               <Table size='small'>
                 <TableHead>
@@ -677,17 +682,20 @@ function GameDetails() {
               </Table>
             </TableContainer>
           </Grid>
+          </Grid>
+          </div>
 
           {/* Section 4 */}
-          <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginTop: '4%', textAlign: 'center', marginBottom: '150px' }}>
+          <div style={{ backgroundColor: 'white' }}>
+          <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginTop: '45px', textAlign: 'center', marginBottom: '150px' }}>
             <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
               <Typography fontSize={20} fontWeight={600}>Laning Phase Summary</Typography>
-              <Typography>How each lane was performing @ 15 minutes</Typography>
+              <Typography marginBottom={'20px'}>How each lane was performing @ 15 minutes</Typography>
 
               <Grid
                 className={topSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'}
                 container
-                style={{ marginBottom: '20px', marginTop: '25px' }}
+                style={{ marginBottom: '20px', marginTop: '250px' }}
               >
                 <Grid item xs={12} style={{ display: 'inline-flex', alignItems: 'center' }}>
                   <Grid item style={{ marginRight: '35px' }} xs={6}>
@@ -808,8 +816,8 @@ function GameDetails() {
 
             </Grid>
           </Grid>
+          </div>
 
-        </Grid>
       </div>
     )
   }
