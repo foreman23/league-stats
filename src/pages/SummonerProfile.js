@@ -10,6 +10,7 @@ import { firestore } from '../FirebaseConfig';
 import { collection, updateDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import SyncIcon from '@mui/icons-material/Sync';
 import DisplayGame from '../components/DisplayGame';
+import Footer from '../components/Footer';
 
 const SummonerProfile = () => {
 
@@ -74,8 +75,6 @@ const SummonerProfile = () => {
           let dateRetrieved = new Date()
           // get match information
           const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyData[i]}`);
-          // get match timeline
-          const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${matchRegion}&matchId=${historyData[i]}`)
           riotApiCallCount += 1;
           const matchData = matchResponse.data;
           const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyData[i]);
@@ -286,7 +285,7 @@ const SummonerProfile = () => {
 
   // Handle match click
   const handleMatchClick = (gameData) => {
-    navigate(`/match/${gameData.metadata.matchId}/${summonerName}/${riotId}`, { state: { gameData } });
+    navigate(`/match/${gameData.metadata.matchId}/${summonerName}/${riotId}`, { state: { gameData, alternateRegion } });
   };
 
   // Render page once data is loaded
@@ -339,7 +338,7 @@ const SummonerProfile = () => {
           <Typography style={{ marginLeft: '15px' }}>Last Updated: {timeLastUpdated}</Typography>
         </Grid>
 
-        <Box justifyContent={'center'} width={'35vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'10px'}>
+        <Box justifyContent={'center'} width={'35vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'125px'}>
           {matchData !== null && matchData.length > 0 ? (
             matchData.map((gameData, index) => (
               <div className='DisplayGameContainer' onClick={ () => handleMatchClick(gameData)} key={index}>
@@ -356,7 +355,7 @@ const SummonerProfile = () => {
           )}
         </Box>
 
-        {/* <Footer></Footer> */}
+        <Footer></Footer>
       </Box>
     )
   }

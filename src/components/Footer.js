@@ -3,7 +3,7 @@ import { Grid, Divider, Typography } from '@mui/material';
 
 function Footer() {
   return (
-    <div style={{ position: 'relative', minHeight: '50vh' }}>
+    <div style={{ position: 'relative' }}>
       
       <Grid
         container
@@ -19,7 +19,7 @@ function Footer() {
           backgroundColor: '#F5F7FA', // Set a background color if needed
         }}
       >
-        <Divider style={{ width: '30%' }} />
+        <Divider style={{ width: '30%', marginBottom: '10px' }} />
         <Typography
           style={{
             width: '50%',
@@ -29,7 +29,7 @@ function Footer() {
             textAlign: 'center', // Align text to the center
           }}
         >
-          [Your Product Name] is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc
+          lolScroll is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc
         </Typography>
       </Grid>
     </div>

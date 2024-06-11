@@ -51,6 +51,20 @@
     text-transform: none !important;
 }
 
+.LanePhaseSummaryBtnBlue {
+    background-color: white !important;
+    color: black !important;
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
+    text-transform: none !important;
+}
+
+.LanePhaseSummaryBtnDraw {
+    background-color: white !important;
+    color: black !important;
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
+    text-transform: none !important;
+}
+
 .LanePhaseSummaryBtnClicked {
     background-color: #FF3F3F !important;
     color: white !important;
@@ -58,8 +72,34 @@
     text-transform: none !important;
 }
 
+.LanePhaseSummaryBtnClickedBlue {
+    background-color: #37B7FF !important;
+    color: white !important;
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
+    text-transform: none !important;
+}
+
+.LanePhaseSummaryBtnClickedDraw {
+    background-color: grey !important;
+    color: white !important;
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
+    text-transform: none !important;
+}
+
 .LanePhaseSummaryBtn:hover {
     background-color: #FF3F3F !important;
+    color: white !important;
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
+}
+
+.LanePhaseSummaryBtnBlue:hover {
+    background-color: #37B7FF !important;
+    color: white !important;
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
+}
+
+.LanePhaseSummaryBtnDraw:hover {
+    background-color: grey !important;
     color: white !important;
     box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
 }

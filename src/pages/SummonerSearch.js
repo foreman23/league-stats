@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Box, ButtonGroup, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 function SummonerSearch() {
 
@@ -137,16 +138,11 @@ function SummonerSearch() {
             <Typography>{dataDragonVersion}</Typography>
           </Grid>
 
-          {/* <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
-            <Divider style={{ width: '30%' }}></Divider>
-            <Typography style={{ width: '50%', fontSize: '12px', lineHeight: '16px', color: '#9AA4AF' }}>[Your Product Name] is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc</Typography>
-          </Grid> */}
-
         </Grid>
+        <Footer></Footer>
 
       </Box>
 
-      {/* <Footer></Footer> */}
 
     </div>
 
