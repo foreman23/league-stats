@@ -170,6 +170,7 @@ function GameDetails() {
   // Calculate individual player scores
   const [playersWithScores, setPlayersWithScore] = useState([]);
   const [matchSummaryDesc, setMatchSummaryDesc] = useState(null);
+  const [highestDamageDealt, setHighestDamageDealt] = useState(null);
 
   const [statsAt15, setStatsAt15] = useState(null);
   useEffect(() => {
@@ -258,8 +259,13 @@ function GameDetails() {
     // Sort players by score
     let sortedPlayers = playersWithOpScores.sort((a, b) => b.opScore - a.opScore);
 
-    // // Assign game standing
+    // Assign game standing and find highest damage dealt
+    let highestDamageDealt = 0;
     sortedPlayers.forEach((player, index) => {
+      if (player.totalDamageDealtToChampions > highestDamageDealt) {
+        highestDamageDealt = player.totalDamageDealtToChampions;
+      }
+
       let standing = index + 1;
       if (standing === 1) {
         player.standing = '1st'
@@ -453,6 +459,7 @@ function GameDetails() {
     const updatedGameData = { ...gameData };
     updatedGameData.info.participants = reSortedPlayers;
     // console.log(updatedGameData.info.participants)
+    setHighestDamageDealt(highestDamageDealt)
     setPlayersWithScore(updatedGameData.info.participants)
   };
 
@@ -587,7 +594,7 @@ function GameDetails() {
                       <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography></TableCell>
                       <TableCell align='center'>
                         <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
-                        <LinearProgress variant='determinate' value={50} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#37B7FF' }, width: '50%', height: '10px' }}></LinearProgress>
+                        <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#37B7FF' }, width: '50%', height: '10px' }}></LinearProgress>
                       </TableCell>
                       <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
                       <TableCell align='center'>
@@ -668,7 +675,7 @@ function GameDetails() {
                       <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography></TableCell>
                       <TableCell align='center'>
                         <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
-                        <LinearProgress variant='determinate' value={50} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#FF3F3F' }, width: '50%', height: '10px' }}></LinearProgress>
+                        <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#FF3F3F' }, width: '50%', height: '10px' }}></LinearProgress>
                       </TableCell>
                       <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
                       <TableCell align='center'>
@@ -730,7 +737,6 @@ function GameDetails() {
                 <LanePhaseSummaryCardJg statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedJg={lastButtonPressedJg} jgSummaryCardStatus={jgSummaryCardStatus}></LanePhaseSummaryCardJg>
                 <LanePhaseSummaryCardMid statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedMid={lastButtonPressedMid} midSummaryCardStatus={midSummaryCardStatus}></LanePhaseSummaryCardMid>
                 <LanePhaseSummaryCardBot statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedBot={lastButtonPressedBot} botSummaryCardStatus={botSummaryCardStatus}></LanePhaseSummaryCardBot>
-
 
               </Grid>
             </Grid>
