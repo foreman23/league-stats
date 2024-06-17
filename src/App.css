@@ -123,6 +123,8 @@
     background-color: #EDEDED;
     padding: 10px;
     padding-left: 20px;
+    margin-bottom: 15px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 .LanePhaseSummaryDetailsInActive {
