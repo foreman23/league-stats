@@ -495,12 +495,34 @@ function GameDetails() {
             {/* Section 1 */}
             <Grid container marginLeft={'2%'} marginRight={'2%'} marginTop={'2%'} maxWidth={'90%'}>
               <Grid style={{ textAlign: 'center', display: 'flex', alignItems: 'center' }} justifyContent={'center'} item xs={5}>
-                <img style={{ margin: '20px', width: '110px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${playerData.championName}.png`} alt=''></img>
+                {playerData.win ? (
+                  <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${playerData.championName}.png`} alt=''></img>
+                    <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/accept.png' alt='Crown'></img>
+                    <Box style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '12px', backgroundColor: playerData.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '2px', borderBottomRightRadius: '2px' }}></Box>
+                  </div>
+                ) : (
+                  <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${playerData.championName}.png`} alt=''></img>
+                    <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/close.png' alt='Crown'></img>
+                    <Box style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '12px', backgroundColor: playerData.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '2px', borderBottomRightRadius: '2px' }}></Box>
+                  </div>
+                )}
                 <img style={{ width: '55px' }} src='/images/swords.svg'></img>
-                <img style={{ margin: '20px', width: '110px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${opposingLaner.championName}.png`} alt=''></img>
+                {playerData.win ? (
+                  <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${opposingLaner.championName}.png`} alt=''></img>
+                    <Box style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '12px', backgroundColor: playerData.teamId !== 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '2px', borderBottomRightRadius: '2px' }}></Box>
+                  </div>
+                ) : (
+                  <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${opposingLaner.championName}.png`} alt=''></img>
+                    <Box style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '12px', backgroundColor: playerData.teamId !== 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '2px', borderBottomRightRadius: '2px' }}></Box>
+                  </div>
+                )}
               </Grid>
               <Grid justifyContent={'center'} item xs={7}>
-                <Typography style={{ paddingTop: '10px' }} fontSize={26} fontWeight={600}>{playerData.riotIdGameName} <span style={{ color: playerData.win ? 'blue' : 'red' }}>{playerData.win ? 'won' : 'lost'}</span> playing {playerData.championName} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.</Typography>
+                <Typography style={{ paddingTop: '10px' }} fontSize={26} fontWeight={600}>{playerData.riotIdGameName} <span>{playerData.win ? 'won' : 'lost'}</span> playing {playerData.championName} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.</Typography>
                 <Typography style={{ paddingTop: '10px', paddingBottom: '10px' }} fontSize={14}>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
                 <span style={{ textAlign: 'start' }}>
                   <Button onClick={() => scrollToSection('SummaryAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Summary</Button>
@@ -513,38 +535,117 @@ function GameDetails() {
             </Grid>
 
             {/* Section 2 */}
-            <Grid style={{ overflow: 'clip' }} marginLeft={'2%'} marginRight={'2%'} container marginTop={'20px'}>
+            <Grid style={{ overflow: 'clip' }} marginLeft={'2%'} marginRight={'2%'} container marginTop={'15px'} paddingBottom={'15px'}>
               <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={7}>
                 <Typography fontSize={20} fontWeight={600}>Match Summary</Typography>
-                <Typography style={{ marginRight: '15%' }} fontSize={16}>{matchSummaryDesc}</Typography>
+                <Typography style={{ marginRight: '15%', marginTop: '5px' }} fontSize={16}>{matchSummaryDesc}</Typography>
               </Grid>
-              <Grid className='MatchScoreGraphGrid' backgroundColor='white' item xs={5}>
-                <List>
-                  <ListItem style={{ backgroundColor: 'white', padding: '2px' }}>
-                    <div style={{ backgroundColor: 'white', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                      <Typography style={{ width: '75px' }} fontSize={'14px'}>Top</Typography>
-                      <Box style={{ flex: '1', backgroundColor: '#FF8B8B', height: '25px', width: `100px`, borderRadius: '2px' }}></Box>
-                    </div>
-                  </ListItem>
-                  <ListItem style={{ backgroundColor: 'white', padding: '2px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                      <Typography style={{ width: '75px' }} fontSize={'14px'}>Jungle</Typography>
-                      <Box style={{ flex: '1', backgroundColor: '#FF3F3F', height: '25px', width: `50px`, borderRadius: '2px' }}></Box>
-                    </div>
-                  </ListItem>
-                  <ListItem style={{ backgroundColor: 'white', padding: '2px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                      <Typography style={{ width: '75px' }} fontSize={'14px'}>Mid</Typography>
-                      <Box style={{ backgroundColor: '#ABE1FF', height: '25px', width: `150px`, borderRadius: '2px' }}></Box>
-                    </div>
-                  </ListItem>
-                  <ListItem style={{ backgroundColor: 'white', padding: '2px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                      <Typography style={{ width: '75px' }} fontSize={'14px'}>Bot</Typography>
-                      <Box style={{ backgroundColor: '#37B7FF', height: '25px', width: `250px`, borderRadius: '2px' }}></Box>
-                    </div>
-                  </ListItem>
-                </List>
+              <Grid backgroundColor='white' item xs={5}>
+                <Typography marginTop={'10px'} fontSize={18} fontWeight={600}>Feats & Fails</Typography>
+                <Grid style={{ width: '65%', marginTop: '2px' }} container spacing={1}>
+                  <Grid item>
+                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
+                      slotProps={{
+                        popper: {
+                          modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
+                        },
+                        tooltip: {
+                          sx: {
+                            fontSize: '14px'
+                          }
+                        }
+                      }}
+                      title='Ler only died 2 time(s) during the match.'
+                    >
+                      <Typography className='FeatBadge'>Tower Dominance</Typography>
+                    </Tooltip>
+                  </Grid>
+                  <Grid item>
+                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
+                      slotProps={{
+                        popper: {
+                          modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
+                        },
+                        tooltip: {
+                          sx: {
+                            fontSize: '14px'
+                          }
+                        }
+                      }}
+                      title='Ler only died 2 time(s) during the match.'
+                    >
+                      <Typography className='FeatBadge'>Flawless Victory</Typography>
+                    </Tooltip>
+                  </Grid>
+                  <Grid item>
+                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
+                      slotProps={{
+                        popper: {
+                          modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
+                        },
+                        tooltip: {
+                          sx: {
+                            fontSize: '14px'
+                          }
+                        }
+                      }}
+                      title='Ler only died 2 time(s) during the match.'
+                    >
+                      <Typography className='FeatBadge'>Survivor</Typography>
+                    </Tooltip>
+                  </Grid>
+                  <Grid item>
+                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
+                      slotProps={{
+                        popper: {
+                          modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
+                        },
+                        tooltip: {
+                          sx: {
+                            fontSize: '14px'
+                          }
+                        }
+                      }}
+                      title='Ler only died 2 time(s) during the match.'
+                    >
+                      <Typography className='FeatBadge'>Swift Execution</Typography>
+                    </Tooltip>
+                  </Grid>
+                  <Grid item>
+                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
+                      slotProps={{
+                        popper: {
+                          modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
+                        },
+                        tooltip: {
+                          sx: {
+                            fontSize: '14px'
+                          }
+                        }
+                      }}
+                      title='Ler only died 2 time(s) during the match.'
+                    >
+                      <Typography className='FailBadge'>Teamfight Follies</Typography>
+                    </Tooltip>
+                  </Grid>
+                  <Grid item>
+                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
+                      slotProps={{
+                        popper: {
+                          modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
+                        },
+                        tooltip: {
+                          sx: {
+                            fontSize: '14px'
+                          }
+                        }
+                      }}
+                      title='Ler only died 2 time(s) during the match.'
+                    >
+                      <Typography className='FailBadge'>No Dragons</Typography>
+                    </Tooltip>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -590,8 +691,11 @@ function GameDetails() {
                           <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
                         </div>
                       </TableCell>
-                      <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase()}</Typography></TableCell>
-                      <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography></TableCell>
+                      <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
+                      <TableCell align='center'>
+                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography>
+                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{(player.kills / player.deaths).toFixed(1)}</Typography>
+                      </TableCell>
                       <TableCell align='center'>
                         <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
                         <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#37B7FF' }, width: '50%', height: '10px' }}></LinearProgress>
@@ -671,8 +775,11 @@ function GameDetails() {
                           <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'} className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
                         </div>
                       </TableCell>
-                      <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase()}</Typography></TableCell>
-                      <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography></TableCell>
+                      <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
+                      <TableCell align='center'>
+                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography>
+                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{(player.kills / player.deaths).toFixed(1)}</Typography>
+                      </TableCell>
                       <TableCell align='center'>
                         <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
                         <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#FF3F3F' }, width: '50%', height: '10px' }}></LinearProgress>

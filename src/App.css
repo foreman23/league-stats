@@ -19,7 +19,7 @@
 
 .MatchSummaryGrid {
     padding-left: 12%;
-    padding-right: 12%;
+    padding-right: 0%;
 }
 
 .GameOverviewTable {
@@ -129,4 +129,34 @@
 
 .LanePhaseSummaryDetailsInActive {
     display: none !important;
+}
+
+.FeatBadge {
+    background-color: #17BA6C;
+    color: white;
+    padding-right: 12px;
+    padding-left: 12px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-radius: 2px;
+    font-size: small !important;
+}
+
+.FeatBadge:hover {
+    cursor: help;
+}
+
+.FailBadge {
+    background-color: #474747;
+    color: white;
+    padding-right: 12px;
+    padding-left: 12px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-radius: 2px;
+    font-size: small !important;
+}
+
+.FailBadge:hover {
+    cursor: help;
 }
