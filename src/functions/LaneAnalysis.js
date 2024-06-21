@@ -5,10 +5,17 @@ const findKillsAt15 = (timelineResponse) => {
     let kda = {};
     let allLaningKills = [];
 
+    console.log(timelineResponse)
+
     // populate kda with participantIds
     timelineResponse.info.participants.forEach(player => kda[player.participantId] = { kills: 0, deaths: 0, assists: 0 });
     for (let i = 0; i < 15; i++) {
         timelineResponse.info.frames[i].events.forEach(event => {
+            if (event.type === 'ELITE_MONSTER_KILL') {
+                event.victimId = 0;
+                allLaningKills.push(event)
+            }
+
             if (event.type === 'CHAMPION_KILL') {
                 allLaningKills.push(event)
                 const killerId = event.killerId;

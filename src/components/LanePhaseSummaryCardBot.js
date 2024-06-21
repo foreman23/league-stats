@@ -112,14 +112,22 @@ const LanePhaseSummaryCardBot = (props) => {
                 <Grid xs={6}>
                     <Typography style={{ marginBottom: '15px' }}>
                         Results of the deaths and objectives affecting
-                        <span style={{ color: statsAt15.laneResults.BOTTOM.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneWinner.riotIdGameName} </span>
-                        ({statsAt15.laneResults.BOTTOM.laneWinner.kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner.cs} CS) and
-                        <span style={{ color: statsAt15.laneResults.BOTTOM.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser.riotIdGameName} </span>
-                        ({statsAt15.laneResults.BOTTOM.laneLoser.kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser.cs} CS) during laning phase.
+                        <span style={{ color: statsAt15.laneResults.BOTTOM.laneWinner[0].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName} </span>
+                        ({statsAt15.laneResults.BOTTOM.laneWinner[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[0].cs} CS), 
+                        <span style={{ color: statsAt15.laneResults.BOTTOM.laneWinner[1].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName} </span>
+                        ({statsAt15.laneResults.BOTTOM.laneWinner[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[1].cs} CS), 
+                        <span style={{ color: statsAt15.laneResults.BOTTOM.laneLoser[0].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName} </span>
+                        ({statsAt15.laneResults.BOTTOM.laneLoser[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[0].cs} CS) and 
+                        <span style={{ color: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName} </span>
+                        ({statsAt15.laneResults.BOTTOM.laneLoser[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[1].cs} CS) during laning phase.
                     </Typography>
                     <Typography style={{ marginBottom: '10px' }}>
                         {botLaneKillTimeline.map((kill, index) => (
-                            <Typography>{Math.round(kill.timestamp / 60000)}m - <span style={{ color: participants.find(player => player.participantId === kill.killerId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.killerId).riotIdGameName}</span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${participants.find(player => player.participantId === kill.killerId).championName}.png`}></img> killed <span style={{ color: participants.find(player => player.participantId === kill.victimId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.victimId).riotIdGameName}</span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${participants.find(player => player.participantId === kill.victimId).championName}.png`}></img></Typography>
+                            kill.victimId !== 0 ? (
+                                <Typography>{Math.round(kill.timestamp / 60000)}m - <span style={{ color: participants.find(player => player.participantId === kill.killerId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.killerId).riotIdGameName}</span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${participants.find(player => player.participantId === kill.killerId).championName}.png`}></img> killed <span style={{ color: participants.find(player => player.participantId === kill.victimId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.victimId).riotIdGameName}</span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${participants.find(player => player.participantId === kill.victimId).championName}.png`}></img></Typography>
+                            ) : (
+                                <Typography>{Math.round(kill.timestamp / 60000)}m - <span style={{ color: participants.find(player => player.participantId === kill.killerId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.killerId).riotIdGameName}</span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${participants.find(player => player.participantId === kill.killerId).championName}.png`}></img> killed <span style={{ color: '#6A00AB', fontWeight: 'bold' }}>{kill.monsterType.toLowerCase()}</span></Typography>
+                            )
                         ))}
                     </Typography>
                 </Grid>
@@ -130,7 +138,7 @@ const LanePhaseSummaryCardBot = (props) => {
                     <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName}`}>
                         <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', marginLeft: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneWinner[1].championName}.png`}></img>
                     </Tooltip>
-                        <img style={{ maxWidth: '30px', maxHeight: '115px', objectFit: 'contain' }} src='/images/swords.svg'></img>
+                    <img style={{ maxWidth: '30px', maxHeight: '115px', objectFit: 'contain' }} src='/images/swords.svg'></img>
                     <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName}`}>
                         <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', marginRight: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneLoser[0].championName}.png`}></img>
                     </Tooltip>
