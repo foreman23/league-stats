@@ -160,3 +160,27 @@
 .FailBadge:hover {
     cursor: help;
 }
+
+.TableStanding {
+    background-color: grey;
+    color: white;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 5px;
+}
+
+.TableStandingMVP {
+    background-color: #dab903;
+    color: white;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 5px;
+}
+
+.TableStandingAce {
+    background-color: #a600c7;
+    color: white;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 5px;
+}

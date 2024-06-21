@@ -9,6 +9,8 @@ import summonerSpells from '../jsonData/summonerSpells.json';
 import runes from '../jsonData/runes.json';
 import Footer from '../components/Footer';
 import getStatsAt15 from '../functions/LaneAnalysis';
+import axios from 'axios';
+import determineFeatsFails from '../functions/GenerateFeats';
 import LanePhaseSummaryCardTop from '../components/LanePhaseSummaryCardTop';
 import LanePhaseSummaryCardJg from '../components/LanePhaseSummaryCardJg';
 import LanePhaseSummaryCardMid from '../components/LanePhaseSummaryCardMid';
@@ -32,6 +34,9 @@ function GameDetails() {
 
   // Find player data
   const playerData = gameData.info.participants.find(player => player.riotIdGameName.toLowerCase() === summonerName)
+
+  // Timeline data
+  const [timelineData, setTimelineData] = useState(null);
 
   // Find opposing laner
   const opposingLaner = gameData.info.participants.find(laner => laner.teamPosition === playerData.teamPosition && laner.summonerId !== playerData.summonerId)
@@ -174,16 +179,34 @@ function GameDetails() {
 
   const [statsAt15, setStatsAt15] = useState(null);
   useEffect(() => {
+
     document.title = `${playerData.riotIdGameName}#${playerData.riotIdTagline} - ${new Date(gameData.info.gameCreation).toLocaleDateString()} @${new Date(gameData.info.gameCreation).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase().replace(/\s/g, '')}`
     calculateOpScores();
+
+    console.log(timelineData)
+
     const fetch15Stats = async () => {
-      const stats15 = await getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData);
-      console.log(stats15)
-      setStatsAt15(stats15);
+      if (timelineData) {
+        const stats15 = await getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData);
+        console.log(stats15)
+        setStatsAt15(stats15);
+      }
     }
 
     fetch15Stats();
 
+  }, [gameData, alternateRegion, timelineData]);
+
+  useEffect(() => {
+    const getMatchTimeline = async (alternateRegion, matchId) => {
+      console.log('CALLING RIOT API');
+      const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
+      const timelineData = timelineResponse.data;
+      setTimelineData(timelineData);
+    };
+  
+    console.log('here');
+    getMatchTimeline(alternateRegion, gameData.metadata.matchId);
   }, [gameData, alternateRegion]);
 
   const calculateOpScores = () => {
@@ -499,25 +522,25 @@ function GameDetails() {
                   <div style={{ position: 'relative', display: 'inline-block' }}>
                     <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${playerData.championName}.png`} alt=''></img>
                     <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/accept.png' alt='Crown'></img>
-                    <Box style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '12px', backgroundColor: playerData.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '2px', borderBottomRightRadius: '2px' }}></Box>
+                    <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
                   </div>
                 ) : (
                   <div style={{ position: 'relative', display: 'inline-block' }}>
                     <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${playerData.championName}.png`} alt=''></img>
                     <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/close.png' alt='Crown'></img>
-                    <Box style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '12px', backgroundColor: playerData.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '2px', borderBottomRightRadius: '2px' }}></Box>
+                    <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
                   </div>
                 )}
                 <img style={{ width: '55px' }} src='/images/swords.svg'></img>
                 {playerData.win ? (
                   <div style={{ position: 'relative', display: 'inline-block' }}>
                     <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${opposingLaner.championName}.png`} alt=''></img>
-                    <Box style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '12px', backgroundColor: playerData.teamId !== 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '2px', borderBottomRightRadius: '2px' }}></Box>
+                    <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId !== 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
                   </div>
                 ) : (
                   <div style={{ position: 'relative', display: 'inline-block' }}>
                     <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${opposingLaner.championName}.png`} alt=''></img>
-                    <Box style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '12px', backgroundColor: playerData.teamId !== 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '2px', borderBottomRightRadius: '2px' }}></Box>
+                    <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId !== 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
                   </div>
                 )}
               </Grid>
@@ -688,7 +711,11 @@ function GameDetails() {
                             <img style={{ width: '19px', borderRadius: '2px' }} src={getKeystoneIconUrl(player, runesObj)} alt="Keystone"></img>
                             <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                           </div>
-                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography><span className={
+                            (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
+                              'TableStandingMVP' :
+                              'TableStanding')
+                          }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</span> {player.score.toFixed(1)} </Typography>
                         </div>
                       </TableCell>
                       <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
@@ -772,8 +799,11 @@ function GameDetails() {
                             <img style={{ width: '19px', borderRadius: '2px' }} src={getKeystoneIconUrl(player, runesObj)} alt="Keystone"></img>
                             <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                           </div>
-                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'} className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography> {player.score.toFixed(1)} {(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</Typography>
-                        </div>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography><span className={
+                            (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
+                              'TableStandingMVP' :
+                              'TableStanding')
+                          }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</span> {player.score.toFixed(1)} </Typography>                        </div>
                       </TableCell>
                       <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
                       <TableCell align='center'>
@@ -840,13 +870,15 @@ function GameDetails() {
                 <Typography fontSize={20} fontWeight={600}>Laning Phase Results</Typography>
                 <Typography marginBottom={'20px'}>How each lane was performing @ 15 minutes</Typography>
 
-                <LanePhaseSummaryCardTop statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedTop={lastButtonPressedTop} topSummaryCardStatus={topSummaryCardStatus}></LanePhaseSummaryCardTop>
-                <LanePhaseSummaryCardJg statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedJg={lastButtonPressedJg} jgSummaryCardStatus={jgSummaryCardStatus}></LanePhaseSummaryCardJg>
-                <LanePhaseSummaryCardMid statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedMid={lastButtonPressedMid} midSummaryCardStatus={midSummaryCardStatus}></LanePhaseSummaryCardMid>
-                <LanePhaseSummaryCardBot statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedBot={lastButtonPressedBot} botSummaryCardStatus={botSummaryCardStatus}></LanePhaseSummaryCardBot>
+                <LanePhaseSummaryCardTop gameData={gameData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedTop={lastButtonPressedTop} topSummaryCardStatus={topSummaryCardStatus}></LanePhaseSummaryCardTop>
+                <LanePhaseSummaryCardJg gameData={gameData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedJg={lastButtonPressedJg} jgSummaryCardStatus={jgSummaryCardStatus}></LanePhaseSummaryCardJg>
+                <LanePhaseSummaryCardMid gameData={gameData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedMid={lastButtonPressedMid} midSummaryCardStatus={midSummaryCardStatus}></LanePhaseSummaryCardMid>
+                <LanePhaseSummaryCardBot gameData={gameData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedBot={lastButtonPressedBot} botSummaryCardStatus={botSummaryCardStatus}></LanePhaseSummaryCardBot>
 
               </Grid>
+              {/* <Button onClick={() => determineFeatsFails(gameData, playerData.teamId, timelineData)}>Debug feats and fails</Button> */}
             </Grid>
+            
           )}
         </div>
 

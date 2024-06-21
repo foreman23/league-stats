@@ -1,22 +1,16 @@
 import axios from "axios";
 
-// Makes a GET request to the API
-// Returns match timeline data
-const getMatchTimeline = async (matchRegion, matchId) => {
-    console.log('CALLING RIOT API')
-    const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${matchRegion}&matchId=${matchId}`)
-    return timelineResponse;
-}
-
 // Find each players kda at 15
 const findKillsAt15 = (timelineResponse) => {
     let kda = {};
+    let allLaningKills = [];
 
     // populate kda with participantIds
-    timelineResponse.data.info.participants.forEach(player => kda[player.participantId] = { kills: 0, deaths: 0, assists: 0 });
+    timelineResponse.info.participants.forEach(player => kda[player.participantId] = { kills: 0, deaths: 0, assists: 0 });
     for (let i = 0; i < 15; i++) {
-        timelineResponse.data.info.frames[i].events.forEach(event => {
+        timelineResponse.info.frames[i].events.forEach(event => {
             if (event.type === 'CHAMPION_KILL') {
+                allLaningKills.push(event)
                 const killerId = event.killerId;
                 const victimId = event.victimId;
                 const assistingParticipantIds = event.assistingParticipantIds;
@@ -38,12 +32,12 @@ const findKillsAt15 = (timelineResponse) => {
             }
         })
     }
-    return kda;
+    return [ kda, allLaningKills ];
 }
 
 // Consolidate data into array
 const pair15Data = (timelineResponse, kda, gameData) => {
-    const statsAt15 = timelineResponse.data.info.frames[15].participantFrames
+    const statsAt15 = timelineResponse.info.frames[15].participantFrames
     let statsAt15Arr = [];
 
     for (const participantId in kda) {
@@ -214,13 +208,17 @@ const determineWinners = (statsAt15Arr) => {
     return laneResults;
 }
 
-const getStatsAt15 = async (matchRegion, matchId, gameData) => {
-    const timelineData = await getMatchTimeline(matchRegion, matchId);
-    const kda = findKillsAt15(timelineData);
+const getStatsAt15 = async (matchRegion, matchId, gameData, timelineData) => {
+    console.log(matchRegion, matchId, gameData, timelineData)
+    const kdaAndallLaningKills = findKillsAt15(timelineData);
+    const kda = kdaAndallLaningKills[0];
+    const allLaningKills = kdaAndallLaningKills[1];
+    console.log(kdaAndallLaningKills)
     const statsAt15Arr = pair15Data(timelineData, kda, gameData)
     const laneResults = determineWinners(statsAt15Arr);
     const payloadObj = {
-        laneResults: laneResults
+        laneResults: laneResults,
+        laningKills: allLaningKills
     }
     return payloadObj;
 }
