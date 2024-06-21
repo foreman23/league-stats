@@ -1,10 +1,20 @@
 import React from 'react';
 import { Grid, Typography, Box, Button, Tooltip } from '@mui/material';
+import { LineChart } from '@mui/x-charts';
 
 const LanePhaseSummaryCardBot = (props) => {
-    const { statsAt15, handleLaneCard, lastButtonPressedBot, botSummaryCardStatus, gameData } = props;
+    const { statsAt15, handleLaneCard, lastButtonPressedBot, botSummaryCardStatus, gameData, timelineData } = props;
     console.log(props)
     const participants = gameData.info.participants;
+
+    // Graph information
+    const frames = timelineData.info.frames;
+    const xAxisData = frames.map((_, index) => index).slice(2, 16);
+    console.log(xAxisData)
+    const yAxisDataWinner1 = frames.map(frame => frame.participantFrames[statsAt15.laneResults.BOTTOM.laneWinner[0].participantId].minionsKilled + frame.participantFrames[statsAt15.laneResults.BOTTOM.laneWinner[0].participantId].jungleMinionsKilled).slice(2, 16);
+    const yAxisDataWinner2 = frames.map(frame => frame.participantFrames[statsAt15.laneResults.BOTTOM.laneWinner[1].participantId].minionsKilled + frame.participantFrames[statsAt15.laneResults.BOTTOM.laneWinner[1].participantId].jungleMinionsKilled).slice(2, 16);
+    const yAxisDataLoser1 = frames.map(frame => frame.participantFrames[statsAt15.laneResults.BOTTOM.laneLoser[0].participantId].minionsKilled + frame.participantFrames[statsAt15.laneResults.BOTTOM.laneLoser[0].participantId].jungleMinionsKilled).slice(2, 16);
+    const yAxisDataLoser2 = frames.map(frame => frame.participantFrames[statsAt15.laneResults.BOTTOM.laneLoser[1].participantId].minionsKilled + frame.participantFrames[statsAt15.laneResults.BOTTOM.laneLoser[1].participantId].jungleMinionsKilled).slice(2, 16);
 
     // Isolate laning kills for bot lane
     const botLaneKillTimeline = statsAt15.laningKills.filter(event =>
@@ -113,11 +123,11 @@ const LanePhaseSummaryCardBot = (props) => {
                     <Typography style={{ marginBottom: '15px' }}>
                         Results of the deaths and objectives affecting
                         <span style={{ color: statsAt15.laneResults.BOTTOM.laneWinner[0].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName} </span>
-                        ({statsAt15.laneResults.BOTTOM.laneWinner[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[0].cs} CS), 
+                        ({statsAt15.laneResults.BOTTOM.laneWinner[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[0].cs} CS),
                         <span style={{ color: statsAt15.laneResults.BOTTOM.laneWinner[1].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName} </span>
-                        ({statsAt15.laneResults.BOTTOM.laneWinner[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[1].cs} CS), 
+                        ({statsAt15.laneResults.BOTTOM.laneWinner[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[1].cs} CS),
                         <span style={{ color: statsAt15.laneResults.BOTTOM.laneLoser[0].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName} </span>
-                        ({statsAt15.laneResults.BOTTOM.laneLoser[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[0].cs} CS) and 
+                        ({statsAt15.laneResults.BOTTOM.laneLoser[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[0].cs} CS) and
                         <span style={{ color: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName} </span>
                         ({statsAt15.laneResults.BOTTOM.laneLoser[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[1].cs} CS) during laning phase.
                     </Typography>
@@ -146,6 +156,58 @@ const LanePhaseSummaryCardBot = (props) => {
                         <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', marginLeft: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneLoser[1].championName}.png`}></img>
                     </Tooltip>
                     <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px' }} src='/images/laneIcons/Bottom.png'></img>
+                </Grid>
+            </Grid>
+
+            <Grid className={botSummaryCardStatus && lastButtonPressedBot === 'laneSumBot3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+                <Grid xs={12}>
+                    <Typography style={{ marginBottom: '15px' }}>
+                        Graph of CS killed each minute by
+                        <span style={{ color: statsAt15.laneResults.BOTTOM.laneWinner[0].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName} </span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneWinner[0].championName}.png`}></img>
+                        ({statsAt15.laneResults.BOTTOM.laneWinner[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[0].cs} CS),
+                        <span style={{ color: statsAt15.laneResults.BOTTOM.laneWinner[1].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName} </span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneWinner[1].championName}.png`}></img>
+                        ({statsAt15.laneResults.BOTTOM.laneWinner[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[1].cs} CS),
+                        <span style={{ color: statsAt15.laneResults.BOTTOM.laneLoser[0].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName} </span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneLoser[0].championName}.png`}></img>
+                        ({statsAt15.laneResults.BOTTOM.laneLoser[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[0].cs} CS) and
+                        <span style={{ color: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName} </span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneLoser[1].championName}.png`}></img>
+                        ({statsAt15.laneResults.BOTTOM.laneLoser[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[1].cs} CS) during laning phase.
+                    </Typography>
+                    <LineChart
+                        xAxis={[{ data: xAxisData, label: 'Minutes' }]}
+                        yAxis={[{ label: 'Total CS' }]}
+                        series={[
+                            {
+                                data: yAxisDataWinner1,
+                                color: statsAt15.laneResults.BOTTOM.laneWinner[0].teamId === 100 
+                                ? (statsAt15.laneResults.BOTTOM.laneWinner[0].teamPosition === 'UTILITY' ? '#9EDCFF' : '#37B7FF') 
+                                : (statsAt15.laneResults.BOTTOM.laneWinner[0].teamPosition === 'UTILITY' ? '#FF8B8B' : '#FF3F3F'),     
+                                label: statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName,
+                            },
+                            {
+                                data: yAxisDataWinner2,
+                                color: statsAt15.laneResults.BOTTOM.laneWinner[1].teamId === 100 
+                                ? (statsAt15.laneResults.BOTTOM.laneWinner[1].teamPosition === 'UTILITY' ? '#9EDCFF' : '#37B7FF') 
+                                : (statsAt15.laneResults.BOTTOM.laneWinner[1].teamPosition === 'UTILITY' ? '#FF8B8B' : '#FF3F3F'),                                
+                                label: statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName,
+                            },
+                            {
+                                data: yAxisDataLoser1,
+                                color: statsAt15.laneResults.BOTTOM.laneLoser[0].teamId === 100 
+                                ? (statsAt15.laneResults.BOTTOM.laneLoser[0].teamPosition === 'UTILITY' ? '#9EDCFF' : '#37B7FF') 
+                                : (statsAt15.laneResults.BOTTOM.laneLoser[0].teamPosition === 'UTILITY' ? '#FF8B8B' : '#FF3F3F'),     
+                                label: statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName,
+                            },
+                            {
+                                data: yAxisDataLoser2,
+                                color: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 
+                                ? (statsAt15.laneResults.BOTTOM.laneLoser[1].teamPosition === 'UTILITY' ? '#9EDCFF' : '#37B7FF') 
+                                : (statsAt15.laneResults.BOTTOM.laneLoser[1].teamPosition === 'UTILITY' ? '#FF8B8B' : '#FF3F3F'), 
+                                label: statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName,
+                            }
+                        ]}
+                        width={800}
+                        height={300}
+                    />
                 </Grid>
             </Grid>
         </div>

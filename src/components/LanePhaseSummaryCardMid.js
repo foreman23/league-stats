@@ -1,10 +1,18 @@
 import React from 'react';
 import { Grid, Typography, Box, Button, Tooltip } from '@mui/material';
+import { LineChart } from '@mui/x-charts';
 
 const LanePhaseSummaryCardMid = (props) => {
-    const { statsAt15, handleLaneCard, lastButtonPressedMid, midSummaryCardStatus, gameData } = props;
+    const { statsAt15, handleLaneCard, lastButtonPressedMid, midSummaryCardStatus, gameData, timelineData } = props;
 
     const participants = gameData.info.participants;
+
+    // Graph information
+    const frames = timelineData.info.frames;
+    const xAxisData = frames.map((_, index) => index).slice(2, 16);
+    console.log(xAxisData)
+    const yAxisDataWinner = frames.map(frame => frame.participantFrames[statsAt15.laneResults.MIDDLE.laneWinner.participantId].minionsKilled + frame.participantFrames[statsAt15.laneResults.MIDDLE.laneWinner.participantId].jungleMinionsKilled).slice(2, 16);
+  const yAxisDataLoser = frames.map(frame => frame.participantFrames[statsAt15.laneResults.MIDDLE.laneLoser.participantId].minionsKilled + frame.participantFrames[statsAt15.laneResults.MIDDLE.laneLoser.participantId].jungleMinionsKilled).slice(2, 16);
 
     // Isolate laning kills for mid lane
     const midLaneKillTimeline = statsAt15.laningKills.filter(event =>
@@ -132,9 +140,40 @@ const LanePhaseSummaryCardMid = (props) => {
                     <Tooltip open={true} slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.MIDDLE.laneLoser.riotIdGameName}`}>
                         <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.MIDDLE.laneLoser.championName}.png`}></img>
                     </Tooltip>
-                    <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/TopLane.png'></img>
+                    <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Middle.png'></img>
                 </Grid>
             </Grid>
+
+            <Grid className={midSummaryCardStatus && lastButtonPressedMid === 'laneSumMid3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+                <Grid xs={12}>
+                    <Typography style={{ marginBottom: '15px' }}>
+                        Graph of CS killed each minute by
+                        <span style={{ color: statsAt15.laneResults.MIDDLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.MIDDLE.laneWinner.riotIdGameName} </span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.MIDDLE.laneWinner.championName}.png`}></img>
+                        ({statsAt15.laneResults.MIDDLE.laneWinner.kdaAlt}, {statsAt15.laneResults.MIDDLE.laneWinner.cs} CS) and
+                        <span style={{ color: statsAt15.laneResults.MIDDLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.MIDDLE.laneLoser.riotIdGameName} </span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.MIDDLE.laneLoser.championName}.png`}></img>
+                        ({statsAt15.laneResults.MIDDLE.laneLoser.kdaAlt}, {statsAt15.laneResults.MIDDLE.laneLoser.cs} CS) during laning phase.
+                    </Typography>
+                    <LineChart
+                        xAxis={[{ data: xAxisData, label: 'Minutes' }]}
+                        yAxis={[{ label: 'Total CS' }]}
+                        series={[
+                            {
+                                data: yAxisDataWinner,
+                                color: statsAt15.laneResults.MIDDLE.laneWinner.teamId === 100 ? '#37B7FF' : '#FF3F3F',
+                                label: statsAt15.laneResults.MIDDLE.laneWinner.riotIdGameName,
+                            },
+                            {
+                                data: yAxisDataLoser,
+                                color: statsAt15.laneResults.MIDDLE.laneLoser.teamId === 100 ? '#37B7FF' : '#FF3F3F',
+                                label: statsAt15.laneResults.MIDDLE.laneLoser.riotIdGameName,
+                            }
+                        ]}
+                        width={800}
+                        height={300}
+                    />
+                </Grid>
+            </Grid>
+
         </div>
     )
 }
