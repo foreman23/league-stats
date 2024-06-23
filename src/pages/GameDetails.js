@@ -15,6 +15,7 @@ import LanePhaseSummaryCardTop from '../components/LanePhaseSummaryCardTop';
 import LanePhaseSummaryCardJg from '../components/LanePhaseSummaryCardJg';
 import LanePhaseSummaryCardMid from '../components/LanePhaseSummaryCardMid';
 import LanePhaseSummaryCardBot from '../components/LanePhaseSummaryCardBot';
+import Graphs from '../components/Graphs';
 
 function GameDetails() {
 
@@ -204,7 +205,7 @@ function GameDetails() {
       const timelineData = timelineResponse.data;
       setTimelineData(timelineData);
     };
-  
+
     console.log('here');
     getMatchTimeline(alternateRegion, gameData.metadata.matchId);
   }, [gameData, alternateRegion]);
@@ -550,7 +551,7 @@ function GameDetails() {
                 <span style={{ textAlign: 'start' }}>
                   <Button onClick={() => scrollToSection('SummaryAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Summary</Button>
                   <Button onClick={() => scrollToSection('LaningAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Laning</Button>
-                  <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Graphs</Button>
+                  <Button onClick={() => scrollToSection('GraphsAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Graphs</Button>
                   <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Teamfights</Button>
                   <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Builds</Button>
                 </span>
@@ -859,13 +860,12 @@ function GameDetails() {
 
         {/* Section 4 */}
         <div id='LaningAnchor' style={{ backgroundColor: 'white' }}>
-
           {statsAt15 === null ? (
             <Box sx={{ display: 'flex', height: '300px', justifyContent: 'center', margin: 'auto', alignItems: 'center' }}>
               <CircularProgress />
             </Box>
           ) : (
-            <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginTop: '45px', textAlign: 'center', marginBottom: '150px' }}>
+            <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginTop: '45px', textAlign: 'center', marginBottom: '45px' }}>
               <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
                 <Typography fontSize={20} fontWeight={600}>Laning Phase Results</Typography>
                 <Typography marginBottom={'20px'}>How each lane was performing @ 15 minutes</Typography>
@@ -878,8 +878,21 @@ function GameDetails() {
               </Grid>
               {/* <Button onClick={() => determineFeatsFails(gameData, playerData.teamId, timelineData)}>Debug feats and fails</Button> */}
             </Grid>
-            
+
           )}
+        </div>
+
+        {/* Section 5 */}
+        <div id='GraphsAnchor' style={{ backgroundColor: '#f2f2f2' }}>
+          <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '45px', textAlign: 'center', marginBottom: '150px' }}>
+            <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
+              <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
+                <Typography fontSize={20} fontWeight={600}>Graphs</Typography>
+                <Typography marginBottom={'20px'}>Match data visualized</Typography>
+                <Graphs gameData={gameData}></Graphs>
+              </Grid>
+            </Grid>
+          </Grid>
         </div>
 
         <Footer></Footer>
