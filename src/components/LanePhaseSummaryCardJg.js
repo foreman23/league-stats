@@ -106,14 +106,20 @@ const LanePhaseSummaryCardJg = (props) => {
                     )}
                 </Grid>
                 <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
-                    <Tooltip open={true} slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName}`}>
-                        <img style={{ margin: '20px', width: '75px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.JUNGLE.laneWinner.championName}.png`}></img>
+                    <Tooltip open={true} slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -124] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName}`}>
+                        <div style={{ position: 'relative', display: 'inline-block' }}>
+                            <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.JUNGLE.laneWinner.championName}.png`}></img>
+                            <Box style={{ position: 'absolute', bottom: '16px', left: '50%', transform: 'translateX(-50%)', width: '75px', height: '8px', backgroundColor: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                        </div>
                     </Tooltip>
-                    <img style={{ width: '30px' }} src='/images/swords.svg'></img>
-                    <Tooltip open={true} slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneLoser.riotIdGameName}`}>
-                        <img style={{ margin: '20px', width: '75px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.JUNGLE.laneLoser.championName}.png`}></img>
+                    <img style={{ maxWidth: '30px', maxHeight: '115px' }} src='/images/swords.svg'></img>
+                    <Tooltip open={true} slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -124] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneLoser.riotIdGameName}`}>
+                        <div style={{ position: 'relative', display: 'inline-block' }}>
+                            <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.JUNGLE.laneLoser.championName}.png`}></img>
+                            <Box style={{ position: 'absolute', bottom: '16px', left: '50%', transform: 'translateX(-50%)', width: '75px', height: '8px', backgroundColor: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                        </div>
                     </Tooltip>
-                    <img style={{ margin: '20px', width: '75px' }} src='/images/laneIcons/Jungle.png'></img>
+                    <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
                 </Grid>
             </Grid>
 
@@ -137,13 +143,19 @@ const LanePhaseSummaryCardJg = (props) => {
                     </Typography>
                 </Grid>
                 <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
-                    <Tooltip open={true} slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName}`}>
-                        <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.JUNGLE.laneWinner.championName}.png`}></img>
-                    </Tooltip>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <Tooltip open={true} slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -104] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName}`}>
+                            <img style={{ margin: '20px', marginBottom: '0px', maxWidth: '75px', maxHeight: '75px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.JUNGLE.laneWinner.championName}.png`}></img>
+                            <Box style={{ position: 'absolute', marginTop: '-4px', left: '50%', transform: 'translateX(-50%)', width: '75px', height: '8px', backgroundColor: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                        </Tooltip>
+                    </div>
                     <img style={{ maxWidth: '30px', maxHeight: '115px' }} src='/images/swords.svg'></img>
-                    <Tooltip open={true} slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneLoser.riotIdGameName}`}>
-                        <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.JUNGLE.laneLoser.championName}.png`}></img>
-                    </Tooltip>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <Tooltip open={true} slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -104] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneLoser.riotIdGameName}`}>
+                            <img style={{ margin: '20px', marginBottom: '0px', maxWidth: '75px', maxHeight: '75px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.JUNGLE.laneLoser.championName}.png`}></img>
+                            <Box style={{ position: 'absolute', marginTop: '-4px', left: '50%', transform: 'translateX(-50%)', width: '75px', height: '8px', backgroundColor: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                        </Tooltip>
+                    </div>
                     <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
                 </Grid>
             </Grid>

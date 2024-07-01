@@ -101,19 +101,31 @@ const LanePhaseSummaryCardBot = (props) => {
                     </Typography>
                 </Grid>
                 <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
-                    <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName}`}>
-                        <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', marginRight: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneWinner[0].championName}.png`}></img>
-                    </Tooltip>
-                    <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName}`}>
-                        <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', marginLeft: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneWinner[1].championName}.png`}></img>
-                    </Tooltip>
-                    <img style={{ maxWidth: '30px', maxHeight: '115px', objectFit: 'contain' }} src='/images/swords.svg'></img>
-                    <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName}`}>
-                        <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', marginRight: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneLoser[0].championName}.png`}></img>
-                    </Tooltip>
-                    <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName}`}>
-                        <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', marginLeft: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneLoser[1].championName}.png`}></img>
-                    </Tooltip>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName}`}>
+                            <img style={{ margin: '20px', marginBottom: '0px', maxWidth: '65px', maxHeight: '65px', marginRight: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneWinner[0].championName}.png`}></img>
+                            <Box style={{ position: 'absolute', marginTop: '-4px', marginLeft: '10px', left: '50%', transform: 'translateX(-50%)', width: '65px', height: '8px', backgroundColor: statsAt15.laneResults.BOTTOM.laneWinner[0].teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '0px' }}></Box>
+                        </Tooltip>
+                    </div>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName}`}>
+                            <img style={{ margin: '20px', marginBottom: '0px', maxWidth: '65px', maxHeight: '65px', marginLeft: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneWinner[1].championName}.png`}></img>
+                            <Box style={{ position: 'absolute', marginTop: '-4px', marginLeft: '-10px', left: '50%', transform: 'translateX(-50%)', width: '65px', height: '8px', backgroundColor: statsAt15.laneResults.BOTTOM.laneWinner[1].teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '0px', borderBottomRightRadius: '3px' }}></Box>
+                        </Tooltip>
+                    </div>
+                    <img style={{ maxWidth: '30px', maxHeight: '115px' }} src='/images/swords.svg'></img>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName}`}>
+                            <img style={{ margin: '20px', marginBottom: '0px', maxWidth: '65px', maxHeight: '65px', marginRight: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneLoser[0].championName}.png`}></img>
+                            <Box style={{ position: 'absolute', marginTop: '-4px', marginLeft: '10px', left: '50%', transform: 'translateX(-50%)', width: '65px', height: '8px', backgroundColor: statsAt15.laneResults.BOTTOM.laneLoser[0].teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '0px' }}></Box>
+                        </Tooltip>
+                    </div>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName}`}>
+                            <img style={{ margin: '20px', marginBottom: '0px', maxWidth: '65px', maxHeight: '65px', marginLeft: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneLoser[1].championName}.png`}></img>
+                            <Box style={{ position: 'absolute', marginTop: '-4px', marginLeft: '-10px', left: '50%', transform: 'translateX(-50%)', width: '65px', height: '8px', backgroundColor: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '0px', borderBottomRightRadius: '3px' }}></Box>
+                        </Tooltip>
+                    </div>
                     <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', objectFit: 'contain' }} src='/images/laneIcons/Bottom.png'></img>
                 </Grid>
             </Grid>
@@ -142,20 +154,32 @@ const LanePhaseSummaryCardBot = (props) => {
                     </Typography>
                 </Grid>
                 <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
-                    <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName}`}>
-                        <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', marginRight: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneWinner[0].championName}.png`}></img>
-                    </Tooltip>
-                    <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName}`}>
-                        <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', marginLeft: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneWinner[1].championName}.png`}></img>
-                    </Tooltip>
-                    <img style={{ maxWidth: '30px', maxHeight: '115px', objectFit: 'contain' }} src='/images/swords.svg'></img>
-                    <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName}`}>
-                        <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', marginRight: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneLoser[0].championName}.png`}></img>
-                    </Tooltip>
-                    <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName}`}>
-                        <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', marginLeft: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneLoser[1].championName}.png`}></img>
-                    </Tooltip>
-                    <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px' }} src='/images/laneIcons/Bottom.png'></img>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName}`}>
+                            <img style={{ margin: '20px', marginBottom: '0px', maxWidth: '65px', maxHeight: '65px', marginRight: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneWinner[0].championName}.png`}></img>
+                            <Box style={{ position: 'absolute', marginTop: '-4px', marginLeft: '10px', left: '50%', transform: 'translateX(-50%)', width: '65px', height: '8px', backgroundColor: statsAt15.laneResults.BOTTOM.laneWinner[0].teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '0px' }}></Box>
+                        </Tooltip>
+                    </div>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName}`}>
+                            <img style={{ margin: '20px', marginBottom: '0px', maxWidth: '65px', maxHeight: '65px', marginLeft: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneWinner[1].championName}.png`}></img>
+                            <Box style={{ position: 'absolute', marginTop: '-4px', marginLeft: '-10px', left: '50%', transform: 'translateX(-50%)', width: '65px', height: '8px', backgroundColor: statsAt15.laneResults.BOTTOM.laneWinner[1].teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '0px', borderBottomRightRadius: '3px' }}></Box>
+                        </Tooltip>
+                    </div>
+                    <img style={{ maxWidth: '30px', maxHeight: '115px', marginTop: '-5px' }} src='/images/swords.svg'></img>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName}`}>
+                            <img style={{ margin: '20px', marginBottom: '0px', maxWidth: '65px', maxHeight: '65px', marginRight: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneLoser[0].championName}.png`}></img>
+                            <Box style={{ position: 'absolute', marginTop: '-4px', marginLeft: '10px', left: '50%', transform: 'translateX(-50%)', width: '65px', height: '8px', backgroundColor: statsAt15.laneResults.BOTTOM.laneLoser[0].teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '0px' }}></Box>
+                        </Tooltip>
+                    </div>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [20, -100] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName}`}>
+                            <img style={{ margin: '20px', marginBottom: '0px', maxWidth: '65px', maxHeight: '65px', marginLeft: '0px', objectFit: 'contain' }} src={`https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/${statsAt15.laneResults.BOTTOM.laneLoser[1].championName}.png`}></img>
+                            <Box style={{ position: 'absolute', marginTop: '-4px', marginLeft: '-10px', left: '50%', transform: 'translateX(-50%)', width: '65px', height: '8px', backgroundColor: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '0px', borderBottomRightRadius: '3px' }}></Box>
+                        </Tooltip>
+                    </div>
+                    <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', objectFit: 'contain' }} src='/images/laneIcons/Bottom.png'></img>
                 </Grid>
             </Grid>
 
@@ -178,30 +202,30 @@ const LanePhaseSummaryCardBot = (props) => {
                         series={[
                             {
                                 data: yAxisDataWinner1,
-                                color: statsAt15.laneResults.BOTTOM.laneWinner[0].teamId === 100 
-                                ? (statsAt15.laneResults.BOTTOM.laneWinner[0].teamPosition === 'UTILITY' ? '#9EDCFF' : '#37B7FF') 
-                                : (statsAt15.laneResults.BOTTOM.laneWinner[0].teamPosition === 'UTILITY' ? '#FF8B8B' : '#FF3F3F'),     
+                                color: statsAt15.laneResults.BOTTOM.laneWinner[0].teamId === 100
+                                    ? (statsAt15.laneResults.BOTTOM.laneWinner[0].teamPosition === 'UTILITY' ? '#9EDCFF' : '#37B7FF')
+                                    : (statsAt15.laneResults.BOTTOM.laneWinner[0].teamPosition === 'UTILITY' ? '#FF8B8B' : '#FF3F3F'),
                                 label: statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName,
                             },
                             {
                                 data: yAxisDataWinner2,
-                                color: statsAt15.laneResults.BOTTOM.laneWinner[1].teamId === 100 
-                                ? (statsAt15.laneResults.BOTTOM.laneWinner[1].teamPosition === 'UTILITY' ? '#9EDCFF' : '#37B7FF') 
-                                : (statsAt15.laneResults.BOTTOM.laneWinner[1].teamPosition === 'UTILITY' ? '#FF8B8B' : '#FF3F3F'),                                
+                                color: statsAt15.laneResults.BOTTOM.laneWinner[1].teamId === 100
+                                    ? (statsAt15.laneResults.BOTTOM.laneWinner[1].teamPosition === 'UTILITY' ? '#9EDCFF' : '#37B7FF')
+                                    : (statsAt15.laneResults.BOTTOM.laneWinner[1].teamPosition === 'UTILITY' ? '#FF8B8B' : '#FF3F3F'),
                                 label: statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName,
                             },
                             {
                                 data: yAxisDataLoser1,
-                                color: statsAt15.laneResults.BOTTOM.laneLoser[0].teamId === 100 
-                                ? (statsAt15.laneResults.BOTTOM.laneLoser[0].teamPosition === 'UTILITY' ? '#9EDCFF' : '#37B7FF') 
-                                : (statsAt15.laneResults.BOTTOM.laneLoser[0].teamPosition === 'UTILITY' ? '#FF8B8B' : '#FF3F3F'),     
+                                color: statsAt15.laneResults.BOTTOM.laneLoser[0].teamId === 100
+                                    ? (statsAt15.laneResults.BOTTOM.laneLoser[0].teamPosition === 'UTILITY' ? '#9EDCFF' : '#37B7FF')
+                                    : (statsAt15.laneResults.BOTTOM.laneLoser[0].teamPosition === 'UTILITY' ? '#FF8B8B' : '#FF3F3F'),
                                 label: statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName,
                             },
                             {
                                 data: yAxisDataLoser2,
-                                color: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 
-                                ? (statsAt15.laneResults.BOTTOM.laneLoser[1].teamPosition === 'UTILITY' ? '#9EDCFF' : '#37B7FF') 
-                                : (statsAt15.laneResults.BOTTOM.laneLoser[1].teamPosition === 'UTILITY' ? '#FF8B8B' : '#FF3F3F'), 
+                                color: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100
+                                    ? (statsAt15.laneResults.BOTTOM.laneLoser[1].teamPosition === 'UTILITY' ? '#9EDCFF' : '#37B7FF')
+                                    : (statsAt15.laneResults.BOTTOM.laneLoser[1].teamPosition === 'UTILITY' ? '#FF8B8B' : '#FF3F3F'),
                                 label: statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName,
                             }
                         ]}

@@ -884,17 +884,22 @@ function GameDetails() {
 
         {/* Section 5 */}
         <div id='GraphsAnchor' style={{ backgroundColor: '#f2f2f2' }}>
-          <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '45px', textAlign: 'center', marginBottom: '150px' }}>
-            <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
+          {statsAt15 === null ? (
+            <Box sx={{ display: 'flex', height: '300px', justifyContent: 'center', margin: 'auto', alignItems: 'center' }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '45px', textAlign: 'center', marginBottom: '150px' }}>
               <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
-                <Typography fontSize={20} fontWeight={600}>Graphs</Typography>
-                <Typography marginBottom={'20px'}>Match data visualized</Typography>
-                <Graphs gameData={gameData}></Graphs>
+                <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
+                  <Typography fontSize={20} fontWeight={600}>Graphs</Typography>
+                  <Typography marginBottom={'20px'}>Match data visualized</Typography>
+                  <Graphs gameData={gameData} timelineData={timelineData}></Graphs>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
+          )}
         </div>
-
         <Footer></Footer>
       </div>
     )

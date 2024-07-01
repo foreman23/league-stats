@@ -65,7 +65,7 @@
     text-transform: none !important;
 }
 
-.LanePhaseSummaryBtnClicked {
+/* .LanePhaseSummaryBtnClicked {
     background-color: #FF3F3F !important;
     color: white !important;
     box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
@@ -77,16 +77,30 @@
     color: white !important;
     box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
     text-transform: none !important;
-}
+} */
 
-.LanePhaseSummaryBtnClickedDraw {
-    background-color: grey !important;
+.LanePhaseSummaryBtnClicked {
+    background-color: #8c8c8c !important;
     color: white !important;
     box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
     text-transform: none !important;
 }
 
-.LanePhaseSummaryBtn:hover {
+.LanePhaseSummaryBtnClickedBlue {
+    background-color: #8c8c8c !important;
+    color: white !important;
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
+    text-transform: none !important;
+}
+
+.LanePhaseSummaryBtnClickedDraw {
+    background-color: #8c8c8c !important;
+    color: white !important;
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
+    text-transform: none !important;
+}
+
+/* .LanePhaseSummaryBtn:hover {
     background-color: #FF3F3F !important;
     color: white !important;
     box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
@@ -96,10 +110,22 @@
     background-color: #37B7FF !important;
     color: white !important;
     box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
+} */
+
+.LanePhaseSummaryBtn:hover {
+    background-color: #8c8c8c !important;
+    color: white !important;
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
+}
+
+.LanePhaseSummaryBtnBlue:hover {
+    background-color: #8c8c8c !important;
+    color: white !important;
+    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
 }
 
 .LanePhaseSummaryBtnDraw:hover {
-    background-color: grey !important;
+    background-color: #8c8c8c !important;
     color: white !important;
     box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
 }
@@ -183,4 +209,8 @@
     padding-left: 3px;
     padding-right: 3px;
     border-radius: 5px;
+}
+
+.GraphHeader {
+    text-align: center;
 }
