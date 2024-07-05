@@ -1,5 +1,5 @@
 import React from 'react'
-import { BarChart } from '@mui/x-charts'
+import { BarChart, LineChart } from '@mui/x-charts'
 import { Grid, Typography } from '@mui/material';
 
 const Graphs = (props) => {
@@ -12,7 +12,7 @@ const Graphs = (props) => {
     // Damage dealt labels
     const yAxisRiotIdDealt = participants.map(participant => ({
         name: `${participant.riotIdGameName} (${participant.championName})`
-    }));    
+    }));
     const xAxisDealt = participants.map(participant => participant.totalDamageDealtToChampions);
     const barColors = participants.map((participant) => {
         if (participant.teamId === 100) {
@@ -29,17 +29,33 @@ const Graphs = (props) => {
 
     // Calculate total gold each minute
     const frames = timelineData.info.frames;
-    const xAxisData = frames.map((_, index) => index);
+    console.log(frames)
+    const xAxisGold = frames.map((_, index) => index).slice(2, frames.length);
 
-    const participantTeamIds = participants.map((participant) => participant.teamId)
-    console.log(participantTeamIds)
+    let yAxisGold = frames.map((frame) => {
+        let team1Gold = 0;
+        let team2Gold = 0;
 
-    const yAxisData = frames.map((frame) => {
-        const team1Gold = frame.participantFrames[1].totalGold
-        return team1Gold;
-    });    
-    console.log(xAxisData)
-    console.log(yAxisData)
+        Object.keys(frame.participantFrames).forEach((participantId) => {
+            const participantFrame = frame.participantFrames[participantId];
+            const teamId = participants.find(p => p.participantId === parseInt(participantId)).teamId;
+
+            if (teamId === 100) {
+                team1Gold += participantFrame.totalGold;
+            } else {
+                team2Gold += participantFrame.totalGold;
+            }
+        });
+        return team1Gold - team2Gold;
+    });
+    yAxisGold = yAxisGold.slice(2, frames.length);
+
+    // const yAxisGold1 = yAxisGold.map(item => item[0]);
+    // const yAxisGold2 = yAxisGold.map(item => item[1]);
+    // console.log(xAxisGold)
+    // console.log(yAxisGold1)
+    // console.log(yAxisGold2)
+
 
     return (
         <div>
@@ -94,26 +110,26 @@ const Graphs = (props) => {
                 </Grid>
                 <Grid xs={12}>
                     <Typography fontWeight={'bold'} className='GraphHeader'>Team Gold Advantage</Typography>
-                    <BarChart
-                        width={1150}
+                    <LineChart
+                        width={1100}
                         height={300}
-                        layout='horizontal'
+                        xAxis={[{ 
+                            data: xAxisGold,
+                        }]}
                         yAxis={[{
-                            data: yAxisRiotIdDealt,
-                            scaleType: 'band',
                             colorMap: {
-                                type: 'ordinal',
-                                values: yAxisRiotIdDealt,
-                                colors: barColors
-                            }
+                                type: 'piecewise',
+                                data: yAxisGold,
+                                thresholds: [0],
+                                colors: ['#ff6666', '#66c7ff'],
+                              },
                         }]}
                         series={[
                             {
-                                data: xAxisDealt,
-                                id: 'damageDealt',
+                                data: yAxisGold,
+                                area: true,
                             },
                         ]}
-                        margin={{ left: 150 }}
                     />
                 </Grid>
             </Grid>
