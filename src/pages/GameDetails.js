@@ -912,8 +912,6 @@ function GameDetails() {
             <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '45px', textAlign: 'center', marginBottom: '150px' }}>
               <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
                 <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
-                  <Typography fontSize={20} fontWeight={600}>Teamfights</Typography>
-                  <Typography marginBottom={'20px'}>Battles that occurred during the match</Typography>
                   <Battles gameData={gameData} timelineData={timelineData}></Battles>
                 </Grid>
               </Grid>
