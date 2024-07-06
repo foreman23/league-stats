@@ -16,6 +16,7 @@ import LanePhaseSummaryCardJg from '../components/LanePhaseSummaryCardJg';
 import LanePhaseSummaryCardMid from '../components/LanePhaseSummaryCardMid';
 import LanePhaseSummaryCardBot from '../components/LanePhaseSummaryCardBot';
 import Graphs from '../components/Graphs';
+import Battles from '../components/Battles';
 
 function GameDetails() {
 
@@ -552,7 +553,7 @@ function GameDetails() {
                   <Button onClick={() => scrollToSection('SummaryAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Summary</Button>
                   <Button onClick={() => scrollToSection('LaningAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Laning</Button>
                   <Button onClick={() => scrollToSection('GraphsAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Graphs</Button>
-                  <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Teamfights</Button>
+                  <Button onClick={() => scrollToSection('TeamfightsAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Teamfights</Button>
                   <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Builds</Button>
                 </span>
               </Grid>
@@ -889,7 +890,7 @@ function GameDetails() {
               <CircularProgress />
             </Box>
           ) : (
-            <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '45px', textAlign: 'center', marginBottom: '150px' }}>
+            <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '45px', textAlign: 'center' }}>
               <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
                 <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
                   <Typography fontSize={20} fontWeight={600}>Graphs</Typography>
@@ -900,6 +901,26 @@ function GameDetails() {
             </Grid>
           )}
         </div>
+
+        {/* Section 6 */}
+        <div id='TeamfightsAnchor'>
+          {statsAt15 === null ? (
+            <Box sx={{ display: 'flex', height: '300px', justifyContent: 'center', margin: 'auto', alignItems: 'center' }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '45px', textAlign: 'center', marginBottom: '150px' }}>
+              <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
+                <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
+                  <Typography fontSize={20} fontWeight={600}>Teamfights</Typography>
+                  <Typography marginBottom={'20px'}>Battles that occurred during the match</Typography>
+                  <Battles gameData={gameData} timelineData={timelineData}></Battles>
+                </Grid>
+              </Grid>
+            </Grid>
+          )}
+        </div>
+
         <Footer></Footer>
       </div>
     )

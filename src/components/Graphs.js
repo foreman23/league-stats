@@ -108,10 +108,10 @@ const Graphs = (props) => {
                         margin={{ left: 200 }}
                     />
                 </Grid>
-                <Grid xs={12}>
+                <Grid style={{ display: 'flex' }} xs={12}>
                     <Typography fontWeight={'bold'} className='GraphHeader'>Team Gold Advantage</Typography>
                     <LineChart
-                        width={1100}
+                        width={1000}
                         height={300}
                         xAxis={[{ 
                             data: xAxisGold,
