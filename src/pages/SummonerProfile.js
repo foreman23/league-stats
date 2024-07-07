@@ -1,4 +1,4 @@
-import { Box, List, ListItem, LinearProgress, Button, Typography } from '@mui/material';
+import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress } from '@mui/material';
 import React, { useCallback } from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -36,6 +36,8 @@ const SummonerProfile = () => {
   let { selectedRegion, summonerName, riotId } = useParams();
   summonerName = summonerName.toLowerCase();
   riotId = riotId.toUpperCase();
+  console.log(selectedRegion, summonerName, riotId)
+  console.log(isLoading)
 
   // Set the current ddragon version
   const getDataDragonVersion = async () => {
@@ -50,15 +52,20 @@ const SummonerProfile = () => {
       })
   }
 
+  const [loadingMatches, setLoadingMatches] = useState(false);
+
   // Update matches involving user (for first 1) ***can increase limit later
   const updateUserMatchInfo = useCallback(async (data) => {
     let historyData = data.historyData
     let newMatchDataArray = [];
     let riotApiCallCount = 0;
 
+    setLoadingMatches(true)
+
     if (historyData.length < 1) {
-      setMatchData(null)
+      setMatchData(null);
       setMatchesLoaded(true);
+      setLoadingMatches(false);
     }
 
     else {
@@ -91,6 +98,7 @@ const SummonerProfile = () => {
       console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
       setMatchData(newMatchDataArray);
       setMatchesLoaded(true);
+      setLoadingMatches(false);
     }
   }, [matchRegion, selectedRegion])
 
@@ -291,24 +299,43 @@ const SummonerProfile = () => {
 
   // Render page once data is loaded
   useEffect(() => {
-    if (summonerData !== null && matchesLoaded === true) {
+    if (summonerData !== null && matchesLoaded === true && matchData !== null && summonerData !== undefined && matchData !== undefined) {
       console.log(summonerData)
       console.log(matchData)
-
       // Find player data
-      setPlayerData(matchData[0].info.participants.find(player => player.puuid === summonerData.summonerData.puuid))
+      if (matchData.length > 0) {
+        setPlayerData(matchData[0].info.participants.find(player => player.puuid === summonerData.summonerData.puuid))
+      }
     }
   }, [summonerData, matchData, matchesLoaded])
 
   useEffect(() => {
-    if (playerData) {
+    if (playerData !== undefined && playerData !== null) {
+      console.log(playerData)
       console.log(playerData.riotIdGameName)
       document.title = `${playerData.riotIdGameName}#${riotId} - ${selectedRegion}`;
-      setIsLoading(false);
     }
   }, [playerData]);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (matchesLoaded && playerData !== undefined && matchData !== undefined && matchData !== null) {
+      console.log(matchData)
+      console.log(playerData)
+      console.log('loading done')
+      setIsLoading(false);
+    }
+  }, [playerData])
+
+  useEffect(() => {
+    if (matchesLoaded === true) {
+      setIsLoading(false);
+    }
+    else {
+      setIsLoading(true);
+    }
+  }, [matchesLoaded])
+
+  if (isLoading === true) {
     return (
       <Box>
         <Navbar></Navbar>
@@ -330,7 +357,11 @@ const SummonerProfile = () => {
 
           <Grid alignItems={'center'} display={'flex'}>
             <List>
-              <ListItem>{playerData.riotIdGameName} #{riotId} ({selectedRegion})</ListItem>
+              {playerData ? (
+                <ListItem>{playerData.riotIdGameName} #{riotId} ({selectedRegion})</ListItem>
+              ) : (
+                <ListItem>{summonerName} #{riotId} ({selectedRegion})</ListItem>
+              )}
               <ListItem>level: {summonerData.summonerData.summonerLevel}</ListItem>
               {summonerData.rankedData.length > 0 ? (
                 <>
@@ -349,19 +380,23 @@ const SummonerProfile = () => {
         </Grid>
 
         <Box justifyContent={'center'} width={'35vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'125px'}>
-          {matchData !== null && matchData.length > 0 ? (
-            matchData.map((gameData, index) => (
-              <div className='DisplayGameContainer' onClick={() => handleMatchClick(gameData)} key={index}>
-                <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid}></DisplayGame>
-              </div>
-            ))
-          ) : (
+          {(loadingMatches) ? (
+            <div style={{ textAlign: 'center' }} >
+              <CircularProgress />
+            </div>
+          ) : (matchData === null || matchData.length === 0 && matchData !== -1) ? (
             // Display NO MATCHES FOUND
             <div>
               <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'}>
                 <Typography style={{ textAlign: 'center' }}>No recent matches!</Typography>
               </Grid>
             </div>
+          ) : (
+            matchData.map((gameData, index) => (
+              <div className='DisplayGameContainer' onClick={() => handleMatchClick(gameData)} key={index}>
+                <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
+              </div>
+            ))
           )}
         </Box>
 

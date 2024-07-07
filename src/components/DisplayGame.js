@@ -8,6 +8,7 @@ const DisplayGame = (props) => {
     // Find participant
     const participants = props.gameData.info.participants;
     const participant = props.gameData.info.participants.find(participant => participant.puuid === props.puuid);
+    console.log(participant)
 
     // Find summoner spells
     const summonerSpellsObj = Object.values(summonerSpells.data);
