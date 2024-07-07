@@ -27,6 +27,7 @@ const SummonerProfile = () => {
   const [disableUpdateButton, setDisableUpdateButton] = useState(false);
 
   const [dataDragonVersion, setDataDragonVersion] = useState(null);
+  const [playerData, setPlayerData] = useState(null);
 
   // Init navigate
   const navigate = useNavigate();
@@ -285,7 +286,7 @@ const SummonerProfile = () => {
 
   // Handle match click
   const handleMatchClick = (gameData) => {
-    navigate(`/match/${gameData.metadata.matchId}/${summonerName}/${riotId}`, { state: { gameData, alternateRegion } });
+    navigate(`/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion } });
   };
 
   // Render page once data is loaded
@@ -293,10 +294,19 @@ const SummonerProfile = () => {
     if (summonerData !== null && matchesLoaded === true) {
       console.log(summonerData)
       console.log(matchData)
-      document.title = `${summonerName}#${riotId} - ${selectedRegion}`;
-      setIsLoading(false);
+
+      // Find player data
+      setPlayerData(matchData[0].info.participants.find(player => player.puuid === summonerData.summonerData.puuid))
     }
   }, [summonerData, matchData, matchesLoaded])
+
+  useEffect(() => {
+    if (playerData) {
+      console.log(playerData.riotIdGameName)
+      document.title = `${playerData.riotIdGameName}#${riotId} - ${selectedRegion}`;
+      setIsLoading(false);
+    }
+  }, [playerData]);
 
   if (isLoading) {
     return (
@@ -320,7 +330,7 @@ const SummonerProfile = () => {
 
           <Grid alignItems={'center'} display={'flex'}>
             <List>
-              <ListItem>{summonerName.toUpperCase()}#{riotId} ({selectedRegion})</ListItem>
+              <ListItem>{playerData.riotIdGameName.toUpperCase()}#{riotId} ({selectedRegion})</ListItem>
               <ListItem>level: {summonerData.summonerData.summonerLevel}</ListItem>
               {summonerData.rankedData.length > 0 ? (
                 <>
@@ -341,7 +351,7 @@ const SummonerProfile = () => {
         <Box justifyContent={'center'} width={'35vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'125px'}>
           {matchData !== null && matchData.length > 0 ? (
             matchData.map((gameData, index) => (
-              <div className='DisplayGameContainer' onClick={ () => handleMatchClick(gameData)} key={index}>
+              <div className='DisplayGameContainer' onClick={() => handleMatchClick(gameData)} key={index}>
                 <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid}></DisplayGame>
               </div>
             ))

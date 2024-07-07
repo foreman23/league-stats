@@ -28,6 +28,7 @@ function GameDetails() {
   const { alternateRegion } = location.state;
   console.log(gameData)
   console.log(alternateRegion)
+  console.log(summonerName)
 
   // Card states (lane summaries)
   const [topSummaryCardStatus, setTopSummaryCardStatus] = useState(false);
@@ -36,12 +37,17 @@ function GameDetails() {
   const [botSummaryCardStatus, setBotSummaryCardStatus] = useState(false);
 
   // Find player data
-  const playerData = gameData.info.participants.find(player => player.riotIdGameName.toLowerCase() === summonerName)
+  const playerData = gameData.info.participants.find(player => player.riotIdGameName === summonerName)
 
   // Timeline data
   const [timelineData, setTimelineData] = useState(null);
 
   // Find opposing laner
+  console.log(gameData.info.participants)
+  gameData.info.participants.forEach((participant) => {
+    console.log(participant.teamPosition)
+  })
+  console.log(playerData)
   const opposingLaner = gameData.info.participants.find(laner => laner.teamPosition === playerData.teamPosition && laner.summonerId !== playerData.summonerId)
 
   // Find gold difference between opposing laner
@@ -554,7 +560,7 @@ function GameDetails() {
                   <Button onClick={() => scrollToSection('SummaryAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Summary</Button>
                   <Button onClick={() => scrollToSection('LaningAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Laning</Button>
                   <Button onClick={() => scrollToSection('GraphsAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Graphs</Button>
-                  <Button onClick={() => scrollToSection('TeamfightsAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Teamfights</Button>
+                  <Button onClick={() => scrollToSection('TeamfightsAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Timeline</Button>
                   {/* <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Builds</Button> */}
                 </span>
               </Grid>
@@ -611,11 +617,13 @@ function GameDetails() {
                             <img style={{ width: '19px', borderRadius: '2px' }} src={getKeystoneIconUrl(player, runesObj)} alt="Keystone"></img>
                             <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                           </div>
+                          <Tooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
                           <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography><span className={
                             (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
                               'TableStandingMVP' :
                               'TableStanding')
                           }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</span> {player.score.toFixed(1)} </Typography>
+                          </Tooltip>
                         </div>
                       </TableCell>
                       <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
@@ -625,7 +633,9 @@ function GameDetails() {
                       </TableCell>
                       <TableCell align='center'>
                         <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
-                        <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#37B7FF' }, width: '50%', height: '10px' }}></LinearProgress>
+                        <Tooltip disableInteractive title={<div>{`Physical: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`Magical: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
+                          <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#37B7FF' }, width: '50%', height: '10px' }}></LinearProgress>
+                        </Tooltip>
                       </TableCell>
                       <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
                       <TableCell align='center'>
@@ -699,11 +709,14 @@ function GameDetails() {
                             <img style={{ width: '19px', borderRadius: '2px' }} src={getKeystoneIconUrl(player, runesObj)} alt="Keystone"></img>
                             <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                           </div>
+                          <Tooltip disabledInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
                           <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography><span className={
                             (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
                               'TableStandingMVP' :
                               'TableStanding')
-                          }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</span> {player.score.toFixed(1)} </Typography>                        </div>
+                          }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</span> {player.score.toFixed(1)} </Typography>                        
+                          </Tooltip>
+                          </div>
                       </TableCell>
                       <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
                       <TableCell align='center'>
@@ -712,7 +725,9 @@ function GameDetails() {
                       </TableCell>
                       <TableCell align='center'>
                         <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
-                        <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#FF3F3F' }, width: '50%', height: '10px' }}></LinearProgress>
+                        <Tooltip disabledInteractive title={<div>{`Physical: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`Magical: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
+                          <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#FF3F3F' }, width: '50%', height: '10px' }}></LinearProgress>
+                        </Tooltip>
                       </TableCell>
                       <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
                       <TableCell align='center'>
