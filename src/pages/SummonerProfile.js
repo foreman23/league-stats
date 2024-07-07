@@ -330,7 +330,7 @@ const SummonerProfile = () => {
 
           <Grid alignItems={'center'} display={'flex'}>
             <List>
-              <ListItem>{playerData.riotIdGameName.toUpperCase()}#{riotId} ({selectedRegion})</ListItem>
+              <ListItem>{playerData.riotIdGameName} #{riotId} ({selectedRegion})</ListItem>
               <ListItem>level: {summonerData.summonerData.summonerLevel}</ListItem>
               {summonerData.rankedData.length > 0 ? (
                 <>

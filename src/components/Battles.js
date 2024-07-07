@@ -37,47 +37,33 @@ const Battles = (props) => {
                 console.log(currEvent)
                 if (lastKillTime === null) {
                     lastKillTime = currEvent.timestamp;
-                    if (currEvent.type === 'CHAMPION_KILL') {
-                        const victim = participants.find(victim => victim.participantId === currEvent.victimId)
-                        if (victim.teamId === 100) {
-                            redKills += 1;
-                        }
-                        if (victim.teamId === 200) {
-                            blueKills += 1;
-                        }
-                    }
+                    // if (currEvent.type === 'CHAMPION_KILL') {
+                    //     const victim = participants.find(victim => victim.participantId === currEvent.victimId)
+                    //     if (victim.teamId === 100) {
+                    //         redKills += 1;
+                    //     }
+                    //     if (victim.teamId === 200) {
+                    //         blueKills += 1;
+                    //     }
+                    // }
                     currBattle.push(currEvent);
                 }
                 else if (currEvent.timestamp - lastKillTime <= 45000) { // if kill occurred in last 45 seconds, it's part of fight
                     lastKillTime = currEvent.timestamp;
                     // Add kill count to team
-                    if (currEvent.type === 'CHAMPION_KILL') {
-                        const victim = participants.find(victim => victim.participantId === currEvent.victimId)
-                        if (victim.teamId === 100) {
-                            redKills += 1;
-                        }
-                        if (victim.teamId === 200) {
-                            blueKills += 1;
-                        }
-                    }
+                    // if (currEvent.type === 'CHAMPION_KILL') {
+                    //     const victim = participants.find(victim => victim.participantId === currEvent.victimId)
+                    //     if (victim.teamId === 100) {
+                    //         redKills += 1;
+                    //     }
+                    //     if (victim.teamId === 200) {
+                    //         blueKills += 1;
+                    //     }
+                    // }
                     currBattle.push(currEvent);
                 }
                 // Push fight to master array and empty variables
                 else {
-                    // Determine Outcome
-                    let outcome = null;
-                    if (blueKills > redKills) {
-                        outcome = `Blue wins ${blueKills} - ${redKills}`;
-                        blueTotalFightsWon += 1;
-                    }
-                    else if (redKills > blueKills) {
-                        outcome = `Red wins ${redKills} - ${blueKills}`;
-                        redTotalFightsWon += 1;
-                    }
-                    else {
-                        outcome = `Even trade ${blueKills} - ${redKills}`;
-                    }
-
                     // Determine Timespan
                     let timespan = null;
                     if (lastKillTime === currBattle[0].timestamp) {
@@ -103,6 +89,12 @@ const Battles = (props) => {
                     currBattle.forEach((kill) => {
                         if (kill.type === 'CHAMPION_KILL') {
                             const victim = participants.find(victim => victim.participantId === kill.victimId)
+                            if (victim.teamId === 100) {
+                                redKills += 1;
+                            }
+                            if (victim.teamId === 200) {
+                                blueKills += 1;
+                            }
                             detailsStr += `${victim.riotIdGameName} (${victim.championName}) died. `;
                         }
                         else {
@@ -140,6 +132,20 @@ const Battles = (props) => {
 
                     })
 
+                    // Determine Outcome
+                    let outcome = null;
+                    if (blueKills > redKills) {
+                        outcome = `Blue wins ${blueKills} - ${redKills}`;
+                        blueTotalFightsWon += 1;
+                    }
+                    else if (redKills > blueKills) {
+                        outcome = `Red wins ${redKills} - ${blueKills}`;
+                        redTotalFightsWon += 1;
+                    }
+                    else {
+                        outcome = `Even trade ${blueKills} - ${redKills}`;
+                    }
+
                     const battlePayload = {
                         outcome: outcome,
                         timespan: timespan,
@@ -174,17 +180,6 @@ const Battles = (props) => {
 
     // After processing all events, check if there's a remaining battle to push
     if (currBattle.length > 0) {
-        let outcome = null;
-        if (blueKills > redKills) {
-            outcome = `Blue wins ${blueKills} - ${redKills}`;
-            blueTotalFightsWon += 1;
-        } else if (redKills > blueKills) {
-            outcome = `Red wins ${redKills} - ${blueKills}`;
-            redTotalFightsWon += 1;
-        } else {
-            outcome = `Even trade ${blueKills} - ${redKills}`;
-        }
-
         // Determine Timespan
         let timespan = null;
         if (lastKillTime === currBattle[0].timestamp) {
@@ -209,6 +204,12 @@ const Battles = (props) => {
         currBattle.forEach((kill) => {
             if (kill.type === 'CHAMPION_KILL') {
                 const victim = participants.find(victim => victim.participantId === kill.victimId)
+                if (victim.teamId === 100) {
+                    redKills += 1;
+                }
+                if (victim.teamId === 200) {
+                    blueKills += 1;
+                }
                 detailsStr += `${victim.riotIdGameName} (${victim.championName}) died. `;
             }
             else {
@@ -245,6 +246,18 @@ const Battles = (props) => {
             }
 
         })
+
+        // Determine Outcome
+        let outcome = null;
+        if (blueKills > redKills) {
+            outcome = `Blue wins ${blueKills} - ${redKills}`;
+            blueTotalFightsWon += 1;
+        } else if (redKills > blueKills) {
+            outcome = `Red wins ${redKills} - ${blueKills}`;
+            redTotalFightsWon += 1;
+        } else {
+            outcome = `Even trade ${blueKills} - ${redKills}`;
+        }
 
         const battlePayload = {
             outcome: outcome,
