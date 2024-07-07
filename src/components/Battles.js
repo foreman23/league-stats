@@ -1,4 +1,4 @@
-import { Typography, Grid, Table, TableContainer, Paper, TableHead, TableBody, TableCell, TableRow } from '@mui/material'
+import { Typography, Grid, Table, TableContainer, Paper, TableHead, TableBody, TableCell, TableRow, Tooltip } from '@mui/material'
 import React from 'react'
 
 const Battles = (props) => {
@@ -286,7 +286,9 @@ const Battles = (props) => {
                                             {fight.blueObjectives.hordeKills > 0 ? (
                                                 <div>
                                                     {Array.from({ length: fight.blueObjectives.hordeKills }).map((_, index) => (
-                                                        <img key={index} width={'20px'} src='/images/objIcons/vilemaw-100.webp' alt={`Horde Kill ${index + 1}`} />
+                                                        <Tooltip title='Blue team killed a void grub'>
+                                                            <img key={index} width={'20px'} src='/images/objIcons/vilemaw-100.webp' alt={`Horde Kill ${index + 1}`} />
+                                                        </Tooltip>
                                                     ))}
                                                 </div>
                                             ) : (
@@ -295,7 +297,9 @@ const Battles = (props) => {
                                             {fight.blueObjectives.dragonKills > 0 ? (
                                                 <div>
                                                     {Array.from({ length: fight.blueObjectives.dragonKills }).map((_, index) => (
-                                                        <img key={index} width={'20px'} src='/images/objIcons/dragon-100.webp' alt={`Dragon Kill ${index + 1}`} />
+                                                        <Tooltip title='Blue team killed a dragon'>
+                                                            <img key={index} width={'20px'} src='/images/objIcons/dragon-100.webp' alt={`Dragon Kill ${index + 1}`} />
+                                                        </Tooltip>
                                                     ))}
                                                 </div>
                                             ) : (
@@ -304,7 +308,9 @@ const Battles = (props) => {
                                             {fight.blueObjectives.baronKills > 0 ? (
                                                 <div>
                                                     {Array.from({ length: fight.blueObjectives.baronKills }).map((_, index) => (
-                                                        <img key={index} width={'20px'} src='/images/objIcons/baron-100.webp' alt={`Baron Kill ${index + 1}`} />
+                                                        <Tooltip title='Blue team killed baron'>
+                                                            <img key={index} width={'20px'} src='/images/objIcons/baron-100.webp' alt={`Baron Kill ${index + 1}`} />
+                                                        </Tooltip>
                                                     ))}
                                                 </div>
                                             ) : (
@@ -312,28 +318,34 @@ const Battles = (props) => {
                                             )}
                                         </div>
                                         <div style={{ display: 'flex' }}>
-                                        {fight.redObjectives.hordeKills > 0 ? (
-                                            <div>
-                                                {Array.from({ length: fight.redObjectives.hordeKills }).map((_, index) => (
-                                                    <img key={index} width={'20px'} src='/images/objIcons/vilemaw-200.webp' alt={`Horde Kill ${index + 1}`} />
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <div></div>
-                                        )}
-                                        {fight.redObjectives.dragonKills > 0 ? (
-                                            <div>
-                                                {Array.from({ length: fight.redObjectives.dragonKills }).map((_, index) => (
-                                                    <img key={index} width={'20px'} src='/images/objIcons/dragon-200.webp' alt={`Dragon Kill ${index + 1}`} />
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <div></div>
-                                        )}
-                                        {fight.redObjectives.baronKills > 0 ? (
+                                            {fight.redObjectives.hordeKills > 0 ? (
+                                                <div>
+                                                    {Array.from({ length: fight.redObjectives.hordeKills }).map((_, index) => (
+                                                        <Tooltip title='Red team killed a void grub'>
+                                                            <img key={index} width={'20px'} src='/images/objIcons/vilemaw-200.webp' alt={`Horde Kill ${index + 1}`} />
+                                                        </Tooltip>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div></div>
+                                            )}
+                                            {fight.redObjectives.dragonKills > 0 ? (
+                                                <div>
+                                                    {Array.from({ length: fight.redObjectives.dragonKills }).map((_, index) => (
+                                                        <Tooltip title='Red team killed a dragon'>
+                                                            <img key={index} width={'20px'} src='/images/objIcons/dragon-200.webp' alt={`Dragon Kill ${index + 1}`} />
+                                                        </Tooltip>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div></div>
+                                            )}
+                                            {fight.redObjectives.baronKills > 0 ? (
                                                 <div>
                                                     {Array.from({ length: fight.redObjectives.baronKills }).map((_, index) => (
-                                                        <img key={index} width={'20px'} src='/images/objIcons/baron-200.webp' alt={`Baron Kill ${index + 1}`} />
+                                                        <Tooltip title='Red team killed baron'>
+                                                            <img key={index} width={'20px'} src='/images/objIcons/baron-200.webp' alt={`Baron Kill ${index + 1}`} />
+                                                        </Tooltip>
                                                     ))}
                                                 </div>
                                             ) : (
