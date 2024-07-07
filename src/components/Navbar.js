@@ -73,7 +73,7 @@ function Navbar() {
                 <Toolbar>
                     <a href='/' style={{ textDecoration: 'none' }}>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            lolScroll.com
+                            RiftReport
                         </Typography>
                     </a>
                     <TextField

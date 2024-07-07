@@ -90,10 +90,10 @@ function SummonerSearch() {
 
       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-        <Grid style={{ alignItems: 'center', display: 'flex', marginTop: '125px' }} container>
+        <Grid style={{ alignItems: 'center', display: 'flex', marginTop: '100px' }} container>
 
           <Grid xs={12} display={'flex'} justifyContent={'center'}>
-            <img style={{ width: '10%', margin: '20px' }} alt='site logo' src='../logo512.png'></img>
+            <img style={{ width: '10%', margin: '20px' }} alt='site logo' src='/images/ryzeLogo.webp'></img>
           </Grid>
 
           <Grid xs={12} display={'flex'} justifyContent={'center'}>
