@@ -17,6 +17,7 @@ import LanePhaseSummaryCardMid from '../components/LanePhaseSummaryCardMid';
 import LanePhaseSummaryCardBot from '../components/LanePhaseSummaryCardBot';
 import Graphs from '../components/Graphs';
 import Battles from '../components/Battles';
+import DisplayFeats from '../components/DisplayFeats';
 
 function GameDetails() {
 
@@ -554,7 +555,7 @@ function GameDetails() {
                   <Button onClick={() => scrollToSection('LaningAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Laning</Button>
                   <Button onClick={() => scrollToSection('GraphsAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Graphs</Button>
                   <Button onClick={() => scrollToSection('TeamfightsAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Teamfights</Button>
-                  <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Builds</Button>
+                  {/* <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Builds</Button> */}
                 </span>
               </Grid>
             </Grid>
@@ -567,110 +568,7 @@ function GameDetails() {
               </Grid>
               <Grid backgroundColor='white' item xs={5}>
                 <Typography marginTop={'10px'} fontSize={18} fontWeight={600}>Feats & Fails</Typography>
-                <Grid style={{ width: '65%', marginTop: '2px' }} container spacing={1}>
-                  <Grid item>
-                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
-                      slotProps={{
-                        popper: {
-                          modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
-                        },
-                        tooltip: {
-                          sx: {
-                            fontSize: '14px'
-                          }
-                        }
-                      }}
-                      title='Ler only died 2 time(s) during the match.'
-                    >
-                      <Typography className='FeatBadge'>Tower Dominance</Typography>
-                    </Tooltip>
-                  </Grid>
-                  <Grid item>
-                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
-                      slotProps={{
-                        popper: {
-                          modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
-                        },
-                        tooltip: {
-                          sx: {
-                            fontSize: '14px'
-                          }
-                        }
-                      }}
-                      title='Ler only died 2 time(s) during the match.'
-                    >
-                      <Typography className='FeatBadge'>Flawless Victory</Typography>
-                    </Tooltip>
-                  </Grid>
-                  <Grid item>
-                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
-                      slotProps={{
-                        popper: {
-                          modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
-                        },
-                        tooltip: {
-                          sx: {
-                            fontSize: '14px'
-                          }
-                        }
-                      }}
-                      title='Ler only died 2 time(s) during the match.'
-                    >
-                      <Typography className='FeatBadge'>Survivor</Typography>
-                    </Tooltip>
-                  </Grid>
-                  <Grid item>
-                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
-                      slotProps={{
-                        popper: {
-                          modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
-                        },
-                        tooltip: {
-                          sx: {
-                            fontSize: '14px'
-                          }
-                        }
-                      }}
-                      title='Ler only died 2 time(s) during the match.'
-                    >
-                      <Typography className='FeatBadge'>Swift Execution</Typography>
-                    </Tooltip>
-                  </Grid>
-                  <Grid item>
-                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
-                      slotProps={{
-                        popper: {
-                          modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
-                        },
-                        tooltip: {
-                          sx: {
-                            fontSize: '14px'
-                          }
-                        }
-                      }}
-                      title='Ler only died 2 time(s) during the match.'
-                    >
-                      <Typography className='FailBadge'>Teamfight Follies</Typography>
-                    </Tooltip>
-                  </Grid>
-                  <Grid item>
-                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
-                      slotProps={{
-                        popper: {
-                          modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
-                        },
-                        tooltip: {
-                          sx: {
-                            fontSize: '14px'
-                          }
-                        }
-                      }}
-                      title='Ler only died 2 time(s) during the match.'
-                    >
-                      <Typography className='FailBadge'>No Dragons</Typography>
-                    </Tooltip>
-                  </Grid>
-                </Grid>
+                <DisplayFeats></DisplayFeats>
               </Grid>
             </Grid>
           </Grid>
