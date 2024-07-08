@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Typography, Toolbar, AppBar, TextField } from '@mui/material';
+import { Box, Button, Typography, Toolbar, AppBar, TextField, IconButton, Select, MenuItem } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 function Navbar() {
@@ -21,61 +22,78 @@ function Navbar() {
     }
 
     const handleSearchSubmit = async () => {
-        // Extract riot tag from summoner name
-        let summonerNamePayload = null;
-        let riotTagPayload = null;
 
-        // If last character is #
-        if (summonerName[summonerName.length - 1] === "#") {
-            summonerNamePayload = summonerName.split("#")[0];
-            riotTagPayload = selectedRegion;
-            // Change tag to #OCE for oc1
-            if (riotTagPayload === 'oc1') {
-                riotTagPayload = 'oce';
+        if (summonerName) {
+            // Extract riot tag from summoner name
+            let summonerNamePayload = null;
+            let riotTagPayload = null;
+
+            // If last character is #
+            if (summonerName[summonerName.length - 1] === "#") {
+                summonerNamePayload = summonerName.split("#")[0];
+                riotTagPayload = selectedRegion;
+                // Change tag to #OCE for oc1
+                if (riotTagPayload === 'oc1') {
+                    riotTagPayload = 'oce';
+                }
             }
-        }
 
-        // Else if contains # but not last character (contains riot tag)
-        else if (summonerName.includes("#")) {
-            summonerNamePayload = summonerName.split("#")[0];
-            riotTagPayload = summonerName.split("#")[1];
-            console.log(summonerNamePayload, riotTagPayload)
-            if (riotTagPayload === undefined || riotTagPayload === null) {
+            // Else if contains # but not last character (contains riot tag)
+            else if (summonerName.includes("#")) {
+                summonerNamePayload = summonerName.split("#")[0];
+                riotTagPayload = summonerName.split("#")[1];
+                console.log(summonerNamePayload, riotTagPayload)
+                if (riotTagPayload === undefined || riotTagPayload === null) {
+                }
             }
-        }
 
-        // If no # riot tag is provided
-        else {
-            summonerNamePayload = summonerName;
-            riotTagPayload = selectedRegion;
-            // Change tag to #OCE for oc1
-            if (riotTagPayload === 'oc1') {
-                riotTagPayload = 'oce';
+            // If no # riot tag is provided
+            else {
+                summonerNamePayload = summonerName;
+                riotTagPayload = selectedRegion;
+                // Change tag to #OCE for oc1
+                if (riotTagPayload === 'oc1') {
+                    riotTagPayload = 'oce';
+                }
             }
-        }
-        console.log(selectedRegion, summonerNamePayload, riotTagPayload)
+            console.log(selectedRegion, summonerNamePayload, riotTagPayload)
 
-        const newPath = `/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`;
+            const newPath = `/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`;
 
-        if (location.pathname.startsWith('/profile')) {
-            navigate('/loading', { replace: true });
-            setTimeout(() => {
-                navigate(newPath, { replace: true });
-            }, 0);
-        } else {
-            navigate(newPath);
+            if (location.pathname.startsWith('/profile')) {
+                navigate('/loading', { replace: true });
+                setTimeout(() => {
+                    navigate(newPath, { replace: true });
+                }, 0);
+            } else {
+                navigate(newPath);
+            }
         }
     }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar style={{ backgroundColor: '#404040', color: 'white' }} position="static">
                 <Toolbar>
-                    <a href='/' style={{ textDecoration: 'none' }}>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            RiftReport
+                    <a href='/' style={{ textDecoration: 'none', color: 'white' }}>
+                        <Typography variant="h6" fontWeight={'bold'} marginRight='10px' component="div" sx={{ flexGrow: 1 }}>
+                            RiftReport.gg
                         </Typography>
                     </a>
+                    <Select
+                        sx={{
+                            backgroundColor: '#4d4d4d',
+                            color: '#d9d9d9',
+                            fontSize: '14px',
+                            fontWeight: 'bold',
+                            height: '46px',
+                            borderTopRightRadius: '0px',
+                            borderBottomRightRadius: '0px'
+                        }}
+                        defaultValue={10}>
+                        <MenuItem value={10}>NA</MenuItem>
+                        <MenuItem value={20}>EUW</MenuItem>
+                    </Select>
                     <TextField
                         onChange={updateSummonerNameState}
                         onKeyDown={event => {
@@ -83,9 +101,39 @@ function Navbar() {
                                 handleSearchSubmit();
                             }
                         }}
+                        sx={{
+                            width: '225px',
+                            backgroundColor: '#333333',
+                            borderTopRightRadius: '5px',
+                            borderBottomRightRadius: '5px',
+                            input: {
+                                color: 'white',
+                                paddingBottom: '20px',
+                                height: '5px'
+                            },
+                            margin: '10px',
+                            marginLeft: '0px',
+                            marginRight: '5px',
+                        }}
+                        size='small'
+                        variant='filled'
                         placeholder='Search for a Summoner'>
                     </TextField>
-                    <Button onClick={handleSearchSubmit} color="inherit">Search</Button>
+                    <IconButton style={{ marginTop: '2px' }} onClick={handleSearchSubmit} color="inherit">
+                        <SearchIcon></SearchIcon>
+                    </IconButton>
+                    <Select
+                        size='small'
+                        sx={{
+                            backgroundColor: '#4d4d4d',
+                            color: '#d9d9d9',
+                            fontSize: '14px',
+                            fontWeight: 'bold'
+                        }}
+                        defaultValue={10}>
+                        <MenuItem value={10}>English</MenuItem>
+                        <MenuItem value={20}>한국어</MenuItem>
+                    </Select>
                 </Toolbar>
             </AppBar>
         </Box>
