@@ -282,7 +282,7 @@ const Battles = (props) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', margin: '0' }}>
             <Grid container>
-                <Grid xs={6}>
+                <Grid style={{ paddingLeft: '55px' }} xs={6}>
                     <Typography fontSize={20} fontWeight={600}>Timeline</Typography>
                     <Typography marginBottom={'20px'}>Battles that occurred during the match</Typography>
                 </Grid>
@@ -291,8 +291,8 @@ const Battles = (props) => {
                     <Typography marginBottom={'20px'}><span style={{ color: '#3374FF', marginRight: '10px', fontWeight: 'bold' }}>{`Blue: ${blueTotalFightsWon} `}</span><span style={{ color: '#FF3F3F', fontWeight: 'bold' }}>{`Red: ${redTotalFightsWon}`}</span></Typography>
                     <Typography>Objectives killed:</Typography>
                 </Grid>
-                <TableContainer sm component={Paper}>
-                    <Table size='small' sx={{ minWidth: 900 }} aria-label="simple table">
+                <TableContainer sx={{ maxWidth: '90%', backgroundColor: '#f2f2f2', margin: 'auto' }} component={Paper}>
+                    <Table size='small' aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell style={{ fontSize: '16px', padding: '15px' }}><b>Outcome</b></TableCell>
@@ -304,7 +304,7 @@ const Battles = (props) => {
                             {teamfights.map((fight, fightIndex) => (
                                 <TableRow key={fightIndex}>
                                     <TableCell width={'150px'} style={{ color: fight.outcome[0] === 'E' ? '#404040' : fight.outcome[0] === 'B' ? '#3374FF' : '#FF3F3F' }}>
-                                        <Typography>{fight.outcome}</Typography>
+                                        <Typography style={{ fontWeight: 'bold' }}>{fight.outcome}</Typography>
                                         <div style={{ display: 'flex' }}>
                                             {fight.blueObjectives.hordeKills > 0 ? (
                                                 <div>
@@ -377,7 +377,7 @@ const Battles = (props) => {
                                         </div>
                                     </TableCell>
                                     <TableCell width={'150px'}>{fight.timespan}</TableCell>
-                                    <TableCell>{fight.details}</TableCell>
+                                    <TableCell style={{ fontSize: '13px' }}>{fight.details}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

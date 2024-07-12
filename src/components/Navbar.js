@@ -75,11 +75,14 @@ function Navbar() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar style={{ backgroundColor: '#404040', color: 'white' }} position="static">
                 <Toolbar>
-                    <a href='/' style={{ textDecoration: 'none', color: 'white' }}>
-                        <Typography variant="h6" fontWeight={'bold'} marginRight='10px' component="div" sx={{ flexGrow: 1 }}>
+                    <a href='/' style={{ textDecoration: 'none', color: 'white', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+                        <Typography variant="h6" fontWeight={'bold'} marginRight='5px' component="div" sx={{ flexGrow: 1 }}>
                             RiftReport.gg
                         </Typography>
+                        <img style={{ width: '40px' }} src='/images/aurelionLogo.webp'></img>
+
                     </a>
+                    <span style={{ marginLeft: 'auto', alignItems: 'center', display: 'inline-flex' }}>
                     <Select
                         sx={{
                             backgroundColor: '#4d4d4d',
@@ -88,7 +91,7 @@ function Navbar() {
                             fontWeight: 'bold',
                             height: '46px',
                             borderTopRightRadius: '0px',
-                            borderBottomRightRadius: '0px'
+                            borderBottomRightRadius: '0px',
                         }}
                         defaultValue={10}>
                         <MenuItem value={10}>NA</MenuItem>
@@ -102,7 +105,7 @@ function Navbar() {
                             }
                         }}
                         sx={{
-                            width: '225px',
+                            width: '500px',
                             backgroundColor: '#333333',
                             borderTopRightRadius: '5px',
                             borderBottomRightRadius: '5px',
@@ -122,13 +125,15 @@ function Navbar() {
                     <IconButton style={{ marginTop: '2px' }} onClick={handleSearchSubmit} color="inherit">
                         <SearchIcon></SearchIcon>
                     </IconButton>
+                    </span>
                     <Select
                         size='small'
                         sx={{
                             backgroundColor: '#4d4d4d',
                             color: '#d9d9d9',
                             fontSize: '14px',
-                            fontWeight: 'bold'
+                            fontWeight: 'bold',
+                            marginLeft: 'auto',
                         }}
                         defaultValue={10}>
                         <MenuItem value={10}>English</MenuItem>
