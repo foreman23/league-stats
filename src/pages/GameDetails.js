@@ -212,6 +212,81 @@ function GameDetails() {
   }, [gameData, alternateRegion, timelineData]);
 
   useEffect(() => {
+    if (graphData) {
+      console.log(graphData.leadChanges)
+      let playerTeamLeading = null;
+      let closeGame = false;
+      let blowout = false;
+
+      // Determine which team was winning most of the match
+
+      // Blue has more time winning
+      if (graphData.blueLeadingTime > graphData.redLeadingTime) {
+        if (graphData.blueLeadingTime - graphData.redLeadingTime < 5) {
+          closeGame = true;
+        }
+        if (graphData.redLeadingTime === 0) {
+          blowout = true;
+        }
+        if (playerData.teamId === 100) {
+          playerTeamLeading = true;
+        }
+        else if (playerData.teamId === 200) {
+          playerTeamLeading = false;
+        }
+      }
+      // Red has more time winning
+      if (graphData.blueLeadingTime < graphData.redLeadingTime) {
+        if (graphData.redLeadingTime - graphData.blueLeadingTime < 5) {
+          closeGame = true;
+        }
+        if (graphData.blueLeadingTime === 0) {
+          blowout = true;
+        }
+        if (playerData.teamId === 100) {
+          playerTeamLeading = false;
+        }
+        else if (playerData.teamId === 200) {
+          playerTeamLeading = true;
+        }
+      }
+
+      else if (graphData.blueLeadingTime === graphData.redLeadingTime) {
+        playerTeamLeading = false;
+        closeGame = true;
+      }
+
+      // Determine team leading most of game
+      let teamLeadingSentence = '';
+      if (!closeGame && !blowout) {
+        teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} most of the game which had ${graphData.leadChanges} lead changes.`
+      } if (blowout) {
+        teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} the whole game.`
+      }
+      else if (closeGame) {
+        teamLeadingSentence = `The game was evenly matched with both teams leading at points.`
+      }
+
+      // Determine closing sentence
+      let lastSentence = '';
+      if (playerData.win && playerTeamLeading === false) {
+        lastSentence = 'Despite of that, their team made a comeback and ended up winning the game.'
+      }
+      if (!playerData.win && playerTeamLeading === true) {
+        lastSentence = `Unfortunately the other team made a comeback and ${playerData.riotIdGameName}'s team ended up losing the game.`
+      }
+      if (playerData.win && playerTeamLeading === true) {
+        lastSentence = `In the end that resulted in victory.`
+      }
+      if (!playerData.win && playerTeamLeading === false) {
+        lastSentence = `In the end that resulted in defeat.`
+      }
+
+      setMatchSummaryDesc(`${matchSummaryDesc} ${teamLeadingSentence} ${lastSentence} `)
+    }
+  }, [graphData])
+
+  useEffect(() => {
     const getMatchTimeline = async (alternateRegion, matchId) => {
       console.log('CALLING RIOT API');
       const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
