@@ -18,6 +18,8 @@ import LanePhaseSummaryCardBot from '../components/LanePhaseSummaryCardBot';
 import Graphs from '../components/Graphs';
 import Battles from '../components/Battles';
 import DisplayFeats from '../components/DisplayFeats';
+import TeamGoldDifGraph from '../components/TeamGoldDifGraph';
+import generateGraphData from '../functions/GenerateGraphData';
 
 function GameDetails() {
 
@@ -187,17 +189,20 @@ function GameDetails() {
   const [highestDamageDealt, setHighestDamageDealt] = useState(null);
 
   const [statsAt15, setStatsAt15] = useState(null);
+  const [graphData, setGraphData] = useState(null);
   useEffect(() => {
 
     document.title = `${playerData.riotIdGameName}#${playerData.riotIdTagline} - ${new Date(gameData.info.gameCreation).toLocaleDateString()} @${new Date(gameData.info.gameCreation).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase().replace(/\s/g, '')}`
     calculateOpScores();
 
     console.log(timelineData)
-
     const fetch15Stats = async () => {
       if (timelineData) {
+        const graphData = await generateGraphData(gameData, timelineData);
+        console.log(graphData)
         const stats15 = await getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData);
         console.log(stats15)
+        setGraphData(graphData);
         setStatsAt15(stats15);
       }
     }
@@ -563,18 +568,22 @@ function GameDetails() {
                   <Button sx={{ fontWeight: 'bold' }} onClick={() => scrollToSection('TeamfightsAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Timeline</Button>
                   {/* <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Builds</Button> */}
                 </span>
+                {/* <Button onClick={() => determineFeatsFails(gameData, playerData.teamId, timelineData)}>Debug feats and fails</Button> */}
               </Grid>
             </Grid>
 
             {/* Section 2 */}
-            <Grid style={{ overflow: 'clip' }} marginLeft={'2%'} marginRight={'2%'} container marginTop={'15px'} paddingBottom={'15px'}>
+            <Grid style={{ overflow: 'clip' }} marginLeft={'0%'} marginRight={'5%'} container marginTop={'15px'} paddingBottom={'15px'}>
               <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={7}>
                 <Typography fontSize={20} fontWeight={600}>Match Summary</Typography>
                 <Typography style={{ marginRight: '15%', marginTop: '5px' }} fontSize={16}>{matchSummaryDesc}</Typography>
               </Grid>
               <Grid backgroundColor='white' item xs={5}>
-                <Typography marginTop={'10px'} fontSize={18} fontWeight={600}>Feats & Fails</Typography>
-                <DisplayFeats></DisplayFeats>
+                {graphData ? (
+                  <TeamGoldDifGraph width={600} height={250} hideTitle yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
+                ) : (
+                  <CircularProgress style={{ justifyContent: 'center', marginTop: '20px' }}></CircularProgress>
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -618,11 +627,11 @@ function GameDetails() {
                             <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                           </div>
                           <Tooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
-                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography><span className={
-                            (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
-                              'TableStandingMVP' :
-                              'TableStanding')
-                          }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</span> {player.score.toFixed(1)} </Typography>
+                            <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography><span className={
+                              (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
+                                'TableStandingMVP' :
+                                'TableStanding')
+                            }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</span> {player.score.toFixed(1)} </Typography>
                           </Tooltip>
                         </div>
                       </TableCell>
@@ -710,13 +719,13 @@ function GameDetails() {
                             <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                           </div>
                           <Tooltip disabledInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
-                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography><span className={
-                            (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
-                              'TableStandingMVP' :
-                              'TableStanding')
-                          }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</span> {player.score.toFixed(1)} </Typography>                        
+                            <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><Typography className='summonerNameTable' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`)} fontSize={'12px'}>{player.riotIdGameName}</Typography><span className={
+                              (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
+                                'TableStandingMVP' :
+                                'TableStanding')
+                            }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}</span> {player.score.toFixed(1)} </Typography>
                           </Tooltip>
-                          </div>
+                        </div>
                       </TableCell>
                       <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
                       <TableCell align='center'>
@@ -790,7 +799,6 @@ function GameDetails() {
                 <LanePhaseSummaryCardBot gameData={gameData} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedBot={lastButtonPressedBot} botSummaryCardStatus={botSummaryCardStatus}></LanePhaseSummaryCardBot>
 
               </Grid>
-              {/* <Button onClick={() => determineFeatsFails(gameData, playerData.teamId, timelineData)}>Debug feats and fails</Button> */}
             </Grid>
 
           )}
@@ -798,20 +806,20 @@ function GameDetails() {
 
         {/* Section 5 */}
         <div id='GraphsAnchor' style={{ backgroundColor: '#f2f2f2' }}>
-          {statsAt15 === null ? (
-            <Box sx={{ display: 'flex', height: '300px', justifyContent: 'center', margin: 'auto', alignItems: 'center' }}>
-              <CircularProgress />
-            </Box>
-          ) : (
+          {statsAt15 && graphData ? (
             <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '45px', textAlign: 'center' }}>
               <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
                 <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
                   <Typography fontSize={20} fontWeight={600}>Graphs</Typography>
                   <Typography marginBottom={'20px'}>Match data visualized</Typography>
-                  <Graphs gameData={gameData} timelineData={timelineData}></Graphs>
+                  <Graphs gameData={gameData} timelineData={timelineData} graphData={graphData}></Graphs>
                 </Grid>
               </Grid>
             </Grid>
+          ) : (
+            <Box sx={{ display: 'flex', height: '300px', justifyContent: 'center', margin: 'auto', alignItems: 'center' }}>
+              <CircularProgress />
+            </Box>
           )}
         </div>
 

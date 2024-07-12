@@ -26,6 +26,18 @@ const Battles = (props) => {
     let redBaronKills = 0;
     let redHordeKills = 0;
 
+    let blueTowerKills = 0;
+    let blueInhibKills = 0;
+    let redTowerKills = 0;
+    let redInhibKills = 0;
+
+    let blueTotalTowersKilled = 0;
+    let blueTotalDragons = 0;
+    let blueTotalBarons = 0;
+    let redTotalTowersKilled = 0;
+    let redTotalDragons = 0;
+    let redTotalBarons = 0;
+
     let blueTotalFightsWon = 0;
     let redTotalFightsWon = 0;
 
@@ -33,33 +45,14 @@ const Battles = (props) => {
         const frame = frames[index]
         for (const event in frame.events) {
             const currEvent = frame.events[event];
-            if (currEvent.type === "CHAMPION_KILL" || currEvent.type === "ELITE_MONSTER_KILL") {
+            if (currEvent.type === "CHAMPION_KILL" || currEvent.type === "ELITE_MONSTER_KILL" || currEvent.type === "BUILDING_KILL") {
                 console.log(currEvent)
                 if (lastKillTime === null) {
                     lastKillTime = currEvent.timestamp;
-                    // if (currEvent.type === 'CHAMPION_KILL') {
-                    //     const victim = participants.find(victim => victim.participantId === currEvent.victimId)
-                    //     if (victim.teamId === 100) {
-                    //         redKills += 1;
-                    //     }
-                    //     if (victim.teamId === 200) {
-                    //         blueKills += 1;
-                    //     }
-                    // }
                     currBattle.push(currEvent);
                 }
-                else if (currEvent.timestamp - lastKillTime <= 45000) { // if kill occurred in last 45 seconds, it's part of fight
+                else if (currEvent.timestamp - lastKillTime <= 20000) { // if kill occurred in last 20 seconds, it's part of fight
                     lastKillTime = currEvent.timestamp;
-                    // Add kill count to team
-                    // if (currEvent.type === 'CHAMPION_KILL') {
-                    //     const victim = participants.find(victim => victim.participantId === currEvent.victimId)
-                    //     if (victim.teamId === 100) {
-                    //         redKills += 1;
-                    //     }
-                    //     if (victim.teamId === 200) {
-                    //         blueKills += 1;
-                    //     }
-                    // }
                     currBattle.push(currEvent);
                 }
                 // Push fight to master array and empty variables
@@ -97,14 +90,43 @@ const Battles = (props) => {
                             }
                             detailsStr += `${victim.riotIdGameName} (${victim.championName}) died. `;
                         }
+                        else if (kill.type === 'BUILDING_KILL') {
+                            let buildingName = null;
+                            console.log(kill)
+                            if (kill.buildingType === 'TOWER_BUILDING') {
+                                if (kill.teamId === 100) {
+                                    buildingName = 'blue tower'
+                                    redTowerKills += 1;
+                                    redTotalTowersKilled += 1;
+                                }
+                                if (kill.teamId === 200) {
+                                    buildingName = 'red tower'
+                                    blueTowerKills += 1;
+                                    blueTotalTowersKilled += 1;
+                                }
+                            }
+                            if (kill.buildingType === 'INHIBITOR_BUILDING') {
+                                if (kill.teamId === 100) {
+                                    buildingName = 'blue inhibitor'
+                                    redInhibKills += 1;
+                                }
+                                if (kill.teamId === 200) {
+                                    buildingName = 'red inhibitor'
+                                    blueInhibKills += 1;
+                                }
+                            }
+                            detailsStr += `${buildingName} destroyed. `;
+                        }
                         else {
                             if (kill.monsterSubType) {
                                 if (kill.monsterType === 'DRAGON') {
                                     if (kill.killerTeamId === 100) {
                                         blueDragonKills += 1;
+                                        blueTotalDragons += 1;
                                     }
                                     else {
                                         redDragonKills += 1;
+                                        redTotalDragons += 1;
                                     }
                                 }
                                 detailsStr += `${kill.monsterSubType} killed by ${kill.killerTeamId === 100 ? 'blue team' : 'red team'}. `;
@@ -113,9 +135,11 @@ const Battles = (props) => {
                                 if (kill.monsterType === 'BARON_NASHOR') {
                                     if (kill.killerTeamId === 100) {
                                         blueBaronKills += 1;
+                                        blueTotalBarons += 1;
                                     }
                                     else {
                                         redBaronKills += 1;
+                                        redTotalBarons += 1;
                                     }
                                 }
                                 if (kill.monsterType === 'HORDE') {
@@ -153,12 +177,16 @@ const Battles = (props) => {
                         blueObjectives: {
                             hordeKills: blueHordeKills,
                             dragonKills: blueDragonKills,
-                            baronKills: blueBaronKills
+                            baronKills: blueBaronKills,
+                            towerKills: blueTowerKills,
+                            inhibKills: blueInhibKills,
                         },
                         redObjectives: {
                             hordeKills: redHordeKills,
                             dragonKills: redDragonKills,
-                            baronKills: redBaronKills
+                            baronKills: redBaronKills,
+                            towerKills: redTowerKills,
+                            inhibKills: redInhibKills,
                         }
                     }
                     teamfights.push(battlePayload);
@@ -169,9 +197,13 @@ const Battles = (props) => {
                     blueDragonKills = 0;
                     blueBaronKills = 0;
                     blueHordeKills = 0;
+                    blueTowerKills = 0;
+                    blueInhibKills = 0;
                     redDragonKills = 0;
                     redBaronKills = 0;
                     redHordeKills = 0;
+                    redTowerKills = 0;
+                    redInhibKills = 0;
                     currBattle.push(currEvent)
                 }
             }
@@ -212,14 +244,43 @@ const Battles = (props) => {
                 }
                 detailsStr += `${victim.riotIdGameName} (${victim.championName}) died. `;
             }
+            else if (kill.type === 'BUILDING_KILL') {
+                let buildingName = null;
+                console.log(kill)
+                if (kill.buildingType === 'TOWER_BUILDING') {
+                    if (kill.teamId === 100) {
+                        buildingName = 'blue tower'
+                        redTowerKills += 1;
+                        redTotalTowersKilled += 1;
+                    }
+                    if (kill.teamId === 200) {
+                        buildingName = 'red tower'
+                        blueTowerKills += 1;
+                        blueTotalTowersKilled += 1;
+                    }
+                }
+                if (kill.buildingType === 'INHIBITOR_BUILDING') {
+                    if (kill.teamId === 100) {
+                        buildingName = 'blue inhibitor'
+                        redInhibKills += 1;
+                    }
+                    if (kill.teamId === 200) {
+                        buildingName = 'red inhibitor'
+                        blueInhibKills += 1;
+                    }
+                }
+                detailsStr += `${buildingName} destroyed. `;
+            }
             else {
                 if (kill.monsterSubType) {
                     if (kill.monsterType === 'DRAGON') {
                         if (kill.killerTeamId === 100) {
                             blueDragonKills += 1;
+                            blueTotalDragons += 1;
                         }
                         else {
                             redDragonKills += 1;
+                            redTotalDragons += 1;
                         }
                     }
                     detailsStr += `${kill.monsterSubType} killed by ${kill.killerTeamId === 100 ? 'blue team' : 'red team'}. `;
@@ -228,9 +289,11 @@ const Battles = (props) => {
                     if (kill.monsterType === 'BARON_NASHOR') {
                         if (kill.killerTeamId === 100) {
                             blueBaronKills += 1;
+                            blueTotalBarons += 1;
                         }
                         else {
                             redBaronKills += 1;
+                            redTotalBarons += 1;
                         }
                     }
                     if (kill.monsterType === 'HORDE') {
@@ -266,12 +329,16 @@ const Battles = (props) => {
             blueObjectives: {
                 hordeKills: blueHordeKills,
                 dragonKills: blueDragonKills,
-                baronKills: blueBaronKills
+                baronKills: blueBaronKills,
+                towerKills: blueTowerKills,
+                inhibKills: blueInhibKills
             },
             redObjectives: {
                 hordeKills: redHordeKills,
                 dragonKills: redDragonKills,
-                baronKills: redBaronKills
+                baronKills: redBaronKills,
+                towerKills: redTowerKills,
+                inhibKills: redInhibKills
             }
         }
         teamfights.push(battlePayload);
@@ -289,7 +356,6 @@ const Battles = (props) => {
                 <Grid style={{ textAlign: 'end', paddingRight: '60px' }} xs={6}>
                     <Typography style={{ marginTop: '4px' }} fontSize={16} fontWeight={600}>Fights Won:</Typography>
                     <Typography marginBottom={'20px'}><span style={{ color: '#3374FF', marginRight: '10px', fontWeight: 'bold' }}>{`Blue: ${blueTotalFightsWon} `}</span><span style={{ color: '#FF3F3F', fontWeight: 'bold' }}>{`Red: ${redTotalFightsWon}`}</span></Typography>
-                    <Typography>Objectives killed:</Typography>
                 </Grid>
                 <TableContainer sx={{ maxWidth: '90%', backgroundColor: '#f2f2f2', margin: 'auto' }} component={Paper}>
                     <Table size='small' aria-label="simple table">
@@ -339,6 +405,30 @@ const Battles = (props) => {
                                             ) : (
                                                 <div></div>
                                             )}
+                                            <div>
+                                                {fight.blueObjectives.towerKills > 0 ? (
+                                                    <div>
+                                                        {Array.from({ length: fight.blueObjectives.towerKills }).map((_, index) => (
+                                                            <Tooltip disableInteractive title='Red tower destroyed'>
+                                                                <img key={index} width={'20px'} src='/images/objIcons/tower-200.webp' alt={`Tower Kill ${index + 1}`} />
+                                                            </Tooltip>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div></div>
+                                                )}
+                                                {fight.blueObjectives.inhibKills > 0 ? (
+                                                    <div>
+                                                        {Array.from({ length: fight.blueObjectives.inhibKills }).map((_, index) => (
+                                                            <Tooltip disableInteractive title='Red inhibitor destroyed'>
+                                                                <img key={index} width={'20px'} src='/images/objIcons/inhibitor-200.webp' alt={`Inhib Kill ${index + 1}`} />
+                                                            </Tooltip>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div></div>
+                                                )}
+                                            </div>
                                         </div>
                                         <div style={{ display: 'flex' }}>
                                             {fight.redObjectives.hordeKills > 0 ? (
@@ -374,6 +464,30 @@ const Battles = (props) => {
                                             ) : (
                                                 <div></div>
                                             )}
+                                            <div>
+                                                {fight.redObjectives.towerKills > 0 ? (
+                                                    <div>
+                                                        {Array.from({ length: fight.redObjectives.towerKills }).map((_, index) => (
+                                                            <Tooltip disableInteractive title='Blue tower destroyed'>
+                                                                <img key={index} width={'20px'} src='/images/objIcons/tower-100.webp' alt={`Tower Kill ${index + 1}`} />
+                                                            </Tooltip>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div></div>
+                                                )}
+                                                {fight.redObjectives.inhibKills > 0 ? (
+                                                    <div>
+                                                        {Array.from({ length: fight.redObjectives.inhibKills }).map((_, index) => (
+                                                            <Tooltip disableInteractive title='Blue inhibitor destroyed'>
+                                                                <img key={index} width={'20px'} src='/images/objIcons/inhibitor-100.webp' alt={`Inhib Kill ${index + 1}`} />
+                                                            </Tooltip>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div></div>
+                                                )}
+                                            </div>
                                         </div>
                                     </TableCell>
                                     <TableCell width={'150px'}>{fight.timespan}</TableCell>
