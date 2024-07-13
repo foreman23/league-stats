@@ -217,6 +217,7 @@ function GameDetails() {
       let playerTeamLeading = null;
       let closeGame = false;
       let blowout = false;
+      let nearBlowout = false;
 
       // Determine which team was winning most of the match
 
@@ -227,6 +228,9 @@ function GameDetails() {
         }
         if (graphData.redLeadingTime === 0) {
           blowout = true;
+        }
+        if (graphData.redLeadingTime < 3) {
+          nearBlowout = true;
         }
         if (playerData.teamId === 100) {
           playerTeamLeading = true;
@@ -242,6 +246,9 @@ function GameDetails() {
         }
         if (graphData.blueLeadingTime === 0) {
           blowout = true;
+        }
+        if (graphData.blueLeadingTime < 3) {
+          nearBlowout = true;
         }
         if (playerData.teamId === 100) {
           playerTeamLeading = false;
@@ -259,9 +266,19 @@ function GameDetails() {
       // Determine team leading most of game
       let teamLeadingSentence = '';
       if (!closeGame && !blowout) {
-        teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} most of the game which had ${graphData.leadChanges} lead changes.`
+        if (graphData.leadChanges === 1) {
+          teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} most of the game which had ${graphData.leadChanges} lead change.`
+        } else {
+          teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} most of the game which had ${graphData.leadChanges} lead changes.`
+        }
       } if (blowout) {
         teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} the whole game.`
+      } else if (nearBlowout) {
+        if (graphData.leadChanges > 1) {
+          teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} for almost the whole game which had ${graphData.leadChanges} lead changes.`
+        } else {
+          teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} for almost the whole game which had ${graphData.leadChanges} lead change.`
+        }
       }
       else if (closeGame) {
         teamLeadingSentence = `The game was evenly matched with both teams leading at points.`
@@ -634,7 +651,13 @@ function GameDetails() {
                 )}
               </Grid>
               <Grid justifyContent={'center'} item xs={7}>
-                <Typography style={{ paddingTop: '10px' }} fontSize={26} fontWeight={600}>{playerData.riotIdGameName} <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? 'won' : 'lost'}</span> playing {playerData.championName} {playerData.teamPosition.toLowerCase()} for <span style={{ color: playerData.teamId === 100 ? '#3374FF' : '#FF3F3F' }}>{playerData.teamId === 100 ? 'blue team' : 'red team'}</span> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.</Typography>
+                <Typography style={{ paddingTop: '10px' }} fontSize={26} fontWeight={600}>
+                  <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                  <a className='clickableName' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`)}>
+                    {playerData.riotIdGameName}
+                  </a>
+                  </Tooltip>
+                  <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {playerData.championName} {playerData.teamPosition.toLowerCase()} for <span style={{ color: playerData.teamId === 100 ? '#3374FF' : '#FF3F3F' }}>{playerData.teamId === 100 ? 'blue team' : 'red team'}</span> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.</Typography>
                 <Typography style={{ paddingTop: '10px', paddingBottom: '10px' }} fontSize={14}>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
                 <span style={{ textAlign: 'start' }}>
                   <Button sx={{ fontWeight: 'bold' }} onClick={() => scrollToSection('SummaryAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Summary</Button>

@@ -215,3 +215,7 @@
 .GraphHeader {
     text-align: center;
 }
+
+.clickableName {
+    cursor: pointer;
+}
