@@ -46,7 +46,7 @@ const Battles = (props) => {
         for (const event in frame.events) {
             const currEvent = frame.events[event];
             if (currEvent.type === "CHAMPION_KILL" || currEvent.type === "ELITE_MONSTER_KILL" || currEvent.type === "BUILDING_KILL") {
-                console.log(currEvent)
+                // console.log(currEvent)
                 if (lastKillTime === null) {
                     lastKillTime = currEvent.timestamp;
                     currBattle.push(currEvent);
@@ -92,7 +92,7 @@ const Battles = (props) => {
                         }
                         else if (kill.type === 'BUILDING_KILL') {
                             let buildingName = null;
-                            console.log(kill)
+                            // console.log(kill)
                             if (kill.buildingType === 'TOWER_BUILDING') {
                                 if (kill.teamId === 100) {
                                     buildingName = 'blue tower'
@@ -246,7 +246,7 @@ const Battles = (props) => {
             }
             else if (kill.type === 'BUILDING_KILL') {
                 let buildingName = null;
-                console.log(kill)
+                // console.log(kill)
                 if (kill.buildingType === 'TOWER_BUILDING') {
                     if (kill.teamId === 100) {
                         buildingName = 'blue tower'
@@ -344,7 +344,7 @@ const Battles = (props) => {
         teamfights.push(battlePayload);
     }
 
-    console.log(teamfights)
+    // console.log(teamfights)
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', margin: '0' }}>

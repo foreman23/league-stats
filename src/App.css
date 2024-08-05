@@ -27,6 +27,11 @@
     max-width: 75% !important;
 }
 
+.GameOverViewTableArena {
+    max-width: 75% !important;
+    margin-bottom: 10px !important;
+}
+
 @media (max-width: 1440px) {
     .MatchSummaryGrid {
         padding-left: 5%;

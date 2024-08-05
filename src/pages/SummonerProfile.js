@@ -294,7 +294,13 @@ const SummonerProfile = () => {
 
   // Handle match click
   const handleMatchClick = (gameData) => {
-    navigate(`/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion } });
+    console.log(gameData.info.gameMode)
+    if (gameData.info.gameMode === "CLASSIC") {
+      navigate(`/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
+    }
+    else if (gameData.info.gameMode === "CHERRY") {
+      navigate(`/arena/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
+    }
   };
 
   // Render page once data is loaded
@@ -394,7 +400,7 @@ const SummonerProfile = () => {
           ) : (
             matchData.map((gameData, index) => (
               <div className='DisplayGameContainer' onClick={() => handleMatchClick(gameData)} key={index}>
-                <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
+                  <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
               </div>
             ))
           )}
