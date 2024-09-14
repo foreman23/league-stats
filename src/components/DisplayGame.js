@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Typography, Grid, Box } from '@mui/material'
-import queues from '../jsonData/queues.json'
+// import queues from '../jsonData/queues.json'
 import summonerSpells from '../jsonData/summonerSpells.json'
 
 const DisplayGame = (props) => {
+
+    const [isLaning, setIsLaning] = useState(true);
+    const [queues, setQueues] = useState(null);
+    const [queueTitle, setQueueTitle] = useState(null);
+
+    const [timeSinceMatch, setTimeSinceMatch] = useState(null);
+    const [matchType, setMatchType] = useState(null);
 
     // Find participant
     const participants = props.gameData.info.participants;
@@ -44,7 +51,7 @@ const DisplayGame = (props) => {
     else if (goldDifference < -3000) {
         differenceDesc = "Dominated by"
     }
-    else if (goldDifference < 0 ) {
+    else if (goldDifference < 0) {
         differenceDesc = "Lost to"
     }
 
@@ -57,66 +64,96 @@ const DisplayGame = (props) => {
         participantLane = 'mid'
     }
 
-    // Find queue title
-    const queue = queues.find(queue => queue.queueId === props.gameData.info.queueId)
-    let queueTitle = queue.description;
-    let isLaning = true; // set to false for non summoners rift modes
-    if (queueTitle === '5v5 Ranked Solo games') {
-        queueTitle = 'Ranked Solo';
-    }
-    if (queueTitle === '5v5 Ranked Flex games') {
-        queueTitle = 'Ranked Flex'
-    }
-    if (queueTitle === '5v5 Draft Pick games') {
-        queueTitle = 'Normal'
-    }
-    else if (queueTitle === '5v5 ARAM games') {
-        queueTitle = 'ARAM';
-        isLaning = false;
-    }
-    else if (queueTitle === 'Arena') {
-        isLaning = false;
+    const findQueueInfo = async () => {
+        const queue = queues.find(queue => queue.queueId === props.gameData.info.queueId);
+        return queue;
     }
 
-    const [timeSinceMatch, setTimeSinceMatch] = useState(null);
-    const [matchType, setMatchType] = useState(null);
+    // Search JSON for relevant Queue data
+    const findQueueTitle = async () => {
+
+        let queue = await findQueueInfo();
+        console.log(props.gameData.info)
+
+        let queueTitle = queue.description;
+        console.log(queueTitle)
+        if (queueTitle === '5v5 Ranked Solo games') {
+            setQueueTitle('Ranked Solo');
+        }
+        if (queueTitle === '5v5 Ranked Flex games') {
+            setQueueTitle('Ranked Flex');
+        }
+        if (queueTitle === '5v5 Draft Pick games') {
+            setQueueTitle('Normal');
+        }
+        else if (queueTitle === '5v5 ARAM games') {
+            setQueueTitle('ARAM')
+            setIsLaning(false);
+        }
+        else if (queueTitle === 'Arena') {
+            setQueueTitle('Arena')
+            setIsLaning(false);
+        }
+    }
+
+    const getQueueJSON = async () => {
+        try {
+            const response = await fetch('https://static.developer.riotgames.com/docs/lol/queues.json');
+            console.log(response)
+            const data = await response.json();
+            setQueues(data);
+        } catch (error) {
+            console.error('Error fetching queue data:', error);
+        }
+    }
 
     useEffect(() => {
-    
+
         // props.ddragonVersion, props.gameData, props.puuid
         console.log(props)
-        
 
-        // Set time since match was played
-        const timeMatchStarted = new Date(props.gameData.info.gameEndTimestamp);
-        const now = new Date();
-        const timeDifferenceInSeconds = Math.floor((now - timeMatchStarted) / 1000);
-
-        if (timeDifferenceInSeconds < 60) {
-            // Less than a minute
-            setTimeSinceMatch(`${timeDifferenceInSeconds} seconds ago`);
-        } else if (timeDifferenceInSeconds < 3600) {
-            // Less than an hour
-            const minutes = Math.floor(timeDifferenceInSeconds / 60);
-            setTimeSinceMatch(`${minutes} minute${minutes !== 1 ? 's' : ''} ago`);
-        } else if (timeDifferenceInSeconds < 86400) {
-            // Less than a day
-            const hours = Math.floor(timeDifferenceInSeconds / 3600);
-            setTimeSinceMatch(`${hours} hour${hours !== 1 ? 's' : ''} ago`);
-        } else {
-            // More than a day
-            const days = Math.floor(timeDifferenceInSeconds / 86400);
-            setTimeSinceMatch(`${days} day${days !== 1 ? 's' : ''} ago`);
-        }
+        // Fetch queue data JSON
+        getQueueJSON();
 
     }, [])
+
+    useEffect(() => {
+
+        if (queues) {
+            // Call queue title function
+            findQueueTitle();
+
+            // Set time since match was played
+            const timeMatchStarted = new Date(props.gameData.info.gameEndTimestamp);
+            const now = new Date();
+            const timeDifferenceInSeconds = Math.floor((now - timeMatchStarted) / 1000);
+
+            if (timeDifferenceInSeconds < 60) {
+                // Less than a minute
+                setTimeSinceMatch(`${timeDifferenceInSeconds} seconds ago`);
+            } else if (timeDifferenceInSeconds < 3600) {
+                // Less than an hour
+                const minutes = Math.floor(timeDifferenceInSeconds / 60);
+                setTimeSinceMatch(`${minutes} minute${minutes !== 1 ? 's' : ''} ago`);
+            } else if (timeDifferenceInSeconds < 86400) {
+                // Less than a day
+                const hours = Math.floor(timeDifferenceInSeconds / 3600);
+                setTimeSinceMatch(`${hours} hour${hours !== 1 ? 's' : ''} ago`);
+            } else {
+                // More than a day
+                const days = Math.floor(timeDifferenceInSeconds / 86400);
+                setTimeSinceMatch(`${days} day${days !== 1 ? 's' : ''} ago`);
+            }
+        }
+
+    }, [queues])
 
     return (
         <Grid container style={{ justifyContent: 'center', marginBottom: '5px', display: 'flex', backgroundColor: `${participant.win === true ? '#ECF2FF' : '#FFF1F3'}`, padding: '10px', borderRadius: '10px' }}>
 
             {/* Match Information */}
             <Grid xs={2} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'center'}>
-                <Typography style={{ fontWeight: 'bold', color: `${participant.win === true ? '#3374ff' : '#ff3352'}`}} >{queueTitle}</Typography>
+                <Typography style={{ fontWeight: 'bold', color: `${participant.win === true ? '#3374ff' : '#ff3352'}` }} >{queueTitle}</Typography>
                 <Typography style={{ fontSize: '14px' }}>{participant.win === true ? 'Victory' : 'Defeat'}</Typography>
                 <Typography style={{ fontSize: '12px' }}>{timeSinceMatch}</Typography>
             </Grid>
@@ -137,7 +174,7 @@ const DisplayGame = (props) => {
 
             {/* Laning Descriptor */}
             <Grid xs={6} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'start'}>
-                {isLaning && 
+                {isLaning &&
                     <Typography style={{ fontSize: '18px' }}>{`${differenceDesc} ${opposingLaner.championName} as ${participantLane} with gold difference of ${goldDifference.toLocaleString()}g at end of game.`}</Typography>
                 }
                 {!isLaning &&

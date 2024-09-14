@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar';
 import { useParams, useLocation } from 'react-router-dom';
-import queues from '../jsonData/queues.json'
+// import queues from '../jsonData/queues.json'
 import summonerSpells from '../jsonData/summonerSpells.json';
 import runes from '../jsonData/runes.json';
 import Footer from '../components/Footer';
@@ -22,6 +22,10 @@ import TeamGoldDifGraph from '../components/TeamGoldDifGraph';
 import generateGraphData from '../functions/GenerateGraphData';
 
 function GameDetails() {
+
+  const [isLaning, setIsLaning] = useState(true);
+  const [queues, setQueues] = useState(null);
+  const [queueTitle, setQueueTitle] = useState(null);
 
   // Get props
   const location = useLocation();
@@ -57,27 +61,6 @@ function GameDetails() {
   const participantGold = playerData.goldEarned;
   const opposingGold = opposingLaner.goldEarned;
   const goldDifference = participantGold - opposingGold;
-
-  // Find queue title
-  const queue = queues.find(queue => queue.queueId === gameData.info.queueId)
-  let queueTitle = queue.description;
-  let isLaning = true; // set to false for non summoners rift modes
-  if (queueTitle === '5v5 Ranked Solo games') {
-    queueTitle = 'Ranked Solo';
-  }
-  if (queueTitle === '5v5 Ranked Flex games') {
-    queueTitle = 'Ranked Flex'
-  }
-  if (queueTitle === '5v5 Draft Pick games') {
-    queueTitle = 'Normal'
-  }
-  else if (queueTitle === '5v5 ARAM games') {
-    queueTitle = 'ARAM';
-    isLaning = false;
-  }
-  else if (queueTitle === 'Arena') {
-    isLaning = false;
-  }
 
   // Create summoner spells object
   const summonerSpellsObj = Object.values(summonerSpells.data);
@@ -192,7 +175,6 @@ function GameDetails() {
   const [statsAt15, setStatsAt15] = useState(null);
   const [graphData, setGraphData] = useState(null);
   useEffect(() => {
-
     document.title = `${playerData.riotIdGameName}#${playerData.riotIdTagline} - ${new Date(gameData.info.gameCreation).toLocaleDateString()} @${new Date(gameData.info.gameCreation).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase().replace(/\s/g, '')}`
     calculateOpScores();
 
@@ -211,6 +193,67 @@ function GameDetails() {
     fetch15Stats();
 
   }, [gameData, alternateRegion, timelineData]);
+
+  const findQueueInfo = async () => {
+    const queue = queues.find(queue => queue.queueId === gameData.info.queueId);
+    return queue;
+  }
+
+  // Search JSON for relevant Queue data
+  const findQueueTitle = async () => {
+
+    let queue = await findQueueInfo();
+    console.log(gameData.info)
+
+    let queueTitle = queue.description;
+    console.log(queueTitle)
+    // let isLaning = true; // set to false for non summoners rift modes
+    if (queueTitle === '5v5 Ranked Solo games') {
+      setQueueTitle('Ranked Solo');
+    }
+    if (queueTitle === '5v5 Ranked Flex games') {
+      setQueueTitle('Ranked Flex');
+    }
+    if (queueTitle === '5v5 Draft Pick games') {
+      // queueTitle = 'Normal'
+      setQueueTitle('Normal');
+    }
+    else if (queueTitle === '5v5 ARAM games') {
+      // queueTitle = 'ARAM';
+      setQueueTitle('ARAM')
+      setIsLaning(false);
+      // isLaning = false;
+    }
+    else if (queueTitle === 'Arena') {
+      setQueueTitle('Arena')
+      setIsLaning(false);
+      // isLaning = false;
+    }
+  }
+
+  const getQueueJSON = async () => {
+    try {
+      const response = await fetch('https://static.developer.riotgames.com/docs/lol/queues.json');
+      console.log(response)
+      const data = await response.json();
+      setQueues(data);
+    } catch (error) {
+      console.error('Error fetching queue data:', error);
+    }
+  }
+
+  useEffect(() => {
+    // Fetch queue data JSON
+    getQueueJSON();
+  }, [])
+
+  useEffect(() => {
+    if (queues) {
+      // Call queue title function
+      findQueueTitle();
+    }
+
+  }, [queues])
 
   useEffect(() => {
     if (graphData) {
@@ -603,7 +646,6 @@ function GameDetails() {
     setHighestDamageDealt(highestDamageDealt)
     setPlayersWithScore(updatedGameData.info.participants)
   };
-
 
   // Init navigate
   const navigate = useNavigate();

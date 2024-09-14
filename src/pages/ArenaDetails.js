@@ -4,25 +4,15 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar';
 import { useParams, useLocation } from 'react-router-dom';
-import queues from '../jsonData/queues.json'
-import summonerSpells from '../jsonData/summonerSpells.json';
-import runes from '../jsonData/runes.json';
+// import queues from '../jsonData/queues.json'
 import Footer from '../components/Footer';
-import getStatsAt15 from '../functions/LaneAnalysis';
-import axios from 'axios';
-import determineFeatsFails from '../functions/GenerateFeats';
-import LanePhaseSummaryCardTop from '../components/LanePhaseSummaryCardTop';
-import LanePhaseSummaryCardJg from '../components/LanePhaseSummaryCardJg';
-import LanePhaseSummaryCardMid from '../components/LanePhaseSummaryCardMid';
-import LanePhaseSummaryCardBot from '../components/LanePhaseSummaryCardBot';
-import Graphs from '../components/Graphs';
-import Battles from '../components/Battles';
-import DisplayFeats from '../components/DisplayFeats';
-import TeamGoldDifGraph from '../components/TeamGoldDifGraph';
-import generateGraphData from '../functions/GenerateGraphData';
 import OverviewTable from '../components/OverviewTable';
 
 const ArenaDetails = () => {
+
+    const [isLaning, setIsLaning] = useState(true);
+    const [queues, setQueues] = useState(null);
+    const [queueTitle, setQueueTitle] = useState(null);
 
     // Init navigate
     const navigate = useNavigate();
@@ -33,30 +23,6 @@ const ArenaDetails = () => {
     const { gameData } = location.state;
     const { alternateRegion } = location.state;
     const { dataDragonVersion } = location.state;
-    console.log(gameData)
-    console.log(alternateRegion)
-    console.log(summonerName)
-
-    // Find queue title
-    const queue = queues.find(queue => queue.queueId === gameData.info.queueId)
-    let queueTitle = queue.description;
-    let isLaning = true; // set to false for non summoners rift modes
-    if (queueTitle === '5v5 Ranked Solo games') {
-        queueTitle = 'Ranked Solo';
-    }
-    if (queueTitle === '5v5 Ranked Flex games') {
-        queueTitle = 'Ranked Flex'
-    }
-    if (queueTitle === '5v5 Draft Pick games') {
-        queueTitle = 'Normal'
-    }
-    else if (queueTitle === '5v5 ARAM games') {
-        queueTitle = 'ARAM';
-        isLaning = false;
-    }
-    else if (queueTitle === 'Arena') {
-        isLaning = false;
-    }
 
     // Find player data
     const playerData = gameData.info.participants.find(player => player.riotIdGameName === summonerName)
@@ -104,6 +70,68 @@ const ArenaDetails = () => {
         placementSuffix = "th";
     }
 
+    const findQueueInfo = async () => {
+        const queue = queues.find(queue => queue.queueId === gameData.info.queueId);
+        return queue;
+    }
+
+    // Search JSON for relevant Queue data
+    const findQueueTitle = async () => {
+
+        let queue = await findQueueInfo();
+        console.log(gameData.info)
+
+        let queueTitle = queue.description;
+        console.log(queueTitle)
+        // let isLaning = true; // set to false for non summoners rift modes
+        if (queueTitle === '5v5 Ranked Solo games') {
+            setQueueTitle('Ranked Solo');
+        }
+        if (queueTitle === '5v5 Ranked Flex games') {
+            setQueueTitle('Ranked Flex');
+        }
+        if (queueTitle === '5v5 Draft Pick games') {
+            // queueTitle = 'Normal'
+            setQueueTitle('Normal');
+        }
+        else if (queueTitle === '5v5 ARAM games') {
+            // queueTitle = 'ARAM';
+            setQueueTitle('ARAM')
+            setIsLaning(false);
+            // isLaning = false;
+        }
+        else if (queueTitle === 'Arena') {
+            setQueueTitle('Arena')
+            setIsLaning(false);
+            // isLaning = false;
+        }
+    }
+
+    const getQueueJSON = async () => {
+        try {
+            const response = await fetch('https://static.developer.riotgames.com/docs/lol/queues.json');
+            console.log(response)
+            const data = await response.json();
+            setQueues(data);
+        } catch (error) {
+            console.error('Error fetching queue data:', error);
+        }
+    }
+
+    useEffect(() => {
+        // Fetch queue data JSON
+        getQueueJSON();
+
+    }, [])
+
+    useEffect(() => {
+        if (queues) {
+            // Call queue title function
+            findQueueTitle();
+        }
+
+    }, [queues])
+
     return (
         <div>
             <div id={'SummaryAnchor'} style={{ backgroundColor: 'white' }}>
@@ -117,24 +145,20 @@ const ArenaDetails = () => {
                             {playerData.win ? (
                                 <div style={{ position: 'relative', display: 'inline-block' }}>
                                     <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${playerData.championName}.png`} alt=''></img>
-                                    <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/accept.png' alt='Crown'></img>
                                 </div>
                             ) : (
                                 <div style={{ position: 'relative', display: 'inline-block' }}>
                                     <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${playerData.championName}.png`} alt=''></img>
-                                    <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/close.png' alt='Close'></img>
                                 </div>
                             )}
                             <img style={{ width: '55px' }} src='/images/deal.png'></img>
                             {playerData.win ? (
                                 <div style={{ position: 'relative', display: 'inline-block' }}>
                                     <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${teammateData.championName}.png`} alt=''></img>
-                                    <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/accept.png' alt='Crown'></img>
                                 </div>
                             ) : (
                                 <div style={{ position: 'relative', display: 'inline-block' }}>
                                     <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${teammateData.championName}.png`} alt=''></img>
-                                    <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/close.png' alt='Close'></img>
                                 </div>
                             )}
                         </Grid>
