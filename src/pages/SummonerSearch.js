@@ -2,7 +2,7 @@ import '../App.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, TextField, Box, ButtonGroup, Typography } from '@mui/material';
+import { Button, TextField, Box, ButtonGroup, Typography, ListItem, List, Divider } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -11,8 +11,10 @@ function SummonerSearch() {
 
   // const [summonerNotFound, setSummonerNotFound] = useState(false);
   const [summonerName, setSummonerName] = useState(null);
-  const [selectedRegion, setSelectedRegion] = useState('na1');
+  const [selectedRegion, setSelectedRegion] = useState(null);
   const [dataDragonVersion, setDataDragonVersion] = useState(null);
+  const [recentSearches, setRecentSearches] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Init navigate
   const navigate = useNavigate();
@@ -38,6 +40,7 @@ function SummonerSearch() {
 
   const handleRegionChange = async (event) => {
     const value = event.target.value;
+    localStorage.setItem('searchRegion', value)
     setSelectedRegion(value);
     //console.log(value)
   }
@@ -79,9 +82,29 @@ function SummonerSearch() {
     navigate(`/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`);
   }
 
+  // Retrieve recent summoners from local storage
+  const getRecentSearches = () => {
+    let recentSearchStr = localStorage.getItem('recentSearches')
+    if (recentSearchStr !== null) {
+      let recentSearchArr = JSON.parse(recentSearchStr)
+      console.log(recentSearchArr)
+      setRecentSearches(recentSearchArr)
+    }
+  }
+
+  // Retrieve previous region from local storage
+  const getPrevRegion = () => {
+    let prevRegion = localStorage.getItem('searchRegion')
+    if (prevRegion !== null) {
+      setSelectedRegion(prevRegion)
+    }
+  }
+
   // Get data dragon version on initial load
   useEffect(() => {
     getDataDragonVersion();
+    getRecentSearches();
+    getPrevRegion();
   }, [])
 
   return (
@@ -95,7 +118,9 @@ function SummonerSearch() {
           <Typography style={{ textAlign: 'center', margin: 'auto', fontSize: '32px', fontWeight: 'bold' }}>RiftReport.gg</Typography>
 
           <Grid xs={12} display={'flex'} justifyContent={'center'}>
-            <img style={{ width: '150px', margin: '20px' }} alt='site logo' src='/images/aurelionLogo.webp'></img>
+            <a href={`/`}>
+              <img style={{ width: '150px', margin: '20px' }} alt='site logo' src='/images/aurelionLogo.webp'></img>
+            </a>
           </Grid>
 
           <Grid xs={12} display={'flex'} justifyContent={'center'}>
@@ -139,6 +164,40 @@ function SummonerSearch() {
           <Grid style={{ marginTop: '10px' }} xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
             <Typography>{dataDragonVersion}</Typography>
           </Grid>
+
+
+          {recentSearches !== null ? (
+            <div style={{ justifyContent: 'center', margin: 'auto', marginTop: '50px', width: '40%' }}>
+              <Typography style={{ textAlign: 'center' }}>Recent</Typography>
+              <Divider></Divider>
+              <List>
+                <Grid container>
+                  {recentSearches.map((item, index) => (
+                    <Grid item xs={4}>
+                      <a className='recentSearchItem' href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`}>
+                        <ListItem style={{ justifyContent: 'center' }} key={index}>
+                          <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '85px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
+                          <Grid>
+                            <Grid>
+                              <b>{item.summonerName} #{item.riotId}</b>
+                            </Grid>
+                            <Grid>
+                              Level: {item.level}
+                            </Grid>
+                            <Grid>
+                              {item.rank}
+                            </Grid>
+                          </Grid>
+                        </ListItem>
+                      </a>
+                    </Grid>
+                  ))}
+                </Grid>
+              </List>
+            </div>
+          ) : (
+            <div></div>
+          )}
 
         </Grid>
       </Box>

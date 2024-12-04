@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Unstable_Grid2';
 import Navbar from '../components/Navbar';
 import { firestore } from '../FirebaseConfig';
-import { collection, updateDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, updateDoc, doc, getDoc, setDoc, sum } from "firebase/firestore";
 import SyncIcon from '@mui/icons-material/Sync';
 import DisplayGame from '../components/DisplayGame';
 import Footer from '../components/Footer';
@@ -309,18 +309,6 @@ const SummonerProfile = () => {
       console.log(summonerData)
       console.log(matchData)
 
-      // Add player to local storage
-      let recentSearchArr = JSON.parse(localStorage.getItem('recentSearches')) || [];
-      let summonerObj = {
-        'name': summonerData.summonerData.name,
-        'tag': summonerData.summonerData.name,
-        'region': summonerData.summonerData.name
-      }
-      recentSearchArr.push(summonerObj)
-      localStorage.setItem('character', summonerObj)
-
-      console.log(summonerObj)
-
       // Find player data
       if (matchData.length > 0) {
         setPlayerData(matchData[0].info.participants.find(player => player.puuid === summonerData.summonerData.puuid))
@@ -332,7 +320,41 @@ const SummonerProfile = () => {
     if (playerData !== undefined && playerData !== null) {
       console.log(playerData)
       console.log(playerData.riotIdGameName)
+      console.log(summonerData)
       document.title = `${playerData.riotIdGameName}#${riotId} - ${selectedRegion}`;
+
+      // Add summoner to local storage
+      const recentSearches = localStorage.getItem('recentSearches')
+  
+      // add ranked data if applicable
+      let rank = null
+      if (summonerData.rankedData[0]) {
+        rank = `${summonerData.rankedData[0].tier} ${summonerData.rankedData[0].rank}`
+      }
+
+      const summonerObj = {
+        selectedRegion: selectedRegion,
+        summonerName: playerData.riotIdGameName,
+        riotId: playerData.riotIdTagline,
+        icon: summonerData.summonerData.profileIconId,
+        level: summonerData.summonerData.summonerLevel,
+        rank: rank
+      }
+      if (recentSearches === null) {
+        const newArr = [summonerObj]
+        localStorage.setItem('recentSearches', JSON.stringify(newArr))
+      }
+      else {
+        const parsedArr = JSON.parse(recentSearches)
+        if (parsedArr.length < 6 && !parsedArr.some(obj =>
+          obj.selectedRegion === summonerObj.selectedRegion &&
+          obj.summonerName === summonerObj.summonerName &&
+          obj.riotId === summonerObj.riotId
+        )) {
+          parsedArr.push(summonerObj)
+          localStorage.setItem('recentSearches', JSON.stringify(parsedArr))
+        }
+      }
     }
   }, [playerData]);
 

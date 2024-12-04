@@ -8,6 +8,11 @@
     cursor: pointer;
 }
 
+.recentSearchItem {
+    text-decoration: none;
+    color: #333333;
+}
+
 .GameDetailsCatBtn {
     margin: 3px !important;
     text-transform: none !important;
