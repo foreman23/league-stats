@@ -141,11 +141,7 @@ function SummonerSearch() {
           </Grid>
 
         </Grid>
-        <Footer></Footer>
-
       </Box>
-
-
     </div>
 
   );

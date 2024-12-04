@@ -3,35 +3,18 @@ import { Grid, Divider, Typography } from '@mui/material';
 
 function Footer() {
   return (
-    <div style={{ position: 'relative' }}>
-      
-      <Grid
-        container
-        display={'flex'}
-        justifyContent={'center'}
-        flexDirection={'column'}
-        alignItems={'center'}
+    <div style={{ justifyContent: 'center', marginTop: 'auto', display: 'flex', paddingBottom: '15px'}}>
+      <Typography
         style={{
-          position: 'absolute',
-          bottom: 0,
-          width: '100%',
-          padding: '20px', // Add padding if needed
-          backgroundColor: '#F5F7FA', // Set a background color if needed
+          width: '50%',
+          fontSize: '12px',
+          lineHeight: '16px',
+          color: '#9AA4AF',
+          textAlign: 'center'
         }}
       >
-        <Divider style={{ width: '30%', marginBottom: '10px' }} />
-        <Typography
-          style={{
-            width: '50%',
-            fontSize: '12px',
-            lineHeight: '16px',
-            color: '#9AA4AF',
-            textAlign: 'center', // Align text to the center
-          }}
-        >
-          lolScroll is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc
-        </Typography>
-      </Grid>
+        RiftReport is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc
+      </Typography>
     </div>
   );
 }

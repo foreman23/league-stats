@@ -58,7 +58,7 @@ const Graphs = (props) => {
                         margin={{ left: 200 }}
                     />
                 </Grid>
-                <TeamGoldDifGraph yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
+                <TeamGoldDifGraph teamId={props.teamId} yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
             </Grid>
         </div>
     )

@@ -308,6 +308,19 @@ const SummonerProfile = () => {
     if (summonerData !== null && matchesLoaded === true && matchData !== null && summonerData !== undefined && matchData !== undefined) {
       console.log(summonerData)
       console.log(matchData)
+
+      // Add player to local storage
+      let recentSearchArr = JSON.parse(localStorage.getItem('recentSearches')) || [];
+      let summonerObj = {
+        'name': summonerData.summonerData.name,
+        'tag': summonerData.summonerData.name,
+        'region': summonerData.summonerData.name
+      }
+      recentSearchArr.push(summonerObj)
+      localStorage.setItem('character', summonerObj)
+
+      console.log(summonerObj)
+
       // Find player data
       if (matchData.length > 0) {
         setPlayerData(matchData[0].info.participants.find(player => player.puuid === summonerData.summonerData.puuid))
@@ -400,13 +413,12 @@ const SummonerProfile = () => {
           ) : (
             matchData.map((gameData, index) => (
               <div className='DisplayGameContainer' onClick={() => handleMatchClick(gameData)} key={index}>
-                  <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
+                <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
               </div>
             ))
           )}
         </Box>
 
-        <Footer></Footer>
       </Box>
     )
   }

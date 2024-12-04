@@ -12,6 +12,18 @@ const TeamGoldDifGraph = (props) => {
         height = props.height;
     }
 
+    console.log(props.yAxisGold)
+    console.log(props.xAxisGold)
+
+
+    // If player team is red flip negative gold to positive
+    let yAxisGold = [...props.yAxisGold];
+    let colors = ['#ff6666', '#66c7ff'];
+    if (props.teamId === 200) {
+        yAxisGold = yAxisGold.map((value) => value * -1);  
+        colors = ['#66c7ff', '#ff6666'];    
+    }
+
     return (
         <div>
             <Grid style={{ display: 'flex' }} xs={12}>
@@ -25,18 +37,20 @@ const TeamGoldDifGraph = (props) => {
                     height={height}
                     xAxis={[{
                         data: props.xAxisGold,
+                        min: 2,
+                        max: Math.max(...props.xAxisGold)
                     }]}
                     yAxis={[{
                         colorMap: {
                             type: 'piecewise',
-                            data: props.yAxisGold,
+                            data: yAxisGold,
                             thresholds: [0],
-                            colors: ['#ff6666', '#66c7ff'],
+                            colors: colors,
                         },
                     }]}
                     series={[
                         {
-                            data: props.yAxisGold,
+                            data: yAxisGold,
                             area: true,
                         },
                     ]}

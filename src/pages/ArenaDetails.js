@@ -202,7 +202,6 @@ const ArenaDetails = () => {
                     <OverviewTable placementIndex={8} gameMode={"CHERRY"} dataDragonVersion={dataDragonVersion} gameData={gameData} summonerName={summonerName}></OverviewTable>
                 </Grid>
             </div>
-            <Footer></Footer>
         </div>
     )
 }
