@@ -294,9 +294,12 @@ const SummonerProfile = () => {
 
   // Handle match click
   const handleMatchClick = (gameData) => {
-    console.log(gameData.info.gameMode)
     if (gameData.info.gameMode === "CLASSIC") {
-      navigate(`/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
+      if (gameData.info.gameDuration < 900) {
+        navigate(`/remake/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
+      } else {
+        navigate(`/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
+      }
     }
     if (gameData.info.gameMode === "ARAM") {
       navigate(`/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
@@ -328,7 +331,7 @@ const SummonerProfile = () => {
 
       // Add summoner to local storage
       const recentSearches = localStorage.getItem('recentSearches')
-  
+
       // add ranked data if applicable
       let rank = null
       if (summonerData.rankedData[0]) {
@@ -423,7 +426,7 @@ const SummonerProfile = () => {
           <Typography style={{ marginLeft: '15px' }}>Last Updated: {timeLastUpdated}</Typography>
         </Grid>
 
-        <Box justifyContent={'center'} width={'35vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'125px'}>
+        <Box justifyContent={'center'} width={'35vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'25px'}>
           {(loadingMatches) ? (
             <div style={{ textAlign: 'center' }} >
               <CircularProgress />
@@ -443,6 +446,12 @@ const SummonerProfile = () => {
             ))
           )}
         </Box>
+
+        {!loadingMatches &&
+          <Grid style={{ justifyContent: 'center', display: 'flex', alignItems: 'center', marginBottom: '70px' }}>
+            <Button variant='contained'>Load more</Button>
+          </Grid>
+        }
 
       </Box>
     )

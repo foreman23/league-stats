@@ -15,7 +15,6 @@ const DisplayGame = (props) => {
     // Find participant
     const participants = props.gameData.info.participants;
     const participant = props.gameData.info.participants.find(participant => participant.puuid === props.puuid);
-    console.log(participant)
 
     // Find summoner spells
     const summonerSpellsObj = Object.values(summonerSpells.data);
@@ -149,12 +148,22 @@ const DisplayGame = (props) => {
     }, [queues])
 
     return (
-        <Grid container style={{ justifyContent: 'center', marginBottom: '5px', display: 'flex', backgroundColor: `${participant.win === true ? '#ECF2FF' : '#FFF1F3'}`, padding: '10px', borderRadius: '10px' }}>
+        <Grid container style={{ justifyContent: 'center', marginBottom: '5px', display: 'flex', backgroundColor: `${(props.gameData.info.gameDuration > 900) ? participant.win === true ? '#ECF2FF' : '#FFF1F3' : 'rgb(242, 242, 242)'}`, padding: '10px', borderRadius: '10px' }}>
 
             {/* Match Information */}
             <Grid xs={2} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'center'}>
-                <Typography style={{ fontWeight: 'bold', color: `${participant.win === true ? '#3374ff' : '#ff3352'}` }} >{queueTitle}</Typography>
-                <Typography style={{ fontSize: '14px' }}>{participant.win === true ? 'Victory' : 'Defeat'}</Typography>
+                {props.gameData.info.gameDuration > 900 ? (
+                    <div>
+                        <Typography style={{ fontWeight: 'bold', color: `${participant.win === true ? '#3374ff' : '#ff3352'}` }} >{queueTitle}</Typography>
+                        <Typography style={{ fontSize: '14px' }}>{participant.win === true ? 'Victory' : 'Defeat'}</Typography>
+                    </div>
+                ) : (
+                    <div>
+                        <Typography style={{ fontWeight: 'bold', color: 'black' }} >{queueTitle}</Typography>
+                        <Typography style={{ fontSize: '14px' }}>Remake</Typography>
+                    </div>
+                )
+                }
                 <Typography style={{ fontSize: '12px' }}>{timeSinceMatch}</Typography>
             </Grid>
 
@@ -188,7 +197,7 @@ const DisplayGame = (props) => {
                 {participants.filter(participant => participant.teamId === 100).map(player => (
                     <Grid display={'flex'}>
                         <img style={{ borderRadius: '0px', width: '24px', marginRight: '7px' }} alt='champion icon' src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${player.championName}.png`}></img>
-                        <a style={{ textDecoration: 'none', color: 'black' }} href={`/na1/${player.riotIdGameName}/${player.riotIdTagline}`}><Typography style={{ fontSize: '14px' }}><b>{player.riotIdGameName}</b> #{player.riotIdTagline}</Typography></a>
+                        <p style={{ textDecoration: 'none', color: 'black' }} href={`/profile/na1/${player.riotIdGameName}/${player.riotIdTagline}`}><Typography style={{ fontSize: '14px' }}><b>{player.riotIdGameName}</b> #{player.riotIdTagline}</Typography></p>
                     </Grid>
                 ))}
             </Grid>
@@ -196,7 +205,7 @@ const DisplayGame = (props) => {
                 {participants.filter(participant => participant.teamId === 200).map(player => (
                     <Grid display={'flex'}>
                         <img style={{ borderRadius: '0px', width: '24px', marginRight: '7px' }} alt='champion icon' src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${player.championName}.png`}></img>
-                        <a style={{ textDecoration: 'none', color: 'black' }} href={`/na1/${player.riotIdGameName}/${player.riotIdTagline}`}><Typography style={{ fontSize: '14px' }}><b>{player.riotIdGameName}</b> #{player.riotIdTagline}</Typography></a>
+                        <p style={{ textDecoration: 'none', color: 'black' }} href={`/profile/na1/${player.riotIdGameName}/${player.riotIdTagline}`}><Typography style={{ fontSize: '14px' }}><b>{player.riotIdGameName}</b> #{player.riotIdTagline}</Typography></p>
                     </Grid>
                 ))}
             </Grid> */}
