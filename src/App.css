@@ -8,6 +8,10 @@
     cursor: pointer;
 }
 
+.pointer:hover {
+    cursor: pointer;
+}
+
 .recentSearchItem {
     text-decoration: none;
     color: #333333;
@@ -233,4 +237,9 @@
 
 .clickableName {
     cursor: pointer;
+}
+
+.clickableChampImageAram {
+    cursor: pointer;
+    margin-right: 50px;
 }

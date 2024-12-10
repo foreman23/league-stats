@@ -6,6 +6,7 @@ import PageNotFound from './pages/PageNotFound';
 import SummonerNotFound from './pages/SummonerNotFound';
 import GameDetails from './pages/GameDetails';
 import ArenaDetails from './pages/ArenaDetails';
+import AramDetails from './pages/AramDetails';
 import Loading from './pages/Loading';
 import Footer from './components/Footer';
 
@@ -20,6 +21,7 @@ function App() {
           <Route path='/profile/:selectedRegion/:summonerName/:riotId' element={<SummonerProfile></SummonerProfile>}></Route>
           <Route path='/match/:matchId/:summonerName/:riotId' element={<GameDetails></GameDetails>}></Route>
           <Route path='/arena/:matchId/:summonerName/:riotId' element={<ArenaDetails></ArenaDetails>}></Route>
+          <Route path='/aram/:matchId/:summonerName/:riotId' element={<AramDetails></AramDetails>}></Route>
           <Route path='/nosummoner' element={<SummonerNotFound></SummonerNotFound>}></Route>
           <Route path='/loading' element={<Loading></Loading>}></Route>
           <Route path='/*' element={<PageNotFound></PageNotFound>}></Route>

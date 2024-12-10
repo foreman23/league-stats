@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Box, ButtonGroup, Typography, ListItem, List, Divider } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import ClearIcon from '@mui/icons-material/Clear';
 
 function SummonerSearch() {
 
@@ -100,6 +100,22 @@ function SummonerSearch() {
     }
   }
 
+  // Remove summoner from recent searches
+  const handleRemoveRecent = (summonerObj) => {
+    let recentStr = localStorage.getItem('recentSearches')
+    if (recentStr) {
+      let recentArr = JSON.parse(recentStr)
+      recentArr = recentArr.filter(obj =>
+        !(obj.selectedRegion === summonerObj.selectedRegion &&
+          obj.summonerName === summonerObj.summonerName &&
+          obj.riotId === summonerObj.riotId)
+      )
+      recentStr = JSON.stringify(recentArr)
+      localStorage.setItem('recentSearches', recentStr)
+      setRecentSearches(recentArr)
+    }
+  }
+
   // Get data dragon version on initial load
   useEffect(() => {
     getDataDragonVersion();
@@ -174,9 +190,10 @@ function SummonerSearch() {
                 <Grid container>
                   {recentSearches.map((item, index) => (
                     <Grid item xs={4}>
+                      <ClearIcon className='pointer' onClick={() => handleRemoveRecent(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></ClearIcon>
                       <a className='recentSearchItem' href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`}>
                         <ListItem style={{ justifyContent: 'center' }} key={index}>
-                          <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '85px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
+                          <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
                           <Grid>
                             <Grid>
                               <b>{item.summonerName} #{item.riotId}</b>

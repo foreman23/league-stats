@@ -298,6 +298,9 @@ const SummonerProfile = () => {
     if (gameData.info.gameMode === "CLASSIC") {
       navigate(`/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
     }
+    if (gameData.info.gameMode === "ARAM") {
+      navigate(`/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
+    }
     else if (gameData.info.gameMode === "CHERRY") {
       navigate(`/arena/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
     }
