@@ -19,6 +19,11 @@ const SummonerProfile = () => {
   const [matchData, setMatchData] = useState(null);
   const [matchesLoaded, setMatchesLoaded] = useState(false);
 
+  const [historyState, setHistoryState] = useState(null);
+  const [historyIndex, setHistoryIndex] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [allLoaded, setAllLoaded] = useState(null);
+
   const [alternateRegion, setAlternateRegion] = useState(null);
   const [matchRegion, setMatchRegion] = useState(null);
 
@@ -57,6 +62,7 @@ const SummonerProfile = () => {
   // Update matches involving user (for first 1) ***can increase limit later
   const updateUserMatchInfo = useCallback(async (data) => {
     let historyData = data.historyData
+    setHistoryState(historyData)
     let newMatchDataArray = [];
     let riotApiCallCount = 0;
 
@@ -70,7 +76,6 @@ const SummonerProfile = () => {
 
     else {
       for (let i = 0; i < 5; i++) {
-        //console.log(historyData)
         // check if match already exists
         const docRef = doc(firestore, `${selectedRegion}-matches`, historyData[i]);
         console.log('Reading from firestore (checking match exists)')
@@ -91,16 +96,68 @@ const SummonerProfile = () => {
             matchData: matchData
             // timelineData: timelineData
           });
-          setMatchData(matchData);
+          // setMatchData(matchData);
           newMatchDataArray.push(matchData);
         }
       }
       console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
+      setHistoryIndex(newMatchDataArray.length)
       setMatchData(newMatchDataArray);
       setMatchesLoaded(true);
       setLoadingMatches(false);
     }
   }, [matchRegion, selectedRegion])
+
+  // Load additional matches for the player
+  const handleLoadMore = async () => {
+    setLoadingMore(true)
+    let newMatchDataArray = [...matchData];
+    let riotApiCallCount = 0;
+
+    console.log(newMatchDataArray)
+
+    console.log(historyState)
+    console.log(historyIndex)
+
+    if (!allLoaded) {
+      for (let i = historyIndex; i < historyIndex + 5; i++) {
+        console.log(historyState[i])
+        // check if match already exists
+        const docRef = doc(firestore, `${selectedRegion}-matches`, historyState[i]);
+        console.log('Reading from firestore (checking match exists)')
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log('match already exists')
+          newMatchDataArray.push(docSnap.data().matchData);
+        }
+
+        else {
+          let dateRetrieved = new Date()
+          // get match information
+          const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyState[i]}`);
+          riotApiCallCount += 1;
+          const matchData = matchResponse.data;
+          const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyState[i]);
+          await setDoc(newDocRef, {
+            dateRetrieved: dateRetrieved,
+            matchData: matchData
+            // timelineData: timelineData
+          });
+          // setMatchData(matchData);
+          newMatchDataArray.push(matchData);
+        }
+      }
+    }
+
+    console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
+    setHistoryIndex(newMatchDataArray.length)
+    setMatchData(newMatchDataArray);
+    setLoadingMore(false)
+    if (newMatchDataArray.length >= historyState.length) {
+      setAllLoaded(true)
+    }
+  }
 
   // Get summoner data from firestore
   const getUserFromFirestore = useCallback(async () => {
@@ -449,7 +506,19 @@ const SummonerProfile = () => {
 
         {!loadingMatches &&
           <Grid style={{ justifyContent: 'center', display: 'flex', alignItems: 'center', marginBottom: '70px' }}>
-            <Button variant='contained'>Load more</Button>
+            {!allLoaded ? (
+              !loadingMore ? (
+                <Button onClick={() => handleLoadMore()} variant="contained">
+                  Load more
+                </Button>
+              ) : (
+                <Button variant="contained" disabled>
+                  <CircularProgress style={{ color: 'white' }} />
+                </Button>
+              )
+            ) : (
+              <div></div>
+            )}
           </Grid>
         }
 
