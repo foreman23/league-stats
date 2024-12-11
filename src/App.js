@@ -11,6 +11,7 @@ import GenericDetails from './pages/GenericDetails';
 import Loading from './pages/Loading';
 import Footer from './components/Footer';
 
+import Test from './pages/Test';
 
 function App() {
 
@@ -27,6 +28,9 @@ function App() {
           <Route path='/nosummoner' element={<SummonerNotFound></SummonerNotFound>}></Route>
           <Route path='/loading' element={<Loading></Loading>}></Route>
           <Route path='/*' element={<PageNotFound></PageNotFound>}></Route>
+
+          <Route path='/Test/:matchId/:summonerName/:riotId' element={<Test></Test>}></Route>
+
         </Routes>
         <Footer></Footer>
       </Router>

@@ -28,14 +28,22 @@ function GameDetails() {
   const [queueTitle, setQueueTitle] = useState(null);
 
   // Get props
-  const location = useLocation();
-  const { gameId, summonerName, riotId } = useParams();
-  const { gameData } = location.state;
-  const { alternateRegion } = location.state;
-  const { dataDragonVersion } = location.state;
-  console.log(gameData)
-  console.log(alternateRegion)
-  console.log(summonerName)
+  const { summonerName } = useParams();
+  const [gameData, setGameData] = useState(null);
+  // const { gameData } = location.state;
+  const [alternateRegion, setAlternateRegion] = useState(null);
+  // const { alternateRegion } = location.state;
+  const [dataDragonVersion, setDataDragonVersion] = useState(null);
+  const [playerData, setPlayerData] = useState(null);
+  const [opposingLaner, setOpposingLaner] = useState(null);
+  const [participantGold, setParticipantGold] = useState(null);
+  const [opposingGold, setOpposingGold] = useState(null);
+  const [gameStartDate, setGameStartDate] = useState(null);
+  const [gameDuration, setGameDuration] = useState(null);
+  // const { dataDragonVersion } = location.state;
+  // console.log(gameData)
+  // console.log(alternateRegion)
+  // console.log(summonerName)
 
   // Card states (lane summaries)
   const [topSummaryCardStatus, setTopSummaryCardStatus] = useState(false);
@@ -43,24 +51,11 @@ function GameDetails() {
   const [midSummaryCardStatus, setMidSummaryCardStatus] = useState(false);
   const [botSummaryCardStatus, setBotSummaryCardStatus] = useState(false);
 
-  // Find player data
-  const playerData = gameData.info.participants.find(player => player.riotIdGameName === summonerName)
-
   // Timeline data
   const [timelineData, setTimelineData] = useState(null);
 
-  // Find opposing laner
-  console.log(gameData.info.participants)
-  gameData.info.participants.forEach((participant) => {
-    console.log(participant.teamPosition)
-  })
-  console.log(playerData)
-  const opposingLaner = gameData.info.participants.find(laner => laner.teamPosition === playerData.teamPosition && laner.summonerId !== playerData.summonerId)
-
   // Find gold difference between opposing laner
-  const participantGold = playerData.goldEarned;
-  const opposingGold = opposingLaner.goldEarned;
-  const goldDifference = participantGold - opposingGold;
+  // const goldDifference = participantGold - opposingGold;
 
   // Create summoner spells object
   const summonerSpellsObj = Object.values(summonerSpells.data);
@@ -68,20 +63,6 @@ function GameDetails() {
 
   // Create runes object
   const runesObj = Object.values(runes);
-
-  // Find duration and date of game start
-  let gameStartDate = new Date(gameData.info.gameCreation);
-  // console.log(gameStartDate)
-  let gameDuration = gameData.info.gameDuration;
-  if (gameDuration >= 3600) {
-    gameDuration = `${(gameDuration / 3600).toFixed(1)} hrs`
-    if (gameDuration === '1.0 hrs') {
-      gameDuration = '1 hr';
-    }
-  }
-  else {
-    gameDuration = `${Math.floor((gameDuration / 60))} mins`
-  }
 
   // Returns keystone url
   const getKeystoneIconUrl = (player, runesObj) => {
@@ -175,24 +156,32 @@ function GameDetails() {
   const [statsAt15, setStatsAt15] = useState(null);
   const [graphData, setGraphData] = useState(null);
   useEffect(() => {
-    document.title = `${playerData.riotIdGameName}#${playerData.riotIdTagline} - ${new Date(gameData.info.gameCreation).toLocaleDateString()} @${new Date(gameData.info.gameCreation).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase().replace(/\s/g, '')}`
-    calculateOpScores();
 
+    console.log(gameData)
+    console.log(alternateRegion)
     console.log(timelineData)
-    const fetch15Stats = async () => {
-      if (timelineData) {
-        const graphData = await generateGraphData(gameData, timelineData);
-        console.log(graphData)
-        const stats15 = await getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData);
-        console.log(stats15)
-        setGraphData(graphData);
-        setStatsAt15(stats15);
+    console.log(playerData)
+
+    if (gameData && alternateRegion && timelineData && playerData) {
+      document.title = `${playerData.riotIdGameName}#${playerData.riotIdTagline} - ${new Date(gameData.info.gameCreation).toLocaleDateString()} @${new Date(gameData.info.gameCreation).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase().replace(/\s/g, '')}`
+      calculateOpScores();
+
+      console.log(timelineData)
+      const fetch15Stats = async () => {
+        if (timelineData) {
+          const graphData = await generateGraphData(gameData, timelineData);
+          console.log(graphData)
+          const stats15 = await getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData);
+          console.log(stats15)
+          setGraphData(graphData);
+          setStatsAt15(stats15);
+        }
       }
+
+      fetch15Stats();
     }
 
-    fetch15Stats();
-
-  }, [gameData, alternateRegion, timelineData]);
+  }, [gameData, alternateRegion, timelineData, playerData]);
 
   const findQueueInfo = async () => {
     const queue = queues.find(queue => queue.queueId === gameData.info.queueId);
@@ -242,10 +231,52 @@ function GameDetails() {
     }
   }
 
+  // On initial page load
   useEffect(() => {
-    // Fetch queue data JSON
+    let payload = JSON.parse(localStorage.getItem('gameData'));
+    setAlternateRegion(payload.alternateRegion);
+    setGameData(payload.gameData);
+    setDataDragonVersion(payload.dataDragonVersion);
     getQueueJSON();
   }, [])
+
+  // Set player data and game duration
+  useEffect(() => {
+    if (gameData) {
+      // Find player data
+      setPlayerData(gameData.info.participants.find(player => player.riotIdGameName === summonerName))
+      // Find duration and date of game start
+      setGameStartDate(new Date(gameData.info.gameCreation));
+      // console.log(gameStartDate)
+      let gameDuration = gameData.info.gameDuration;
+      if (gameDuration >= 3600) {
+        gameDuration = `${(gameDuration / 3600).toFixed(1)} hrs`
+        if (gameDuration === '1.0 hrs') {
+          gameDuration = '1 hr';
+        }
+      }
+      else {
+        gameDuration = `${Math.floor((gameDuration / 60))} mins`
+      }
+      setGameDuration(gameDuration)
+    }
+  }, [gameData])
+
+  // Set data that depends on player data
+  useEffect(() => {
+    if (playerData) {
+      // Find opposing laner
+      setOpposingLaner(gameData.info.participants.find(laner => laner.teamPosition === playerData.teamPosition && laner.summonerId !== playerData.summonerId))
+    }
+  }, [playerData])
+
+  // Set gold data
+  useEffect(() => {
+    if (playerData && opposingLaner) {
+      setParticipantGold(playerData.goldEarned);
+      setOpposingGold(opposingLaner.goldEarned)
+    }
+  }, [playerData, opposingLaner])
 
   useEffect(() => {
     if (queues) {
@@ -360,14 +391,17 @@ function GameDetails() {
   }, [graphData])
 
   useEffect(() => {
-    const getMatchTimeline = async (alternateRegion, matchId) => {
-      console.log('CALLING RIOT API');
-      const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
-      const timelineData = timelineResponse.data;
-      setTimelineData(timelineData);
-    };
+    if (gameData && alternateRegion) {
+      const getMatchTimeline = async (alternateRegion, matchId) => {
+        console.log('CALLING RIOT API');
+        const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
+        const timelineData = timelineResponse.data;
+        setTimelineData(timelineData);
+      };
 
-    getMatchTimeline(alternateRegion, gameData.metadata.matchId);
+      getMatchTimeline(alternateRegion, gameData.metadata.matchId);
+    }
+
   }, [gameData, alternateRegion]);
 
   const calculateOpScores = () => {

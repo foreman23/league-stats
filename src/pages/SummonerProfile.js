@@ -10,7 +10,6 @@ import { firestore } from '../FirebaseConfig';
 import { collection, updateDoc, doc, getDoc, setDoc, sum } from "firebase/firestore";
 import SyncIcon from '@mui/icons-material/Sync';
 import DisplayGame from '../components/DisplayGame';
-import Footer from '../components/Footer';
 
 const SummonerProfile = () => {
 
@@ -33,6 +32,8 @@ const SummonerProfile = () => {
 
   const [dataDragonVersion, setDataDragonVersion] = useState(null);
   const [playerData, setPlayerData] = useState(null);
+
+  const [recentOpen, setRecentOpen] = useState(false);
 
   // Init navigate
   const navigate = useNavigate();
@@ -496,11 +497,47 @@ const SummonerProfile = () => {
               </Grid>
             </div>
           ) : (
-            matchData.map((gameData, index) => (
-              <div className='DisplayGameContainer' onClick={() => handleMatchClick(gameData)} key={index}>
-                <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
-              </div>
-            ))
+            matchData.map((gameData, index) => {
+              let gameModeHref = "";
+              if (gameData.info.gameMode === "CLASSIC") {
+                gameModeHref = `/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
+              } else if (gameData.info.gameMode === "ARAM") {
+                gameModeHref = "/Test";
+              } else if (gameData.info.gameMode === "CHERRY") {
+                gameModeHref = "/Test";
+              }
+
+              let gameDataPayload = {
+                "gameData": gameData,
+                "alternateRegion": alternateRegion,
+                "dataDragonVersion": dataDragonVersion
+              }
+
+
+              if (recentOpen === false) return (
+                <a style={{ textDecoration: 'inherit', color: 'inherit' }} onMouseDown={(e) => {
+                  if (e.button === 0 || e.button === 1) {
+                    localStorage.setItem('gameData', JSON.stringify(gameDataPayload))
+                    // Prevent spamming of tabs which leads to incorrect game details
+                    setTimeout(() => {
+                      setRecentOpen(true);
+                      setTimeout(() => {
+                        setRecentOpen(false);
+                      }, 150)
+                    }, 150);
+                  }
+                }} 
+                className="DisplayGameContainer" href={gameModeHref} key={index} target="_blank" rel="noopener noreferrer">
+                  <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
+                </a>
+              )
+              if (recentOpen === true) return (
+                <a className="DisplayGameContainer" key={index} target="_blank" rel="noopener noreferrer">
+                  <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
+                </a>
+              )
+            }
+            )
           )}
         </Box>
 
