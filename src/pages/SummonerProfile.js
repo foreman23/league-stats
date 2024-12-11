@@ -502,7 +502,7 @@ const SummonerProfile = () => {
               if (gameData.info.gameMode === "CLASSIC") {
                 gameModeHref = `/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
               } else if (gameData.info.gameMode === "ARAM") {
-                gameModeHref = "/Test";
+                gameModeHref = `/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
               } else if (gameData.info.gameMode === "CHERRY") {
                 gameModeHref = "/Test";
               }

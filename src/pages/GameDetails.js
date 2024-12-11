@@ -27,14 +27,11 @@ function GameDetails() {
   const [queues, setQueues] = useState(null);
   const [queueTitle, setQueueTitle] = useState(null);
 
-  const [items, setItems] = useState(null);
 
-  // Get props
+  // Init state
   const { summonerName } = useParams();
   const [gameData, setGameData] = useState(null);
-  // const { gameData } = location.state;
   const [alternateRegion, setAlternateRegion] = useState(null);
-  // const { alternateRegion } = location.state;
   const [dataDragonVersion, setDataDragonVersion] = useState(null);
   const [playerData, setPlayerData] = useState(null);
   const [opposingLaner, setOpposingLaner] = useState(null);
@@ -42,10 +39,7 @@ function GameDetails() {
   const [opposingGold, setOpposingGold] = useState(null);
   const [gameStartDate, setGameStartDate] = useState(null);
   const [gameDuration, setGameDuration] = useState(null);
-  // const { dataDragonVersion } = location.state;
-  // console.log(gameData)
-  // console.log(alternateRegion)
-  // console.log(summonerName)
+  const [items, setItems] = useState(null);
 
   // Card states (lane summaries)
   const [topSummaryCardStatus, setTopSummaryCardStatus] = useState(false);
@@ -61,7 +55,6 @@ function GameDetails() {
 
   // Create summoner spells object
   const summonerSpellsObj = Object.values(summonerSpells.data);
-  // console.log(summonerSpellsObj)
 
   // Create runes object
   const runesObj = Object.values(runes);
@@ -159,11 +152,6 @@ function GameDetails() {
   const [graphData, setGraphData] = useState(null);
   useEffect(() => {
 
-    console.log(gameData)
-    console.log(alternateRegion)
-    console.log(timelineData)
-    console.log(playerData)
-
     if (gameData && alternateRegion && timelineData && playerData) {
       document.title = `${playerData.riotIdGameName}#${playerData.riotIdTagline} - ${new Date(gameData.info.gameCreation).toLocaleDateString()} @${new Date(gameData.info.gameCreation).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase().replace(/\s/g, '')}`
       calculateOpScores();
@@ -172,9 +160,7 @@ function GameDetails() {
       const fetch15Stats = async () => {
         if (timelineData) {
           const graphData = await generateGraphData(gameData, timelineData);
-          console.log(graphData)
           const stats15 = await getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData);
-          console.log(stats15)
           setGraphData(graphData);
           setStatsAt15(stats15);
         }
@@ -226,7 +212,6 @@ function GameDetails() {
   const getQueueJSON = async () => {
     try {
       const response = await fetch('https://static.developer.riotgames.com/docs/lol/queues.json');
-      console.log(response)
       const data = await response.json();
       setQueues(data);
     } catch (error) {
@@ -238,9 +223,7 @@ function GameDetails() {
   const getItemsJSON = async () => {
     try {
       const response = await fetch('https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/item.json');
-      console.log(response)
       const data = await response.json();
-      console.log(data)
       setItems(data);
     } catch (error) {
       console.error('Error fetching item JSON data:', error);
@@ -922,7 +905,6 @@ function GameDetails() {
                               </img>
                             )
                             }
-
                             {player?.item1 ? (
                               <Tooltip
                                 arrow
@@ -945,7 +927,6 @@ function GameDetails() {
                               </img>
                             )
                             }
-
                             {player?.item2 ? (
                               <Tooltip
                                 arrow
@@ -968,7 +949,6 @@ function GameDetails() {
                               </img>
                             )
                             }
-
                             {player?.item6 ? (
                               <Tooltip
                                 arrow
@@ -992,7 +972,6 @@ function GameDetails() {
                             )
                             }
                           </div>
-
                           <div style={{ display: 'flex', flexDirection: 'row' }}>
                             {player?.item3 ? (
                               <Tooltip
@@ -1016,7 +995,6 @@ function GameDetails() {
                               </img>
                             )
                             }
-
                             {player?.item4 ? (
                               <Tooltip
                                 arrow
@@ -1039,7 +1017,6 @@ function GameDetails() {
                               </img>
                             )
                             }
-
                             {player?.item5 ? (
                               <Tooltip
                                 arrow
