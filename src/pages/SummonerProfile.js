@@ -523,8 +523,8 @@ const SummonerProfile = () => {
                       setRecentOpen(true);
                       setTimeout(() => {
                         setRecentOpen(false);
-                      }, 150)
-                    }, 150);
+                      }, 200)
+                    }, 200);
                   }
                 }} 
                 className="DisplayGameContainer" href={gameModeHref} key={index} target="_blank" rel="noopener noreferrer">
