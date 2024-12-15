@@ -243,3 +243,13 @@
     cursor: pointer;
     margin-right: 50px;
 }
+
+.favoriteButtonInactive {
+    cursor: pointer;
+    color: #D8D8D8;
+}
+
+.favoriteButtonActive {
+    cursor: pointer;
+    color: #FF4081;
+}

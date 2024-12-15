@@ -79,7 +79,7 @@ function Navbar() {
                         <Typography variant="h6" fontWeight={'bold'} marginRight='5px' component="div" sx={{ flexGrow: 1 }}>
                             RiftReport.gg
                         </Typography>
-                        <img style={{ width: '40px' }} src='/images/aurelionLogo.webp'></img>
+                        <img style={{ width: '40px' }} src='/images/sorakaLogo.webp'></img>
 
                     </a>
                     <span style={{ marginLeft: 'auto', alignItems: 'center', display: 'inline-flex' }}>

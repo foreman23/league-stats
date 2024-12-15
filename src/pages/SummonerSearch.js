@@ -2,10 +2,11 @@ import '../App.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, TextField, Box, ButtonGroup, Typography, ListItem, List, Divider } from '@mui/material';
+import { Button, TextField, Box, ButtonGroup, Typography, ListItem, List, Divider, Autocomplete } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Navbar from '../components/Navbar';
 import ClearIcon from '@mui/icons-material/Clear';
+import { sum } from 'firebase/firestore';
 
 function SummonerSearch() {
 
@@ -14,6 +15,7 @@ function SummonerSearch() {
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [dataDragonVersion, setDataDragonVersion] = useState(null);
   const [recentSearches, setRecentSearches] = useState(null);
+  const [recentArr, setRecentArr] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // Init navigate
@@ -33,9 +35,12 @@ function SummonerSearch() {
   }
 
   const updateSummonerNameState = async (event) => {
-    const inputValue = event.target.value;
-    setSummonerName(inputValue.toLowerCase());
-    //console.log(inputValue);
+    // console.log(event.target.value)
+    if (event.target.value !== 0) {
+      setSummonerName(event.target.value.toLowerCase());
+      //console.log(inputValue);
+      console.log(summonerName)
+    }
   }
 
   const handleRegionChange = async (event) => {
@@ -46,40 +51,43 @@ function SummonerSearch() {
   }
 
   const handleSearchSubmit = async () => {
-    // Extract riot tag from summoner name
-    let summonerNamePayload = null;
-    let riotTagPayload = null;
 
-    // If last character is #
-    if (summonerName[summonerName.length - 1] === "#") {
-      summonerNamePayload = summonerName.split("#")[0];
-      riotTagPayload = selectedRegion;
-      // Change tag to #OCE for oc1
-      if (riotTagPayload === 'oc1') {
-        riotTagPayload = 'oce';
-      }
-    }
+    console.log(summonerName)
 
-    // Else if contains # but not last character (contains riot tag)
-    else if (summonerName.includes("#")) {
-      summonerNamePayload = summonerName.split("#")[0];
-      riotTagPayload = summonerName.split("#")[1];
-      console.log(summonerNamePayload, riotTagPayload)
-      if (riotTagPayload === undefined || riotTagPayload === null) {
-      }
-    }
+    // // Extract riot tag from summoner name
+    // let summonerNamePayload = null;
+    // let riotTagPayload = null;
 
-    // If no # riot tag is provided
-    else {
-      summonerNamePayload = summonerName;
-      riotTagPayload = selectedRegion;
-      // Change tag to #OCE for oc1
-      if (riotTagPayload === 'oc1') {
-        riotTagPayload = 'oce';
-      }
-    }
+    // // If last character is #
+    // if (summonerName[summonerName.length - 1] === "#") {
+    //   summonerNamePayload = summonerName.split("#")[0];
+    //   riotTagPayload = selectedRegion;
+    //   // Change tag to #OCE for oc1
+    //   if (riotTagPayload === 'oc1') {
+    //     riotTagPayload = 'oce';
+    //   }
+    // }
 
-    navigate(`/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`);
+    // // Else if contains # but not last character (contains riot tag)
+    // else if (summonerName.includes("#")) {
+    //   summonerNamePayload = summonerName.split("#")[0];
+    //   riotTagPayload = summonerName.split("#")[1];
+    //   console.log(summonerNamePayload, riotTagPayload)
+    //   if (riotTagPayload === undefined || riotTagPayload === null) {
+    //   }
+    // }
+
+    // // If no # riot tag is provided
+    // else {
+    //   summonerNamePayload = summonerName;
+    //   riotTagPayload = selectedRegion;
+    //   // Change tag to #OCE for oc1
+    //   if (riotTagPayload === 'oc1') {
+    //     riotTagPayload = 'oce';
+    //   }
+    // }
+
+    // navigate(`/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`);
   }
 
   // Retrieve recent summoners from local storage
@@ -89,6 +97,18 @@ function SummonerSearch() {
       let recentSearchArr = JSON.parse(recentSearchStr)
       console.log(recentSearchArr)
       setRecentSearches(recentSearchArr)
+
+      let arr = []
+      for (let i = 0; i < recentSearchArr.length; i++) {
+        let temp = {
+          summonerName: recentSearchArr[i].summonerName,
+          selectedRegion: recentSearchArr[i].selectedRegion,
+          riotId: recentSearchArr[i].riotId
+        }
+        arr.push(temp)
+      }
+      console.log(arr)
+      setRecentArr(arr)
     }
   }
 
@@ -135,12 +155,11 @@ function SummonerSearch() {
 
           <Grid xs={12} display={'flex'} justifyContent={'center'}>
             <a href={`/`}>
-              <img style={{ width: '150px', margin: '20px' }} alt='site logo' src='/images/aurelionLogo.webp'></img>
+              <img style={{ width: '150px', margin: '20px' }} alt='site logo' src='/images/sorakaLogo.webp'></img>
             </a>
           </Grid>
 
-          <Grid xs={12} display={'flex'} justifyContent={'center'}>
-            <TextField onKeyDown={event => {
+          {/* <TextField onKeyDown={event => {
               if (event.key === 'Enter') {
                 handleSearchSubmit();
               }
@@ -149,7 +168,34 @@ function SummonerSearch() {
               placeholder='Search by Riot ID (eg. Teemo#NA1)'
               style={{ width: '30%' }}
               fullWidth>
-            </TextField>
+            </TextField> */}
+
+          <Grid xs={12} display={'flex'} justifyContent={'center'}>
+            <Autocomplete
+              options={recentArr || []}
+              value={summonerName}
+              getOptionLabel={(option) => option.summonerName}
+              onInputChange={(event, newInputValue) => {
+                setSummonerName(newInputValue)
+              }}
+              onChange={(event, newValue) => {
+                setSummonerName(newValue);
+              }}
+              fullWidth
+              style={{ width: '30%' }}
+              freeSolo
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      handleSearchSubmit();
+                    }
+                  }}
+                  placeholder="Search by Riot ID (e.g., Teemo#NA1)"
+                />
+              )}
+            />
             <Button onClick={handleSearchSubmit} style={{ marginLeft: '5px' }} variant='contained'>Search</Button>
           </Grid>
           <Grid style={{ marginTop: '15px' }} xs={12} display={'flex'} justifyContent={'center'}>
@@ -184,7 +230,7 @@ function SummonerSearch() {
 
           {recentSearches !== null ? (
             <div style={{ justifyContent: 'center', margin: 'auto', marginTop: '50px', width: '40%' }}>
-              <Typography style={{ textAlign: 'center' }}>Recent</Typography>
+              <Typography style={{ textAlign: 'center' }}>Favorites</Typography>
               <Divider></Divider>
               <List>
                 <Grid container>

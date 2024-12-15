@@ -10,6 +10,7 @@ import { firestore } from '../FirebaseConfig';
 import { collection, updateDoc, doc, getDoc, setDoc, sum } from "firebase/firestore";
 import SyncIcon from '@mui/icons-material/Sync';
 import DisplayGame from '../components/DisplayGame';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const SummonerProfile = () => {
 
@@ -35,6 +36,8 @@ const SummonerProfile = () => {
 
   const [recentOpen, setRecentOpen] = useState(false);
 
+  const [favorited, setFavorited] = useState(false);
+
   // Init navigate
   const navigate = useNavigate();
 
@@ -44,6 +47,57 @@ const SummonerProfile = () => {
   riotId = riotId.toUpperCase();
   console.log(selectedRegion, summonerName, riotId)
   console.log(isLoading)
+
+  // Set region string name
+  let regionStr = ''
+  if (selectedRegion === 'na1') {
+    regionStr = 'North America'
+  }
+  else if (selectedRegion === 'euw1') {
+    regionStr = 'Europe West'
+  }
+  else if (selectedRegion === 'br1') {
+    regionStr = 'Brazil'
+  }
+  else if (selectedRegion === 'eun1') {
+    regionStr = 'Europe Nordic & East'
+  }
+  else if (selectedRegion === 'la1') {
+    regionStr = 'Latin America North'
+  }
+  else if (selectedRegion === 'la2') {
+    regionStr = 'Latin America South'
+  }
+  else if (selectedRegion === 'oc1') {
+    regionStr = 'Oceania'
+  }
+  else if (selectedRegion === 'ru') {
+    regionStr = 'Russia'
+  }
+  else if (selectedRegion === 'tr1') {
+    regionStr = 'Turkey'
+  }
+  else if (selectedRegion === 'jp1') {
+    regionStr = 'Japan'
+  }
+  else if (selectedRegion === 'kr') {
+    regionStr = 'Korea'
+  }
+  else if (selectedRegion === 'ph2') {
+    regionStr = 'The Philippines'
+  }
+  else if (selectedRegion === 'sg2') {
+    regionStr = 'Singapore'
+  }
+  else if (selectedRegion === 'tw2') {
+    regionStr = 'Taiwan'
+  }
+  else if (selectedRegion === 'th2') {
+    regionStr = 'Thailand'
+  }
+  else if (selectedRegion === 'vn2') {
+    regionStr = 'Vietnam'
+  }
 
   // Set the current ddragon version
   const getDataDragonVersion = async () => {
@@ -350,22 +404,32 @@ const SummonerProfile = () => {
 
   }, [summonerName, selectedRegion, alternateRegion, matchRegion, riotId, getUserFromFirestore])
 
+  // Handle favorite click
+  const handleFavoriteClick = () => {
+    console.log(favorited)
+    if (favorited === false) {
+      setFavorited(true)
+    } else {
+      setFavorited(false)
+    }
+  }
+
   // Handle match click
-  const handleMatchClick = (gameData) => {
-    if (gameData.info.gameMode === "CLASSIC") {
-      if (gameData.info.gameDuration < 900) {
-        navigate(`/remake/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
-      } else {
-        navigate(`/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
-      }
-    }
-    if (gameData.info.gameMode === "ARAM") {
-      navigate(`/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
-    }
-    else if (gameData.info.gameMode === "CHERRY") {
-      navigate(`/arena/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
-    }
-  };
+  // const handleMatchClick = (gameData) => {
+  //   if (gameData.info.gameMode === "CLASSIC") {
+  //     if (gameData.info.gameDuration < 900) {
+  //       navigate(`/remake/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
+  //     } else {
+  //       navigate(`/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
+  //     }
+  //   }
+  //   if (gameData.info.gameMode === "ARAM") {
+  //     navigate(`/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
+  //   }
+  //   else if (gameData.info.gameMode === "CHERRY") {
+  //     navigate(`/arena/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
+  //   }
+  // };
 
   // Render page once data is loaded
   useEffect(() => {
@@ -382,9 +446,9 @@ const SummonerProfile = () => {
 
   useEffect(() => {
     if (playerData !== undefined && playerData !== null) {
-      console.log(playerData)
-      console.log(playerData.riotIdGameName)
-      console.log(summonerData)
+      // console.log(playerData)
+      // console.log(playerData.riotIdGameName)
+      // console.log(summonerData)
       document.title = `${playerData.riotIdGameName}#${riotId} - ${selectedRegion}`;
 
       // Add summoner to local storage
@@ -454,34 +518,196 @@ const SummonerProfile = () => {
 
       <Box>
         <Navbar></Navbar>
-        <Grid xs={12} display={'flex'} justifyContent={'center'}>
 
-          <Grid>
-            <img style={{ borderRadius: '100%', border: '6px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', margin: '20px', width: '170px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${summonerData.summonerData.profileIconId}.png`} alt=''></img>
+
+        <Grid container display={'flex'} marginTop={'25px'} justifyContent={'center'}>
+          <Grid display={'flex'} flexDirection={'column'}>
+            <Grid style={{ margin: 'auto', justifyContent: 'center', position: 'relative', display: 'flex', paddingRight: '30px' }}>
+              <Typography style={{
+                position: 'absolute',
+                top: '0px',
+                margin: 'auto',
+                justifyContent: 'center',
+                textAlign: 'center',
+                backgroundColor: '#5900FF',
+                color: 'white',
+                fontWeight: 'bold',
+                borderRadius: '10px',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+                paddingTop: '1px',
+                paddingBottom: '1px'
+              }}>{summonerData.summonerData.summonerLevel}
+              </Typography>
+              <img style={{
+                borderRadius: '100%',
+                border: '6px solid white',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)',
+                margin: 'auto',
+                marginRight: '0px',
+                width: '170px',
+                marginBottom: '10px',
+                justifyContent: 'center'
+              }}
+                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${summonerData.summonerData.profileIconId}.png`} alt=''>
+              </img>
+              <FavoriteIcon
+                onClick={handleFavoriteClick}
+                className={favorited === false ? 'favoriteButtonInactive' : 'favoriteButtonActive'}
+                style={{
+                  verticalAlign: 'top',
+                  top: '10px',
+                  right: '6px',
+                  fontSize: '30px',
+                  position: 'absolute'
+                }}>
+              </FavoriteIcon>
+            </Grid>
+            <Grid style={{ margin: 'auto', textAlign: 'center', paddingRight: '30px', marginTop: '12px' }}>
+              <Button style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', marginBottom: '10px', width: '130px' }} disabled={disableUpdateButton} onClick={updateUserFirestore} variant='contained' endIcon={<SyncIcon></SyncIcon>}>Update</Button>
+              <Typography style={{ fontSize: '12px', color: '#4E4E4E' }}>Updated: {timeLastUpdated}</Typography>
+            </Grid>
           </Grid>
 
-          <Grid alignItems={'center'} display={'flex'}>
-            <List>
-              {playerData ? (
-                <ListItem>{playerData.riotIdGameName} #{riotId} ({selectedRegion})</ListItem>
-              ) : (
-                <ListItem>{summonerName} #{riotId} ({selectedRegion})</ListItem>
-              )}
-              <ListItem>level: {summonerData.summonerData.summonerLevel}</ListItem>
-              {summonerData.rankedData.length > 0 ? (
-                <>
-                  <ListItem>{summonerData.rankedData[0].tier} {summonerData.rankedData[0].rank}</ListItem>
-                  <ListItem>{summonerData.rankedData[0].wins}W {summonerData.rankedData[0].losses}L {((summonerData.rankedData[0].wins / (summonerData.rankedData[0].wins + summonerData.rankedData[0].losses)) * 100).toFixed(0)}%</ListItem>
-                </>
-              ) : <ListItem>Unranked</ListItem>}
-            </List>
+          <Grid display={'flex'} flexDirection={'column'} marginTop={'0px'}>
+            <Grid marginLeft={'15px'} display={'flex'} flexDirection={'row'}>
+              <Grid>
+                <List style={{ lineHeight: '22px' }}>
+                  {playerData ? (
+                    <ListItem style={{ fontWeight: 'bolder' }}>{playerData.riotIdGameName} #{riotId}</ListItem>
+                  ) : (
+                    <ListItem style={{ fontWeight: 'bolder' }}>{summonerName} #{riotId} ({selectedRegion})</ListItem>
+                  )}
+                  <ListItem style={{ fontWeight: '500', color: '#404040' }}>{regionStr}</ListItem>
+                  {summonerData.rankedData.length > 0 ? (
+                    <>
+                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{(summonerData.rankedData[0].tier).charAt(0) + summonerData.rankedData[0].tier.substring(1).toLowerCase()} {summonerData.rankedData[0].rank}</ListItem>
+                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{summonerData.rankedData[0].wins}W {summonerData.rankedData[0].losses}L {((summonerData.rankedData[0].wins / (summonerData.rankedData[0].wins + summonerData.rankedData[0].losses)) * 100).toFixed(0)}%</ListItem>
+                    </>
+                  ) : <ListItem style={{ fontWeight: '500', color: '#404040' }}>Unranked</ListItem>}
+                </List>
+              </Grid>
+              <Grid position={'relative'} marginLeft={'20px'}>
+                <img style={{
+                  backgroundColor: '#E3E3E3',
+                  borderRadius: '100%',
+                  border: '4px white solid',
+                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25',
+                  maxWidth: '150px'
+                }}
+                  src='/images/RankIcon.svg'>
+                </img>
+                <Typography style={{
+                  position: 'absolute',
+                  margin: 'auto',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  backgroundColor: '#949494',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  borderRadius: '10px',
+                  paddingLeft: '8px',
+                  paddingRight: '8px',
+                  paddingTop: '1px',
+                  paddingBottom: '1px',
+                  bottom: '4px'
+                }}>
+                  72 lp
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} marginLeft={'0px'} marginTop={'15px'} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'row'}>
+              <Grid marginRight={'20px'} flex={'column'}>
+                {/* **** Change to map later **** */}
+                <img style={{
+                  borderRadius: '100%',
+                  border: '3px solid white',
+                  width: '65px',
+                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                }}
+                  src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/Talon.png`} alt=''>
+                </img>
+                <Typography style={{
+                  textAlign: 'center',
+                  fontSize: '12px',
+                  backgroundColor: '#606060',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  borderRadius: '5px',
+                  width: '50%',
+                  paddingLeft: '3px',
+                  paddingRight: '3px',
+                  margin: 'auto',
+                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                }}>
+                  1.2M
+                </Typography>
+              </Grid>
+              <Grid marginRight={'20px'} flex={'column'}>
+                <img style={{
+                  borderRadius: '100%',
+                  border: '3px solid white',
+                  width: '65px',
+                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                }}
+                  src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/Vladimir.png`} alt=''>
+                </img>
+                <Typography style={{
+                  textAlign: 'center',
+                  fontSize: '12px',
+                  backgroundColor: '#606060',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  borderRadius: '5px',
+                  width: '50%',
+                  paddingLeft: '3px',
+                  paddingRight: '3px',
+                  margin: 'auto',
+                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                }}>
+                  231k
+                </Typography>
+              </Grid>
+              <Grid marginRight={'20px'} flex={'column'}>
+                <img style={{
+                  borderRadius: '100%',
+                  border: '3px solid white',
+                  width: '65px',
+                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                }}
+                  src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/Viktor.png`} alt=''>
+                </img>
+                <Typography style={{
+                  textAlign: 'center',
+                  fontSize: '12px',
+                  backgroundColor: '#606060',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  borderRadius: '5px',
+                  width: '50%',
+                  paddingLeft: '3px',
+                  paddingRight: '3px',
+                  margin: 'auto',
+                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                }}>
+                  12k
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
 
-        </Grid>
-
-        <Grid xs={12} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-          <Button disabled={disableUpdateButton} onClick={updateUserFirestore} variant='contained' endIcon={<SyncIcon></SyncIcon>}>Update</Button>
-          <Typography style={{ marginLeft: '15px' }}>Last Updated: {timeLastUpdated}</Typography>
+          {/* <Grid display={'flex'} flexDirection={'column'} marginTop={'20px'}>
+            <img style={{
+              backgroundColor: '#E3E3E3',
+              borderRadius: '100%',
+              border: '3px white solid',
+              filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25',
+              maxWidth: '150px',
+            }}
+              src='/images/RankIcon.svg'>
+            </img>
+          </Grid> */}
         </Grid>
 
         <Box justifyContent={'center'} width={'35vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'25px'}>
@@ -526,8 +752,8 @@ const SummonerProfile = () => {
                       }, 200)
                     }, 200);
                   }
-                }} 
-                className="DisplayGameContainer" href={gameModeHref} key={index} target="_blank" rel="noopener noreferrer">
+                }}
+                  className="DisplayGameContainer" href={gameModeHref} key={index} target="_blank" rel="noopener noreferrer">
                   <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
                 </a>
               )
