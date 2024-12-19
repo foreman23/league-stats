@@ -253,3 +253,7 @@
     cursor: pointer;
     color: #fc578e;
 }
+
+.displayGameGoldBar {
+    cursor: default;
+}

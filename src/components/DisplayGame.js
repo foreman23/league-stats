@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, Grid, Divider, LinearProgress, Box } from '@mui/material'
+import { Typography, Grid, Divider, LinearProgress, Box, Tooltip } from '@mui/material'
 // import queues from '../jsonData/queues.json'
 import summonerSpells from '../jsonData/summonerSpells.json'
 
@@ -26,6 +26,9 @@ const DisplayGame = (props) => {
     const opposingSummonerSpell1 = summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString());
     const opposingSummonerSpell2 = summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString());
 
+
+    // Find highest gold earned
+    const highestGold =  props.gameData.info.participants.reduce((max, player) => Math.max(max, player.goldEarned), 0);
 
     // Find gold difference between opposing laner
     const participantGold = participant.goldEarned;
@@ -266,10 +269,14 @@ const DisplayGame = (props) => {
 
             <Grid xs={2} display={'flex'} flexDirection={'row'} margin={'auto'}>
                 <Grid xs={3}>
-                    <LinearProgress variant='determinate' value={75} sx={{ backgroundColor: participant.teamId === 100 ? '#BED3FF' : '#FFC3CC', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#568CFF' : '#FF3A54' } }} style={{ width: '64px', height: '14px', transform: 'rotate(270deg)', borderRadius: '5px' }}></LinearProgress>
+                    <Tooltip className='displayGameGoldBar' title={`${participantGold.toLocaleString()}g`}>
+                        <LinearProgress variant='determinate' value={(participantGold / highestGold) * 100} sx={{ backgroundColor: participant.teamId === 100 ? '#BED3FF' : '#FFC3CC', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#568CFF' : '#FF3A54' } }} style={{ width: '64px', height: '14px', transform: 'rotate(270deg)', borderRadius: '5px' }}></LinearProgress>
+                    </Tooltip>
                 </Grid>
                 <Grid xs={3}>
-                    <LinearProgress variant='determinate' value={40} sx={{ backgroundColor: participant.teamId === 100 ? '#FFC3CC' : '#BED3FF', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#FF3A54' : '#568CFF' } }} style={{ width: '64px', height: '14px', transform: 'rotate(270deg)', borderRadius: '5px' }}></LinearProgress>
+                    <Tooltip className='displayGameGoldBar' title={`${opposingGold.toLocaleString()}g`}>
+                        <LinearProgress variant='determinate' value={(opposingGold / highestGold) * 100} sx={{ backgroundColor: participant.teamId === 100 ? '#FFC3CC' : '#BED3FF', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#FF3A54' : '#568CFF' } }} style={{ width: '64px', height: '14px', transform: 'rotate(270deg)', borderRadius: '5px' }}></LinearProgress>
+                    </Tooltip>
                 </Grid>
             </Grid>
 

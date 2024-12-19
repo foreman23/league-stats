@@ -1,4 +1,4 @@
-import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress } from '@mui/material';
+import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress, Tooltip } from '@mui/material';
 import React, { useCallback } from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -39,6 +39,7 @@ const SummonerProfile = () => {
   const [favorited, setFavorited] = useState(false);
 
   const [levelBG, setLevelBG] = useState(null);
+  const [champsJSON, setChampsJSON] = useState(null);
 
   // Init navigate
   const navigate = useNavigate();
@@ -260,6 +261,9 @@ const SummonerProfile = () => {
         const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`);
         const historyData = historyResponse.data;
 
+        const masteryResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
+        const masteryData = masteryResponse.data;
+
         // if match history is empty set matchesLoaded to true
         if (historyData.length < 1) {
           setMatchesLoaded(true);
@@ -271,13 +275,15 @@ const SummonerProfile = () => {
           lastUpdated: lastUpdated,
           summonerData: summonerData,
           rankedData: rankedData,
-          historyData: historyData
+          historyData: historyData,
+          masteryData: masteryData
         }
         await setDoc(newDocRef, {
           lastUpdated: lastUpdated,
           summonerData: summonerData,
           rankedData: rankedData,
-          historyData: historyData
+          historyData: historyData,
+          masteryData: masteryData
         });
         setSummonerData(data);
         updateUserMatchInfo(data);
@@ -307,19 +313,24 @@ const SummonerProfile = () => {
       const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${summonerData.puuid}`);
       const historyData = historyResponse.data;
 
+      const masteryResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
+      const masteryData = masteryResponse.data;
+
       let lastUpdated = new Date()
       const docRef = doc(firestore, `${selectedRegion}-users`, `${summonerName}-${riotId}`);
       const data = {
         lastUpdated: lastUpdated,
         summonerData: summonerData,
         rankedData: rankedData,
-        historyData: historyData
+        historyData: historyData,
+        masteryData: masteryData
       }
       await updateDoc(docRef, {
         lastUpdated: lastUpdated,
         summonerData: summonerData,
         rankedData: rankedData,
-        historyData: historyData
+        historyData: historyData,
+        masteryData: masteryData
       });
       setSummonerData(data);
       updateUserMatchInfo(data);
@@ -418,6 +429,8 @@ const SummonerProfile = () => {
     const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
     const europeServer = ['eun1', 'euw1', 'tr1', 'ru'];
 
+    getChampsJSON();
+
     if (americasServers.includes(selectedRegion) && alternateRegion === null) {
       setAlternateRegion('americas');
       setMatchRegion('americas');
@@ -457,22 +470,17 @@ const SummonerProfile = () => {
     }
   }
 
-  // Handle match click
-  // const handleMatchClick = (gameData) => {
-  //   if (gameData.info.gameMode === "CLASSIC") {
-  //     if (gameData.info.gameDuration < 900) {
-  //       navigate(`/remake/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
-  //     } else {
-  //       navigate(`/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
-  //     }
-  //   }
-  //   if (gameData.info.gameMode === "ARAM") {
-  //     navigate(`/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
-  //   }
-  //   else if (gameData.info.gameMode === "CHERRY") {
-  //     navigate(`/arena/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`, { state: { gameData, alternateRegion, dataDragonVersion } });
-  //   }
-  // };
+  const [topChamps, setTopChamps] = useState([]);
+  // Get champion JSON data from riot
+  const getChampsJSON = async () => {
+    try {
+      const response = await fetch('https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/champion.json');
+      const data = await response.json();
+      setChampsJSON(data);
+    } catch (error) {
+      console.error('Error fetching champion JSON data:', error);
+    }
+  }
 
   // Render page once data is loaded
   useEffect(() => {
@@ -486,6 +494,13 @@ const SummonerProfile = () => {
       }
     }
   }, [summonerData, matchData, matchesLoaded])
+
+  // DELETE THIS TESTING********************
+  useEffect(() => {
+    if (champsJSON) {
+      console.log(champsJSON)
+    }
+  }, [champsJSON])
 
   useEffect(() => {
     if (playerData !== undefined && playerData !== null) {
@@ -660,90 +675,146 @@ const SummonerProfile = () => {
                       bottom: '4px',
                       filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.45))'
                     }}>
-                      72 lp
+                      {summonerData.rankedData[0].leaguePoints} lp
                     </Typography>
                   </div>
                 }
               </Grid>
             </Grid>
-            <Grid xs={12} marginLeft={'0px'} marginTop={'15px'} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'row'}>
-              <Grid marginRight={'20px'} flex={'column'}>
-                {/* **** Change to map later **** */}
-                <img style={{
-                  borderRadius: '100%',
-                  border: '3px solid white',
-                  width: '65px',
-                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                }}
-                  src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/Talon.png`} alt=''>
-                </img>
-                <Typography style={{
-                  textAlign: 'center',
-                  fontSize: '12px',
-                  backgroundColor: '#606060',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  borderRadius: '5px',
-                  width: '50%',
-                  paddingLeft: '3px',
-                  paddingRight: '3px',
-                  margin: 'auto',
-                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                }}>
-                  1.2M
-                </Typography>
+            {summonerData.masteryData &&
+              <Grid xs={12} marginLeft={'0px'} marginTop={'15px'} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'row'}>
+
+                {summonerData.masteryData.length >= 1 &&
+                  <Grid marginRight={'20px'} flex={'column'}>
+                    <Tooltip disableInteractive
+                      placement='top'
+                      arrow
+                      slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                      title={<>
+                        <div style={{ textDecoration: 'underline' }}>
+                          {
+                            Object.values(champsJSON.data).find(
+                              champ => champ.key === String(summonerData.masteryData[0].championId)
+                            ).id
+                          }
+                        </div>
+                        <div>Level: {summonerData.masteryData[0].championLevel}</div>
+                        <div>Mastery: {summonerData.masteryData[0].championPoints.toLocaleString()}</div>
+                      </>}>
+                      <img style={{
+                        borderRadius: '100%',
+                        border: '3px solid white',
+                        width: '65px',
+                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                      }}
+                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(summonerData.masteryData[0].championId)).id}.png`} alt=''>
+                      </img>
+                    </Tooltip>
+                    <Typography style={{
+                      textAlign: 'center',
+                      fontSize: '12px',
+                      backgroundColor: '#606060',
+                      color: 'white',
+                      fontWeight: 'bold',
+                      borderRadius: '5px',
+                      width: '50%',
+                      paddingLeft: '3px',
+                      paddingRight: '3px',
+                      margin: 'auto',
+                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                    }}>
+                      {summonerData.masteryData[0].championLevel}
+                    </Typography>
+                  </Grid>
+                }
+                {summonerData.masteryData.length >= 2 &&
+                  <Grid marginRight={'20px'} flex={'column'}>
+                    <Tooltip disableInteractive
+                      placement='top'
+                      arrow
+                      slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                      title={<>
+                        <div style={{ textDecoration: 'underline' }}>
+                          {
+                            Object.values(champsJSON.data).find(
+                              champ => champ.key === String(summonerData.masteryData[1].championId)
+                            ).id
+                          }
+                        </div>
+                        <div>Level: {summonerData.masteryData[1].championLevel}</div>
+                        <div>Mastery: {summonerData.masteryData[1].championPoints.toLocaleString()}</div>
+                      </>}>
+                    <img style={{
+                      borderRadius: '100%',
+                      border: '3px solid white',
+                      width: '65px',
+                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                    }}
+                      src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(summonerData.masteryData[1].championId)).id}.png`} alt=''>
+                    </img>
+                    </Tooltip>
+                    <Typography style={{
+                      textAlign: 'center',
+                      fontSize: '12px',
+                      backgroundColor: '#606060',
+                      color: 'white',
+                      fontWeight: 'bold',
+                      borderRadius: '5px',
+                      width: '50%',
+                      paddingLeft: '3px',
+                      paddingRight: '3px',
+                      margin: 'auto',
+                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                    }}>
+                      {summonerData.masteryData[1].championLevel}
+                    </Typography>
+                  </Grid>
+                }
+                {summonerData.masteryData.length >= 3 &&
+                  <Grid marginRight={'20px'} flex={'column'}>
+                    <Tooltip disableInteractive
+                      placement='top'
+                      arrow
+                      slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                      title={<>
+                        <div style={{ textDecoration: 'underline' }}>
+                          {
+                            Object.values(champsJSON.data).find(
+                              champ => champ.key === String(summonerData.masteryData[2].championId)
+                            ).id
+                          }
+                        </div>
+                        <div>Level: {summonerData.masteryData[2].championLevel}</div>
+                        <div>Mastery: {summonerData.masteryData[2].championPoints.toLocaleString()}</div>
+                      </>}>
+                    <img style={{
+                      borderRadius: '100%',
+                      border: '3px solid white',
+                      width: '65px',
+                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                    }}
+                      src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(summonerData.masteryData[2].championId)).id}.png`} alt=''>
+                    </img>
+                    </Tooltip>
+                    <Typography style={{
+                      textAlign: 'center',
+                      fontSize: '12px',
+                      backgroundColor: '#606060',
+                      color: 'white',
+                      fontWeight: 'bold',
+                      borderRadius: '5px',
+                      width: '50%',
+                      paddingLeft: '3px',
+                      paddingRight: '3px',
+                      margin: 'auto',
+                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                    }}>
+                      {summonerData.masteryData[2].championLevel}
+                    </Typography>
+                  </Grid>
+                }
               </Grid>
-              <Grid marginRight={'20px'} flex={'column'}>
-                <img style={{
-                  borderRadius: '100%',
-                  border: '3px solid white',
-                  width: '65px',
-                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                }}
-                  src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/Vladimir.png`} alt=''>
-                </img>
-                <Typography style={{
-                  textAlign: 'center',
-                  fontSize: '12px',
-                  backgroundColor: '#606060',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  borderRadius: '5px',
-                  width: '50%',
-                  paddingLeft: '3px',
-                  paddingRight: '3px',
-                  margin: 'auto',
-                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                }}>
-                  231k
-                </Typography>
-              </Grid>
-              <Grid marginRight={'20px'} flex={'column'}>
-                <img style={{
-                  borderRadius: '100%',
-                  border: '3px solid white',
-                  width: '65px',
-                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                }}
-                  src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/Viktor.png`} alt=''>
-                </img>
-                <Typography style={{
-                  textAlign: 'center',
-                  fontSize: '12px',
-                  backgroundColor: '#606060',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  borderRadius: '5px',
-                  width: '50%',
-                  paddingLeft: '3px',
-                  paddingRight: '3px',
-                  margin: 'auto',
-                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                }}>
-                  12k
-                </Typography>
-              </Grid>
-            </Grid>
+            }
           </Grid>
 
           {/* <Grid display={'flex'} flexDirection={'column'} marginTop={'20px'}>
