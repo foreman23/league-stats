@@ -559,8 +559,6 @@ function GameDetails() {
         }
 
         // Calculate win/loss tag
-        // console.log(roles[i], scoreDiff)
-        // console.log(winner)
 
         if (winner[0] === allyADC || winner[1] === allyADC) {
           if (winner[0].puuid === playerData.puuid || winner[1].puuid === playerData.puuid) {
@@ -821,7 +819,34 @@ function GameDetails() {
                       <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                           <Tooltip title={player.championName} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                            <img style={{ width: '38px', borderRadius: '100%', marginRight: '3px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}></img>
+                            <div style={{ position: 'relative' }}>
+                              <Typography style={{
+                                fontSize: '11px',
+                                position: 'absolute',
+                                backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                color: 'white',
+                                borderRadius: '100%',
+                                paddingLeft: '4px',
+                                paddingRight: '4px',
+                                paddingTop: '1px',
+                                paddingBottom: '1px',
+                                textAlign: 'center',
+                                right: 'auto',
+                                bottom: 'auto',
+                                top: '-5px',
+                                left: '0px',
+                                justifyContent: 'center'
+                              }}>{player.champLevel}
+                              </Typography>
+                              <img style={{
+                                width: '38px',
+                                borderRadius: '100%',
+                                marginRight: '3px',
+                                border: player.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid'
+                              }}
+                                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}>
+                              </img>
+                            </div>
                           </Tooltip>
                           <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
                             <Tooltip
@@ -854,12 +879,12 @@ function GameDetails() {
                           </div>
                           <Tooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
                             <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><a style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}><Typography className='summonerNameTable' fontSize={'12px'}>{player.riotIdGameName}</Typography></a>
-                              <span className={
+                              {/* <span className={
                                 (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
                                   'TableStandingMVP' :
                                   'TableStanding')
                               }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}
-                              </span> {player.score.toFixed(1)}
+                              </span> {player.score.toFixed(1)} */}
                             </Typography>
                           </Tooltip>
                         </div>
@@ -1072,7 +1097,34 @@ function GameDetails() {
                       <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                           <Tooltip title={player.championName} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                            <img style={{ width: '38px', borderRadius: '100%', marginRight: '3px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}></img>
+                            <div style={{ position: 'relative' }}>
+                              <Typography style={{
+                                fontSize: '11px',
+                                position: 'absolute',
+                                backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                color: 'white',
+                                borderRadius: '100%',
+                                paddingLeft: '4px',
+                                paddingRight: '4px',
+                                paddingTop: '1px',
+                                paddingBottom: '1px',
+                                textAlign: 'center',
+                                right: 'auto',
+                                bottom: 'auto',
+                                top: '-5px',
+                                left: '0px',
+                                justifyContent: 'center'
+                              }}>{player.champLevel}
+                              </Typography>
+                              <img style={{
+                                width: '38px',
+                                borderRadius: '100%',
+                                marginRight: '3px',
+                                border: player.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid'
+                              }}
+                                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}>
+                              </img>
+                            </div>
                           </Tooltip>
                           <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
                             <Tooltip title={`summoner 1`} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
@@ -1089,12 +1141,12 @@ function GameDetails() {
                           <Tooltip disabledInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
                             <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><a style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}><Typography className='summonerNameTable' fontSize={'12px'}>{player.riotIdGameName}</Typography></a>
                               {/* ********************** COMMENT THIS BACK IN LATER ******************************* */}
-                              <span className={
+                              {/* <span className={
                                 (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
                                   'TableStandingMVP' :
                                   'TableStanding')
                               }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}
-                              </span> {player.score.toFixed(1)}
+                              </span> {player.score.toFixed(1)} */}
                             </Typography>
                           </Tooltip>
                         </div>

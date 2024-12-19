@@ -38,6 +38,8 @@ const SummonerProfile = () => {
 
   const [favorited, setFavorited] = useState(false);
 
+  const [levelBG, setLevelBG] = useState(null);
+
   // Init navigate
   const navigate = useNavigate();
 
@@ -331,6 +333,47 @@ const SummonerProfile = () => {
     return;
   }
 
+  // Update summoner level background color based on rank
+  useEffect(() => {
+    console.log(summonerData)
+    if (summonerData) {
+      if (summonerData.rankedData.length > 0) {
+        if (summonerData.rankedData[0].tier === "IRON") {
+          setLevelBG('#2D1E1A')
+        }
+        else if (summonerData.rankedData[0].tier === "BRONZE") {
+          setLevelBG('#845850')
+        }
+        else if (summonerData.rankedData[0].tier === "SILVER") {
+          setLevelBG('#687681')
+        }
+        else if (summonerData.rankedData[0].tier === "GOLD") {
+          setLevelBG('#B68D52')
+        }
+        else if (summonerData.rankedData[0].tier === "PLATINUM") {
+          setLevelBG('#278FAC')
+        }
+        else if (summonerData.rankedData[0].tier === "EMERALD") {
+          setLevelBG('#047F46')
+        }
+        else if (summonerData.rankedData[0].tier === "DIAMOND") {
+          setLevelBG('#486DC7')
+        }
+        else if (summonerData.rankedData[0].tier === "MASTER") {
+          setLevelBG('#C37FB4')
+        }
+        else if (summonerData.rankedData[0].tier === "GRANDMASTER") {
+          setLevelBG('#9E2C22')
+        }
+        else if (summonerData.rankedData[0].tier === "CHALLENGER") {
+          setLevelBG('#4B78E4')
+        }
+      } else {
+        setLevelBG('grey')
+      }
+    }
+  }, [summonerData])
+
   // Sets time since summoner profile last updated
   const setTimeSinceUpdated = (timestampSeconds) => {
     const lastUpdatedDate = new Date(timestampSeconds * 1000);
@@ -521,22 +564,23 @@ const SummonerProfile = () => {
 
 
         <Grid container display={'flex'} marginTop={'25px'} justifyContent={'center'}>
-          <Grid display={'flex'} flexDirection={'column'}>
+          <Grid display={'flex'} flexDirection={'column'} marginRight={'20px'}>
             <Grid style={{ margin: 'auto', justifyContent: 'center', position: 'relative', display: 'flex', paddingRight: '30px' }}>
               <Typography style={{
                 position: 'absolute',
-                top: '0px',
+                top: '-5px',
                 margin: 'auto',
                 justifyContent: 'center',
                 textAlign: 'center',
-                backgroundColor: '#5900FF',
+                backgroundColor: levelBG,
                 color: 'white',
                 fontWeight: 'bold',
                 borderRadius: '10px',
                 paddingLeft: '10px',
                 paddingRight: '10px',
                 paddingTop: '1px',
-                paddingBottom: '1px'
+                paddingBottom: '1px',
+                filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.8))'
               }}>{summonerData.summonerData.summonerLevel}
               </Typography>
               <img style={{
@@ -588,33 +632,38 @@ const SummonerProfile = () => {
                 </List>
               </Grid>
               <Grid position={'relative'} marginLeft={'20px'}>
-                <img style={{
-                  backgroundColor: '#E3E3E3',
-                  borderRadius: '100%',
-                  border: '4px white solid',
-                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25',
-                  maxWidth: '150px'
-                }}
-                  src='/images/RankIcon.svg'>
-                </img>
-                <Typography style={{
-                  position: 'absolute',
-                  margin: 'auto',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  backgroundColor: '#949494',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  fontSize: '14px',
-                  borderRadius: '10px',
-                  paddingLeft: '8px',
-                  paddingRight: '8px',
-                  paddingTop: '1px',
-                  paddingBottom: '1px',
-                  bottom: '4px'
-                }}>
-                  72 lp
-                </Typography>
+                {summonerData.rankedData[0] &&
+                  <div>
+                    <img style={{
+                      backgroundColor: '#E3E3E3',
+                      borderRadius: '100%',
+                      border: '4px white solid',
+                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25',
+                      maxWidth: '150px',
+                    }}
+                      src={`/images/rankIcons/Rank=${(summonerData.rankedData[0].tier).charAt(0) + summonerData.rankedData[0].tier.substring(1).toLowerCase()}.webp`}>
+                    </img>
+                    <Typography style={{
+                      position: 'absolute',
+                      margin: 'auto',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      backgroundColor: '#949494',
+                      color: 'white',
+                      fontWeight: 'bold',
+                      fontSize: '14px',
+                      borderRadius: '10px',
+                      paddingLeft: '8px',
+                      paddingRight: '8px',
+                      paddingTop: '1px',
+                      paddingBottom: '1px',
+                      bottom: '4px',
+                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.45))'
+                    }}>
+                      72 lp
+                    </Typography>
+                  </div>
+                }
               </Grid>
             </Grid>
             <Grid xs={12} marginLeft={'0px'} marginTop={'15px'} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'row'}>
@@ -710,7 +759,7 @@ const SummonerProfile = () => {
           </Grid> */}
         </Grid>
 
-        <Box justifyContent={'center'} width={'35vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'25px'}>
+        <Box justifyContent={'center'} width={'33vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'25px'}>
           {(loadingMatches) ? (
             <div style={{ textAlign: 'center' }} >
               <CircularProgress />
@@ -725,11 +774,16 @@ const SummonerProfile = () => {
           ) : (
             matchData.map((gameData, index) => {
               let gameModeHref = "";
-              if (gameData.info.gameMode === "CLASSIC") {
+              if (gameData.info.gameMode === "CLASSIC" && gameData.info.gameDuration > 300) {
                 gameModeHref = `/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
-              } else if (gameData.info.gameMode === "ARAM") {
+              }
+              else if (gameData.info.gameMode === "CLASSIC" && gameData.info.gameDuration < 300) {
+                gameModeHref = `/remake/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
+              }
+              else if (gameData.info.gameMode === "ARAM") {
                 gameModeHref = `/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
-              } else if (gameData.info.gameMode === "CHERRY") {
+              }
+              else if (gameData.info.gameMode === "CHERRY") {
                 gameModeHref = "/Test";
               }
 

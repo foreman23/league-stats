@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, Grid, Box } from '@mui/material'
+import { Typography, Grid, Divider, LinearProgress, Box } from '@mui/material'
 // import queues from '../jsonData/queues.json'
 import summonerSpells from '../jsonData/summonerSpells.json'
 
@@ -23,11 +23,18 @@ const DisplayGame = (props) => {
 
     // Find opposing laner
     const opposingLaner = props.gameData.info.participants.find(laner => laner.teamPosition === participant.teamPosition && laner.summonerId !== participant.summonerId)
+    const opposingSummonerSpell1 = summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString());
+    const opposingSummonerSpell2 = summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString());
+
 
     // Find gold difference between opposing laner
     const participantGold = participant.goldEarned;
-    const opposingGold = opposingLaner.goldEarned;
-    const goldDifference = participantGold - opposingGold;
+    let opposingGold = null
+    let goldDifference = null
+    if (opposingLaner) {
+        opposingGold = opposingLaner.goldEarned;
+        goldDifference = participantGold - opposingGold;
+    }
 
     // Generate gold difference descriptor
     let differenceDesc = null;
@@ -75,7 +82,6 @@ const DisplayGame = (props) => {
         console.log(props.gameData.info)
 
         let queueTitle = queue.description;
-        console.log(queueTitle)
         if (queueTitle === '5v5 Ranked Solo games') {
             setQueueTitle('Ranked Solo');
         }
@@ -98,7 +104,6 @@ const DisplayGame = (props) => {
     const getQueueJSON = async () => {
         try {
             const response = await fetch('https://static.developer.riotgames.com/docs/lol/queues.json');
-            console.log(response)
             const data = await response.json();
             setQueues(data);
         } catch (error) {
@@ -107,10 +112,6 @@ const DisplayGame = (props) => {
     }
 
     useEffect(() => {
-
-        // props.ddragonVersion, props.gameData, props.puuid
-        console.log(props)
-
         // Fetch queue data JSON
         getQueueJSON();
 
@@ -148,13 +149,24 @@ const DisplayGame = (props) => {
     }, [queues])
 
     return (
-        <Grid container style={{ justifyContent: 'center', marginBottom: '5px', display: 'flex', backgroundColor: `${(props.gameData.info.gameDuration > 900) ? participant.win === true ? '#ECF2FF' : '#FFF1F3' : 'rgb(242, 242, 242)'}`, padding: '10px', borderRadius: '10px' }}>
+        <Grid container style={{
+            justifyContent: 'center',
+            marginBottom: '5px',
+            display: 'flex',
+            backgroundColor: `${(props.gameData.info.gameDuration > 900) ? participant.win === true ? '#ECF2FF' : '#FFF1F3' : 'rgb(242, 242, 242)'}`,
+            border: `2px ${(props.gameData.info.gameDuration > 900) ? participant.win === true ? '#DCE7FF' : '#FFE1E6' : 'rgb(224, 224, 224)'} solid`,
+            padding: '10px',
+            paddingTop: '35px',
+            paddingBottom: '35px',
+            borderRadius: '10px'
+        }}>
 
             {/* Match Information */}
-            <Grid xs={2} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'center'}>
+            <Grid xs={3} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'center'}>
                 {props.gameData.info.gameDuration > 900 ? (
                     <div>
-                        <Typography style={{ fontWeight: 'bold', color: `${participant.win === true ? '#3374ff' : '#ff3352'}` }} >{queueTitle}</Typography>
+                        <Typography style={{ fontWeight: 'bold', fontSize: '18px', color: `${participant.win === true ? '#3374ff' : '#ff3352'}` }} >{queueTitle}</Typography>
+                        <Typography style={{ fontSize: '14px' }}>{(participant.teamId === 100) ? '(Blue Team)' : '(Red Team)'}</Typography>
                         <Typography style={{ fontSize: '14px' }}>{participant.win === true ? 'Victory' : 'Defeat'}</Typography>
                     </div>
                 ) : (
@@ -164,36 +176,116 @@ const DisplayGame = (props) => {
                     </div>
                 )
                 }
+                <Divider style={{ margin: 'auto', marginTop: '3px', marginBottom: '3px' }} color={participant.win === true ? '#BED3FF' : '#FFC4CC'} width={'55%'}></Divider>
                 <Typography style={{ fontSize: '12px' }}>{timeSinceMatch}</Typography>
             </Grid>
 
             {/* Summoner profile for game */}
-            <Grid xs={2} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'center'}>
-                <img style={{ borderRadius: '100%', width: '54px', alignSelf: 'center', border: '3px #cccaca solid' }} alt='champion icon'
-                    src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${participant.championName}.png`}>
-                </img>
-                <Grid style={{ flexDirection: 'row', marginTop: '3px' }}>
-                    <img style={{ width: '20px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpell1.id}.png`}></img>
-                    <img style={{ width: '20px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpell2.id}.png`}></img>
+            <Grid xs={3} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
+                <Grid display={'flex'} flexDirection={'column'} position={'relative'}>
+                    <Typography style={{
+                        fontSize: '12px',
+                        position: 'absolute',
+                        backgroundColor: participant.teamId === 100 ? '#568CFF' : '#FF3A54',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        borderRadius: '100%',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        paddingTop: '1px',
+                        paddingBottom: '1px',
+                        textAlign: 'center',
+                        right: '0px',
+                        bottom: 'auto',
+                        top: '-5px',
+                        left: 'auto',
+                        justifyContent: 'center'
+                    }}
+                    >{participant.champLevel}
+                    </Typography>
+                    <img style={{ borderRadius: '100%', marginBottom: '3px', width: '58px', alignSelf: 'center', border: participant.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid' }} alt='champion icon'
+                        src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${participant.championName}.png`}>
+                    </img>
+                    <Grid flexDirection={'row'}>
+                        <img style={{ width: '20px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpell1.id}.png`}></img>
+                        <img style={{ width: '20px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpell2.id}.png`}></img>
+                    </Grid>
                 </Grid>
-                <Typography style={{ fontSize: '12px' }}>{participant.championName}</Typography>
-                <Typography style={{ fontSize: '12px' }}>{participant.kills}/{participant.deaths}/{participant.assists}</Typography>
-                <Typography style={{ fontSize: '12px' }}>{participant.totalMinionsKilled + participant.neutralMinionsKilled} CS</Typography>
+                <Grid display={'flex'} flexDirection={'column'} alignSelf={'center'} marginLeft={'10px'}>
+                    <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>{participant.championName}</Typography>
+                    <Typography style={{ fontSize: '13px' }}>{participant.kills}/{participant.deaths}/{participant.assists}</Typography>
+                    <Box marginTop={'3px'} marginBottom={'3px'} alignSelf={'center'} width={'7px'} height={'7px'} borderRadius={'100%'} backgroundColor={'#BFBFBF'}></Box>
+                    <Typography style={{ fontSize: '13px' }}>{participant.totalMinionsKilled + participant.neutralMinionsKilled} CS</Typography>
+                </Grid>
+            </Grid>
+
+            <Grid xs={1} display={'flex'} alignItems={'center'} flexDirection={'row'} textAlign={'center'} justifyContent={'center'}>
+                {/* <img style={{ width: '27px', opacity: '0.65' }} src='/images/swords.svg'></img> */}
+                <Divider orientation='vertical'></Divider>
+                {/* <Box style={{ width: '50px', height: '50px', backgroundColor: 'red' }}></Box> */}
+            </Grid>
+
+            {/* Opposing summoner profile */}
+            <Grid xs={3} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
+                <Grid display={'flex'} flexDirection={'column'} position={'relative'}>
+                    <Typography style={{
+                        fontSize: '12px',
+                        position: 'absolute',
+                        backgroundColor: participant.teamId === 100 ? '#FF3A54' : '#568CFF',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        borderRadius: '100%',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        paddingTop: '1px',
+                        paddingBottom: '1px',
+                        textAlign: 'center',
+                        right: '0px',
+                        bottom: 'auto',
+                        top: '-5px',
+                        left: 'auto',
+                        justifyContent: 'center'
+                    }}
+                    >{opposingLaner.champLevel}
+                    </Typography>
+                    <img style={{ borderRadius: '100%', marginBottom: '3px', width: '58px', alignSelf: 'center', border: participant.teamId === 100 ? '3px #FF3A54 solid' : '3px #568CFF solid' }} alt='champion icon'
+                        src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${opposingLaner.championName}.png`}>
+                    </img>
+                    <Grid flexDirection={'row'}>
+                        <img style={{ width: '20px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${opposingSummonerSpell1.id}.png`}></img>
+                        <img style={{ width: '20px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${opposingSummonerSpell2.id}.png`}></img>
+                    </Grid>
+                </Grid>
+                <Grid display={'flex'} flexDirection={'column'} alignSelf={'center'} marginLeft={'10px'}>
+                    <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>{opposingLaner.championName}</Typography>
+                    <Typography style={{ fontSize: '13px' }}>{opposingLaner.kills}/{opposingLaner.deaths}/{opposingLaner.assists}</Typography>
+                    <Box marginTop={'3px'} marginBottom={'3px'} alignSelf={'center'} width={'7px'} height={'7px'} borderRadius={'100%'} backgroundColor={'#BFBFBF'}></Box>
+                    <Typography style={{ fontSize: '13px' }}>{opposingLaner.totalMinionsKilled + opposingLaner.neutralMinionsKilled} CS</Typography>
+                </Grid>
+            </Grid>
+
+            <Grid xs={2} display={'flex'} flexDirection={'row'} margin={'auto'}>
+                <Grid xs={3}>
+                    <LinearProgress variant='determinate' value={75} sx={{ backgroundColor: participant.teamId === 100 ? '#BED3FF' : '#FFC3CC', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#568CFF' : '#FF3A54' } }} style={{ width: '64px', height: '14px', transform: 'rotate(270deg)', borderRadius: '5px' }}></LinearProgress>
+                </Grid>
+                <Grid xs={3}>
+                    <LinearProgress variant='determinate' value={40} sx={{ backgroundColor: participant.teamId === 100 ? '#FFC3CC' : '#BED3FF', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#FF3A54' : '#568CFF' } }} style={{ width: '64px', height: '14px', transform: 'rotate(270deg)', borderRadius: '5px' }}></LinearProgress>
+                </Grid>
             </Grid>
 
             {/* Laning Descriptor */}
-            <Grid xs={6} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'start'}>
+            {/* <Grid display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'start'}>
                 {isLaning &&
                     <Typography style={{ fontSize: '18px' }}>{`${differenceDesc} ${opposingLaner.championName} as ${participantLane} with gold difference of ${goldDifference.toLocaleString()}g at end of game.`}</Typography>
                 }
                 {!isLaning &&
                     <Typography style={{ fontSize: '18px' }}>{`${participant.win ? 'Won' : 'Lost'} ${queueTitle} with ${participantGold.toLocaleString()}g at end of game.`}</Typography>
                 }
-            </Grid>
+            </Grid> */}
 
 
             {/* Champions that participated */}
-            {/* <Grid xs={4} display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'start'}>
+            {/* <Grid display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'start'}>
                 {participants.filter(participant => participant.teamId === 100).map(player => (
                     <Grid display={'flex'}>
                         <img style={{ borderRadius: '0px', width: '24px', marginRight: '7px' }} alt='champion icon' src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${player.championName}.png`}></img>
@@ -201,7 +293,7 @@ const DisplayGame = (props) => {
                     </Grid>
                 ))}
             </Grid>
-            <Grid xs={4} display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'start'}>
+            <Grid display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'start'}>
                 {participants.filter(participant => participant.teamId === 200).map(player => (
                     <Grid display={'flex'}>
                         <img style={{ borderRadius: '0px', width: '24px', marginRight: '7px' }} alt='champion icon' src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${player.championName}.png`}></img>
