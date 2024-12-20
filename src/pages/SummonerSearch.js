@@ -6,16 +6,18 @@ import { Button, TextField, Box, ButtonGroup, Typography, ListItem, List, Divide
 import Grid from '@mui/material/Unstable_Grid2';
 import Navbar from '../components/Navbar';
 import ClearIcon from '@mui/icons-material/Clear';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { sum } from 'firebase/firestore';
 
 function SummonerSearch() {
 
   // const [summonerNotFound, setSummonerNotFound] = useState(false);
-  const [summonerName, setSummonerName] = useState(null);
+  const [summonerName, setSummonerName] = useState('');
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [dataDragonVersion, setDataDragonVersion] = useState(null);
   const [recentSearches, setRecentSearches] = useState(null);
   const [recentArr, setRecentArr] = useState(null);
+  const [favorites, setFavorites] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // Init navigate
@@ -51,43 +53,41 @@ function SummonerSearch() {
   }
 
   const handleSearchSubmit = async () => {
+    
+    // Extract riot tag from summoner name
+    let summonerNamePayload = null;
+    let riotTagPayload = null;
 
-    console.log(summonerName)
+    // If last character is #
+    if (summonerName[summonerName.length - 1] === "#") {
+      summonerNamePayload = summonerName.split("#")[0];
+      riotTagPayload = selectedRegion;
+      // Change tag to #OCE for oc1
+      if (riotTagPayload === 'oc1') {
+        riotTagPayload = 'oce';
+      }
+    }
 
-    // // Extract riot tag from summoner name
-    // let summonerNamePayload = null;
-    // let riotTagPayload = null;
+    // Else if contains # but not last character (contains riot tag)
+    else if (summonerName.includes("#")) {
+      summonerNamePayload = summonerName.split("#")[0];
+      riotTagPayload = summonerName.split("#")[1];
+      console.log(summonerNamePayload, riotTagPayload)
+      if (riotTagPayload === undefined || riotTagPayload === null) {
+      }
+    }
 
-    // // If last character is #
-    // if (summonerName[summonerName.length - 1] === "#") {
-    //   summonerNamePayload = summonerName.split("#")[0];
-    //   riotTagPayload = selectedRegion;
-    //   // Change tag to #OCE for oc1
-    //   if (riotTagPayload === 'oc1') {
-    //     riotTagPayload = 'oce';
-    //   }
-    // }
+    // If no # riot tag is provided
+    else {
+      summonerNamePayload = summonerName;
+      riotTagPayload = selectedRegion;
+      // Change tag to #OCE for oc1
+      if (riotTagPayload === 'oc1') {
+        riotTagPayload = 'oce';
+      }
+    }
 
-    // // Else if contains # but not last character (contains riot tag)
-    // else if (summonerName.includes("#")) {
-    //   summonerNamePayload = summonerName.split("#")[0];
-    //   riotTagPayload = summonerName.split("#")[1];
-    //   console.log(summonerNamePayload, riotTagPayload)
-    //   if (riotTagPayload === undefined || riotTagPayload === null) {
-    //   }
-    // }
-
-    // // If no # riot tag is provided
-    // else {
-    //   summonerNamePayload = summonerName;
-    //   riotTagPayload = selectedRegion;
-    //   // Change tag to #OCE for oc1
-    //   if (riotTagPayload === 'oc1') {
-    //     riotTagPayload = 'oce';
-    //   }
-    // }
-
-    // navigate(`/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`);
+    navigate(`/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`);
   }
 
   // Retrieve recent summoners from local storage
@@ -95,7 +95,6 @@ function SummonerSearch() {
     let recentSearchStr = localStorage.getItem('recentSearches')
     if (recentSearchStr !== null) {
       let recentSearchArr = JSON.parse(recentSearchStr)
-      console.log(recentSearchArr)
       setRecentSearches(recentSearchArr)
 
       let arr = []
@@ -109,6 +108,15 @@ function SummonerSearch() {
       }
       console.log(arr)
       setRecentArr(arr)
+    }
+  }
+
+  // Retrieve favorite summoners from local storage
+  const getFavorites = () => {
+    let favoritesStr = localStorage.getItem('favorites')
+    if (favoritesStr !== null) {
+      let favoritesArr = JSON.parse(favoritesStr)
+      setFavorites(favoritesArr)
     }
   }
 
@@ -136,10 +144,26 @@ function SummonerSearch() {
     }
   }
 
+  // Remove summoner from favorites
+  const handleRemoveFavorite = (summonerObj) => {
+    let favoritesStr = localStorage.getItem('favorites')
+    if (favoritesStr !== null) {
+      let favsArr = JSON.parse(favoritesStr)
+      favsArr = favsArr.filter(obj =>
+        !(obj.selectedRegion === summonerObj.selectedRegion &&
+          obj.summonerName === summonerObj.summonerName &&
+          obj.riotId === summonerObj.riotId))
+      favoritesStr = JSON.stringify(favsArr)
+      localStorage.setItem('favorites', favoritesStr)
+      setFavorites(favsArr)
+    }
+  }
+
   // Get data dragon version on initial load
   useEffect(() => {
     getDataDragonVersion();
     getRecentSearches();
+    getFavorites();
     getPrevRegion();
   }, [])
 
@@ -173,13 +197,19 @@ function SummonerSearch() {
           <Grid xs={12} display={'flex'} justifyContent={'center'}>
             <Autocomplete
               options={recentArr || []}
-              value={summonerName}
-              getOptionLabel={(option) => option.summonerName}
+              getOptionLabel={(option) =>
+                typeof option === 'string' ? option : `${option.summonerName} #${option.riotId}`
+              } 
+              value={summonerName || ''}
               onInputChange={(event, newInputValue) => {
                 setSummonerName(newInputValue)
               }}
               onChange={(event, newValue) => {
-                setSummonerName(newValue);
+                if (typeof newValue === 'string') {
+                  setSummonerName(newValue);
+                } else if (newValue && typeof newValue === 'object') {
+                  setSummonerName(newValue.summonerName + ' #' + newValue.riotId)
+                }
               }}
               fullWidth
               style={{ width: '30%' }}
@@ -228,15 +258,15 @@ function SummonerSearch() {
           </Grid>
 
 
-          {recentSearches !== null ? (
+          {favorites !== null ? (
             <div style={{ justifyContent: 'center', margin: 'auto', marginTop: '50px', width: '40%' }}>
               <Typography style={{ textAlign: 'center' }}>Favorites</Typography>
               <Divider></Divider>
               <List>
                 <Grid container>
-                  {recentSearches.map((item, index) => (
+                  {favorites.map((item, index) => (
                     <Grid item xs={4}>
-                      <ClearIcon className='pointer' onClick={() => handleRemoveRecent(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></ClearIcon>
+                      <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>
                       <a className='recentSearchItem' href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`}>
                         <ListItem style={{ justifyContent: 'center' }} key={index}>
                           <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>

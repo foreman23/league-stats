@@ -462,11 +462,49 @@ const SummonerProfile = () => {
 
   // Handle favorite click
   const handleFavoriteClick = () => {
-    console.log(favorited)
+    const favorites = localStorage.getItem('favorites')
+
+    // add ranked data if applicable
+    let rank = null
+    if (summonerData.rankedData[0]) {
+      rank = `${summonerData.rankedData[0].tier} ${summonerData.rankedData[0].rank}`
+    }
+
+    const summonerObj = {
+      selectedRegion: selectedRegion,
+      summonerName: playerData.riotIdGameName,
+      riotId: playerData.riotIdTagline,
+      icon: summonerData.summonerData.profileIconId,
+      level: summonerData.summonerData.summonerLevel,
+      rank: rank
+    }
     if (favorited === false) {
       setFavorited(true)
+      if (favorites === null) {
+        const newArr = [summonerObj]
+        localStorage.setItem('favorites', JSON.stringify(newArr))
+      } else {
+        const parsedArr = JSON.parse(favorites)
+        if (!parsedArr.some(obj =>
+          obj.selectedRegion === summonerObj.selectedRegion &&
+          obj.summonerName === summonerObj.summonerName &&
+          obj.riotId === summonerObj.riotId
+        )) {
+          parsedArr.push(summonerObj)
+          localStorage.setItem('favorites', JSON.stringify(parsedArr))
+        }
+      }
     } else {
       setFavorited(false)
+      if (favorites !== null) {
+        let favsArr = JSON.parse(favorites)
+        favsArr = favsArr.filter(obj =>
+          !(obj.selectedRegion === summonerObj.selectedRegion &&
+            obj.summonerName === summonerObj.summonerName &&
+            obj.riotId === summonerObj.riotId))
+        let favsStr = JSON.stringify(favsArr)
+        localStorage.setItem('favorites', favsStr)
+      }
     }
   }
 
@@ -495,18 +533,8 @@ const SummonerProfile = () => {
     }
   }, [summonerData, matchData, matchesLoaded])
 
-  // DELETE THIS TESTING********************
-  useEffect(() => {
-    if (champsJSON) {
-      console.log(champsJSON)
-    }
-  }, [champsJSON])
-
   useEffect(() => {
     if (playerData !== undefined && playerData !== null) {
-      // console.log(playerData)
-      // console.log(playerData.riotIdGameName)
-      // console.log(summonerData)
       document.title = `${playerData.riotIdGameName}#${riotId} - ${selectedRegion}`;
 
       // Add summoner to local storage
@@ -517,7 +545,6 @@ const SummonerProfile = () => {
       if (summonerData.rankedData[0]) {
         rank = `${summonerData.rankedData[0].tier} ${summonerData.rankedData[0].rank}`
       }
-
       const summonerObj = {
         selectedRegion: selectedRegion,
         summonerName: playerData.riotIdGameName,
@@ -526,17 +553,56 @@ const SummonerProfile = () => {
         level: summonerData.summonerData.summonerLevel,
         rank: rank
       }
+      
+      // Set favorited if in local storage
+      let favsStr = localStorage.getItem('favorites')
+      let favsArr = JSON.parse(favsStr)
+      console.log(favsArr)
+      if (favsArr.some(obj =>
+        obj.selectedRegion === summonerObj.selectedRegion &&
+        obj.summonerName === summonerObj.summonerName &&
+        obj.riotId === summonerObj.riotId
+      )) {
+        // Update favorite summoner info
+        favsArr = favsArr.map(obj => {
+          if (
+            obj.selectedRegion === summonerObj.selectedRegion &&
+            obj.summonerName === summonerObj.summonerName &&
+            obj.riotId === summonerObj.riotId
+          ) {
+            return {
+              ...obj,
+              ...summonerObj
+            }
+          }
+          return obj;
+        })
+        setFavorited(true);
+        localStorage.setItem('favorites', JSON.stringify(favsArr))
+      }
+
       if (recentSearches === null) {
         const newArr = [summonerObj]
         localStorage.setItem('recentSearches', JSON.stringify(newArr))
       }
       else {
         const parsedArr = JSON.parse(recentSearches)
-        if (parsedArr.length < 6 && !parsedArr.some(obj =>
+        // Less than 10 recent searches
+        if (parsedArr.length < 10 && !parsedArr.some(obj =>
           obj.selectedRegion === summonerObj.selectedRegion &&
           obj.summonerName === summonerObj.summonerName &&
           obj.riotId === summonerObj.riotId
         )) {
+          parsedArr.push(summonerObj)
+          localStorage.setItem('recentSearches', JSON.stringify(parsedArr))
+        }
+        // If already 10 recent searches, remove earliest and push recent
+        if (parsedArr.length >= 10 && !parsedArr.some(obj =>
+          obj.selectedRegion === summonerObj.selectedRegion &&
+          obj.summonerName === summonerObj.summonerName &&
+          obj.riotId === summonerObj.riotId
+        )) {
+          parsedArr.shift()
           parsedArr.push(summonerObj)
           localStorage.setItem('recentSearches', JSON.stringify(parsedArr))
         }
@@ -576,7 +642,6 @@ const SummonerProfile = () => {
 
       <Box>
         <Navbar></Navbar>
-
 
         <Grid container display={'flex'} marginTop={'25px'} justifyContent={'center'}>
           <Grid display={'flex'} flexDirection={'column'} marginRight={'20px'}>
@@ -744,14 +809,14 @@ const SummonerProfile = () => {
                         <div>Level: {summonerData.masteryData[1].championLevel}</div>
                         <div>Mastery: {summonerData.masteryData[1].championPoints.toLocaleString()}</div>
                       </>}>
-                    <img style={{
-                      borderRadius: '100%',
-                      border: '3px solid white',
-                      width: '65px',
-                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                    }}
-                      src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(summonerData.masteryData[1].championId)).id}.png`} alt=''>
-                    </img>
+                      <img style={{
+                        borderRadius: '100%',
+                        border: '3px solid white',
+                        width: '65px',
+                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                      }}
+                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(summonerData.masteryData[1].championId)).id}.png`} alt=''>
+                      </img>
                     </Tooltip>
                     <Typography style={{
                       textAlign: 'center',
@@ -787,14 +852,14 @@ const SummonerProfile = () => {
                         <div>Level: {summonerData.masteryData[2].championLevel}</div>
                         <div>Mastery: {summonerData.masteryData[2].championPoints.toLocaleString()}</div>
                       </>}>
-                    <img style={{
-                      borderRadius: '100%',
-                      border: '3px solid white',
-                      width: '65px',
-                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                    }}
-                      src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(summonerData.masteryData[2].championId)).id}.png`} alt=''>
-                    </img>
+                      <img style={{
+                        borderRadius: '100%',
+                        border: '3px solid white',
+                        width: '65px',
+                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                      }}
+                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(summonerData.masteryData[2].championId)).id}.png`} alt=''>
+                      </img>
                     </Tooltip>
                     <Typography style={{
                       textAlign: 'center',
