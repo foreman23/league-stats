@@ -53,7 +53,6 @@ function SummonerSearch() {
   }
 
   const handleSearchSubmit = async () => {
-    
     // Extract riot tag from summoner name
     let summonerNamePayload = null;
     let riotTagPayload = null;
@@ -67,7 +66,6 @@ function SummonerSearch() {
         riotTagPayload = 'oce';
       }
     }
-
     // Else if contains # but not last character (contains riot tag)
     else if (summonerName.includes("#")) {
       summonerNamePayload = summonerName.split("#")[0];
@@ -76,7 +74,6 @@ function SummonerSearch() {
       if (riotTagPayload === undefined || riotTagPayload === null) {
       }
     }
-
     // If no # riot tag is provided
     else {
       summonerNamePayload = summonerName;
@@ -87,6 +84,11 @@ function SummonerSearch() {
       }
     }
 
+    // Remove trailing white space if necessary
+    if (summonerNamePayload[summonerNamePayload.length - 1] === ' ') {
+      summonerNamePayload = summonerNamePayload.slice(0, summonerNamePayload.length - 1)
+    }
+
     navigate(`/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`);
   }
 
@@ -95,6 +97,7 @@ function SummonerSearch() {
     let recentSearchStr = localStorage.getItem('recentSearches')
     if (recentSearchStr !== null) {
       let recentSearchArr = JSON.parse(recentSearchStr)
+      recentSearchArr.reverse()
       setRecentSearches(recentSearchArr)
 
       let arr = []
@@ -263,7 +266,7 @@ function SummonerSearch() {
               <Typography style={{ textAlign: 'center' }}>Favorites</Typography>
               <Divider></Divider>
               <List>
-                <Grid container>
+                <Grid style={{ justifyContent: 'center' }} container>
                   {favorites.map((item, index) => (
                     <Grid item xs={4}>
                       <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>

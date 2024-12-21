@@ -508,7 +508,6 @@ const SummonerProfile = () => {
     }
   }
 
-  const [topChamps, setTopChamps] = useState([]);
   // Get champion JSON data from riot
   const getChampsJSON = async () => {
     try {
@@ -521,10 +520,53 @@ const SummonerProfile = () => {
   }
 
   // Render page once data is loaded
+  const [rankIndex, setRankIndex] = useState(null);
   useEffect(() => {
     if (summonerData !== null && matchesLoaded === true && matchData !== null && summonerData !== undefined && matchData !== undefined) {
       console.log(summonerData)
       console.log(matchData)
+
+      // Select highest rank to display on profile
+      if (summonerData.rankedData.length > 0) {
+        let rankedValues = {
+          'IRON': 0,
+          'BRONZE': 1,
+          'SILVER': 2,
+          'GOLD': 3,
+          'PLATINUM': 4,
+          'EMERALD': 5,
+          'DIAMOND': 6,
+          'MASTER': 7,
+          'GRANDMASTER': 8,
+          'CHALLENGER': 9
+        }
+        let tierValues = {
+          'IV': 0,
+          'III': 1,
+          'II': 2,
+          'I': 3
+        }
+        let highestRank = 0;
+        let highestRankIndex = null;
+        let highestTierValue = 0;
+        for (let i = 0; i < summonerData.rankedData.length; i++) {
+          if (summonerData.rankedData[i].queueType === 'RANKED_FLEX_SR' || summonerData.rankedData[i].queueType === 'RANKED_SOLO_5x5') {
+            if (rankedValues[summonerData.rankedData[i].tier] > highestRank) {
+              highestRank = rankedValues[summonerData.rankedData[i].tier]
+              highestRankIndex = i
+              highestTierValue = tierValues[summonerData.rankedData[i].rank]
+            }
+            // If rank same (eg. silver and silver) pick higher tier
+            else if (rankedValues[summonerData.rankedData[i].tier] == highestRank) {
+              if (tierValues[summonerData.rankedData[i].rank] > highestTierValue) {
+                highestTierValue = summonerData.rankedData[i].rank
+                highestRankIndex = i
+              }
+            }
+          }
+        }
+        setRankIndex(highestRankIndex)
+      }
 
       // Find player data
       if (matchData.length > 0) {
@@ -553,7 +595,7 @@ const SummonerProfile = () => {
         level: summonerData.summonerData.summonerLevel,
         rank: rank
       }
-      
+
       // Set favorited if in local storage
       let favsStr = localStorage.getItem('favorites')
       let favsArr = JSON.parse(favsStr)
@@ -596,7 +638,19 @@ const SummonerProfile = () => {
           parsedArr.push(summonerObj)
           localStorage.setItem('recentSearches', JSON.stringify(parsedArr))
         }
-        // If already 10 recent searches, remove earliest and push recent
+
+        // If already 10 recent searches AND current summoner is one of them
+        // if (parsedArr.length >= 10 && parsedArr.some(obj =>
+        //   obj.selectedRegion === summonerObj.selectedRegion &&
+        //   obj.summonerName === summonerObj.summonerName &&
+        //   obj.riotId === summonerObj.riotId
+        // )) {
+        //   let tempSummoner = parsedArr[0]
+        //   console.log(tempSummoner)
+        //   parsedArr[0] = 
+        // }
+
+        // If already 10 recent searches and NOT current summoner one of them
         if (parsedArr.length >= 10 && !parsedArr.some(obj =>
           obj.selectedRegion === summonerObj.selectedRegion &&
           obj.summonerName === summonerObj.summonerName &&
@@ -703,26 +757,39 @@ const SummonerProfile = () => {
                     <ListItem style={{ fontWeight: 'bolder' }}>{summonerName} #{riotId} ({selectedRegion})</ListItem>
                   )}
                   <ListItem style={{ fontWeight: '500', color: '#404040' }}>{regionStr}</ListItem>
-                  {summonerData.rankedData.length > 0 ? (
+                  {rankIndex !== null ? (
                     <>
-                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{(summonerData.rankedData[0].tier).charAt(0) + summonerData.rankedData[0].tier.substring(1).toLowerCase()} {summonerData.rankedData[0].rank}</ListItem>
-                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{summonerData.rankedData[0].wins}W {summonerData.rankedData[0].losses}L {((summonerData.rankedData[0].wins / (summonerData.rankedData[0].wins + summonerData.rankedData[0].losses)) * 100).toFixed(0)}%</ListItem>
+                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex].rank}</ListItem>
+                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{summonerData.rankedData[rankIndex].wins}W {summonerData.rankedData[rankIndex].losses}L {((summonerData.rankedData[0].wins / (summonerData.rankedData[rankIndex].wins + summonerData.rankedData[rankIndex].losses)) * 100).toFixed(0)}%</ListItem>
                     </>
                   ) : <ListItem style={{ fontWeight: '500', color: '#404040' }}>Unranked</ListItem>}
                 </List>
               </Grid>
               <Grid position={'relative'} marginLeft={'20px'}>
-                {summonerData.rankedData[0] &&
+                {rankIndex !== null &&
                   <div>
-                    <img style={{
-                      backgroundColor: '#E3E3E3',
-                      borderRadius: '100%',
-                      border: '4px white solid',
-                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25',
-                      maxWidth: '150px',
-                    }}
-                      src={`/images/rankIcons/Rank=${(summonerData.rankedData[0].tier).charAt(0) + summonerData.rankedData[0].tier.substring(1).toLowerCase()}.webp`}>
-                    </img>
+                    <Tooltip
+                      slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -40] } }] } }}
+                      placement='top'
+                      arrow
+                      disableInteractive
+                      title={<>
+                        <div>
+                          <span style={{ textDecoration: 'underline', fontWeight: 'bold' }}>{summonerData.rankedData[rankIndex].queueType}<br></br></span>
+                          {(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex].rank} - {summonerData.rankedData[rankIndex].leaguePoints} lp
+                        </div>
+                      </>}
+                    >
+                      <img style={{
+                        backgroundColor: '#E3E3E3',
+                        borderRadius: '100%',
+                        border: '4px white solid',
+                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25',
+                        maxWidth: '150px',
+                      }}
+                        src={`/images/rankIcons/Rank=${(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()}.webp`}>
+                      </img>
+                    </Tooltip>
                     <Typography style={{
                       position: 'absolute',
                       margin: 'auto',
