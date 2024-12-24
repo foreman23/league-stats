@@ -21,6 +21,7 @@ import DisplayFeats from '../components/DisplayFeats';
 import TeamGoldDifGraph from '../components/TeamGoldDifGraph';
 import generateGraphData from '../functions/GenerateGraphData';
 import calculateOpScores from '../functions/CalculateOpScores';
+import generateShortSummary from '../functions/GenerateShortSummary';
 
 function GameDetails() {
 
@@ -43,10 +44,10 @@ function GameDetails() {
   const [items, setItems] = useState(null);
 
   // Card states (lane summaries)
-  const [topSummaryCardStatus, setTopSummaryCardStatus] = useState(false);
-  const [jgSummaryCardStatus, setJgSummaryCardStatus] = useState(false);
-  const [midSummaryCardStatus, setMidSummaryCardStatus] = useState(false);
-  const [botSummaryCardStatus, setBotSummaryCardStatus] = useState(false);
+  const [topSummaryCardStatus, setTopSummaryCardStatus] = useState(true);
+  const [jgSummaryCardStatus, setJgSummaryCardStatus] = useState(true);
+  const [midSummaryCardStatus, setMidSummaryCardStatus] = useState(true);
+  const [botSummaryCardStatus, setBotSummaryCardStatus] = useState(true);
 
   // Timeline data
   const [timelineData, setTimelineData] = useState(null);
@@ -69,7 +70,6 @@ function GameDetails() {
     if (style) {
       const keystone = style.slots[0].runes.find(rune => rune.id === keystoneId);
       if (keystone) {
-        // console.log(keystone.icon)
         return `https://ddragon.canisback.com/img/${keystone.icon}`;
       } else {
         console.error(`Keystone with ID ${keystoneId} not found in style ${styleId}`);
@@ -93,20 +93,20 @@ function GameDetails() {
   }
 
   // Handle lane summary card active status
-  const [lastButtonPressedTop, setLastButtonPressedTop] = useState(null);
-  const [lastButtonPressedJg, setLastButtonPressedJg] = useState(null);
-  const [lastButtonPressedMid, setLastButtonPressedMid] = useState(null);
-  const [lastButtonPressedBot, setLastButtonPressedBot] = useState(null);
+  const [lastButtonPressedTop, setLastButtonPressedTop] = useState('laneSumTop1');
+  const [lastButtonPressedJg, setLastButtonPressedJg] = useState('laneSumJg1');
+  const [lastButtonPressedMid, setLastButtonPressedMid] = useState('laneSumMid1');
+  const [lastButtonPressedBot, setLastButtonPressedBot] = useState('laneSumBot1');
   const handleLaneCard = (lane, btnName) => {
     if (lane === 'top') {
       setLastButtonPressedTop(btnName)
       if (topSummaryCardStatus === false) {
         setTopSummaryCardStatus(true);
       }
-      else if (btnName === lastButtonPressedTop) {
-        setTopSummaryCardStatus(false);
-        setLastButtonPressedTop(null);
-      }
+      // else if (btnName === lastButtonPressedTop) {
+      //   setTopSummaryCardStatus(false);
+      //   setLastButtonPressedTop(null);
+      // }
     };
 
     if (lane === 'mid') {
@@ -114,10 +114,10 @@ function GameDetails() {
       if (midSummaryCardStatus === false) {
         setMidSummaryCardStatus(true);
       }
-      else if (btnName === lastButtonPressedMid) {
-        setMidSummaryCardStatus(false);
-        setLastButtonPressedMid(null);
-      }
+      // else if (btnName === lastButtonPressedMid) {
+      //   setMidSummaryCardStatus(false);
+      //   setLastButtonPressedMid(null);
+      // }
     };
 
     if (lane === 'jg') {
@@ -125,10 +125,10 @@ function GameDetails() {
       if (jgSummaryCardStatus === false) {
         setJgSummaryCardStatus(true);
       }
-      else if (btnName === lastButtonPressedJg) {
-        setJgSummaryCardStatus(false);
-        setLastButtonPressedJg(null);
-      }
+      // else if (btnName === lastButtonPressedJg) {
+      //   setJgSummaryCardStatus(false);
+      //   setLastButtonPressedJg(null);
+      // }
     };
 
     if (lane === 'bot') {
@@ -136,10 +136,10 @@ function GameDetails() {
       if (botSummaryCardStatus === false) {
         setBotSummaryCardStatus(true);
       }
-      else if (btnName === lastButtonPressedBot) {
-        setBotSummaryCardStatus(false);
-        setLastButtonPressedBot(null);
-      }
+      // else if (btnName === lastButtonPressedBot) {
+      //   setBotSummaryCardStatus(false);
+      //   setLastButtonPressedBot(null);
+      // }
     };
 
   }
@@ -150,6 +150,7 @@ function GameDetails() {
   const [highestDamageDealt, setHighestDamageDealt] = useState(null);
 
   const [statsAt15, setStatsAt15] = useState(null);
+  const [shortSummary, setShortSummary] = useState(null);
   const [graphData, setGraphData] = useState(null);
   useEffect(() => {
 
@@ -166,6 +167,8 @@ function GameDetails() {
           const graphData = await generateGraphData(gameData, timelineData);
           const stats15 = await getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData);
           setGraphData(graphData);
+          const shortSummaryRes = generateShortSummary(gameData, playerData, timelineData, stats15)
+          setShortSummary(shortSummaryRes)
           setStatsAt15(stats15);
         }
       }
@@ -184,10 +187,8 @@ function GameDetails() {
   const findQueueTitle = async () => {
 
     let queue = await findQueueInfo();
-    console.log(gameData.info)
 
     let queueTitle = queue.description;
-    console.log(queueTitle)
     // let isLaning = true; // set to false for non summoners rift modes
     if (queueTitle === '5v5 Ranked Solo games') {
       setQueueTitle('Ranked Solo');
@@ -251,7 +252,6 @@ function GameDetails() {
       setPlayerData(gameData.info.participants.find(player => player.riotIdGameName === summonerName))
       // Find duration and date of game start
       setGameStartDate(new Date(gameData.info.gameCreation));
-      // console.log(gameStartDate)
       let gameDuration = gameData.info.gameDuration;
       if (gameDuration >= 3600) {
         gameDuration = `${(gameDuration / 3600).toFixed(1)} hrs`
@@ -292,7 +292,6 @@ function GameDetails() {
 
   useEffect(() => {
     if (graphData) {
-      console.log(graphData.leadChanges)
       let playerTeamLeading = null;
       let closeGame = false;
       let blowout = false;
@@ -302,16 +301,13 @@ function GameDetails() {
       let gameLength = graphData.blueLeadingTime + graphData.redLeadingTime;
       let blueLeadingPercentage = graphData.blueLeadingTime / gameLength;
       let redLeadingPercentage = graphData.redLeadingTime / gameLength
-      console.log(blueLeadingPercentage)
-      console.log(redLeadingPercentage)
 
       // Blue has more time winning
       if (graphData.blueLeadingTime > graphData.redLeadingTime) {
-        console.log(blueLeadingPercentage - redLeadingPercentage)
         if (blueLeadingPercentage - redLeadingPercentage < 0.25) {
           closeGame = true;
         }
-        if (graphData.redLeadingTime === 0) {
+        if (graphData.redLeadingTime <= 1) {
           blowout = true;
         }
         if (graphData.redLeadingTime < 3) {
@@ -326,11 +322,10 @@ function GameDetails() {
       }
       // Red has more time winning
       if (graphData.blueLeadingTime < graphData.redLeadingTime) {
-        console.log(redLeadingPercentage - blueLeadingPercentage)
         if (redLeadingPercentage - blueLeadingPercentage < 0.25) {
           closeGame = true;
         }
-        if (graphData.blueLeadingTime === 0) {
+        if (graphData.blueLeadingTime <= 1) {
           blowout = true;
         }
         if (graphData.blueLeadingTime < 3) {
@@ -350,7 +345,6 @@ function GameDetails() {
       }
 
       if (closeGame === true) {
-        console.log(closeGame)
         playerTeamLeading = false;
       }
 
@@ -372,25 +366,33 @@ function GameDetails() {
         }
       }
       else if (closeGame) {
-        teamLeadingSentence = `The game was evenly matched for most of the game.`
+        teamLeadingSentence = `The game was evenly matched, with both teams fighting hard.`
       }
 
       // Determine closing sentence
       let lastSentence = '';
-      if (playerData.win && playerTeamLeading === false) {
-        lastSentence = 'Despite of that, their team made a comeback and ended up winning the game.'
+      // Player's team won
+      if (playerData.win && playerTeamLeading === false && closeGame === true) {
+        lastSentence = 'Luckily, their team ended up winning the game.'
       }
-      if (!playerData.win && playerTeamLeading === true) {
-        lastSentence = `Unfortunately the other team made a comeback and ${playerData.riotIdGameName}'s team ended up losing the game.`
+      if (playerData.win && playerTeamLeading === false && closeGame === false) {
+        lastSentence = 'Despite of that, their team made a comeback and ended up winning the game.'
       }
       if (playerData.win && playerTeamLeading === true) {
         lastSentence = `In the end that resulted in victory.`
       }
-      if (!playerData.win && playerTeamLeading === false) {
+      // Player's team lost
+      if (!playerData.win && playerTeamLeading === true) {
+        lastSentence = `Unfortunately the other team made a comeback and ${playerData.riotIdGameName}'s team ended up losing the game.`
+      }
+      if (!playerData.win && playerTeamLeading === false && closeGame === true) {
+        lastSentence = `Unfortunately, in the end, ${playerData.riotIdGameName}'s team lost.`
+      }
+      if (!playerData.win && playerTeamLeading === false && closeGame === false) {
         lastSentence = `In the end that resulted in defeat.`
       }
 
-      setMatchSummaryDesc(`${matchSummaryDesc} ${teamLeadingSentence} ${lastSentence} `)
+      setMatchSummaryDesc(`${teamLeadingSentence} ${lastSentence} `)
     }
   }, [graphData])
 
@@ -506,7 +508,10 @@ function GameDetails() {
             <Grid style={{ overflow: 'clip' }} marginLeft={'0%'} marginRight={'5%'} container marginTop={'15px'} paddingBottom={'15px'}>
               <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={7}>
                 <Typography fontSize={20} fontWeight={600}>Match Summary</Typography>
-                <Typography style={{ marginRight: '15%', marginTop: '5px' }} fontSize={16}>{matchSummaryDesc}</Typography>
+                <ul>
+                  <li><Typography style={{ marginRight: '15%', marginTop: '5px' }} fontSize={16}>{shortSummary}</Typography></li>
+                  <li>{matchSummaryDesc}</li>
+                </ul>
               </Grid>
               <Grid backgroundColor='white' item xs={5}>
                 {graphData ? (
@@ -856,16 +861,33 @@ function GameDetails() {
                             </div>
                           </Tooltip>
                           <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
-                            <Tooltip title={`summoner 1`} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                            <Tooltip
+                              title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).description}</span></>}
+                              disableInteractive
+                              placement='top'
+                              arrow
+                              slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
                               <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                             </Tooltip>
-                            <Tooltip title={`summoner 2`} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                            <Tooltip
+                              title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
+                              disableInteractive
+                              placement='top'
+                              arrow
+                              slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
                               <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
                             </Tooltip>
                           </div>
                           <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
                             <img style={{ width: '19px', borderRadius: '2px' }} src={getKeystoneIconUrl(player, runesObj)} alt="Keystone"></img>
-                            <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
+                            <Tooltip
+                              title={<>{runesObj.find(keystone => keystone.id === player.perks.styles[0].style).key}</>}
+                              disableInteractive
+                              placement='top'
+                              arrow
+                              slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                              <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
+                            </Tooltip>
                           </div>
                           <Tooltip disabledInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
                             <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><a style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}><Typography className='summonerNameTable' fontSize={'12px'}>{player.riotIdGameName}</Typography></a>

@@ -131,7 +131,7 @@ const DisplayGame = (props) => {
     useEffect(() => {
         // Fetch queue data JSON
         getQueueJSON();
-        if (props.gameData.info.gameMode !== 'ARAM' && props.gameData.info.gameDuration > 900) {
+        if (props.gameData.info.gameMode !== 'ARAM' && props.gameData.info.gameDuration > 180) {
             const { matchSummaryText, highestDamageDealt, playersWithScores } = calculateOpScores(props.gameData, participant)
             setMatchText(matchSummaryText)
             setPlayersWithOpScores(playersWithScores)
@@ -139,7 +139,7 @@ const DisplayGame = (props) => {
             setPlayerScore(playersWithScores.find(participant => participant.puuid === props.puuid))
             setOppScore(playersWithScores.find(laner => laner.teamPosition === participant.teamPosition && laner.summonerId !== participant.summonerId))
         }
-        else if (props.gameData.info.gameMode === 'ARAM' || props.gameData.info.gameDuration < 900) {
+        else if (props.gameData.info.gameMode === 'ARAM' || props.gameData.info.gameDuration < 180) {
             const { highestDamageDealt, playersWithScores } = calculateOpScoresAram(props.gameData, participant)
             setPlayersWithOpScores(playersWithScores)
 
@@ -202,8 +202,8 @@ const DisplayGame = (props) => {
                 justifyContent: 'center',
                 marginBottom: '5px',
                 display: 'flex',
-                backgroundColor: `${(props.gameData.info.gameDuration > 900) ? participant.win === true ? '#ECF2FF' : '#FFF1F3' : 'rgb(242, 242, 242)'}`,
-                border: `2px ${(props.gameData.info.gameDuration > 900) ? participant.win === true ? '#DCE7FF' : '#FFE1E6' : 'rgb(224, 224, 224)'} solid`,
+                backgroundColor: `${(props.gameData.info.gameDuration > 180) ? participant.win === true ? '#ECF2FF' : '#FFF1F3' : 'rgb(242, 242, 242)'}`,
+                border: `2px ${(props.gameData.info.gameDuration > 180) ? participant.win === true ? '#DCE7FF' : '#FFE1E6' : 'rgb(224, 224, 224)'} solid`,
                 padding: '10px',
                 paddingTop: '35px',
                 paddingBottom: '35px',
@@ -212,7 +212,7 @@ const DisplayGame = (props) => {
 
                 {/* Match Information */}
                 <Grid xs={3} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'center'}>
-                    {props.gameData.info.gameDuration > 900 ? (
+                    {props.gameData.info.gameDuration > 180 ? (
                         <div>
                             <Typography style={{ fontWeight: 'bold', fontSize: '18px', color: `${participant.win === true ? '#3374ff' : '#ff3352'}` }} >{queueTitle}</Typography>
                             <Typography style={{ fontSize: '14px' }}>{(participant.teamId === 100) ? '(Blue Team)' : '(Red Team)'}</Typography>
