@@ -1,4 +1,4 @@
-import { Button, Typography, Box, Grid, ButtonGroup, Container, ListItem, Divider, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
+import { Button, Typography, Box, Grid, Paper, Container, TableBody, Divider, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
@@ -442,7 +442,7 @@ function GameDetails() {
             <Grid container marginLeft={'2%'} marginRight={'2%'} marginTop={'2%'} maxWidth={'90%'}>
               <Grid style={{ textAlign: 'center', display: 'flex', alignItems: 'center' }} justifyContent={'center'} item xs={5}>
                 {playerData.win ? (
-                  <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block' }}>
+                  <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                     <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
                       <img
                         style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${playerData.championName}.png`} alt=''>
@@ -452,7 +452,7 @@ function GameDetails() {
                     <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
                   </a>
                 ) : (
-                  <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block' }}>
+                  <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                     <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
                       <img
                         style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${playerData.championName}.png`} alt=''>
@@ -464,16 +464,16 @@ function GameDetails() {
                 )}
                 <img style={{ width: '55px' }} src='/images/swords.svg'></img>
                 {playerData.win ? (
-                  <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block' }}>
+                  <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                     <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
                       <img
                         style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${opposingLaner.championName}.png`} alt=''>
                       </img>
                     </Tooltip>
-                    <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId !== 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                    <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId !== 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}></Box>
                   </a>
                 ) : (
-                  <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', color: 'red' }}>
+                  <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', color: 'red', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                     <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
                       <img
                         style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${opposingLaner.championName}.png`} alt=''>
@@ -524,22 +524,35 @@ function GameDetails() {
                 </Grid>
               </Grid>
 
-              <Grid container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto' }}>
+              {/* Divider */}
+              <Divider
+                width='75%'
+                style={{ borderColor: '#BFBFBF', margin: 'auto', marginTop: '5px', marginBottom: '10px' }}
+              />
+
+              <Grid container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto', marginTop: '-10px' }}>
                 {/* Red Team */}
-                <Grid item xs={3} style={{ textAlign: 'right', paddingRight: '16px' }}>
-                  <Typography style={{ color: '#FF3F3F', fontWeight: 'bold', marginBottom: '8px', fontSize: '22px' }}>Red Team</Typography>
-                  <Grid container style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
-                    <img width={'24px'} src='/images/objIcons/tower-200.webp' alt='Tower Icon' />
-                    <Typography className='teamSummaryInfoText'>Grubs: 2</Typography>
-                    <Typography className='teamSummaryInfoText'>Herald: 1</Typography>
-                    <Typography style={{ fontWeight: 'bold' }} className='teamSummaryInfoText'>32 kills</Typography>
-                  </Grid>
-                  <Grid container style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px', marginTop: '4px' }}>
-                    <img width={'24px'} src='/images/objIcons/inhibitor_building_red.png' alt='Inhibitor Icon' />
-                    <Typography className='teamSummaryInfoText'>Dragons: 1</Typography>
-                    <Typography className='teamSummaryInfoText'>Barons: 1</Typography>
-                    <Typography style={{ fontWeight: 'bold' }} className='teamSummaryInfoText'>43,835g</Typography>
-                  </Grid>
+                <Grid item xs={3} style={{ textAlign: 'right', paddingRight: '16px', marginLeft: '140px' }}>
+                  <Typography style={{ color: '#FF3F3F', fontWeight: 'bold', fontSize: '22px' }}>Red Team</Typography>
+                  <Table size='small' style={{ borderCollapse: "collapse" }}>
+                    <TableBody>
+                      {/* Row 1 */}
+                      <TableRow style={{ height: "30px" }}>
+                        <TableCell style={{ border: "none", padding: '0px' }}><img style={{ maxWidth: '30px' }} src='/images/objIcons/tower-200.webp'></img></TableCell>
+                        <TableCell style={{ border: "none" }}>Grubs: {gameData.info.teams[1].objectives.horde.kills}</TableCell>
+                        <TableCell style={{ border: "none" }}>Herald: {gameData.info.teams[1].objectives.riftHerald.kills}</TableCell>
+                        <TableCell style={{ border: "none", fontWeight: 'bold' }}>{gameData.info.teams[1].objectives.champion.kills} kills</TableCell>
+                      </TableRow>
+
+                      {/* Row 2 */}
+                      <TableRow style={{ height: "30px" }}>
+                        <TableCell style={{ border: "none", padding: '0px' }}><img style={{ maxWidth: '24px', marginLeft: '3px' }} src='/images/objIcons/inhibitor-200.webp'></img></TableCell>
+                        <TableCell style={{ border: "none" }}>Dragons: {gameData.info.teams[1].objectives.dragon.kills}</TableCell>
+                        <TableCell style={{ border: "none" }}>Barons: {gameData.info.teams[1].objectives.baron.kills}</TableCell>
+                        <TableCell style={{ border: "none", fontWeight: 'bold' }}>43,235g</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
                 </Grid>
 
                 {/* Divider */}
@@ -550,46 +563,145 @@ function GameDetails() {
                 />
 
                 {/* Blue Team */}
-                <Grid item xs={3} style={{ textAlign: 'left', paddingLeft: '16px' }}>
-                  <Typography style={{ color: '#37B7FF', fontWeight: 'bold', marginBottom: '8px', fontSize: '22px' }}>Blue Team</Typography>
-                  <Grid container style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '8px' }}>
-                    <Typography style={{ fontWeight: 'bold' }} className='teamSummaryInfoText'>32 kills</Typography>
-                    <Typography className='teamSummaryInfoText'>Grubs: 2</Typography>
-                    <Typography className='teamSummaryInfoText'>Herald: 1</Typography>
-                    <img width={'24px'} src='/images/objIcons/tower-100.webp' alt='Tower Icon' />
-                  </Grid>
-                  <Grid container style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '8px', marginTop: '4px' }}>
-                    <Typography style={{ fontWeight: 'bold' }} className='teamSummaryInfoText'>43,835g</Typography>
-                    <Typography className='teamSummaryInfoText'>Dragons: 1</Typography>
-                    <Typography className='teamSummaryInfoText'>Barons: 1</Typography>
-                    <img width={'24px'} src='/images/objIcons/inhibitor_building_blue.png' alt='Inhibitor Icon' />
-                  </Grid>
+                <Grid item xs={3} style={{ textAlign: 'left', paddingRight: '16px' }}>
+                  <Typography style={{ color: '#37B7FF', fontWeight: 'bold', fontSize: '22px' }}>Blue Team</Typography>
+                  <Table size='small' style={{ borderCollapse: "collapse" }}>
+                    <TableBody>
+                      {/* Row 1 */}
+                      <TableRow style={{ height: "30px" }}>
+                        <TableCell style={{ border: "none", fontWeight: 'bold' }}>{gameData.info.teams[0].objectives.champion.kills} kills</TableCell>
+                        <TableCell style={{ border: "none" }}>Herald: {gameData.info.teams[0].objectives.riftHerald.kills}</TableCell>
+                        <TableCell style={{ border: "none" }}>Grubs: {gameData.info.teams[0].objectives.horde.kills}</TableCell>
+                        <TableCell style={{ border: "none", padding: '0px' }}>
+                          <img style={{ maxWidth: '30px' }} src='/images/objIcons/tower-100.webp'></img>
+                        </TableCell>
+                      </TableRow>
+
+                      {/* Row 2 */}
+                      <TableRow style={{ height: "30px" }}>
+                        <TableCell style={{ border: "none", fontWeight: 'bold' }}>43,235g</TableCell>
+                        <TableCell style={{ border: "none" }}>Barons: {gameData.info.teams[0].objectives.baron.kills}</TableCell>
+                        <TableCell style={{ border: "none" }}>Dragons: {gameData.info.teams[0].objectives.dragon.kills}</TableCell>
+                        <TableCell style={{ border: "none", padding: '0px' }}>
+                          <img style={{ maxWidth: '24px', marginLeft: '3px' }} src='/images/objIcons/inhibitor-100.webp'></img>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
                 </Grid>
-                <Grid xs={3}>
-                  <img style={{
-                    borderRadius: '100%',
-                    border: '3px solid white',
-                    width: '65px',
-                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                  }}
-                    src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/Volibear.png`} alt=''>
-                  </img>
-                  <img style={{
-                    borderRadius: '100%',
-                    border: '3px solid white',
-                    width: '65px',
-                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                  }}
-                    src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/Volibear.png`} alt=''>
-                  </img>
-                  <img style={{
-                    borderRadius: '100%',
-                    border: '3px solid white',
-                    width: '65px',
-                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                  }}
-                    src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/Volibear.png`} alt=''>
-                  </img>
+                <Grid xs={3} style={{ margin: '0', marginLeft: '35px', display: 'flex', marginTop: '15px', paddingTop: '20px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
+                    <Tooltip placement='top'
+                      arrow
+                      disableInteractive
+                      title={<><div>{gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).riotIdGameName} ({gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).championName})<br></br>
+                        {gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).kills}/{gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).deaths}/{gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).assists}<br></br>
+                        Score: {gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).score.toFixed(1)}
+                      </div></>}
+                      slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 0] } }] } }}>
+                      <img style={{
+                        borderRadius: '100%',
+                        border: `4px solid ${gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).teamId === 100 ? '#37B7FF' : '#FF3F3F'}`,
+                        width: '70px',
+                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+                        marginRight: '20px',
+                        margin: 'auto'
+                      }}
+                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).championName}.png`} alt=''>
+                      </img>
+                    </Tooltip>
+                    <img style={{ margin: 'auto', marginTop: '0px' }} src='/images/text/MVP.png'></img>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
+                    <Tooltip placement='top'
+                      arrow
+                      disableInteractive
+                      title={<><div>{gameData.info.participants.sort((a, b) => b.score - a.score)[1].riotIdGameName} ({gameData.info.participants.sort((a, b) => b.score - a.score)[1].championName})<br></br>
+                        {gameData.info.participants.sort((a, b) => b.score - a.score)[1].kills}/{gameData.info.participants.sort((a, b) => b.score - a.score)[1].deaths}/{gameData.info.participants.sort((a, b) => b.score - a.score)[1].assists}<br></br>
+                        Score: {gameData.info.participants.sort((a, b) => b.score - a.score)[1].score.toFixed(1)}
+                      </div></>}
+                      slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 0] } }] } }}>
+                      <img style={{
+                        borderRadius: '100%',
+                        border: `4px solid ${gameData.info.participants.sort((a, b) => b.score - a.score)[1].teamId === 100 ? '#37B7FF' : '#FF3F3F'}`,
+                        width: '70px',
+                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+                        marginRight: '20px',
+                        margin: 'auto'
+                      }}
+                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${gameData.info.participants.sort((a, b) => b.score - a.score)[1].championName}.png`} alt=''>
+                      </img>
+                    </Tooltip>
+                    <img style={{ margin: 'auto', marginTop: '0px' }} src='/images/text/2ND.png'></img>
+                  </div>
+                  <Tooltip
+                    placement='top'
+                    arrow
+                    disableInteractive
+                    title={<><div>
+                      {gameData.info.participants.reduce(
+                        (minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
+                        null
+                      ).riotIdGameName} ({gameData.info.participants.reduce(
+                        (minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
+                        null
+                      ).championName})<br></br>
+                      {gameData.info.participants.reduce(
+                        (minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
+                        null
+                      ).kills}/{gameData.info.participants.reduce(
+                        (minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
+                        null
+                      ).deaths}/{gameData.info.participants.reduce(
+                        (minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
+                        null
+                      ).assists}<br></br>
+                      Score: {gameData.info.participants.reduce(
+                        (minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
+                        null
+                      ).score.toFixed(1)}
+                    </div></>}>
+                    <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
+                      <div
+                        style={{
+                          borderRadius: '50%',
+                          border: `4px solid ${gameData.info.participants.reduce(
+                            (minPlayer, player) =>
+                              player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
+                            null
+                          ).teamId === 100
+                            ? '#37B7FF'
+                            : '#FF3F3F'
+                            }`,
+                          width: '70px',
+                          height: '70px',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+                          marginRight: '20px',
+                          margin: 'auto',
+                        }}
+                      >
+                        <img
+                          style={{
+                            borderRadius: '50%',
+                            width: '70px',
+                            height: '70px',
+                            filter: 'grayscale(80%)',
+                          }}
+                          src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${gameData.info.participants.reduce(
+                            (minPlayer, player) =>
+                              player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
+                            null
+                          ).championName}.png`}
+                          alt=""
+                        />
+                      </div>
+                      <img style={{ margin: 'auto', marginTop: '0px' }} src='/images/text/INT.png' />
+                    </div>
+                  </Tooltip>
+
                 </Grid>
               </Grid>
 
