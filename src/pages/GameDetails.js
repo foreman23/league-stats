@@ -1,4 +1,4 @@
-import { Button, Typography, Box, Grid, ButtonGroup, Container, ListItem, List, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
+import { Button, Typography, Box, Grid, ButtonGroup, Container, ListItem, Divider, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
@@ -506,20 +506,94 @@ function GameDetails() {
 
             {/* Section 2 */}
             <Grid style={{ overflow: 'clip' }} marginLeft={'0%'} marginRight={'5%'} container marginTop={'15px'} paddingBottom={'15px'}>
-              <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={7}>
-                <Typography fontSize={20} fontWeight={600}>Match Summary</Typography>
-                <ul>
-                  <li><Typography style={{ marginRight: '15%', marginTop: '5px' }} fontSize={16}>{shortSummary}</Typography></li>
-                  <li>{matchSummaryDesc}</li>
-                </ul>
+
+              <Grid style={{ display: 'flex' }}>
+                <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={7}>
+                  <Typography fontSize={20} fontWeight={600}>Match Summary</Typography>
+                  <ul>
+                    <li><Typography style={{ marginRight: '15%', marginTop: '5px' }} fontSize={16}>{shortSummary}</Typography></li>
+                    <li>{matchSummaryDesc}</li>
+                  </ul>
+                </Grid>
+                <Grid backgroundColor='white' item xs={5}>
+                  {graphData ? (
+                    <TeamGoldDifGraph width={600} teamId={playerData.teamId} height={250} hideTitle yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
+                  ) : (
+                    <CircularProgress style={{ justifyContent: 'center', marginTop: '20px' }}></CircularProgress>
+                  )}
+                </Grid>
               </Grid>
-              <Grid backgroundColor='white' item xs={5}>
-                {graphData ? (
-                  <TeamGoldDifGraph width={600} teamId={playerData.teamId} height={250} hideTitle yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
-                ) : (
-                  <CircularProgress style={{ justifyContent: 'center', marginTop: '20px' }}></CircularProgress>
-                )}
+
+              <Grid container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto' }}>
+                {/* Red Team */}
+                <Grid item xs={3} style={{ textAlign: 'right', paddingRight: '16px' }}>
+                  <Typography style={{ color: '#FF3F3F', fontWeight: 'bold', marginBottom: '8px', fontSize: '22px' }}>Red Team</Typography>
+                  <Grid container style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
+                    <img width={'24px'} src='/images/objIcons/tower-200.webp' alt='Tower Icon' />
+                    <Typography className='teamSummaryInfoText'>Grubs: 2</Typography>
+                    <Typography className='teamSummaryInfoText'>Herald: 1</Typography>
+                    <Typography style={{ fontWeight: 'bold' }} className='teamSummaryInfoText'>32 kills</Typography>
+                  </Grid>
+                  <Grid container style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px', marginTop: '4px' }}>
+                    <img width={'24px'} src='/images/objIcons/inhibitor_building_red.png' alt='Inhibitor Icon' />
+                    <Typography className='teamSummaryInfoText'>Dragons: 1</Typography>
+                    <Typography className='teamSummaryInfoText'>Barons: 1</Typography>
+                    <Typography style={{ fontWeight: 'bold' }} className='teamSummaryInfoText'>43,835g</Typography>
+                  </Grid>
+                </Grid>
+
+                {/* Divider */}
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  style={{ borderColor: '#BFBFBF', margin: '0 16px', height: '60px', alignSelf: 'center', marginTop: '30px' }}
+                />
+
+                {/* Blue Team */}
+                <Grid item xs={3} style={{ textAlign: 'left', paddingLeft: '16px' }}>
+                  <Typography style={{ color: '#37B7FF', fontWeight: 'bold', marginBottom: '8px', fontSize: '22px' }}>Blue Team</Typography>
+                  <Grid container style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '8px' }}>
+                    <Typography style={{ fontWeight: 'bold' }} className='teamSummaryInfoText'>32 kills</Typography>
+                    <Typography className='teamSummaryInfoText'>Grubs: 2</Typography>
+                    <Typography className='teamSummaryInfoText'>Herald: 1</Typography>
+                    <img width={'24px'} src='/images/objIcons/tower-100.webp' alt='Tower Icon' />
+                  </Grid>
+                  <Grid container style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '8px', marginTop: '4px' }}>
+                    <Typography style={{ fontWeight: 'bold' }} className='teamSummaryInfoText'>43,835g</Typography>
+                    <Typography className='teamSummaryInfoText'>Dragons: 1</Typography>
+                    <Typography className='teamSummaryInfoText'>Barons: 1</Typography>
+                    <img width={'24px'} src='/images/objIcons/inhibitor_building_blue.png' alt='Inhibitor Icon' />
+                  </Grid>
+                </Grid>
+                <Grid xs={3}>
+                  <img style={{
+                    borderRadius: '100%',
+                    border: '3px solid white',
+                    width: '65px',
+                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                  }}
+                    src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/Volibear.png`} alt=''>
+                  </img>
+                  <img style={{
+                    borderRadius: '100%',
+                    border: '3px solid white',
+                    width: '65px',
+                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                  }}
+                    src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/Volibear.png`} alt=''>
+                  </img>
+                  <img style={{
+                    borderRadius: '100%',
+                    border: '3px solid white',
+                    width: '65px',
+                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                  }}
+                    src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/Volibear.png`} alt=''>
+                  </img>
+                </Grid>
               </Grid>
+
+
             </Grid>
           </Grid>
         </div>
