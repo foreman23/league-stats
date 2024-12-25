@@ -261,8 +261,8 @@ const SummonerProfile = () => {
         const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`);
         const historyData = historyResponse.data;
 
-        const masteryResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
-        const masteryData = masteryResponse.data;
+        // const masteryResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
+        // const masteryData = masteryResponse.data;
 
         // if match history is empty set matchesLoaded to true
         if (historyData.length < 1) {
@@ -276,14 +276,14 @@ const SummonerProfile = () => {
           summonerData: summonerData,
           rankedData: rankedData,
           historyData: historyData,
-          masteryData: masteryData
+          // masteryData: masteryData
         }
         await setDoc(newDocRef, {
           lastUpdated: lastUpdated,
           summonerData: summonerData,
           rankedData: rankedData,
           historyData: historyData,
-          masteryData: masteryData
+          // masteryData: masteryData
         });
         setSummonerData(data);
         updateUserMatchInfo(data);

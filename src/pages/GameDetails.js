@@ -237,7 +237,7 @@ function GameDetails() {
 
   // On initial page load
   useEffect(() => {
-    let payload = JSON.parse(localStorage.getItem('gameData'));
+    let payload = JSON.parse(localStorage.getItem('gameData')); // FIX THIS IT WON'T WORK IF SOMEONE FOLLOWS LINK FROM OUTSIDE SOURCE
     setAlternateRegion(payload.alternateRegion);
     setGameData(payload.gameData);
     setDataDragonVersion(payload.dataDragonVersion);
