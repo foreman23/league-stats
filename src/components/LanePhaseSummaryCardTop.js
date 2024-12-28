@@ -3,7 +3,7 @@ import { Grid, Typography, Box, Button, Tooltip } from '@mui/material';
 import { LineChart } from '@mui/x-charts';
 
 const LanePhaseSummaryCardTop = (props) => {
-  const { statsAt15, handleLaneCard, lastButtonPressedTop, topSummaryCardStatus, gameData, timelineData, dataDragonVersion, champsJSON } = props;
+  const { statsAt15, handleLaneCard, lastButtonPressedTop, topSummaryCardStatus, gameData, timelineData, dataDragonVersion, champsJSON, gameDuration } = props;
 
   const participants = gameData.info.participants;
 
@@ -95,7 +95,7 @@ const LanePhaseSummaryCardTop = (props) => {
               <span style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner.riotIdGameName} </span>
               ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) in the top lane earned {statsAt15.laneResults.TOP.goldDifference} more gold than
               <span style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser.riotIdGameName} </span>
-              ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) at the end of 15 minutes, giving {statsAt15.laneResults.TOP.teamWonLane === 100 ? "blue" : "red"} team an advantage entering the mid phase.
+              ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, giving {statsAt15.laneResults.TOP.teamWonLane === 100 ? "blue" : "red"} team an advantage entering the mid phase.
             </Typography>
           ) : (
             <Typography>

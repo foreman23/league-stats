@@ -1,15 +1,17 @@
-import axios from "axios";
-
 // Find each players kda at 15
 const findKillsAt15 = (timelineResponse) => {
     let kda = {};
     let allLaningKills = [];
 
-    console.log(timelineResponse)
+    // Lower max frames if short game
+    let maxFrames = 15;
+    if (timelineResponse.info.frames.length < 15) {
+        maxFrames = timelineResponse.info.frames.length
+    }
 
     // populate kda with participantIds
     timelineResponse.info.participants.forEach(player => kda[player.participantId] = { kills: 0, deaths: 0, assists: 0 });
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < maxFrames; i++) {
         timelineResponse.info.frames[i].events.forEach(event => {
             if (event.type === 'ELITE_MONSTER_KILL') {
                 event.victimId = 0;
@@ -44,7 +46,14 @@ const findKillsAt15 = (timelineResponse) => {
 
 // Consolidate data into array
 const pair15Data = (timelineResponse, kda, gameData) => {
-    const statsAt15 = timelineResponse.info.frames[15].participantFrames
+
+    // Lower max frames if short game
+    let maxFrames = 15;
+    if (timelineResponse.info.frames.length < 15) {
+        maxFrames = timelineResponse.info.frames.length - 1
+    }
+
+    const statsAt15 = timelineResponse.info.frames[maxFrames].participantFrames
     let statsAt15Arr = [];
 
     for (const participantId in kda) {

@@ -348,13 +348,13 @@ function GameDetails() {
       setGameStartDate(new Date(gameData.info.gameCreation));
       let gameDuration = gameData.info.gameDuration;
       if (gameDuration >= 3600) {
-        gameDuration = `${(gameDuration / 3600).toFixed(1)} hrs`
-        if (gameDuration === '1.0 hrs') {
-          gameDuration = '1 hr';
+        gameDuration = `${(gameDuration / 3600).toFixed(1)} hours`
+        if (gameDuration === '1.0 hours') {
+          gameDuration = '1 hour';
         }
       }
       else {
-        gameDuration = `${Math.floor((gameDuration / 60))} mins`
+        gameDuration = `${Math.floor((gameDuration / 60))} minutes`
       }
       setGameDuration(gameDuration)
     }
@@ -1426,12 +1426,16 @@ function GameDetails() {
             <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginTop: '45px', textAlign: 'center', marginBottom: '45px' }}>
               <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
                 <Typography fontSize={20} fontWeight={600}>Laning Phase Results</Typography>
-                <Typography marginBottom={'20px'}>How each lane was performing @ 15 minutes</Typography>
-
-                <LanePhaseSummaryCardTop gameData={gameData} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedTop={lastButtonPressedTop} topSummaryCardStatus={topSummaryCardStatus}></LanePhaseSummaryCardTop>
-                <LanePhaseSummaryCardJg gameData={gameData} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedJg={lastButtonPressedJg} jgSummaryCardStatus={jgSummaryCardStatus}></LanePhaseSummaryCardJg>
-                <LanePhaseSummaryCardMid gameData={gameData} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedMid={lastButtonPressedMid} midSummaryCardStatus={midSummaryCardStatus}></LanePhaseSummaryCardMid>
-                <LanePhaseSummaryCardBot gameData={gameData} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedBot={lastButtonPressedBot} botSummaryCardStatus={botSummaryCardStatus}></LanePhaseSummaryCardBot>
+                {gameData.info.gameDuration > 900 ? (
+                  <Typography marginBottom={'20px'}>How each lane was performing @ 15 minutes</Typography>
+                ) : (
+                  <Typography marginBottom={'20px'}>{`How each lane was performing @ ${gameDuration} (game ended early)`}</Typography>
+                )
+                }
+                <LanePhaseSummaryCardTop gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedTop={lastButtonPressedTop} topSummaryCardStatus={topSummaryCardStatus}></LanePhaseSummaryCardTop>
+                <LanePhaseSummaryCardJg gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedJg={lastButtonPressedJg} jgSummaryCardStatus={jgSummaryCardStatus}></LanePhaseSummaryCardJg>
+                <LanePhaseSummaryCardMid gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedMid={lastButtonPressedMid} midSummaryCardStatus={midSummaryCardStatus}></LanePhaseSummaryCardMid>
+                <LanePhaseSummaryCardBot gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedBot={lastButtonPressedBot} botSummaryCardStatus={botSummaryCardStatus}></LanePhaseSummaryCardBot>
 
               </Grid>
             </Grid>
