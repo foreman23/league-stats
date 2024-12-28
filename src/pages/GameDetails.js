@@ -171,7 +171,7 @@ function GameDetails() {
           const graphData = await generateGraphData(gameData, timelineData);
           const stats15 = await getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData);
           setGraphData(graphData);
-          const shortSummaryRes = generateShortSummary(gameData, playerData, timelineData, stats15)
+          const shortSummaryRes = generateShortSummary(gameData, playerData, timelineData, stats15, champsJSON)
           setShortSummary(shortSummaryRes)
           setStatsAt15(stats15);
         }
@@ -220,7 +220,7 @@ function GameDetails() {
   // Get queue JSON data from riot
   const getQueueJSON = async () => {
     try {
-      const response = await fetch('https://static.developer.riotgames.com/docs/lol/queues.json');
+      const response = await fetch(`https://static.developer.riotgames.com/docs/lol/queues.json`);
       const data = await response.json();
       setQueues(data);
     } catch (error) {
@@ -231,7 +231,7 @@ function GameDetails() {
   // Get item JSON data from riot
   const getItemsJSON = async () => {
     try {
-      const response = await fetch('https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/item.json');
+      const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/item.json`);
       const data = await response.json();
       setItems(data);
     } catch (error) {
@@ -242,7 +242,7 @@ function GameDetails() {
   // Get champion JSON data from riot
   const getChampsJSON = async () => {
     try {
-      const response = await fetch('https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/champion.json');
+      const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
       const data = await response.json();
       setChampsJSON(data);
       console.log(data)
@@ -328,10 +328,16 @@ function GameDetails() {
       setGameData(payload.gameData);
       setDataDragonVersion(payload.dataDragonVersion);
     }
-    getQueueJSON();
-    getItemsJSON();
-    getChampsJSON();
   }, [])
+
+  // Get JSON after dataDragonVersion populates
+  useEffect(() => {
+    if (dataDragonVersion !== null) {
+      getQueueJSON();
+      getItemsJSON();
+      getChampsJSON();
+    }
+  }, [dataDragonVersion])
 
   // Set player data and game duration
   useEffect(() => {
@@ -579,7 +585,7 @@ function GameDetails() {
                       {playerData.riotIdGameName}
                     </a>
                   </Tooltip>
-                  <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {playerData.championName} {playerData.teamPosition.toLowerCase()} for <span style={{ color: playerData.teamId === 100 ? '#3374FF' : '#FF3F3F' }}>{playerData.teamId === 100 ? 'blue team' : 'red team'}</span> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
+                  <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for <span style={{ color: playerData.teamId === 100 ? '#3374FF' : '#FF3F3F' }}>{playerData.teamId === 100 ? 'blue team' : 'red team'}</span> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                 </Typography>
                 <Typography style={{ paddingTop: '10px', paddingBottom: '10px' }} fontSize={14}>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
                 <span style={{ textAlign: 'start' }}>
@@ -683,10 +689,30 @@ function GameDetails() {
                     <Tooltip placement='top'
                       arrow
                       disableInteractive
-                      title={<><div>{gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).riotIdGameName} ({gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).championName})<br></br>
-                        {gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).kills}/{gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).deaths}/{gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).assists}<br></br>
-                        Score: {gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).score.toFixed(1)}
-                      </div></>}
+                      title={
+                        <>
+                          <div>
+                            {(() => {
+                              const maxPlayer = gameData.info.participants.reduce(
+                                (max, player) => (player.score > (max?.score || 0) ? player : max),
+                                null
+                              );
+                              if (!maxPlayer) return "No data";
+
+                              const champion = Object.values(champsJSON.data).find(
+                                (champ) => champ.key === String(maxPlayer.championId)
+                              );
+                              return (
+                                <>
+                                  {maxPlayer.riotIdGameName} ({champion?.name || "Unknown Champion"})<br />
+                                  {maxPlayer.kills}/{maxPlayer.deaths}/{maxPlayer.assists}<br />
+                                  Score: {maxPlayer.score.toFixed(1)}
+                                </>
+                              );
+                            })()}
+                          </div>
+                        </>
+                      }
                       slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 0] } }] } }}>
                       <img style={{
                         borderRadius: '100%',
@@ -706,10 +732,30 @@ function GameDetails() {
                     <Tooltip placement='top'
                       arrow
                       disableInteractive
-                      title={<><div>{gameData.info.participants.sort((a, b) => b.score - a.score)[1].riotIdGameName} ({gameData.info.participants.sort((a, b) => b.score - a.score)[1].championName})<br></br>
-                        {gameData.info.participants.sort((a, b) => b.score - a.score)[1].kills}/{gameData.info.participants.sort((a, b) => b.score - a.score)[1].deaths}/{gameData.info.participants.sort((a, b) => b.score - a.score)[1].assists}<br></br>
-                        Score: {gameData.info.participants.sort((a, b) => b.score - a.score)[1].score.toFixed(1)}
-                      </div></>}
+                      title={
+                        <>
+                          <div>
+                            {(() => {
+                              const secondHighestPlayer = gameData.info.participants
+                                .sort((a, b) => b.score - a.score)[1];
+
+                              if (!secondHighestPlayer) return "No data";
+
+                              const champion = Object.values(champsJSON.data).find(
+                                (champ) => champ.key === String(secondHighestPlayer.championId)
+                              );
+
+                              return (
+                                <>
+                                  {secondHighestPlayer.riotIdGameName} ({champion?.name || "Unknown Champion"})<br />
+                                  {secondHighestPlayer.kills}/{secondHighestPlayer.deaths}/{secondHighestPlayer.assists}<br />
+                                  Score: {secondHighestPlayer.score.toFixed(1)}
+                                </>
+                              );
+                            })()}
+                          </div>
+                        </>
+                      }
                       slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 0] } }] } }}>
                       <img style={{
                         borderRadius: '100%',
@@ -729,29 +775,33 @@ function GameDetails() {
                     placement='top'
                     arrow
                     disableInteractive
-                    title={<><div>
-                      {gameData.info.participants.reduce(
-                        (minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
-                        null
-                      ).riotIdGameName} ({gameData.info.participants.reduce(
-                        (minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
-                        null
-                      ).championName})<br></br>
-                      {gameData.info.participants.reduce(
-                        (minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
-                        null
-                      ).kills}/{gameData.info.participants.reduce(
-                        (minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
-                        null
-                      ).deaths}/{gameData.info.participants.reduce(
-                        (minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
-                        null
-                      ).assists}<br></br>
-                      Score: {gameData.info.participants.reduce(
-                        (minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
-                        null
-                      ).score.toFixed(1)}
-                    </div></>}>
+                    title={
+                      <>
+                        <div>
+                          {(() => {
+                            const minPlayer = gameData.info.participants.reduce(
+                              (min, player) => (player.score < (min?.score ?? Infinity) ? player : min),
+                              null
+                            );
+
+                            if (!minPlayer) return "No data";
+
+                            const champion = Object.values(champsJSON.data).find(
+                              (champ) => champ.key === String(minPlayer.championId)
+                            );
+
+                            return (
+                              <>
+                                {minPlayer.riotIdGameName} ({champion?.name || "Unknown Champion"})<br />
+                                {minPlayer.kills}/{minPlayer.deaths}/{minPlayer.assists}<br />
+                                Score: {minPlayer.score.toFixed(1)}
+                              </>
+                            );
+                          })()}
+                        </div>
+                      </>
+                    }
+                  >
                     <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
                       <div
                         style={{
@@ -861,7 +911,7 @@ function GameDetails() {
                               placement='top'
                               arrow
                               slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                              <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                              <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                             </Tooltip>
                             <Tooltip
                               title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
@@ -869,7 +919,7 @@ function GameDetails() {
                               placement='top'
                               arrow
                               slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                              <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                              <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
                             </Tooltip>
                           </div>
                           <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
@@ -996,7 +1046,7 @@ function GameDetails() {
                                 </img>
                               </Tooltip>
                             ) : (
-                              <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                              <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
                                 src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item6}.png`}
                                 alt="Ward">
                               </img>
@@ -1139,7 +1189,7 @@ function GameDetails() {
                               placement='top'
                               arrow
                               slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                              <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                              <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                             </Tooltip>
                             <Tooltip
                               title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
@@ -1147,7 +1197,7 @@ function GameDetails() {
                               placement='top'
                               arrow
                               slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                              <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                              <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
                             </Tooltip>
                           </div>
                           <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
@@ -1163,7 +1213,6 @@ function GameDetails() {
                           </div>
                           <Tooltip disabledInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
                             <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><a style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}><Typography className='summonerNameTable' fontSize={'12px'}>{player.riotIdGameName}</Typography></a>
-                              {/* ********************** COMMENT THIS BACK IN LATER ******************************* */}
                               <span className={
                                 (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
                                   'TableStandingMVP' :
@@ -1279,7 +1328,7 @@ function GameDetails() {
                                 </img>
                               </Tooltip>
                             ) : (
-                              <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                              <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
                                 src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item6}.png`}
                                 alt="Ward">
                               </img>

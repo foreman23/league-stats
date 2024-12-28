@@ -1016,12 +1016,12 @@ const SummonerProfile = () => {
                   }
                 }}
                   className="DisplayGameContainer" href={gameModeHref} key={index} target="_blank" rel="noopener noreferrer">
-                  <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
+                  <DisplayGame gameData={gameData} dataDragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
                 </a>
               )
               if (recentOpen === true) return (
                 <a className="DisplayGameContainer" key={index} target="_blank" rel="noopener noreferrer">
-                  <DisplayGame gameData={gameData} ddragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
+                  <DisplayGame gameData={gameData} dataDragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
                 </a>
               )
             }

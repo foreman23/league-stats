@@ -20,6 +20,9 @@ const DisplayGame = (props) => {
     const participants = props.gameData.info.participants;
     const participant = props.gameData.info.participants.find(participant => participant.puuid === props.puuid);
 
+    // Init datadragon version
+    const dataDragonVersion = props.dataDragonVersion
+
     // Find summoner spells
     const summonerSpellsObj = Object.values(summonerSpells.data);
     const summonerSpell1 = summonerSpellsObj.find(spell => spell.key === participant.summoner1Id.toString());
@@ -129,7 +132,7 @@ const DisplayGame = (props) => {
     // Get champion JSON data from riot
     const getChampsJSON = async () => {
         try {
-            const response = await fetch('https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/champion.json');
+            const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
             const data = await response.json();
             setChampsJSON(data);
             console.log(data)
@@ -157,7 +160,6 @@ const DisplayGame = (props) => {
         else if (props.gameData.info.gameMode === 'ARAM' || props.gameData.info.gameDuration < 180) {
             const { highestDamageDealt, playersWithScores } = calculateOpScoresAram(props.gameData, participant)
             setPlayersWithOpScores(playersWithScores)
-
             setPlayerScore(playersWithScores.find(participant => participant.puuid === props.puuid))
             setOppScore(playersWithScores.find(laner => laner.teamPosition === participant.teamPosition && laner.summonerId !== participant.summonerId))
         }
@@ -268,11 +270,11 @@ const DisplayGame = (props) => {
                         >{participant.champLevel}
                         </Typography>
                         <img style={{ borderRadius: '100%', marginBottom: '3px', width: '58px', alignSelf: 'center', border: participant.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid' }} alt='champion icon'
-                            src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).id}.png`}>
+                            src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).id}.png`}>
                         </img>
                         <Grid flexDirection={'row'}>
-                            <img style={{ width: '20px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpell1.id}.png`}></img>
-                            <img style={{ width: '20px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpell2.id}.png`}></img>
+                            <img style={{ width: '20px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpell1.id}.png`}></img>
+                            <img style={{ width: '20px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpell2.id}.png`}></img>
                         </Grid>
                     </Grid>
                     <Grid display={'flex'} flexDirection={'column'} alignSelf={'center'} marginLeft={'10px'}>
@@ -313,11 +315,11 @@ const DisplayGame = (props) => {
                         >{opposingLaner.champLevel}
                         </Typography>
                         <img style={{ borderRadius: '100%', marginBottom: '3px', width: '58px', alignSelf: 'center', border: participant.teamId === 100 ? '3px #FF3A54 solid' : '3px #568CFF solid' }} alt='champion icon'
-                            src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`}>
+                            src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`}>
                         </img>
                         <Grid flexDirection={'row'}>
-                            <img style={{ width: '20px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${opposingSummonerSpell1.id}.png`}></img>
-                            <img style={{ width: '20px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${opposingSummonerSpell2.id}.png`}></img>
+                            <img style={{ width: '20px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${opposingSummonerSpell1.id}.png`}></img>
+                            <img style={{ width: '20px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${opposingSummonerSpell2.id}.png`}></img>
                         </Grid>
                     </Grid>
                     <Grid display={'flex'} flexDirection={'column'} alignSelf={'center'} marginLeft={'10px'}>

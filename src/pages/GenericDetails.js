@@ -316,9 +316,15 @@ const GenericDetails = () => {
             setGameData(payload.gameData);
             setDataDragonVersion(payload.dataDragonVersion);
         }
-        getItemsJSON();
-        getChampsJSON();
     }, [])
+
+    // Get JSON after dataDragonVersion populates
+    useEffect(() => {
+        if (dataDragonVersion !== null) {
+            getItemsJSON();
+            getChampsJSON();
+        }
+    }, [dataDragonVersion])
 
     // Set player data and game duration
     useEffect(() => {
@@ -508,7 +514,7 @@ const GenericDetails = () => {
                                                         placement='top'
                                                         arrow
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                                                     </Tooltip>
                                                     <Tooltip
                                                         title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
@@ -516,7 +522,7 @@ const GenericDetails = () => {
                                                         placement='top'
                                                         arrow
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
                                                     </Tooltip>
                                                 </div>
                                                 <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
@@ -644,7 +650,7 @@ const GenericDetails = () => {
                                                             </img>
                                                         </Tooltip>
                                                     ) : (
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                                        <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
                                                             src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item6}.png`}
                                                             alt="Ward">
                                                         </img>
@@ -787,7 +793,7 @@ const GenericDetails = () => {
                                                         placement='top'
                                                         arrow
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                                                     </Tooltip>
                                                     <Tooltip
                                                         title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
@@ -795,7 +801,7 @@ const GenericDetails = () => {
                                                         placement='top'
                                                         arrow
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
                                                     </Tooltip>
                                                 </div>
                                                 <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
@@ -923,7 +929,7 @@ const GenericDetails = () => {
                                                             </img>
                                                         </Tooltip>
                                                     ) : (
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                                        <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
                                                             src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item6}.png`}
                                                             alt="Ward">
                                                         </img>

@@ -182,7 +182,8 @@ const AramDetails = () => {
     // Get item JSON data from riot
     const getItemsJSON = async () => {
         try {
-            const response = await fetch('https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/item.json');
+            console.log(dataDragonVersion)
+            const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/item.json`);
             const data = await response.json();
             setItems(data);
         } catch (error) {
@@ -193,7 +194,7 @@ const AramDetails = () => {
     // Get champion JSON data from riot
     const getChampsJSON = async () => {
         try {
-            const response = await fetch('https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/champion.json');
+            const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
             const data = await response.json();
             setChampsJSON(data);
             console.log(data)
@@ -279,9 +280,15 @@ const AramDetails = () => {
             setGameData(payload.gameData);
             setDataDragonVersion(payload.dataDragonVersion);
         }
-        getItemsJSON();
-        getChampsJSON();
     }, [])
+
+    // Get JSON after dataDragonVersion populates
+    useEffect(() => {
+        if (dataDragonVersion !== null) {
+            getItemsJSON();
+            getChampsJSON();
+        }
+    }, [dataDragonVersion])
 
     useEffect(() => {
 
@@ -460,7 +467,7 @@ const AramDetails = () => {
                                                         placement='top'
                                                         arrow
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                                                     </Tooltip>
                                                     <Tooltip
                                                         title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
@@ -468,7 +475,7 @@ const AramDetails = () => {
                                                         placement='top'
                                                         arrow
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
                                                     </Tooltip>
                                                 </div>
                                                 <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
@@ -594,7 +601,7 @@ const AramDetails = () => {
                                                             </img>
                                                         </Tooltip>
                                                     ) : (
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                                        <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
                                                             src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item6}.png`}
                                                             alt="Ward">
                                                         </img>
@@ -735,7 +742,7 @@ const AramDetails = () => {
                                                         placement='top'
                                                         arrow
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                                                     </Tooltip>
                                                     <Tooltip
                                                         title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
@@ -743,7 +750,7 @@ const AramDetails = () => {
                                                         placement='top'
                                                         arrow
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                                                        <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
                                                     </Tooltip>
                                                 </div>
                                                 <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
@@ -869,7 +876,7 @@ const AramDetails = () => {
                                                             </img>
                                                         </Tooltip>
                                                     ) : (
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                                        <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
                                                             src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item6}.png`}
                                                             alt="Ward">
                                                         </img>
