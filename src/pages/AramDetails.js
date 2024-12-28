@@ -30,6 +30,8 @@ const AramDetails = () => {
     const [gameDuration, setGameDuration] = useState(null);
     const [items, setItems] = useState(null);
 
+    const [champsJSON, setChampsJSON] = useState(null);
+
     // Timeline data
     const [timelineData, setTimelineData] = useState(null);
 
@@ -188,6 +190,18 @@ const AramDetails = () => {
         }
     }
 
+    // Get champion JSON data from riot
+    const getChampsJSON = async () => {
+        try {
+            const response = await fetch('https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/champion.json');
+            const data = await response.json();
+            setChampsJSON(data);
+            console.log(data)
+        } catch (error) {
+            console.error('Error fetching champion JSON data:', error);
+        }
+    }
+
     const findAltRegion = (selectedRegion) => {
         // set alternate routing value
         const americasServers = ['na1', 'br1', 'la1', 'la2'];
@@ -266,6 +280,7 @@ const AramDetails = () => {
             setDataDragonVersion(payload.dataDragonVersion);
         }
         getItemsJSON();
+        getChampsJSON();
     }, [])
 
     useEffect(() => {
@@ -347,7 +362,7 @@ const AramDetails = () => {
                                 {playerData.win ? (
                                     <div className='clickableChampImageAram' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`)} style={{ position: 'relative', display: 'inline-block' }}>
                                         <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
-                                            <img style={{ margin: '20px', width: '125px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${playerData.championName}.png`} alt=''></img>
+                                            <img style={{ margin: '20px', width: '125px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''></img>
                                         </Tooltip>
                                         <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/accept.png' alt='Crown'></img>
                                         <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '125px', height: '10px', backgroundColor: playerData.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
@@ -355,7 +370,7 @@ const AramDetails = () => {
                                 ) : (
                                     <div className='clickableChampImageAram' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`)} style={{ position: 'relative', display: 'inline-block' }}>
                                         <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
-                                            <img style={{ margin: '20px', width: '125px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${playerData.championName}.png`} alt=''></img>
+                                            <img style={{ margin: '20px', width: '125px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''></img>
                                         </Tooltip>
                                         <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/close.png' alt='Crown'></img>
                                         <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '125px', height: '10px', backgroundColor: playerData.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
@@ -369,7 +384,7 @@ const AramDetails = () => {
                                             {playerData.riotIdGameName}
                                         </a>
                                     </Tooltip>
-                                    <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {playerData.championName} {playerData.teamPosition.toLowerCase()} for <span style={{ color: playerData.teamId === 100 ? '#3374FF' : '#FF3F3F' }}>{playerData.teamId === 100 ? 'blue team' : 'red team'}</span> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
+                                    <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for <span style={{ color: playerData.teamId === 100 ? '#3374FF' : '#FF3F3F' }}>{playerData.teamId === 100 ? 'blue team' : 'red team'}</span> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                                 </Typography>
                                 <Typography style={{ paddingTop: '10px', paddingBottom: '10px' }} fontSize={14}>ARAM played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
                                 <span style={{ textAlign: 'start' }}>
@@ -407,8 +422,35 @@ const AramDetails = () => {
                                     <TableRow key={index}>
                                         <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                <Tooltip title={player.championName} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img style={{ width: '38px', borderRadius: '100%', marginRight: '3px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}></img>
+                                                <Tooltip title={Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).name} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                                                    <div style={{ position: 'relative' }}>
+                                                        <Typography style={{
+                                                            fontSize: '11px',
+                                                            position: 'absolute',
+                                                            backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                                            color: 'white',
+                                                            borderRadius: '100%',
+                                                            paddingLeft: '4px',
+                                                            paddingRight: '4px',
+                                                            paddingTop: '1px',
+                                                            paddingBottom: '1px',
+                                                            textAlign: 'center',
+                                                            right: 'auto',
+                                                            bottom: 'auto',
+                                                            top: '-5px',
+                                                            left: '0px',
+                                                            justifyContent: 'center'
+                                                        }}>{player.champLevel}
+                                                        </Typography>
+                                                        <img style={{
+                                                            width: '38px',
+                                                            borderRadius: '100%',
+                                                            marginRight: '3px',
+                                                            border: player.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid'
+                                                        }}
+                                                            src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}>
+                                                        </img>
+                                                    </div>
                                                 </Tooltip>
 
                                                 <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
@@ -656,8 +698,35 @@ const AramDetails = () => {
                                     <TableRow key={index}>
                                         <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                <Tooltip title={player.championName} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img style={{ width: '38px', borderRadius: '100%', marginRight: '3px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}></img>
+                                                <Tooltip title={Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).name} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                                                    <div style={{ position: 'relative' }}>
+                                                        <Typography style={{
+                                                            fontSize: '11px',
+                                                            position: 'absolute',
+                                                            backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                                            color: 'white',
+                                                            borderRadius: '100%',
+                                                            paddingLeft: '4px',
+                                                            paddingRight: '4px',
+                                                            paddingTop: '1px',
+                                                            paddingBottom: '1px',
+                                                            textAlign: 'center',
+                                                            right: 'auto',
+                                                            bottom: 'auto',
+                                                            top: '-5px',
+                                                            left: '0px',
+                                                            justifyContent: 'center'
+                                                        }}>{player.champLevel}
+                                                        </Typography>
+                                                        <img style={{
+                                                            width: '38px',
+                                                            borderRadius: '100%',
+                                                            marginRight: '3px',
+                                                            border: player.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid'
+                                                        }}
+                                                            src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}>
+                                                        </img>
+                                                    </div>
                                                 </Tooltip>
                                                 <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
                                                     <Tooltip
@@ -895,7 +964,7 @@ const AramDetails = () => {
                     <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '45px', textAlign: 'center', marginBottom: '150px' }}>
                         <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
                             <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
-                                <Battles gameData={gameData} timelineData={timelineData}></Battles>
+                                <Battles gameData={gameData} champsJSON={champsJSON} timelineData={timelineData}></Battles>
                             </Grid>
                         </Grid>
                     </Grid>

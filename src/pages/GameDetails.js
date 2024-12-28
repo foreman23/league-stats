@@ -1419,7 +1419,7 @@ function GameDetails() {
             <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '45px', textAlign: 'center', marginBottom: '150px' }}>
               <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
                 <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
-                  <Battles gameData={gameData} timelineData={timelineData}></Battles>
+                  <Battles gameData={gameData} champsJSON={champsJSON} timelineData={timelineData}></Battles>
                 </Grid>
               </Grid>
             </Grid>

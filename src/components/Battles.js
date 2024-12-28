@@ -6,6 +6,7 @@ const Battles = (props) => {
     const timelineData = props.timelineData;
     const gameData = props.gameData;
     const participants = gameData.info.participants;
+    const champsJSON = props.champsJSON;
     // console.log(timelineData)
     console.log(gameData)
 
@@ -88,7 +89,7 @@ const Battles = (props) => {
                             if (victim.teamId === 200) {
                                 blueKills += 1;
                             }
-                            detailsStr += `${victim.riotIdGameName} (${victim.championName}) died. `;
+                            detailsStr += `${victim.riotIdGameName} (${Object.values(champsJSON.data).find(champ => champ.key === String(victim.championId)).name }) died. `;
                         }
                         else if (kill.type === 'BUILDING_KILL') {
                             let buildingName = null;
@@ -242,7 +243,7 @@ const Battles = (props) => {
                 if (victim.teamId === 200) {
                     blueKills += 1;
                 }
-                detailsStr += `${victim.riotIdGameName} (${victim.championName}) died. `;
+                detailsStr += `${victim.riotIdGameName} (${Object.values(champsJSON.data).find(champ => champ.key === String(victim.championId)).name }) died. `;
             }
             else if (kill.type === 'BUILDING_KILL') {
                 let buildingName = null;
