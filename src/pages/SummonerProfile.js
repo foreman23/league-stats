@@ -117,7 +117,7 @@ const SummonerProfile = () => {
 
   const [loadingMatches, setLoadingMatches] = useState(false);
 
-  // Update matches involving user (for first 1) ***can increase limit later
+  // Update matches involving user can increase limit later
   const updateUserMatchInfo = useCallback(async (data) => {
     let historyData = data.historyData
     setHistoryState(historyData)
@@ -600,27 +600,32 @@ const SummonerProfile = () => {
       let favsStr = localStorage.getItem('favorites')
       let favsArr = JSON.parse(favsStr)
       console.log(favsArr)
-      if (favsArr.some(obj =>
-        obj.selectedRegion === summonerObj.selectedRegion &&
-        obj.summonerName === summonerObj.summonerName &&
-        obj.riotId === summonerObj.riotId
-      )) {
-        // Update favorite summoner info
-        favsArr = favsArr.map(obj => {
-          if (
-            obj.selectedRegion === summonerObj.selectedRegion &&
-            obj.summonerName === summonerObj.summonerName &&
-            obj.riotId === summonerObj.riotId
-          ) {
-            return {
-              ...obj,
-              ...summonerObj
+      if (favsArr) {
+        if (favsArr.some(obj =>
+          obj.selectedRegion === summonerObj.selectedRegion &&
+          obj.summonerName === summonerObj.summonerName &&
+          obj.riotId === summonerObj.riotId
+        )) {
+          // Update favorite summoner info
+          favsArr = favsArr.map(obj => {
+            if (
+              obj.selectedRegion === summonerObj.selectedRegion &&
+              obj.summonerName === summonerObj.summonerName &&
+              obj.riotId === summonerObj.riotId
+            ) {
+              return {
+                ...obj,
+                ...summonerObj
+              }
             }
-          }
-          return obj;
-        })
-        setFavorited(true);
-        localStorage.setItem('favorites', JSON.stringify(favsArr))
+            return obj;
+          })
+          setFavorited(true);
+          localStorage.setItem('favorites', JSON.stringify(favsArr))
+          // Create favorites array if not exist
+        } else {
+          localStorage.setItem('favorites', JSON.stringify([]))
+        }
       }
 
       if (recentSearches === null) {
@@ -827,7 +832,7 @@ const SummonerProfile = () => {
                           {
                             Object.values(champsJSON.data).find(
                               champ => champ.key === String(summonerData.masteryData[0].championId)
-                            ).id
+                            ).name
                           }
                         </div>
                         <div>Level: {summonerData.masteryData[0].championLevel}</div>
@@ -870,7 +875,7 @@ const SummonerProfile = () => {
                           {
                             Object.values(champsJSON.data).find(
                               champ => champ.key === String(summonerData.masteryData[1].championId)
-                            ).id
+                            ).name
                           }
                         </div>
                         <div>Level: {summonerData.masteryData[1].championLevel}</div>
@@ -913,7 +918,7 @@ const SummonerProfile = () => {
                           {
                             Object.values(champsJSON.data).find(
                               champ => champ.key === String(summonerData.masteryData[2].championId)
-                            ).id
+                            ).name
                           }
                         </div>
                         <div>Level: {summonerData.masteryData[2].championLevel}</div>

@@ -14,6 +14,8 @@ const DisplayGame = (props) => {
     const [timeSinceMatch, setTimeSinceMatch] = useState(null);
     const [matchType, setMatchType] = useState(null);
 
+    const [champsJSON, setChampsJSON] = useState(null);
+
     // Find participant
     const participants = props.gameData.info.participants;
     const participant = props.gameData.info.participants.find(participant => participant.puuid === props.puuid);
@@ -124,6 +126,18 @@ const DisplayGame = (props) => {
         }
     }
 
+    // Get champion JSON data from riot
+    const getChampsJSON = async () => {
+        try {
+            const response = await fetch('https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/champion.json');
+            const data = await response.json();
+            setChampsJSON(data);
+            console.log(data)
+        } catch (error) {
+            console.error('Error fetching champion JSON data:', error);
+        }
+    }
+
     const [matchText, setMatchText] = useState(null);
     const [playersWithOpScores, setPlayersWithOpScores] = useState(null);
     const [playerScore, setPlayerScore] = useState(null);
@@ -131,6 +145,7 @@ const DisplayGame = (props) => {
     useEffect(() => {
         // Fetch queue data JSON
         getQueueJSON();
+        getChampsJSON();
         if (props.gameData.info.gameMode !== 'ARAM' && props.gameData.info.gameDuration > 180) {
             const { matchSummaryText, highestDamageDealt, playersWithScores } = calculateOpScores(props.gameData, participant)
             setMatchText(matchSummaryText)
@@ -153,11 +168,11 @@ const DisplayGame = (props) => {
     // Set loading to false when data is loaded
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        if (playersWithOpScores !== null && playerScore !== null && oppScore !== null) {
+        if (playersWithOpScores !== null && playerScore !== null && oppScore !== null && champsJSON !== null) {
             setIsLoading(false)
         }
 
-    }, [playersWithOpScores, playerScore, oppScore])
+    }, [playersWithOpScores, playerScore, oppScore, champsJSON])
 
     useEffect(() => {
 
@@ -253,7 +268,7 @@ const DisplayGame = (props) => {
                         >{participant.champLevel}
                         </Typography>
                         <img style={{ borderRadius: '100%', marginBottom: '3px', width: '58px', alignSelf: 'center', border: participant.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid' }} alt='champion icon'
-                            src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${participant.championName}.png`}>
+                            src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).id}.png`}>
                         </img>
                         <Grid flexDirection={'row'}>
                             <img style={{ width: '20px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${summonerSpell1.id}.png`}></img>
@@ -261,7 +276,7 @@ const DisplayGame = (props) => {
                         </Grid>
                     </Grid>
                     <Grid display={'flex'} flexDirection={'column'} alignSelf={'center'} marginLeft={'10px'}>
-                        <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>{participant.championName}</Typography>
+                        <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).name}</Typography>
                         <Typography style={{ fontSize: '13px' }}>{participant.kills}/{participant.deaths}/{participant.assists}</Typography>
                         <Box marginTop={'3px'} marginBottom={'3px'} alignSelf={'center'} width={'7px'} height={'7px'} borderRadius={'100%'} backgroundColor={'#BFBFBF'}></Box>
                         <Typography style={{ fontSize: '13px' }}>{participant.totalMinionsKilled + participant.neutralMinionsKilled} CS</Typography>
@@ -298,7 +313,7 @@ const DisplayGame = (props) => {
                         >{opposingLaner.champLevel}
                         </Typography>
                         <img style={{ borderRadius: '100%', marginBottom: '3px', width: '58px', alignSelf: 'center', border: participant.teamId === 100 ? '3px #FF3A54 solid' : '3px #568CFF solid' }} alt='champion icon'
-                            src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${opposingLaner.championName}.png`}>
+                            src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`}>
                         </img>
                         <Grid flexDirection={'row'}>
                             <img style={{ width: '20px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/spell/${opposingSummonerSpell1.id}.png`}></img>
@@ -306,7 +321,7 @@ const DisplayGame = (props) => {
                         </Grid>
                     </Grid>
                     <Grid display={'flex'} flexDirection={'column'} alignSelf={'center'} marginLeft={'10px'}>
-                        <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>{opposingLaner.championName}</Typography>
+                        <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).name}</Typography>
                         <Typography style={{ fontSize: '13px' }}>{opposingLaner.kills}/{opposingLaner.deaths}/{opposingLaner.assists}</Typography>
                         <Box marginTop={'3px'} marginBottom={'3px'} alignSelf={'center'} width={'7px'} height={'7px'} borderRadius={'100%'} backgroundColor={'#BFBFBF'}></Box>
                         <Typography style={{ fontSize: '13px' }}>{opposingLaner.totalMinionsKilled + opposingLaner.neutralMinionsKilled} CS</Typography>

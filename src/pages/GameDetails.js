@@ -22,6 +22,8 @@ import TeamGoldDifGraph from '../components/TeamGoldDifGraph';
 import generateGraphData from '../functions/GenerateGraphData';
 import calculateOpScores from '../functions/CalculateOpScores';
 import generateShortSummary from '../functions/GenerateShortSummary';
+import { doc, getDoc } from 'firebase/firestore';
+import { firestore } from '../FirebaseConfig';
 
 function GameDetails() {
 
@@ -31,7 +33,7 @@ function GameDetails() {
 
 
   // Init state
-  const { summonerName } = useParams();
+  const { matchId, summonerName } = useParams();
   const [gameData, setGameData] = useState(null);
   const [alternateRegion, setAlternateRegion] = useState(null);
   const [dataDragonVersion, setDataDragonVersion] = useState(null);
@@ -42,6 +44,8 @@ function GameDetails() {
   const [gameStartDate, setGameStartDate] = useState(null);
   const [gameDuration, setGameDuration] = useState(null);
   const [items, setItems] = useState(null);
+
+  const [champsJSON, setChampsJSON] = useState(null);
 
   // Card states (lane summaries)
   const [topSummaryCardStatus, setTopSummaryCardStatus] = useState(true);
@@ -235,14 +239,98 @@ function GameDetails() {
     }
   }
 
+  // Get champion JSON data from riot
+  const getChampsJSON = async () => {
+    try {
+      const response = await fetch('https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/champion.json');
+      const data = await response.json();
+      setChampsJSON(data);
+      console.log(data)
+    } catch (error) {
+      console.error('Error fetching champion JSON data:', error);
+    }
+  }
+
+  const findAltRegion = (selectedRegion) => {
+    // set alternate routing value
+    const americasServers = ['na1', 'br1', 'la1', 'la2'];
+    const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
+    const europeServer = ['eun1', 'euw1', 'tr1', 'ru'];
+
+    let alternateRegion = null
+
+    if (americasServers.includes(selectedRegion)) {
+      alternateRegion = 'americas'
+    }
+    if (asiaServers.includes(selectedRegion)) {
+      const seaServer = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2']
+      if (seaServer.includes(selectedRegion)) {
+        alternateRegion = 'sea'
+      }
+      else {
+        alternateRegion = 'asia'
+      }
+    }
+    if (europeServer.includes(selectedRegion)) {
+      alternateRegion = 'europe'
+    }
+    return alternateRegion
+  }
+
+  // Set the current ddragon version
+  const getDataDragonVersion = async () => {
+    axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
+      .then(function (response) {
+        // console.log(response.data[0])
+        const currentVersion = response.data[0];
+        setDataDragonVersion(currentVersion);
+      })
+      .catch(function (response) {
+        console.log('Error: Error fetching datadragon version')
+      })
+  }
+
+  const fetchGameData = async () => {
+    let riotApiCallCount = 0;
+    let region = matchId.split('_')[0].toLowerCase()
+    console.log(region)
+    const docRef = doc(firestore, `${region}-matches`, matchId)
+    console.log('Reading from firestore (checking match exists)')
+    const docSnap = await getDoc(docRef);
+    // If match exists
+    if (docSnap.exists()) {
+      let altRegion = findAltRegion(region)
+      setAlternateRegion(altRegion)
+      setGameData(docSnap.data().matchData)
+      getDataDragonVersion()
+    }
+    // Else match not found (bad link)
+    else {
+      navigate('/*')
+    }
+  }
+
   // On initial page load
   useEffect(() => {
-    let payload = JSON.parse(localStorage.getItem('gameData')); // FIX THIS IT WON'T WORK IF SOMEONE FOLLOWS LINK FROM OUTSIDE SOURCE
-    setAlternateRegion(payload.alternateRegion);
-    setGameData(payload.gameData);
-    setDataDragonVersion(payload.dataDragonVersion);
+    let payload = JSON.parse(localStorage.getItem('gameData'));
+    // Match ID mistmatch on follow external link
+    if (payload === null || payload.gameData.metadata.matchId !== matchId) {
+      fetchGameData()
+    }
+    else if (payload !== null) {
+      // Special edge case for special Oceania
+      const seaServer = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2']
+      if (seaServer.includes(payload.gameData.metadata.matchId.split('_')[0].toLowerCase())) {
+        setAlternateRegion('sea')
+      } else {
+        setAlternateRegion(payload.alternateRegion);
+      }
+      setGameData(payload.gameData);
+      setDataDragonVersion(payload.dataDragonVersion);
+    }
     getQueueJSON();
     getItemsJSON();
+    getChampsJSON();
   }, [])
 
   // Set player data and game duration
@@ -283,12 +371,12 @@ function GameDetails() {
   }, [playerData, opposingLaner])
 
   useEffect(() => {
-    if (queues) {
+    if (queues && gameData) {
       // Call queue title function
       findQueueTitle();
     }
 
-  }, [queues])
+  }, [queues, gameData])
 
   useEffect(() => {
     if (graphData) {
@@ -400,6 +488,7 @@ function GameDetails() {
     if (gameData && alternateRegion) {
       const getMatchTimeline = async (alternateRegion, matchId) => {
         console.log('CALLING RIOT API');
+        console.log(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`)
         const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
         const timelineData = timelineResponse.data;
         setTimelineData(timelineData);
@@ -445,7 +534,7 @@ function GameDetails() {
                   <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                     <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
                       <img
-                        style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${playerData.championName}.png`} alt=''>
+                        style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''>
                       </img>
                     </Tooltip>
                     <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/accept.png' alt='Crown'></img>
@@ -455,7 +544,7 @@ function GameDetails() {
                   <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                     <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
                       <img
-                        style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${playerData.championName}.png`} alt=''>
+                        style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''>
                       </img>
                     </Tooltip>
                     <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/close.png' alt='Crown'></img>
@@ -467,7 +556,7 @@ function GameDetails() {
                   <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                     <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
                       <img
-                        style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${opposingLaner.championName}.png`} alt=''>
+                        style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`} alt=''>
                       </img>
                     </Tooltip>
                     <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId !== 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}></Box>
@@ -476,7 +565,7 @@ function GameDetails() {
                   <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', color: 'red', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                     <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
                       <img
-                        style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${opposingLaner.championName}.png`} alt=''>
+                        style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`} alt=''>
                       </img>
                     </Tooltip>
                     <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId !== 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
@@ -607,7 +696,8 @@ function GameDetails() {
                         marginRight: '20px',
                         margin: 'auto'
                       }}
-                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).championName}.png`} alt=''>
+                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).championId)).id}.png`} alt=''
+                      >
                       </img>
                     </Tooltip>
                     <img style={{ margin: 'auto', marginTop: '0px' }} src='/images/text/MVP.png'></img>
@@ -629,7 +719,8 @@ function GameDetails() {
                         marginRight: '20px',
                         margin: 'auto'
                       }}
-                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${gameData.info.participants.sort((a, b) => b.score - a.score)[1].championName}.png`} alt=''>
+                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(gameData.info.participants.sort((a, b) => b.score - a.score)[1].championId)).id}.png`} alt=''
+                      >
                       </img>
                     </Tooltip>
                     <img style={{ margin: 'auto', marginTop: '0px' }} src='/images/text/2ND.png'></img>
@@ -690,12 +781,7 @@ function GameDetails() {
                             height: '70px',
                             filter: 'grayscale(80%)',
                           }}
-                          src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${gameData.info.participants.reduce(
-                            (minPlayer, player) =>
-                              player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
-                            null
-                          ).championName}.png`}
-                          alt=""
+                          src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(gameData.info.participants.reduce((minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer, null).championId)).id}.png`} alt=''
                         />
                       </div>
                       <img style={{ margin: 'auto', marginTop: '0px' }} src='/images/text/INT.png' />
@@ -738,7 +824,7 @@ function GameDetails() {
                     <TableRow key={index}>
                       <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                          <Tooltip title={player.championName} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                          <Tooltip title={Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).name} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
                             <div style={{ position: 'relative' }}>
                               <Typography style={{
                                 fontSize: '11px',
@@ -764,7 +850,7 @@ function GameDetails() {
                                 marginRight: '3px',
                                 border: player.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid'
                               }}
-                                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}>
+                                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}>
                               </img>
                             </div>
                           </Tooltip>
@@ -1016,7 +1102,7 @@ function GameDetails() {
                     <TableRow key={index}>
                       <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                          <Tooltip title={player.championName} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                          <Tooltip title={Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).name} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
                             <div style={{ position: 'relative' }}>
                               <Typography style={{
                                 fontSize: '11px',
@@ -1042,7 +1128,7 @@ function GameDetails() {
                                 marginRight: '3px',
                                 border: player.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid'
                               }}
-                                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${player.championName}.png`}>
+                                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}>
                               </img>
                             </div>
                           </Tooltip>
@@ -1293,10 +1379,10 @@ function GameDetails() {
                 <Typography fontSize={20} fontWeight={600}>Laning Phase Results</Typography>
                 <Typography marginBottom={'20px'}>How each lane was performing @ 15 minutes</Typography>
 
-                <LanePhaseSummaryCardTop gameData={gameData} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedTop={lastButtonPressedTop} topSummaryCardStatus={topSummaryCardStatus}></LanePhaseSummaryCardTop>
-                <LanePhaseSummaryCardJg gameData={gameData} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedJg={lastButtonPressedJg} jgSummaryCardStatus={jgSummaryCardStatus}></LanePhaseSummaryCardJg>
-                <LanePhaseSummaryCardMid gameData={gameData} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedMid={lastButtonPressedMid} midSummaryCardStatus={midSummaryCardStatus}></LanePhaseSummaryCardMid>
-                <LanePhaseSummaryCardBot gameData={gameData} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedBot={lastButtonPressedBot} botSummaryCardStatus={botSummaryCardStatus}></LanePhaseSummaryCardBot>
+                <LanePhaseSummaryCardTop gameData={gameData} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedTop={lastButtonPressedTop} topSummaryCardStatus={topSummaryCardStatus}></LanePhaseSummaryCardTop>
+                <LanePhaseSummaryCardJg gameData={gameData} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedJg={lastButtonPressedJg} jgSummaryCardStatus={jgSummaryCardStatus}></LanePhaseSummaryCardJg>
+                <LanePhaseSummaryCardMid gameData={gameData} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedMid={lastButtonPressedMid} midSummaryCardStatus={midSummaryCardStatus}></LanePhaseSummaryCardMid>
+                <LanePhaseSummaryCardBot gameData={gameData} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedBot={lastButtonPressedBot} botSummaryCardStatus={botSummaryCardStatus}></LanePhaseSummaryCardBot>
 
               </Grid>
             </Grid>

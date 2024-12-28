@@ -8,6 +8,8 @@ import runes from '../jsonData/runes.json';
 import summonerSpells from '../jsonData/summonerSpells.json';
 import Battles from '../components/Battles';
 import axios from 'axios';
+import { doc, getDoc } from 'firebase/firestore';
+import { firestore } from '../FirebaseConfig';
 
 const GenericDetails = () => {
 
@@ -18,7 +20,7 @@ const GenericDetails = () => {
     const [queues, setQueues] = useState(null);
 
     // Init state
-    const { summonerName } = useParams();
+    const { matchId, summonerName } = useParams();
     const [gameData, setGameData] = useState(null);
     const [alternateRegion, setAlternateRegion] = useState(null);
     const [dataDragonVersion, setDataDragonVersion] = useState(null);
@@ -223,13 +225,83 @@ const GenericDetails = () => {
         }
     }
 
+    const findAltRegion = (selectedRegion) => {
+        // set alternate routing value
+        const americasServers = ['na1', 'br1', 'la1', 'la2'];
+        const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
+        const europeServer = ['eun1', 'euw1', 'tr1', 'ru'];
+
+        let alternateRegion = null
+
+        if (americasServers.includes(selectedRegion)) {
+            alternateRegion = 'americas'
+        }
+        if (asiaServers.includes(selectedRegion)) {
+            const seaServer = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2']
+            if (seaServer.includes(selectedRegion)) {
+                alternateRegion = 'sea'
+            }
+            else {
+                alternateRegion = 'asia'
+            }
+        }
+        if (europeServer.includes(selectedRegion)) {
+            alternateRegion = 'europe'
+        }
+        return alternateRegion
+    }
+
+    // Set the current ddragon version
+    const getDataDragonVersion = async () => {
+        axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
+            .then(function (response) {
+                // console.log(response.data[0])
+                const currentVersion = response.data[0];
+                setDataDragonVersion(currentVersion);
+            })
+            .catch(function (response) {
+                console.log('Error: Error fetching datadragon version')
+            })
+    }
+
+    const fetchGameData = async () => {
+        let riotApiCallCount = 0;
+        let region = matchId.split('_')[0].toLowerCase()
+        console.log(region)
+        const docRef = doc(firestore, `${region}-matches`, matchId)
+        console.log('Reading from firestore (checking match exists)')
+        const docSnap = await getDoc(docRef);
+        // If match exists
+        if (docSnap.exists()) {
+            let altRegion = findAltRegion(region)
+            setAlternateRegion(altRegion)
+            setGameData(docSnap.data().matchData)
+            getDataDragonVersion()
+        }
+        // Else match not found (bad link)
+        else {
+            navigate('/*')
+        }
+    }
+
     // On initial page load
     useEffect(() => {
         let payload = JSON.parse(localStorage.getItem('gameData'));
-        setAlternateRegion(payload.alternateRegion);
-        setGameData(payload.gameData);
-        setDataDragonVersion(payload.dataDragonVersion);
-        getQueueJSON();
+        // Match ID mistmatch on follow external link
+        if (payload === null || payload.gameData.metadata.matchId !== matchId) {
+            fetchGameData()
+        }
+        else if (payload !== null) {
+            // Special edge case for special Oceania
+            const seaServer = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2']
+            if (seaServer.includes(payload.gameData.metadata.matchId.split('_')[0].toLowerCase())) {
+                setAlternateRegion('sea')
+            } else {
+                setAlternateRegion(payload.alternateRegion);
+            }
+            setGameData(payload.gameData);
+            setDataDragonVersion(payload.dataDragonVersion);
+        }
         getItemsJSON();
     }, [])
 

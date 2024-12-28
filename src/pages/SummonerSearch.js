@@ -128,6 +128,8 @@ function SummonerSearch() {
     let prevRegion = localStorage.getItem('searchRegion')
     if (prevRegion !== null) {
       setSelectedRegion(prevRegion)
+    } else {
+      setSelectedRegion('na1')
     }
   }
 

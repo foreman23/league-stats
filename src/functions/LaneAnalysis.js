@@ -60,7 +60,8 @@ const pair15Data = (timelineResponse, kda, gameData) => {
             gold: statsAt15[participantId].totalGold,
             teamId: participantData.teamId,
             wonGame: participantData.win,
-            kdaAlt: `${kdaObj.kills}/${kdaObj.deaths}/${kdaObj.assists}`
+            kdaAlt: `${kdaObj.kills}/${kdaObj.deaths}/${kdaObj.assists}`,
+            championId: participantData.championId
             // wonLane: 
         }
         statsAt15Arr.push(statsForPlayerAt15)
