@@ -26,7 +26,7 @@ const LanePhaseSummaryCardTop = (props) => {
   let loserChampName = Object.values(champsJSON.data).find(champ => champ.key === String(statsAt15.laneResults.TOP.laneLoser.championId)).id
 
   return (
-    <div>
+    <div id='laningTopAnchor'>
       <Grid
         className={topSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'}
         container

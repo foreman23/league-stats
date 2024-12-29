@@ -1,5 +1,17 @@
-const generateShortSummary = (gameData, playerData, timelineData, stats15, champsJSON) => {
-    console.log(playerData)
+// Get champion JSON data from riot
+const getChampsJSON = async (dataDragonVersion) => {
+    try {
+      const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
+      const data = await response.json();
+      return data
+    } catch (error) {
+      console.error('Error fetching champion JSON data:', error);
+    }
+  }
+
+const generateShortSummary = async (gameData, playerData, timelineData, stats15, dataDragonVersion) => {
+    const champsJSON = await getChampsJSON(dataDragonVersion)
+    console.log(champsJSON)
     let lanes = stats15.laneResults;
     console.log(lanes)
     let roles = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM'];
@@ -46,6 +58,17 @@ const generateShortSummary = (gameData, playerData, timelineData, stats15, champ
         }
     }
 
+    // Handle section button click
+    const scrollToSection = (id) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+            })
+        }
+    }
+
     // Assemble match summary text
     let matchSummaryText = null;
     let playerChampionName = null;
@@ -78,11 +101,11 @@ const generateShortSummary = (gameData, playerData, timelineData, stats15, champ
         oppWinChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(lanes.MIDDLE.laneWinner.championId)).name
         // Player won lane
         if (lanes.MIDDLE.laneWinner.riotIdGameName === playerData.riotIdGameName) {
-            matchSummaryText = `In laning phase, '${playerData.riotIdGameName}' (${playerChampionName}) ${midDescEndGame} against '${lanes.MIDDLE.laneLoser.riotIdGameName}' (${oppLoseChampionName}) while their team ${topDescEndGame}, ${jgDescEndGame}, and ${botDescEndGame}.`
+            matchSummaryText = (<>In laning phase, <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{playerData.riotIdGameName}' ({playerChampionName})</a> <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningMidAnchor')}>{midDescEndGame}</u> against <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${lanes.MIDDLE.laneLoser.riotIdGameName}/${lanes.MIDDLE.laneLoser.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{lanes.MIDDLE.laneLoser.riotIdGameName}' ({oppLoseChampionName})</a> while their team <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningTopAnchor')}>{topDescEndGame}</u>, <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningJgAnchor')}>{jgDescEndGame}</u>, and <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningBotAnchor')}>{botDescEndGame}</u>.</>)
         }
         // Player lost lane
         else {
-            matchSummaryText = `In laning phase, '${playerData.riotIdGameName}' (${playerChampionName}) ${midDescEndGame} against '${lanes.MIDDLE.laneWinner.riotIdGameName}' (${oppWinChampionName}) while their team ${topDescEndGame}, ${jgDescEndGame}, and ${botDescEndGame}.`
+            matchSummaryText = (<>In laning phase, <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{playerData.riotIdGameName}' ({playerChampionName})</a> {midDescEndGame} against '{lanes.MIDDLE.laneWinner.riotIdGameName}' (${oppWinChampionName}) while their team {topDescEndGame}, {jgDescEndGame}, and {botDescEndGame}.</>)
         }
     }
     else if (playerData.teamPosition === 'BOTTOM' || playerData.teamPosition === 'UTILITY') {

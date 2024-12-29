@@ -26,7 +26,7 @@ const LanePhaseSummaryCardJg = (props) => {
     let loserChampName = Object.values(champsJSON.data).find(champ => champ.key === String(statsAt15.laneResults.JUNGLE.laneLoser.championId)).id
 
     return (
-        <div>
+        <div id='laningJgAnchor'>
             <Grid
                 className={jgSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'}
                 container

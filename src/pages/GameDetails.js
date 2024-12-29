@@ -171,7 +171,7 @@ function GameDetails() {
           const graphData = await generateGraphData(gameData, timelineData);
           const stats15 = await getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData);
           setGraphData(graphData);
-          const shortSummaryRes = generateShortSummary(gameData, playerData, timelineData, stats15, champsJSON)
+          const shortSummaryRes = await generateShortSummary(gameData, playerData, timelineData, stats15, dataDragonVersion)
           setShortSummary(shortSummaryRes)
           setStatsAt15(stats15);
         }
@@ -531,7 +531,7 @@ function GameDetails() {
         <div id={'SummaryAnchor'} style={{ backgroundColor: 'white' }}>
           <Navbar></Navbar>
 
-          <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '20px' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '20px'}} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
             {/* Section 1 */}
             <Grid container marginLeft={'2%'} marginRight={'2%'} marginTop={'2%'} maxWidth={'90%'}>

@@ -26,7 +26,7 @@ const LanePhaseSummaryCardMid = (props) => {
     let loserChampName = Object.values(champsJSON.data).find(champ => champ.key === String(statsAt15.laneResults.MIDDLE.laneLoser.championId)).id
 
     return (
-        <div>
+        <div id='laningMidAnchor'>
             <Grid className={midSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'} container style={{ flexDirection: 'row', display: 'inline-flex', alignItems: 'center' }}>
                 <Grid item xs={12} style={{ display: 'inline-flex', alignItems: 'center' }}>
                     <Grid style={{ marginRight: '35px' }} xs={6}>

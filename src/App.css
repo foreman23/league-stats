@@ -258,5 +258,13 @@
     cursor: default;
 }
 
-.teamSummaryInfoText {
+.matchSummaryLaneLink {
+    cursor: pointer;
+}
+
+.matchSummaryPlayerLink {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
 }
