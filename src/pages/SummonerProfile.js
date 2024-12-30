@@ -967,7 +967,17 @@ const SummonerProfile = () => {
           </Grid> */}
         </Grid>
 
-        <Box justifyContent={'center'} width={'33vw'} margin={'auto'} borderRadius={'5px'} marginTop={'20px'} paddingTop={'10px'} paddingBottom={'25px'}>
+        <Box 
+          sx={{
+            justifyContent: 'center',
+            width: { xs: '95%', sm: '60%', lg: '45%', xl: '33%' },
+            margin: 'auto',
+            borderRadius: '5px',
+            marginTop: '20px',
+            paddingTop: '10px',
+            paddingBottom: '25px'
+          }}
+          >
           {(loadingMatches) ? (
             <div style={{ textAlign: 'center' }} >
               <CircularProgress />

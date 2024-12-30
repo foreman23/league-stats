@@ -631,7 +631,7 @@ function GameDetails() {
 
               <Grid container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto', marginTop: '-10px' }}>
                 {/* Red Team */}
-                <Grid item xs={3} style={{ textAlign: 'right', paddingRight: '16px', marginLeft: '140px' }}>
+                <Grid item xs={3} style={{ textAlign: 'right', paddingRight: '16px' }}>
                   <Typography style={{ color: '#FF3F3F', fontWeight: 'bold', fontSize: '22px' }}>Red Team</Typography>
                   <Table size='small' style={{ borderCollapse: "collapse" }}>
                     <TableBody>
@@ -1428,7 +1428,7 @@ function GameDetails() {
             </Box>
           ) : (
             <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginTop: '45px', textAlign: 'center', marginBottom: '45px' }}>
-              <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
+              <Grid sx={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: { xs: '1000px', lg: '60%', xl: '1000px' } }}>
                 <Typography fontSize={20} fontWeight={600}>Laning Phase Results</Typography>
                 {gameData.info.gameDuration > 900 ? (
                   <Typography marginBottom={'20px'}>How each lane was performing @ 15 minutes</Typography>
