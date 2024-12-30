@@ -80,9 +80,9 @@ const generateShortSummary = async (gameData, playerData, timelineData, stats15,
         oppLoseChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(lanes.TOP.laneLoser.championId)).name
         oppWinChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(lanes.TOP.laneWinner.championId)).name
         if (lanes.TOP.laneWinner.riotIdGameName === playerData.riotIdGameName) {
-            matchSummaryText = `In laning phase, '${playerData.riotIdGameName}' (${playerChampionName}) ${topDescEndGame} against '${lanes.TOP.laneLoser.riotIdGameName}' (${oppLoseChampionName}) while their team ${jgDescEndGame}, ${midDescEndGame}, and ${botDescEndGame}.`
+            matchSummaryText = (<>In laning phase, <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{playerData.riotIdGameName}' ({playerChampionName})</a> <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningTopAnchor')}>{topDescEndGame}</u> against <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${lanes.TOP.laneLoser.riotIdGameName}/${lanes.TOP.laneLoser.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{lanes.TOP.laneLoser.riotIdGameName}' ({oppLoseChampionName})</a> while their team <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningJgAnchor')}>{jgDescEndGame}</u>, <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningMidAnchor')}>{midDescEndGame}</u>, and <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningBotAnchor')}>{botDescEndGame}</u>.</>)
         } else {
-            matchSummaryText = `In laning phase, '${playerData.riotIdGameName}' (${playerChampionName}) ${topDescEndGame} against '${lanes.TOP.laneWinner.riotIdGameName}' (${oppWinChampionName}) while their team ${jgDescEndGame}, ${midDescEndGame}, and ${botDescEndGame}.`
+            matchSummaryText = (<>In laning phase, <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{playerData.riotIdGameName}' ({playerChampionName})</a> <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningTopAnchor')}>{topDescEndGame}</u> against <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${lanes.TOP.laneWinner.riotIdGameName}/${lanes.TOP.laneWinner.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{lanes.TOP.laneWinner.riotIdGameName}' ({oppWinChampionName})</a> while their team <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningJgAnchor')}>{jgDescEndGame}</u>, <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningMidAnchor')}>{midDescEndGame}</u>, and <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningBotAnchor')}>{botDescEndGame}</u>.</>)
         }
     }
     if (playerData.teamPosition === 'JUNGLE') {
@@ -90,9 +90,9 @@ const generateShortSummary = async (gameData, playerData, timelineData, stats15,
         oppLoseChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(lanes.JUNGLE.laneLoser.championId)).name
         oppWinChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(lanes.JUNGLE.laneWinner.championId)).name
         if (lanes.JUNGLE.laneWinner.riotIdGameName === playerData.riotIdGameName) {
-            matchSummaryText = `In laning phase, '${playerData.riotIdGameName}' (${playerChampionName}) ${jgDescEndGame} against '${lanes.JUNGLE.laneLoser.riotIdGameName}' (${oppLoseChampionName}) while their team ${topDescEndGame}, ${midDescEndGame}, and ${botDescEndGame}.`
+            matchSummaryText = (<>In laning phase, <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{playerData.riotIdGameName}' ({playerChampionName})</a> <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningJgAnchor')}>{jgDescEndGame}</u> against <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${lanes.JUNGLE.laneLoser.riotIdGameName}/${lanes.JUNGLE.laneLoser.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{lanes.JUNGLE.laneLoser.riotIdGameName}' ({oppLoseChampionName})</a> while their team <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningTopAnchor')}>{topDescEndGame}</u>, <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningMidAnchor')}>{midDescEndGame}</u>, and <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningBotAnchor')}>{botDescEndGame}</u>.</>)
         } else {
-            matchSummaryText = `In laning phase, '${playerData.riotIdGameName}' (${playerChampionName}) ${jgDescEndGame} against '${lanes.JUNGLE.laneWinner.riotIdGameName}' (${oppWinChampionName}) while their team ${topDescEndGame}, ${midDescEndGame}, and ${botDescEndGame}.`
+            matchSummaryText = (<>In laning phase, <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{playerData.riotIdGameName}' ({playerChampionName})</a> <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningJgAnchor')}>{jgDescEndGame}</u> against <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${lanes.JUNGLE.laneWinner.riotIdGameName}/${lanes.JUNGLE.laneWinner.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{lanes.JUNGLE.laneWinner.riotIdGameName}' ({oppWinChampionName})</a> while their team <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningTopAnchor')}>{topDescEndGame}</u>, <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningMidAnchor')}>{midDescEndGame}</u>, and <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningBotAnchor')}>{botDescEndGame}</u>.</>)
         }
     }
     if (playerData.teamPosition === 'MIDDLE') {
@@ -105,10 +105,11 @@ const generateShortSummary = async (gameData, playerData, timelineData, stats15,
         }
         // Player lost lane
         else {
-            matchSummaryText = (<>In laning phase, <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{playerData.riotIdGameName}' ({playerChampionName})</a> {midDescEndGame} against '{lanes.MIDDLE.laneWinner.riotIdGameName}' (${oppWinChampionName}) while their team {topDescEndGame}, {jgDescEndGame}, and {botDescEndGame}.</>)
+            matchSummaryText = (<>In laning phase, <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{playerData.riotIdGameName}' ({playerChampionName})</a> <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningMidAnchor')}>{midDescEndGame}</u> against <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${lanes.MIDDLE.laneWinner.riotIdGameName}/${lanes.MIDDLE.laneWinner.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{lanes.MIDDLE.laneWinner.riotIdGameName}' ({oppWinChampionName})</a> while their team <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningTopAnchor')}>{topDescEndGame}</u>, <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningJgAnchor')}>{jgDescEndGame}</u>, and <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningBotAnchor')}>{botDescEndGame}</u>.</>)
         }
     }
     else if (playerData.teamPosition === 'BOTTOM' || playerData.teamPosition === 'UTILITY') {
+        // Player is ADC
         if (playerData.teamPosition === 'BOTTOM') {
             // Player won lane
             if (lanes.BOTTOM.laneWinner.some(player => player.riotIdGameName === playerData.riotIdGameName)) {
@@ -119,10 +120,10 @@ const generateShortSummary = async (gameData, playerData, timelineData, stats15,
                 let bottomOpponentChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(bottomOpponent.championId)).name
                 const utilityOpponent = lanes.BOTTOM.laneLoser.find(player => player.teamPosition === 'UTILITY');
                 let utilityOpponentChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(utilityOpponent.championId)).name
-                matchSummaryText = `In laning phase, '${playerData.riotIdGameName}' (${playerChampionName}) ${botDescEndGame} with 
-                '${utilityWinner.riotIdGameName}' (${utilityWinnerChampionName}) against '${bottomOpponent.riotIdGameName}'
-                (${bottomOpponentChampionName}) and '${utilityOpponent.riotIdGameName}' (${utilityOpponentChampionName}) while their team ${topDescEndGame}, ${jgDescEndGame}, 
-                and ${midDescEndGame}.`;
+
+                matchSummaryText = (<>In laning phase, <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{playerData.riotIdGameName}' ({playerChampionName})</a> <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningBotAnchor')}>{botDescEndGame}</u> with 
+                <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${utilityWinner.riotIdGameName}/${utilityWinner.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink"> '{utilityWinner.riotIdGameName}' ({utilityWinnerChampionName})</a> against <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${bottomOpponent.riotIdGameName}/${bottomOpponent.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{bottomOpponent.riotIdGameName}' ({bottomOpponentChampionName}) </a>
+                and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${utilityOpponent.riotIdGameName}/${utilityOpponent.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink"> '{utilityOpponent.riotIdGameName}' ({utilityOpponentChampionName})</a> while their team <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningTopAnchor')}>{topDescEndGame}</u>, <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningJgAnchor')}>{jgDescEndGame}</u>, and <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningMidAnchor')}>{midDescEndGame}</u>.</>);
             }
             // Player lost lane 
             else {
@@ -133,12 +134,14 @@ const generateShortSummary = async (gameData, playerData, timelineData, stats15,
                 let bottomOpponentChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(bottomOpponent.championId)).name
                 const utilityOpponent = lanes.BOTTOM.laneWinner.find(player => player.teamPosition === 'UTILITY');
                 let utilityOpponentChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(utilityOpponent.championId)).name
-                matchSummaryText = `In laning phase, '${playerData.riotIdGameName}' (${playerChampionName}) ${botDescEndGame} with 
-                '${utilityLoser.riotIdGameName}' (${utilityLoserChampionName}) against '${bottomOpponent.riotIdGameName}'
-                (${bottomOpponentChampionName}) and '${utilityOpponent.riotIdGameName}' (${utilityOpponentChampionName}) while their team ${topDescEndGame}, ${jgDescEndGame}, 
-                and ${midDescEndGame}.`;
+
+                matchSummaryText = (<>In laning phase, <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{playerData.riotIdGameName}' ({playerChampionName})</a> <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningBotAnchor')}>{botDescEndGame}</u> with 
+                <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${utilityLoser.riotIdGameName}/${utilityLoser.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink"> '{utilityLoser.riotIdGameName}' ({utilityLoserChampionName})</a> against <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${bottomOpponent.riotIdGameName}/${bottomOpponent.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{bottomOpponent.riotIdGameName}' ({bottomOpponentChampionName}) </a>
+                and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${utilityOpponent.riotIdGameName}/${utilityOpponent.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink"> '{utilityOpponent.riotIdGameName}' ({utilityOpponentChampionName})</a> while their team <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningTopAnchor')}>{topDescEndGame}</u>, <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningJgAnchor')}>{jgDescEndGame}</u>, and <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningMidAnchor')}>{midDescEndGame}</u>.</>);
             }
-        } else if (playerData.teamPosition === 'UTILITY') {
+        }
+        // Player is support 
+        else if (playerData.teamPosition === 'UTILITY') {
             // Player won lane
             if (lanes.BOTTOM.laneWinner.some(player => player.riotIdGameName === playerData.riotIdGameName)) {
                 playerChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name
@@ -148,10 +151,10 @@ const generateShortSummary = async (gameData, playerData, timelineData, stats15,
                 let bottomOpponentChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(bottomOpponent.championId)).name
                 const utilityOpponent = lanes.BOTTOM.laneLoser.find(player => player.teamPosition === 'UTILITY');
                 let utilityOpponentChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(utilityOpponent.championId)).name
-                matchSummaryText = `In laning phase, '${playerData.riotIdGameName}' (${playerChampionName}) ${botDescEndGame} with 
-                '${bottomWinner.riotIdGameName}' (${bottomWinnerChampionName}) against '${bottomOpponent.riotIdGameName} '
-                (${bottomOpponentChampionName}) and '${utilityOpponent.riotIdGameName}' (${utilityOpponentChampionName}) while their team ${topDescEndGame}, ${jgDescEndGame}, 
-                and ${midDescEndGame}.`;
+
+                matchSummaryText = (<>In laning phase, <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{playerData.riotIdGameName}' ({playerChampionName})</a> <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningBotAnchor')}>{botDescEndGame}</u> with 
+                <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${bottomWinner.riotIdGameName}/${bottomWinner.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink"> '{bottomWinner.riotIdGameName}' ({bottomWinnerChampionName})</a> against <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${bottomOpponent.riotIdGameName}/${bottomOpponent.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{bottomOpponent.riotIdGameName}' ({bottomOpponentChampionName}) </a>
+                and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${utilityOpponent.riotIdGameName}/${utilityOpponent.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink"> '{utilityOpponent.riotIdGameName}' ({utilityOpponentChampionName})</a> while their team <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningTopAnchor')}>{topDescEndGame}</u>, <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningJgAnchor')}>{jgDescEndGame}</u>, and <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningMidAnchor')}>{midDescEndGame}</u>.</>);
             }
             // Player lost lane
             else {
@@ -162,10 +165,10 @@ const generateShortSummary = async (gameData, playerData, timelineData, stats15,
                 let bottomOpponentChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(bottomOpponent.championId)).name
                 const utilityOpponent = lanes.BOTTOM.laneWinner.find(player => player.teamPosition === 'UTILITY');
                 let utilityOpponentChampionName = Object.values(champsJSON.data).find(champ => champ.key === String(utilityOpponent.championId)).name
-                matchSummaryText = `In laning phase, '${playerData.riotIdGameName}' (${playerChampionName}) ${botDescEndGame} with 
-                '${bottomLoser.riotIdGameName}' (${bottomLoserChampionName}) against '${bottomOpponent.riotIdGameName}'
-                (${bottomOpponentChampionName}) and '${utilityOpponent.riotIdGameName}' (${utilityOpponentChampionName}) while their team ${topDescEndGame}, ${jgDescEndGame}, 
-                and ${midDescEndGame}.`;
+
+                matchSummaryText = (<>In laning phase, <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{playerData.riotIdGameName}' ({playerChampionName})</a> <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningBotAnchor')}>{botDescEndGame}</u> with 
+                <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${bottomLoser.riotIdGameName}/${bottomLoser.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink"> '{bottomLoser.riotIdGameName}' ({bottomLoserChampionName})</a> against <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${bottomOpponent.riotIdGameName}/${bottomOpponent.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink">'{bottomOpponent.riotIdGameName}' ({bottomOpponentChampionName}) </a>
+                and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${utilityOpponent.riotIdGameName}/${utilityOpponent.riotIdTagline.toLowerCase()}`} className="matchSummaryPlayerLink"> '{utilityOpponent.riotIdGameName}' ({utilityOpponentChampionName})</a> while their team <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningTopAnchor')}>{topDescEndGame}</u>, <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningJgAnchor')}>{jgDescEndGame}</u>, and <u className="matchSummaryLaneLink" onClick={() => scrollToSection('laningMidAnchor')}>{midDescEndGame}</u>.</>);
             }
         }
     }
