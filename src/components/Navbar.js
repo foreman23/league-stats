@@ -1,12 +1,17 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Typography, Toolbar, AppBar, TextField, IconButton, Select, MenuItem, Autocomplete } from '@mui/material';
+import { Box, Button, Typography, Toolbar, AppBar, TextField, IconButton, Select, MenuItem, Autocomplete, Switch, FormControlLabel, FormGroup, Drawer, ListItem, List } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import MenuIcon from '@mui/icons-material/Menu';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 
-function Navbar() {
+function Navbar(props) {
 
+    const dataDragonVersion = props.dataDragonVersion
 
     // Init navigate
     const navigate = useNavigate();
@@ -14,14 +19,32 @@ function Navbar() {
 
     const [summonerName, setSummonerName] = useState(null);
     const [selectedRegion, setSelectedRegion] = useState('na1');
+    const [favorites, setFavorites] = useState(null);
 
     const [recentArr, setRecentArr] = useState(null);
     const [recentSearches, setRecentSearches] = useState(null);
+
+    const [theme, setTheme] = useState('light');
 
     const updateSummonerNameState = async (event) => {
         const inputValue = event.target.value;
         setSummonerName(inputValue.toLowerCase());
         console.log(inputValue)
+    }
+
+    const [openDrawer, setOpenDrawer] = useState(false);
+    // Toggle menu drawer for mobile
+    const toggleDrawer = (newOpen) => () => {
+        setOpenDrawer(newOpen);
+    };
+
+    // Retrieve favorite summoners from local storage
+    const getFavorites = () => {
+        let favoritesStr = localStorage.getItem('favorites')
+        if (favoritesStr !== null) {
+            let favoritesArr = JSON.parse(favoritesStr)
+            setFavorites(favoritesArr)
+        }
     }
 
     // Retrieve recent summoners from local storage
@@ -89,6 +112,8 @@ function Navbar() {
 
             const newPath = `/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`;
 
+            setOpenDrawer(false)
+
             if (location.pathname.startsWith('/profile')) {
                 navigate('/loading', { replace: true });
                 setTimeout(() => {
@@ -100,23 +125,133 @@ function Navbar() {
         }
     }
 
+    const changeTheme = () => {
+        if (theme === 'light') {
+            setTheme('dark')
+        } else if (theme === 'dark') {
+            setTheme('light')
+        }
+    }
+
+    // Remove summoner from favorites
+    const handleRemoveFavorite = (summonerObj) => {
+        let favoritesStr = localStorage.getItem('favorites')
+        if (favoritesStr !== null) {
+            let favsArr = JSON.parse(favoritesStr)
+            favsArr = favsArr.filter(obj =>
+                !(obj.selectedRegion === summonerObj.selectedRegion &&
+                    obj.summonerName === summonerObj.summonerName &&
+                    obj.riotId === summonerObj.riotId))
+            favoritesStr = JSON.stringify(favsArr)
+            localStorage.setItem('favorites', favoritesStr)
+            setFavorites(favsArr)
+        }
+    }
+
     // On component render
     useEffect(() => {
         getRecentSearches();
+        getFavorites();
     }, [])
 
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar style={{ backgroundColor: '#404040', color: 'white' }} position="static">
                 <Toolbar>
-                    <a href='/' style={{ textDecoration: 'none', color: 'white', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="h6" fontWeight={'bold'} marginRight='5px' component="div" sx={{ flexGrow: 1 }}>
+                    <a href='/' className='hideMobile' style={{ textDecoration: 'none', color: 'white', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+                        <Typography className='navBarHeaderText' variant="h6" fontWeight={'bold'} marginRight='5px' component="div" sx={{ flexGrow: 1 }}>
                             RiftReport.gg
                         </Typography>
                         <img style={{ width: '40px' }} src='/images/sorakaLogo.webp'></img>
-
                     </a>
-                    <span style={{ marginLeft: 'auto', alignItems: 'center', display: 'inline-flex', width: '25%' }}>
+
+                    <div>
+                        <MenuIcon onClick={toggleDrawer(true)} style={{ fontSize: '32px', marginLeft: '10px' }} className='hideDesktop'></MenuIcon>
+                        <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
+                            <List>
+                                <ListItem>
+                                    <a href='/' onClick={() => toggleDrawer(false)} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                                        <img style={{ width: '40px', marginRight: '5px' }} src='/images/sorakaLogo.webp'></img>
+                                        <Typography>RiftReport.gg</Typography>
+                                    </a>
+                                </ListItem>
+                                <ListItem>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span className='navBarSearchBarMobile'>
+                                            <Autocomplete
+                                                options={recentArr || []}
+                                                getOptionLabel={(option) =>
+                                                    typeof option === 'string' ? option : `${option.summonerName} #${option.riotId}`
+                                                }
+                                                value={summonerName || ''}
+                                                onInputChange={(event, newInputValue) => {
+                                                    setSummonerName(newInputValue)
+                                                }}
+                                                onChange={(event, newValue) => {
+                                                    if (typeof newValue === 'string') {
+                                                        setSummonerName(newValue);
+                                                    } else if (newValue && typeof newValue === 'object') {
+                                                        setSummonerName(newValue.summonerName + ' #' + newValue.riotId)
+                                                    }
+                                                }}
+                                                fullWidth
+                                                freeSolo
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        style={{ backgroundColor: 'white', borderRadius: '5px' }}
+                                                        {...params}
+                                                        onKeyDown={(event) => {
+                                                            if (event.key === 'Enter') {
+                                                                handleSearchSubmit();
+                                                            }
+                                                        }}
+                                                        placeholder="Search by Riot ID (e.g., Teemo#NA1)"
+                                                    />
+                                                )}
+                                            />
+                                            <IconButton style={{ marginTop: '2px' }} onClick={handleSearchSubmit} color="inherit">
+                                                <SearchIcon></SearchIcon>
+                                            </IconButton>
+                                        </span>
+                                        <Select
+                                            sx={{
+                                                backgroundColor: '#4d4d4d',
+                                                marginLeft: '0px',
+                                                color: '#d9d9d9',
+                                                fontSize: '14px',
+                                                fontWeight: 'bold',
+                                                height: '46px',
+                                                width: '35%',
+                                                marginTop: '5px'
+                                            }}
+                                            defaultValue={10}>
+                                            <MenuItem value={10}>NA</MenuItem>
+                                            <MenuItem value={20}>EUW</MenuItem>
+                                        </Select>
+                                    </div>
+                                </ListItem>
+                                <ListItem style={{ display: 'block' }}>
+                                    <Typography>Favorites</Typography>
+                                    {favorites !== null &&
+                                        <List>
+                                            {favorites.map((item, index) => (
+                                                <ListItem style={{ alignItems: 'center' }} key={index}>
+                                                    <a onClick={() => toggleDrawer(false)} href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: '25px' }}>
+                                                        <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '52px', marginRight: '10px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
+                                                        {item.summonerName} #{item.riotId}
+                                                    </a>
+                                                    <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>
+                                                </ListItem>
+                                            ))}
+                                        </List>
+                                    }
+                                </ListItem>
+                            </List>
+                        </Drawer>
+
+                    </div>
+
+                    <span className='navBarSearchBar'>
                         <Select
                             sx={{
                                 backgroundColor: '#4d4d4d',
@@ -166,19 +301,13 @@ function Navbar() {
                             <SearchIcon></SearchIcon>
                         </IconButton>
                     </span>
-                    <Select
-                        size='small'
-                        sx={{
-                            backgroundColor: '#4d4d4d',
-                            color: '#d9d9d9',
-                            fontSize: '14px',
-                            fontWeight: 'bold',
-                            marginLeft: 'auto',
-                        }}
-                        defaultValue={10}>
-                        <MenuItem value={10}>English</MenuItem>
-                        <MenuItem value={20}>한국어</MenuItem>
-                    </Select>
+
+                    <div style={{ marginLeft: 'auto' }}>
+                        <FormGroup onClick={() => changeTheme()}>
+                            <FormControlLabel control={<Switch />} label={theme === 'light' ? <DarkModeIcon style={{ marginTop: '3px' }}></DarkModeIcon> : <LightModeIcon style={{ marginTop: '3px' }}></LightModeIcon>} />
+                        </FormGroup>
+                    </div>
+
                 </Toolbar>
             </AppBar>
         </Box>

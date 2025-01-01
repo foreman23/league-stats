@@ -1,4 +1,4 @@
-import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress, Tooltip } from '@mui/material';
+import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress, Tooltip, Divider } from '@mui/material';
 import React, { useCallback } from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -623,9 +623,10 @@ const SummonerProfile = () => {
           setFavorited(true);
           localStorage.setItem('favorites', JSON.stringify(favsArr))
           // Create favorites array if not exist
-        } else {
-          localStorage.setItem('favorites', JSON.stringify([]))
         }
+      }
+      else if (favsArr === null) {
+        localStorage.setItem('favorites', JSON.stringify([]))
       }
 
       if (recentSearches === null) {
@@ -690,7 +691,6 @@ const SummonerProfile = () => {
   if (isLoading === true) {
     return (
       <Box>
-        <Navbar></Navbar>
         <LinearProgress></LinearProgress>
       </Box>
     )
@@ -700,10 +700,9 @@ const SummonerProfile = () => {
     return (
 
       <Box>
-        <Navbar></Navbar>
 
         <Grid container display={'flex'} marginTop={'25px'} justifyContent={'center'}>
-          <Grid display={'flex'} flexDirection={'column'} marginRight={'20px'}>
+          <Grid className='summonerProfilePicture'>
             <Grid style={{ margin: 'auto', justifyContent: 'center', position: 'relative', display: 'flex', paddingRight: '30px' }}>
               <Typography style={{
                 position: 'absolute',
@@ -753,6 +752,7 @@ const SummonerProfile = () => {
           </Grid>
 
           <Grid display={'flex'} flexDirection={'column'} marginTop={'0px'}>
+          <Divider className='hideDesktop' variant="middle" width={'50%'} style={{ margin: 'auto', marginTop: '10px', marginBottom: '25px' }} flexItem />
             <Grid marginLeft={'15px'} display={'flex'} flexDirection={'row'}>
               <Grid>
                 <List style={{ lineHeight: '22px' }}>
@@ -770,7 +770,7 @@ const SummonerProfile = () => {
                   ) : <ListItem style={{ fontWeight: '500', color: '#404040' }}>Unranked</ListItem>}
                 </List>
               </Grid>
-              <Grid position={'relative'} marginLeft={'20px'}>
+              <Grid className='summonerProfileInformation'>
                 {rankIndex !== null &&
                   <div>
                     <Tooltip
@@ -819,7 +819,7 @@ const SummonerProfile = () => {
               </Grid>
             </Grid>
             {summonerData.masteryData &&
-              <Grid xs={12} marginLeft={'0px'} marginTop={'15px'} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'row'}>
+              <Grid className='summonerProfileMastery' xs={12}>
 
                 {summonerData.masteryData.length >= 1 &&
                   <Grid marginRight={'20px'} flex={'column'}>
@@ -967,17 +967,17 @@ const SummonerProfile = () => {
           </Grid> */}
         </Grid>
 
-        <Box 
+        <Box
           sx={{
             justifyContent: 'center',
-            width: { xs: '95%', sm: '60%', lg: '45%', xl: '33%' },
+            width: { xs: '100%', sm: '60%', lg: '45%', xl: '33%' },
             margin: 'auto',
             borderRadius: '5px',
             marginTop: '20px',
             paddingTop: '10px',
             paddingBottom: '25px'
           }}
-          >
+        >
           {(loadingMatches) ? (
             <div style={{ textAlign: 'center' }} >
               <CircularProgress />
@@ -1040,7 +1040,7 @@ const SummonerProfile = () => {
         </Box>
 
         {!loadingMatches &&
-          <Grid style={{ justifyContent: 'center', display: 'flex', alignItems: 'center', marginBottom: '70px' }}>
+          <Grid style={{ justifyContent: 'center', display: 'flex', alignItems: 'center', marginBottom: '35px' }}>
             {!allLoaded ? (
               !loadingMore ? (
                 <Button onClick={() => handleLoadMore()} variant="contained">

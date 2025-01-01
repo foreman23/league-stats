@@ -135,7 +135,6 @@ const ArenaDetails = () => {
     return (
         <div>
             <div id={'SummaryAnchor'} style={{ backgroundColor: 'white' }}>
-                <Navbar></Navbar>
 
                 <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '20px' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 

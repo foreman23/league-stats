@@ -6,7 +6,6 @@ const Loading = () => {
     return (
         <div>
             <Box>
-                <Navbar></Navbar>
                 <LinearProgress></LinearProgress>
             </Box>
         </div>

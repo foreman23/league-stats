@@ -174,7 +174,6 @@ function SummonerSearch() {
 
   return (
     <div>
-      <Navbar></Navbar>
 
       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 

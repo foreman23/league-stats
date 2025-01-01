@@ -215,39 +215,53 @@ const DisplayGame = (props) => {
 
     else {
         return (
-            <Grid container style={{
-                justifyContent: 'center',
-                marginBottom: '5px',
-                display: 'flex',
+            <Grid className='displayGameMainContainer' container style={{
                 backgroundColor: `${(props.gameData.info.gameDuration > 180) ? participant.win === true ? '#ECF2FF' : '#FFF1F3' : 'rgb(242, 242, 242)'}`,
-                border: `2px ${(props.gameData.info.gameDuration > 180) ? participant.win === true ? '#DCE7FF' : '#FFE1E6' : 'rgb(224, 224, 224)'} solid`,
-                padding: '10px',
-                paddingTop: '35px',
-                paddingBottom: '35px',
-                borderRadius: '10px'
-            }}>
+                border: `2px ${(props.gameData.info.gameDuration > 180) ? participant.win === true ? '#DCE7FF' : '#FFE1E6' : 'rgb(224, 224, 224)'} solid`,          
+                }}>
 
                 {/* Match Information */}
-                <Grid xs={3} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'center'}>
+                <Grid className='displayGameMatchInfoContainer' xs={12} sm={3} display={'flex'} justifyContent={'center'}  margin={'auto'} textAlign={'center'} flexDirection={'column'}>
                     {props.gameData.info.gameDuration > 180 ? (
-                        <div>
+                        <div className='displayGameMatchInfo'>
                             <Typography style={{ fontWeight: 'bold', fontSize: '18px', color: `${participant.win === true ? '#3374ff' : '#ff3352'}` }} >{queueTitle}</Typography>
                             <Typography style={{ fontSize: '14px' }}>{(participant.teamId === 100) ? '(Blue Team)' : '(Red Team)'}</Typography>
                             <Typography style={{ fontSize: '14px' }}>{participant.win === true ? 'Victory' : 'Defeat'}</Typography>
                         </div>
                     ) : (
-                        <div>
+                        <div className='displayGameMatchInfo'>
                             <Typography style={{ fontWeight: 'bold', color: 'black' }} >{queueTitle}</Typography>
                             <Typography style={{ fontSize: '14px' }}>Remake</Typography>
                         </div>
                     )
                     }
                     <Divider style={{ margin: 'auto', marginTop: '3px', marginBottom: '3px' }} color={participant.win === true ? '#BED3FF' : '#FFC4CC'} width={'55%'}></Divider>
-                    <Typography style={{ fontSize: '12px' }}>{timeSinceMatch}</Typography>
+                    <Typography className='hideMobile' style={{ fontSize: '12px' }}>{timeSinceMatch}</Typography>
+                </Grid>
+
+                <Grid className='displayGameMatchInfoContainerMobile' xs={12} sm={3} display={'flex'} justifyContent={'center'}  margin={'auto'} textAlign={'start'} marginBottom={'10px'} flexDirection={'column'}>
+                    {props.gameData.info.gameDuration > 180 ? (
+                        <div className='displayGameMatchInfo'>
+                            <Typography className='displayGameHeader' style={{ color: `${participant.win === true ? '#3374ff' : '#ff3352'}` }} >{queueTitle}</Typography>
+                            <Typography className='displayGameSubHeader'>{(participant.teamId === 100) ? '(Blue Team)' : '(Red Team)'}</Typography>
+                            <Box margin={'10px'} alignSelf={'center'} width={'7px'} height={'7px'} borderRadius={'100%'} backgroundColor={'#BFBFBF'}></Box>
+                            <Typography className='displayGameSubHeader'>{participant.win === true ? 'Victory' : 'Defeat'}</Typography>
+                            <Box margin={'10px'} alignSelf={'center'} width={'7px'} height={'7px'} borderRadius={'100%'} backgroundColor={'#BFBFBF'}></Box>
+                            <Typography className='displayGameSubHeader'>{timeSinceMatch}</Typography>
+                        </div>
+                    ) : (
+                        <div className='displayGameMatchInfo'>
+                            <Typography style={{ fontWeight: 'bold', color: 'black' }} >{queueTitle}</Typography>
+                            <Typography className='displayGameSubHeader'>Remake</Typography>
+                            <Typography className='displayGameSubHeader'>{timeSinceMatch}</Typography>
+                        </div>
+                    )
+                    }
+                    <Divider style={{ margin: 'auto', marginTop: '3px', marginBottom: '3px' }} color={participant.win === true ? '#BED3FF' : '#FFC4CC'} width={'80%'}></Divider>
                 </Grid>
 
                 {/* Summoner profile for game */}
-                <Grid xs={3} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
+                <Grid className='displayGamePlayerProfileContainer' order={{ xs: 1 }} xs={4} sm={3} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
                     <Grid display={'flex'} flexDirection={'column'} position={'relative'}>
                         <Typography style={{
                             fontSize: '12px',
@@ -285,14 +299,14 @@ const DisplayGame = (props) => {
                     </Grid>
                 </Grid>
 
-                <Grid xs={1} display={'flex'} alignItems={'center'} flexDirection={'row'} textAlign={'center'} justifyContent={'center'}>
+                <Grid xs={0} sm={1} display={'flex'} alignItems={'center'} flexDirection={'row'} textAlign={'center'} justifyContent={'center'}>
                     {/* <img style={{ width: '27px', opacity: '0.65' }} src='/images/swords.svg'></img> */}
-                    <Divider orientation='vertical'></Divider>
+                    <Divider className='displayGameDividerVertical' orientation='vertical'></Divider>
                     {/* <Box style={{ width: '50px', height: '50px', backgroundColor: 'red' }}></Box> */}
                 </Grid>
 
                 {/* Opposing summoner profile */}
-                <Grid xs={3} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
+                <Grid className='displayGameOpposingProfileContainer' order={{ xs: 3 }} xs={4} sm={3} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
                     <Grid display={'flex'} flexDirection={'column'} position={'relative'}>
                         <Typography style={{
                             fontSize: '12px',
@@ -330,48 +344,18 @@ const DisplayGame = (props) => {
                     </Grid>
                 </Grid>
 
-                <Grid xs={2} display={'flex'} flexDirection={'row'} margin={'auto'}>
-                    <Grid xs={3}>
+                <Grid order={{ xs: 2 }} className='displayGameGoldBarContainer' xs={2} sm={2}>
+                    <Grid className='displayGoldBar1Container' xs={3} sm={3}>
                         <Tooltip className='displayGameGoldBar' title={`Overall: ${playerScore.score.toFixed(1)}`}>
                             <LinearProgress variant='determinate' value={(playerScore.score * 10).toFixed(2)} sx={{ backgroundColor: participant.teamId === 100 ? '#BED3FF' : '#FFC3CC', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#568CFF' : '#FF3A54' } }} style={{ width: '64px', height: '14px', transform: 'rotate(270deg)', borderRadius: '5px' }}></LinearProgress>
                         </Tooltip>
                     </Grid>
-                    <Grid xs={3}>
+                    <Grid xs={3} sm={3}>
                         <Tooltip className='displayGameGoldBar' title={`Overall: ${oppScore.score.toFixed(1)}`}>
                             <LinearProgress variant='determinate' value={(oppScore.score * 10).toFixed(2)} sx={{ backgroundColor: participant.teamId === 100 ? '#FFC3CC' : '#BED3FF', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#FF3A54' : '#568CFF' } }} style={{ width: '64px', height: '14px', transform: 'rotate(270deg)', borderRadius: '5px' }}></LinearProgress>
                         </Tooltip>
                     </Grid>
                 </Grid>
-
-                {/* Laning Descriptor */}
-                <Grid display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} textAlign={'start'}>
-                    {/* {matchText} */}
-                    {/* {isLaning &&
-                        <Typography style={{ fontSize: '18px' }}>{`${differenceDesc} ${opposingLaner.championName} as ${participantLane} with gold difference of ${goldDifference.toLocaleString()}g at end of game.`}</Typography>
-                    }
-                    {!isLaning &&
-                        <Typography style={{ fontSize: '18px' }}>{`${participant.win ? 'Won' : 'Lost'} ${queueTitle} with ${participantGold.toLocaleString()}g at end of game.`}</Typography>
-                    } */}
-                </Grid>
-
-
-                {/* Champions that participated */}
-                {/* <Grid display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'start'}>
-                    {participants.filter(participant => participant.teamId === 100).map(player => (
-                        <Grid display={'flex'}>
-                            <img style={{ borderRadius: '0px', width: '24px', marginRight: '7px' }} alt='champion icon' src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${player.championName}.png`}></img>
-                            <p style={{ textDecoration: 'none', color: 'black' }} href={`/profile/na1/${player.riotIdGameName}/${player.riotIdTagline}`}><Typography style={{ fontSize: '14px' }}><b>{player.riotIdGameName}</b> #{player.riotIdTagline}</Typography></p>
-                        </Grid>
-                    ))}
-                </Grid>
-                <Grid display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'start'}>
-                    {participants.filter(participant => participant.teamId === 200).map(player => (
-                        <Grid display={'flex'}>
-                            <img style={{ borderRadius: '0px', width: '24px', marginRight: '7px' }} alt='champion icon' src={`https://ddragon.leagueoflegends.com/cdn/${props.ddragonVersion}/img/champion/${player.championName}.png`}></img>
-                            <p style={{ textDecoration: 'none', color: 'black' }} href={`/profile/na1/${player.riotIdGameName}/${player.riotIdTagline}`}><Typography style={{ fontSize: '14px' }}><b>{player.riotIdGameName}</b> #{player.riotIdTagline}</Typography></p>
-                        </Grid>
-                    ))}
-                </Grid> */}
 
             </Grid>
         )
