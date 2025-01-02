@@ -338,6 +338,53 @@
     background-position: center -110px;
     background-size: cover;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.searchFeaturedContainer {
+    justify-content: center;
+    margin: auto;
+    margin-top: 16px;
+    width: 665px;
+    background-color: white;
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 40px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.searchFeaturedContainer:hover {
+    transform: scale(1.01);
+    cursor: pointer;
+}
+
+.searchFavoritesContainer {
+    justify-content: center;
+    margin: auto;
+    margin-top: 16px;
+    width: 665px;
+    background-color: white;
+    padding: 5px;
+    padding-top: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.searchRecentContainer {
+    justify-content: center;
+    margin: auto;
+    margin-top: 16px;
+    width: 665px;
+    background-color: white;
+    padding: 5px;
+    padding-top: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 @media only screen and (min-width: 600px) {
@@ -350,6 +397,7 @@
     }
 }
 
+
 .displayGameHeader {
     font-weight: bold !important;
     font-size: 16px !important;
@@ -360,11 +408,96 @@
     font-size: 14px !important;
 }
 
+.searchMainImageContainer {
+    display: flex;
+    margin: auto;
+    margin-left: auto;
+    margin-right: 40%;
+}
+
+.searchMainImage {
+    width: 174px;
+    margin: 20px;
+}
+
+.searchSearchContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.dataDragonVersionContainer {
+    margin-top: 5px;
+    color: white;
+    margin-bottom: 295px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.summonerSearchButton {
+    margin-left: 5px !important;
+    height: auto !important;
+    background-color: #519EDD !important;
+    color: white !important;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)) !important;
+}
+
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
+
+    .summonerSearchContainer {
+        background-color: #ffffff;
+        background-repeat: repeat-y;
+        background-position: center -110px;
+        background-size: auto;
+        z-index: 1;
+    }
+
+    .summonerSearchButton {
+        margin-left: 0px !important;
+    }
+
+    .searchFeaturedContainer {
+        width: 95vw !important;
+        height: auto !important;
+    }
+
+    .searchFavoritesContainer {
+        width: 95vw !important;
+        height: auto !important;
+    }
+
+    .searchRecentContainer {
+        width: 95vw !important;
+        height: auto !important;
+    }
+
+    .searchSearchContainer {
+        width: 95vw !important;
+        margin-top: 30px;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .searchMainImageContainer {
+        display: flex;
+        margin: auto;
+    }
+
+    .searchMainImage {
+        width: 126px;
+        margin: 0px;
+    }
+
+    .dataDragonVersionContainer {
+        margin-bottom: 100px;
+    }
+
     .footerContainer {
         padding: 10px;
     }
+
     .footer {
         width: 100%;
         font-size: 12px !important;

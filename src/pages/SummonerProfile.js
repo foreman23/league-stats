@@ -635,8 +635,8 @@ const SummonerProfile = () => {
       }
       else {
         const parsedArr = JSON.parse(recentSearches)
-        // Less than 10 recent searches
-        if (parsedArr.length < 10 && !parsedArr.some(obj =>
+        // Less than 9 recent searches
+        if (parsedArr.length < 9 && !parsedArr.some(obj =>
           obj.selectedRegion === summonerObj.selectedRegion &&
           obj.summonerName === summonerObj.summonerName &&
           obj.riotId === summonerObj.riotId
@@ -645,19 +645,8 @@ const SummonerProfile = () => {
           localStorage.setItem('recentSearches', JSON.stringify(parsedArr))
         }
 
-        // If already 10 recent searches AND current summoner is one of them
-        // if (parsedArr.length >= 10 && parsedArr.some(obj =>
-        //   obj.selectedRegion === summonerObj.selectedRegion &&
-        //   obj.summonerName === summonerObj.summonerName &&
-        //   obj.riotId === summonerObj.riotId
-        // )) {
-        //   let tempSummoner = parsedArr[0]
-        //   console.log(tempSummoner)
-        //   parsedArr[0] = 
-        // }
-
-        // If already 10 recent searches and NOT current summoner one of them
-        if (parsedArr.length >= 10 && !parsedArr.some(obj =>
+        // If already 9 recent searches and NOT current summoner one of them
+        if (parsedArr.length >= 9 && !parsedArr.some(obj =>
           obj.selectedRegion === summonerObj.selectedRegion &&
           obj.summonerName === summonerObj.summonerName &&
           obj.riotId === summonerObj.riotId

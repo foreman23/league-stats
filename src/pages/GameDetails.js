@@ -494,6 +494,7 @@ function GameDetails() {
     if (gameData && alternateRegion) {
       const getMatchTimeline = async (alternateRegion, matchId) => {
         console.log('CALLING RIOT API');
+        console.log(gameData)
         console.log(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`)
         const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
         const timelineData = timelineResponse.data;
@@ -529,7 +530,7 @@ function GameDetails() {
       <div>
         <div id={'SummaryAnchor'} style={{ backgroundColor: 'white' }}>
 
-          <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '20px'}} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '20px' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
             {/* Section 1 */}
             <Grid container marginLeft={'2%'} marginRight={'2%'} marginTop={'2%'} maxWidth={'90%'}>
@@ -687,6 +688,7 @@ function GameDetails() {
                   </Table>
                 </Grid>
                 <Grid xs={3} style={{ margin: '0', marginLeft: '35px', display: 'flex', marginTop: '15px', paddingTop: '20px' }}>
+                  {/* MVP */}
                   <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
                     <Tooltip placement='top'
                       arrow
@@ -730,49 +732,61 @@ function GameDetails() {
                     </Tooltip>
                     <img style={{ margin: 'auto', marginTop: '0px' }} src='/images/text/MVP.png'></img>
                   </div>
+                  {/* 2ND */}
                   <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
-                    <Tooltip placement='top'
-                      arrow
-                      disableInteractive
-                      title={
+                    {(() => {
+                      // Find the highest scoring player
+                      const highestPlayer = gameData.info.participants.reduce((maxPlayer, player) =>
+                        player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null);
+
+                      // Find the second highest scoring player by filtering out the highest player
+                      const secondHighestPlayer = gameData.info.participants
+                        .filter(player => player !== highestPlayer)
+                        .reduce((maxPlayer, player) =>
+                          player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null);
+
+                      return (
                         <>
-                          <div>
-                            {(() => {
-                              const secondHighestPlayer = gameData.info.participants
-                                .sort((a, b) => b.score - a.score)[1];
-
-                              if (!secondHighestPlayer) return "No data";
-
-                              const champion = Object.values(champsJSON.data).find(
-                                (champ) => champ.key === String(secondHighestPlayer.championId)
-                              );
-
-                              return (
-                                <>
-                                  {secondHighestPlayer.riotIdGameName} ({champion?.name || "Unknown Champion"})<br />
-                                  {secondHighestPlayer.kills}/{secondHighestPlayer.deaths}/{secondHighestPlayer.assists}<br />
-                                  Score: {secondHighestPlayer.score.toFixed(1)}
-                                </>
-                              );
-                            })()}
-                          </div>
+                          <Tooltip
+                            placement='top'
+                            arrow
+                            disableInteractive
+                            title={
+                              <div>
+                                {secondHighestPlayer ? (
+                                  <>
+                                    {secondHighestPlayer.riotIdGameName} (
+                                    {Object.values(champsJSON.data).find(champ => champ.key === String(secondHighestPlayer.championId))?.name || "Unknown Champion"}
+                                    )<br />
+                                    {secondHighestPlayer.kills}/{secondHighestPlayer.deaths}/{secondHighestPlayer.assists}<br />
+                                    Score: {secondHighestPlayer.score.toFixed(1)}
+                                  </>
+                                ) : (
+                                  "No data"
+                                )}
+                              </div>
+                            }
+                            slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 0] } }] } }}
+                          >
+                            <img
+                              style={{
+                                borderRadius: '100%',
+                                border: `4px solid ${secondHighestPlayer?.teamId === 100 ? '#37B7FF' : '#FF3F3F'}`,
+                                width: '70px',
+                                filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+                                marginRight: '20px',
+                                margin: 'auto',
+                              }}
+                              src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(secondHighestPlayer?.championId)).id}.png`}
+                              alt=''
+                            />
+                          </Tooltip>
+                          <img style={{ margin: 'auto', marginTop: '0px' }} src='/images/text/2ND.png' />
                         </>
-                      }
-                      slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 0] } }] } }}>
-                      <img style={{
-                        borderRadius: '100%',
-                        border: `4px solid ${gameData.info.participants.sort((a, b) => b.score - a.score)[1].teamId === 100 ? '#37B7FF' : '#FF3F3F'}`,
-                        width: '70px',
-                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-                        marginRight: '20px',
-                        margin: 'auto'
-                      }}
-                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(gameData.info.participants.sort((a, b) => b.score - a.score)[1].championId)).id}.png`} alt=''
-                      >
-                      </img>
-                    </Tooltip>
-                    <img style={{ margin: 'auto', marginTop: '0px' }} src='/images/text/2ND.png'></img>
+                      );
+                    })()}
                   </div>
+
                   <Tooltip
                     placement='top'
                     arrow
@@ -804,6 +818,7 @@ function GameDetails() {
                       </>
                     }
                   >
+                    {/* INT */}
                     <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
                       <div
                         style={{

@@ -112,7 +112,9 @@ function SummonerSearch() {
       summonerNamePayload = summonerNamePayload.slice(0, summonerNamePayload.length - 1)
     }
 
-    navigate(`/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`);
+    if (summonerNamePayload && riotTagPayload) {
+      navigate(`/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`);
+    }
   }
 
   // Retrieve recent summoners from local storage
@@ -128,7 +130,10 @@ function SummonerSearch() {
         let temp = {
           summonerName: recentSearchArr[i].summonerName,
           selectedRegion: recentSearchArr[i].selectedRegion,
-          riotId: recentSearchArr[i].riotId
+          riotId: recentSearchArr[i].riotId,
+          level: recentSearchArr[i].level,
+          icon: recentSearchArr[i].icon,
+          rank: recentSearchArr[i].rank
         }
         arr.push(temp)
       }
@@ -212,12 +217,32 @@ function SummonerSearch() {
     }
   }
 
+  // Retrieve previous tab pref from local storage
+  const getPrevTab = () => {
+    let prevTab = localStorage.getItem('prevTab')
+    if (prevTab !== null) {
+      setCurrentTab(prevTab)
+    } else {
+      setCurrentTab('recent')
+    }
+  }
+
+  // Handle click favorite or recent tab
+  const [currentTab, setCurrentTab] = useState('recent');
+  const handleChangeTab = (tab) => {
+    if (tab === 'recent' || tab === 'favorites') {
+      localStorage.setItem('prevTab', tab)
+      setCurrentTab(tab)
+    }
+  }
+
   // Get data dragon version on initial load
   useEffect(() => {
     getDataDragonVersion();
     getRecentSearches();
     getFavorites();
     getPrevRegion();
+    getPrevTab();
   }, [])
 
   return (
@@ -225,29 +250,18 @@ function SummonerSearch() {
 
       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-        <Grid style={{ alignItems: 'center', display: 'flex', marginTop: '50px' }} container>
+        <Grid style={{ alignItems: 'center', display: 'flex', marginTop: '50px', flexDirection: 'column' }} container>
 
           <Grid xs={12} display={'flex'} margin={'auto'}>
-            <div style={{ display: 'flex', margin: 'auto', marginLeft: 'auto', marginRight: '40%' }}>
-              <img style={{ width: '174px', margin: '20px' }} alt='site logo' src='/images/sorakaLogo.webp'></img>
+            <div className='searchMainImageContainer'>
+              <img className='searchMainImage' alt='site logo' src='/images/sorakaLogo.webp'></img>
               <Typography style={{
                 textAlign: 'center', margin: 'auto', fontSize: '32px', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
               }}>RiftReport.gg</Typography>
             </div>
           </Grid>
 
-          {/* <TextField onKeyDown={event => {
-              if (event.key === 'Enter') {
-                handleSearchSubmit();
-              }
-            }}
-              onChange={updateSummonerNameState}
-              placeholder='Search by Riot ID (eg. Teemo#NA1)'
-              style={{ width: '30%' }}
-              fullWidth>
-            </TextField> */}
-
-          <Grid xs={12} display={'flex'} justifyContent={'center'}>
+          <Grid className='searchSearchContainer' xs={12}>
             <Select
               sx={{
                 backgroundColor: '#519EDD',
@@ -311,41 +325,124 @@ function SummonerSearch() {
                 />
               )}
             />
-            <Button onClick={handleSearchSubmit} style={{ marginLeft: '5px', height: 'auto', backgroundColor: '#519EDD', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} variant='contained'>Search</Button>
+            <Button onClick={handleSearchSubmit} className='summonerSearchButton' variant='contained'>Search</Button>
           </Grid>
-          {/* <Grid style={{ marginTop: '15px' }} xs={12} display={'flex'} justifyContent={'center'}>
-            <ButtonGroup>
-              <Button onClick={handleRegionChange} value='br1' style={{ backgroundColor: selectedRegion === 'br1' ? '#1b5f98' : '#4d9de0' }} variant='contained'>BR</Button>
-              <Button onClick={handleRegionChange} value='eun1' style={{ backgroundColor: selectedRegion === 'eun1' ? '#1b5f98' : '#4d9de0' }} variant='contained'>EUNE</Button>
-              <Button onClick={handleRegionChange} value='euw1' style={{ backgroundColor: selectedRegion === 'euw1' ? '#1b5f98' : '#4d9de0' }} variant='contained'>EUW</Button>
-              <Button onClick={handleRegionChange} value='la1' style={{ backgroundColor: selectedRegion === 'la1' ? '#1b5f98' : '#4d9de0' }} variant='contained'>LAN</Button>
-              <Button onClick={handleRegionChange} value='la2' style={{ backgroundColor: selectedRegion === 'la2' ? '#1b5f98' : '#4d9de0' }} variant='contained'>LAS</Button>
-              <Button onClick={handleRegionChange} value='na1' style={{ backgroundColor: selectedRegion === 'na1' ? '#1b5f98' : '#4d9de0' }} variant='contained'>NA</Button>
-              <Button onClick={handleRegionChange} value='oc1' style={{ backgroundColor: selectedRegion === 'oc1' ? '#1b5f98' : '#4d9de0' }} variant='contained'>OCE</Button>
-              <Button onClick={handleRegionChange} value='ru' style={{ backgroundColor: selectedRegion === 'ru' ? '#1b5f98' : '#4d9de0' }} variant='contained'>RU</Button>
-              <Button onClick={handleRegionChange} value='tr1' style={{ backgroundColor: selectedRegion === 'tr1' ? '#1b5f98' : '#4d9de0' }} variant='contained'>TR</Button>
-            </ButtonGroup>
-          </Grid>
-          <Grid xs={12} display={'flex'} justifyContent={'center'}>
-            <ButtonGroup>
-              <Button onClick={handleRegionChange} value='jp1' style={{ backgroundColor: selectedRegion === 'jp1' ? '#1b5f98' : '#4d9de0' }} variant='contained'>JP</Button>
-              <Button onClick={handleRegionChange} value='kr' style={{ backgroundColor: selectedRegion === 'kr' ? '#1b5f98' : '#4d9de0' }} variant='contained'>KR</Button>
-              <Button onClick={handleRegionChange} value='ph2' style={{ backgroundColor: selectedRegion === 'ph2' ? '#1b5f98' : '#4d9de0' }} variant='contained'>PH</Button>
-              <Button onClick={handleRegionChange} value='sg2' style={{ backgroundColor: selectedRegion === 'sg2' ? '#1b5f98' : '#4d9de0' }} variant='contained'>SG</Button>
-              <Button onClick={handleRegionChange} value='tw2' style={{ backgroundColor: selectedRegion === 'tw2' ? '#1b5f98' : '#4d9de0' }} variant='contained'>TW</Button>
-              <Button onClick={handleRegionChange} value='th2' style={{ backgroundColor: selectedRegion === 'th2' ? '#1b5f98' : '#4d9de0' }} variant='contained'>TH</Button>
-              <Button onClick={handleRegionChange} value='vn2' style={{ backgroundColor: selectedRegion === 'vn2' ? '#1b5f98' : '#4d9de0' }} variant='contained'>VN</Button>
-            </ButtonGroup>
-          </Grid> */}
 
-          {favorites !== null ? (
-            <div style={{ justifyContent: 'center', margin: 'auto', marginTop: '16px', width: '665px', height: `${initialFavHeight + Math.ceil(favorites.length / 3) * 90}px`, backgroundColor: 'white', padding: '5px', paddingTop: '10px', marginBottom: '15px', borderRadius: '5px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-              <Typography style={{ textAlign: 'center', color: '#7E7E7E' }}>Favorites</Typography>
-              <Divider color='#ABABAB' style={{ width: '30%', margin: 'auto', marginTop: '10px', marginBottom: '10px' }}></Divider>
+          <a href='https://www.google.com/' target='__blank' style={{ backgroundColor: '#FFF1F3', color: 'inherit', textDecoration: 'inherit' }} className='searchFeaturedContainer'>
+            <Grid>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'column', marginBottom: '10px' }}>
+                <Typography style={{ fontWeight: 'bold', color: '#7E7E7E', textAlign: 'center', margin: 'auto' }}>Featured Game</Typography>
+                <Divider color={'#7E7E7E'} style={{ width: '30%', margin: 'auto', marginTop: '10px', marginBottom: '10px' }}></Divider>
+                <Typography style={{ textAlign: 'right', left: 'auto', right: '30px', color: '#7E7E7E', fontSize: '16px', whiteSpace: 'nowrap', position: 'absolute', fontWeight: 'bold' }}>NA</Typography>
+              </div>
+
+              <Grid style={{ display: 'flex' }}>
+                <div style={{ marginLeft: '35px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.8))' }}>
+                  <Typography style={{
+                    fontSize: '12px',
+                    position: 'absolute',
+                    backgroundColor: '#FF3A54',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    borderRadius: '100%',
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
+                    paddingTop: '1px',
+                    paddingBottom: '1px',
+                    textAlign: 'center',
+                    right: 'auto',
+                    bottom: 'auto',
+                    top: '-2px',
+                    left: '76px',
+                    justifyContent: 'center'
+                  }}
+                  >{17}
+                  </Typography>
+                  <img style={{ borderRadius: '100%', width: '102px', backgroundColor: '#FF3F3F', padding: '4px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/AurelionSol.png`}></img>
+                </div>
+                <div style={{ marginLeft: '25px', marginRight: '20px', marginTop: '5px' }}>
+                  <Typography style={{ fontWeight: 'bold', fontSize: '18px' }}>Deeto #NA1</Typography>
+                  <Typography style={{ color: '#7E7E7E' }}>Aurelion Sol</Typography>
+                </div>
+                <div style={{ marginRight: '20px', marginTop: '25px' }}>
+                  <Box marginTop={'3px'} marginBottom={'3px'} alignSelf={'center'} width={'10px'} height={'10px'} borderRadius={'100%'} backgroundColor={'#DDDDDD'}></Box>
+                </div>
+                <div style={{ marginRight: '20px', marginTop: '5px' }}>
+                  <Typography style={{ fontWeight: 'bold', fontSize: '16px' }}>Ranked Solo</Typography>
+                  <Typography style={{ color: '#7E7E7E' }}>1 hour ago</Typography>
+                </div>
+                <div style={{ marginRight: '20px', marginTop: '25px' }}>
+                  <Box marginTop={'3px'} marginBottom={'3px'} alignSelf={'center'} width={'10px'} height={'10px'} borderRadius={'100%'} backgroundColor={'#DDDDDD'}></Box>
+                </div>
+                <div style={{ marginRight: '20px', marginTop: '5px' }}>
+                  <Typography style={{ fontWeight: 'bold', fontSize: '16px' }}>Tier</Typography>
+                  <Typography style={{ color: '#7E7E7E' }}>Gold 3</Typography>
+                </div>
+              </Grid>
+              <div style={{ display: 'flex', marginLeft: '170px', position: 'absolute', top: 'auto', bottom: '45px' }}>
+                <Grid>
+                  <span style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                    <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/Yone.png`}></img>
+                    <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', backgroundColor: '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                  </span>
+                  <span style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                    <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/Akshan.png`}></img>
+                    <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', left: '0px', backgroundColor: '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                  </span>
+                  <span style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                    <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/Jhin.png`}></img>
+                    <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', left: '0px', backgroundColor: '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                  </span>
+                  <span style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                    <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/Galio.png`}></img>
+                    <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', left: '0px', backgroundColor: '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                  </span>
+                </Grid>
+                <img style={{ width: '27px', opacity: '0.65', marginLeft: '25px', marginRight: '25px' }} src='/images/swords.svg'></img>
+                <Grid>
+                  <span style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                    <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/Heimerdinger.png`}></img>
+                    <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', backgroundColor: '#37B7FF', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                  </span>
+                  <span style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                    <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/Ivern.png`}></img>
+                    <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', left: '0px', backgroundColor: '#37B7FF', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                  </span>
+                  <span style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                    <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/Kayle.png`}></img>
+                    <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', left: '0px', backgroundColor: '#37B7FF', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                  </span>
+                  <span style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                    <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/Kassadin.png`}></img>
+                    <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', left: '0px', backgroundColor: '#37B7FF', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                  </span>
+                  <span style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                    <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/Singed.png`}></img>
+                    <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', left: '0px', backgroundColor: '#37B7FF', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                  </span>
+                </Grid>
+              </div>
+
+            </Grid>
+          </a>
+
+          {favorites !== null && currentTab === 'favorites' ? (
+            <div className='searchFavoritesContainer' style={{ height: `auto` }}>
+              <Grid style={{ display: 'flex', margin: 'auto', justifyContent: 'center' }}>
+                <span onClick={() => handleChangeTab('favorites')} style={{ marginRight: '50px' }}>
+                  <Typography style={{ textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', color: currentTab === 'favorites' ? 'black' : '#999999' }}>Favorites</Typography>
+                  <Divider color={currentTab === 'favorites' ? 'black' : '#999999'} style={{ width: '100%', margin: 'auto', marginTop: '10px', marginBottom: '10px' }}></Divider>
+                </span>
+                <span onClick={() => handleChangeTab('recent')} style={{ marginLeft: '50px' }}>
+                  <Typography style={{ textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', color: currentTab === 'recent' ? 'black' : '#999999' }}>Recent</Typography>
+                  <Divider color={currentTab === 'recent' ? 'black' : '#999999'} style={{ width: '100%', margin: 'auto', marginTop: '10px', marginBottom: '10px' }}></Divider>
+                </span>
+              </Grid>
+
               <List>
                 <Grid style={{ justifyContent: 'center', alignItems: 'center' }} container>
                   {favorites.map((item, index) => (
-                    <Grid item xs={4}>
+                    <Grid item xs={12} sm={4}>
                       <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: 'auto', marginLeft: '8px', marginTop: '10px', fontSize: '18px', position: 'absolute', zIndex: 1 }}></FavoriteIcon>
                       <a className='recentSearchItem' href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`}>
                         <ListItem style={{ justifyContent: 'center' }} key={index}>
@@ -375,7 +472,52 @@ function SummonerSearch() {
             <div></div>
           )}
 
-          <Grid style={{ marginTop: '5px', color: 'white', marginBottom: '135px' }} xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
+          {recentArr !== null && currentTab === 'recent' ? (
+            <div className='searchRecentContainer' style={{ height: `auto` }}>
+              <Grid style={{ display: 'flex', margin: 'auto', justifyContent: 'center' }}>
+                <span onClick={() => handleChangeTab('favorites')} style={{ marginRight: '50px' }}>
+                  <Typography style={{ textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', color: currentTab === 'favorites' ? 'black' : '#999999' }}>Favorites</Typography>
+                  <Divider color={currentTab === 'favorites' ? 'black' : '#999999'} style={{ width: '100%', margin: 'auto', marginTop: '10px', marginBottom: '10px' }}></Divider>
+                </span>
+                <span onClick={() => handleChangeTab('recent')} style={{ marginLeft: '50px' }}>
+                  <Typography style={{ textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', color: currentTab === 'recent' ? 'black' : '#999999' }}>Recent</Typography>
+                  <Divider color={currentTab === 'recent' ? 'black' : '#999999'} style={{ width: '100%', margin: 'auto', marginTop: '10px', marginBottom: '10px' }}></Divider>
+                </span>
+              </Grid>
+              <List>
+                <Grid style={{ justifyContent: 'center', alignItems: 'center' }} container>
+                  {recentArr.map((item, index) => (
+                    <Grid item xs={12} sm={4}>
+                      <FavoriteIcon className='favoriteButtonActive' style={{ display: 'flex', marginRight: 'auto', marginLeft: '8px', marginTop: '10px', fontSize: '18px', position: 'absolute', zIndex: 1 }}></FavoriteIcon>
+                      <a className='recentSearchItem' href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`}>
+                        <ListItem style={{ justifyContent: 'center' }} key={index}>
+                          <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
+                          <Grid style={{ marginLeft: '60px', textAlign: 'center' }}>
+                            <Grid>
+                              <b style={{ fontSize: '14px' }}>{item.summonerName}</b>
+                            </Grid>
+                            <Grid>
+                              <b style={{ fontSize: '14px' }}>#{item.riotId}</b>
+                            </Grid>
+                            <Grid>
+                              <span style={{ fontSize: '14px' }}>Level: {item.level}</span>
+                            </Grid>
+                            <Grid>
+                              <span style={{ fontSize: '14px' }}>{item.rank}</span>
+                            </Grid>
+                          </Grid>
+                        </ListItem>
+                      </a>
+                    </Grid>
+                  ))}
+                </Grid>
+              </List>
+            </div>
+          ) : (
+            <div></div>
+          )}
+
+          <Grid xs={12} className='dataDragonVersionContainer'>
             <Typography>{dataDragonVersion}</Typography>
           </Grid>
 
