@@ -2,7 +2,7 @@ import '../App.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, TextField, Box, ButtonGroup, Typography, ListItem, List, Divider, Autocomplete } from '@mui/material';
+import { Button, TextField, Box, ButtonGroup, Typography, ListItem, List, Divider, Autocomplete, Select, MenuItem, LinearProgress } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Navbar from '../components/Navbar';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -18,7 +18,9 @@ function SummonerSearch() {
   const [recentSearches, setRecentSearches] = useState(null);
   const [recentArr, setRecentArr] = useState(null);
   const [favorites, setFavorites] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const initialFavHeight = 115
 
   // Init navigate
   const navigate = useNavigate();
@@ -45,10 +47,31 @@ function SummonerSearch() {
     }
   }
 
+  const [dropdownDefaultValue, setDropdownDefaultValue] = useState(null);
   const handleRegionChange = async (event) => {
     const value = event.target.value;
-    localStorage.setItem('searchRegion', value)
-    setSelectedRegion(value);
+    const regionValues = {
+      10: 'na1',
+      20: 'euw1',
+      30: 'br1',
+      40: 'eun1',
+      50: 'la1',
+      60: 'la2',
+      70: 'oc1',
+      80: 'ru',
+      90: 'tr1',
+      100: 'jp1',
+      110: 'kr',
+      120: 'ph2',
+      130: 'sg2',
+      140: 'tw2',
+      150: 'th2',
+      160: 'vn2'
+    }
+
+    localStorage.setItem('searchRegion', regionValues[value])
+    setSelectedRegion(regionValues[value]);
+    setDropdownDefaultValue(value);
     //console.log(value)
   }
 
@@ -125,11 +148,36 @@ function SummonerSearch() {
 
   // Retrieve previous region from local storage
   const getPrevRegion = () => {
+
+    const regionValues = {
+      10: 'na1',
+      20: 'euw1',
+      30: 'br1',
+      40: 'eun1',
+      50: 'la1',
+      60: 'la2',
+      70: 'oc1',
+      80: 'ru',
+      90: 'tr1',
+      100: 'jp1',
+      110: 'kr',
+      120: 'ph2',
+      130: 'sg2',
+      140: 'tw2',
+      150: 'th2',
+      160: 'vn2'
+    }
+
     let prevRegion = localStorage.getItem('searchRegion')
     if (prevRegion !== null) {
       setSelectedRegion(prevRegion)
+      let defaultValue = parseInt(Object.keys(regionValues).find(
+        (key) => regionValues[key] === prevRegion
+      )) || 10;
+      setDropdownDefaultValue(defaultValue);
     } else {
       setSelectedRegion('na1')
+      setDropdownDefaultValue(10);
     }
   }
 
@@ -173,18 +221,19 @@ function SummonerSearch() {
   }, [])
 
   return (
-    <div>
+    <div className='summonerSearchContainer'>
 
       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-        <Grid style={{ alignItems: 'center', display: 'flex', marginTop: '70px' }} container>
+        <Grid style={{ alignItems: 'center', display: 'flex', marginTop: '50px' }} container>
 
-          <Typography style={{ textAlign: 'center', margin: 'auto', fontSize: '32px', fontWeight: 'bold' }}>RiftReport.gg</Typography>
-
-          <Grid xs={12} display={'flex'} justifyContent={'center'}>
-            <a href={`/`}>
-              <img style={{ width: '150px', margin: '20px' }} alt='site logo' src='/images/sorakaLogo.webp'></img>
-            </a>
+          <Grid xs={12} display={'flex'} margin={'auto'}>
+            <div style={{ display: 'flex', margin: 'auto', marginLeft: 'auto', marginRight: '40%' }}>
+              <img style={{ width: '174px', margin: '20px' }} alt='site logo' src='/images/sorakaLogo.webp'></img>
+              <Typography style={{
+                textAlign: 'center', margin: 'auto', fontSize: '32px', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
+              }}>RiftReport.gg</Typography>
+            </div>
           </Grid>
 
           {/* <TextField onKeyDown={event => {
@@ -199,11 +248,42 @@ function SummonerSearch() {
             </TextField> */}
 
           <Grid xs={12} display={'flex'} justifyContent={'center'}>
+            <Select
+              sx={{
+                backgroundColor: '#519EDD',
+                color: 'white',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                width: '80px',
+                height: 'auto',
+                border: 'none',
+                filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+              }}
+              value={dropdownDefaultValue}
+              onChange={(event) => handleRegionChange(event)}
+            >
+              <MenuItem value={10}>NA</MenuItem>
+              <MenuItem value={20}>EUW</MenuItem>
+              <MenuItem value={30}>BR</MenuItem>
+              <MenuItem value={40}>EUNE</MenuItem>
+              <MenuItem value={50}>LAN</MenuItem>
+              <MenuItem value={60}>LAS</MenuItem>
+              <MenuItem value={70}>OCE</MenuItem>
+              <MenuItem value={80}>RU</MenuItem>
+              <MenuItem value={90}>TR</MenuItem>
+              <MenuItem value={100}>JP</MenuItem>
+              <MenuItem value={110}>KR</MenuItem>
+              <MenuItem value={120}>PH</MenuItem>
+              <MenuItem value={130}>SG</MenuItem>
+              <MenuItem value={140}>TW</MenuItem>
+              <MenuItem value={150}>TH</MenuItem>
+              <MenuItem value={160}>VN</MenuItem>
+            </Select>
             <Autocomplete
               options={recentArr || []}
               getOptionLabel={(option) =>
                 typeof option === 'string' ? option : `${option.summonerName} #${option.riotId}`
-              } 
+              }
               value={summonerName || ''}
               onInputChange={(event, newInputValue) => {
                 setSummonerName(newInputValue)
@@ -216,10 +296,11 @@ function SummonerSearch() {
                 }
               }}
               fullWidth
-              style={{ width: '30%' }}
+              style={{ width: '495px' }}
               freeSolo
               renderInput={(params) => (
                 <TextField
+                  style={{ backgroundColor: 'white', borderTopRightRadius: '5px', borderBottomRightRadius: '5px', borderTopLeftRadius: '5px', borderBottomLeftRadius: '5px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}
                   {...params}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter') {
@@ -230,9 +311,9 @@ function SummonerSearch() {
                 />
               )}
             />
-            <Button onClick={handleSearchSubmit} style={{ marginLeft: '5px' }} variant='contained'>Search</Button>
+            <Button onClick={handleSearchSubmit} style={{ marginLeft: '5px', height: 'auto', backgroundColor: '#519EDD', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} variant='contained'>Search</Button>
           </Grid>
-          <Grid style={{ marginTop: '15px' }} xs={12} display={'flex'} justifyContent={'center'}>
+          {/* <Grid style={{ marginTop: '15px' }} xs={12} display={'flex'} justifyContent={'center'}>
             <ButtonGroup>
               <Button onClick={handleRegionChange} value='br1' style={{ backgroundColor: selectedRegion === 'br1' ? '#1b5f98' : '#4d9de0' }} variant='contained'>BR</Button>
               <Button onClick={handleRegionChange} value='eun1' style={{ backgroundColor: selectedRegion === 'eun1' ? '#1b5f98' : '#4d9de0' }} variant='contained'>EUNE</Button>
@@ -255,34 +336,32 @@ function SummonerSearch() {
               <Button onClick={handleRegionChange} value='th2' style={{ backgroundColor: selectedRegion === 'th2' ? '#1b5f98' : '#4d9de0' }} variant='contained'>TH</Button>
               <Button onClick={handleRegionChange} value='vn2' style={{ backgroundColor: selectedRegion === 'vn2' ? '#1b5f98' : '#4d9de0' }} variant='contained'>VN</Button>
             </ButtonGroup>
-          </Grid>
-
-          <Grid style={{ marginTop: '10px' }} xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
-            <Typography>{dataDragonVersion}</Typography>
-          </Grid>
-
+          </Grid> */}
 
           {favorites !== null ? (
-            <div style={{ justifyContent: 'center', margin: 'auto', marginTop: '50px', width: '40%' }}>
-              <Typography style={{ textAlign: 'center' }}>Favorites</Typography>
-              <Divider></Divider>
+            <div style={{ justifyContent: 'center', margin: 'auto', marginTop: '16px', width: '665px', height: `${initialFavHeight + Math.ceil(favorites.length / 3) * 90}px`, backgroundColor: 'white', padding: '5px', paddingTop: '10px', marginBottom: '15px', borderRadius: '5px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+              <Typography style={{ textAlign: 'center', color: '#7E7E7E' }}>Favorites</Typography>
+              <Divider color='#ABABAB' style={{ width: '30%', margin: 'auto', marginTop: '10px', marginBottom: '10px' }}></Divider>
               <List>
-                <Grid style={{ justifyContent: 'center' }} container>
+                <Grid style={{ justifyContent: 'center', alignItems: 'center' }} container>
                   {favorites.map((item, index) => (
                     <Grid item xs={4}>
-                      <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>
+                      <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: 'auto', marginLeft: '8px', marginTop: '10px', fontSize: '18px', position: 'absolute', zIndex: 1 }}></FavoriteIcon>
                       <a className='recentSearchItem' href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`}>
                         <ListItem style={{ justifyContent: 'center' }} key={index}>
-                          <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
-                          <Grid>
+                          <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
+                          <Grid style={{ marginLeft: '60px', textAlign: 'center' }}>
                             <Grid>
-                              <b>{item.summonerName} #{item.riotId}</b>
+                              <b style={{ fontSize: '14px' }}>{item.summonerName}</b>
                             </Grid>
                             <Grid>
-                              Level: {item.level}
+                              <b style={{ fontSize: '14px' }}>#{item.riotId}</b>
                             </Grid>
                             <Grid>
-                              {item.rank}
+                              <span style={{ fontSize: '14px' }}>Level: {item.level}</span>
+                            </Grid>
+                            <Grid>
+                              <span style={{ fontSize: '14px' }}>{item.rank}</span>
                             </Grid>
                           </Grid>
                         </ListItem>
@@ -295,6 +374,10 @@ function SummonerSearch() {
           ) : (
             <div></div>
           )}
+
+          <Grid style={{ marginTop: '5px', color: 'white', marginBottom: '135px' }} xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
+            <Typography>{dataDragonVersion}</Typography>
+          </Grid>
 
         </Grid>
       </Box>

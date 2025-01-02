@@ -700,8 +700,7 @@ const SummonerProfile = () => {
     return (
 
       <Box>
-
-        <Grid container display={'flex'} marginTop={'25px'} justifyContent={'center'}>
+        <Grid container display={'flex'} marginTop={'35px'} justifyContent={'center'}>
           <Grid className='summonerProfilePicture'>
             <Grid style={{ margin: 'auto', justifyContent: 'center', position: 'relative', display: 'flex', paddingRight: '30px' }}>
               <Typography style={{
@@ -953,18 +952,6 @@ const SummonerProfile = () => {
               </Grid>
             }
           </Grid>
-
-          {/* <Grid display={'flex'} flexDirection={'column'} marginTop={'20px'}>
-            <img style={{
-              backgroundColor: '#E3E3E3',
-              borderRadius: '100%',
-              border: '3px white solid',
-              filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25',
-              maxWidth: '150px',
-            }}
-              src='/images/RankIcon.svg'>
-            </img>
-          </Grid> */}
         </Grid>
 
         <Box

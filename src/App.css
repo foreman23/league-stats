@@ -332,6 +332,14 @@
     margin: auto !important;
 }
 
+.summonerSearchContainer {
+    background-image: url('/public/images/backgrounds/Bridge_of_Progress_Map_Preview\ 2.webp');
+    background-repeat: no-repeat;
+    background-position: center -110px;
+    background-size: cover;
+    z-index: 1;
+}
+
 @media only screen and (min-width: 600px) {
     .hideDesktop {
         display: none !important;
