@@ -112,7 +112,7 @@ function Navbar(props) {
 
             const newPath = `/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`;
 
-            setOpenDrawer(false)
+            setOpenDrawer(false);
 
             if (location.pathname.startsWith('/profile')) {
                 navigate('/loading', { replace: true });
@@ -211,6 +211,18 @@ function Navbar(props) {
         }
     }
 
+    // Handle clicking of autocomplete element
+    const handleAutoCompleteSelect = (newValue) => {
+        if (newValue && typeof newValue === 'object') {
+            const newPath = `/profile/${newValue.selectedRegion}/${newValue.summonerName}/${newValue.riotId}`
+
+            setOpenDrawer(false);
+
+            navigate(newPath)
+
+        }
+    };
+
     // On component render
     useEffect(() => {
         getRecentSearches();
@@ -257,6 +269,7 @@ function Navbar(props) {
                                                     setSummonerName(newValue);
                                                 } else if (newValue && typeof newValue === 'object') {
                                                     setSummonerName(newValue.summonerName + ' #' + newValue.riotId)
+                                                    handleAutoCompleteSelect(newValue)
                                                 }
                                             }}
                                             fullWidth
@@ -375,6 +388,7 @@ function Navbar(props) {
                                 setSummonerName(newValue);
                             } else if (newValue && typeof newValue === 'object') {
                                 setSummonerName(newValue.summonerName + ' #' + newValue.riotId)
+                                handleAutoCompleteSelect(newValue)
                             }
                         }}
                         fullWidth

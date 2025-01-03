@@ -25,6 +25,24 @@ const LanePhaseSummaryCardJg = (props) => {
     let winnerChampName = Object.values(champsJSON.data).find(champ => champ.key === String(statsAt15.laneResults.JUNGLE.laneWinner.championId)).id
     let loserChampName = Object.values(champsJSON.data).find(champ => champ.key === String(statsAt15.laneResults.JUNGLE.laneLoser.championId)).id
 
+    // Generate string for advantage description
+    let advantageStr = null;
+    if (statsAt15.laneResults.JUNGLE.goldDifference > 3000) {
+        advantageStr = `almost guaranteeing ${statsAt15.laneResults.JUNGLE.teamWonLane === 100 ? 'blue' : 'red'} team the victory`
+    }
+    else if (statsAt15.laneResults.JUNGLE.goldDifference > 2000) {
+        advantageStr = `giving ${statsAt15.laneResults.JUNGLE.teamWonLane === 100 ? 'blue' : 'red'} team a big lead entering the mid phase`
+    }
+    else if (statsAt15.laneResults.JUNGLE.goldDifference > 650) {
+        advantageStr = `giving ${statsAt15.laneResults.JUNGLE.teamWonLane === 100 ? 'blue' : 'red'} team an advantage entering the mid phase`
+    }
+    else if (statsAt15.laneResults.JUNGLE.goldDifference >= 150) {
+        advantageStr = `giving ${statsAt15.laneResults.JUNGLE.teamWonLane === 100 ? 'blue' : 'red'} team a small advantage entering the mid phase`
+    }
+    else if (statsAt15.laneResults.JUNGLE.goldDifference < 150) {
+        advantageStr = `so we consider jungle to be a tie`
+    }
+
     return (
         <div id='laningJgAnchor'>
             <Grid
@@ -96,7 +114,7 @@ const LanePhaseSummaryCardJg = (props) => {
                             <span style={{ color: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName} </span>
                             ({statsAt15.laneResults.JUNGLE.laneWinner.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneWinner.cs} CS) in the jungle earned {statsAt15.laneResults.JUNGLE.goldDifference} more gold than
                             <span style={{ color: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneLoser.riotIdGameName} </span>
-                            ({statsAt15.laneResults.JUNGLE.laneLoser.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneLoser.cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, giving {statsAt15.laneResults.JUNGLE.teamWonLane === 100 ? "blue" : "red"} team an advantage entering the mid phase.
+                            ({statsAt15.laneResults.JUNGLE.laneLoser.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneLoser.cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, {advantageStr}.
                         </Typography>
                     ) : (
                         <Typography>
@@ -151,14 +169,14 @@ const LanePhaseSummaryCardJg = (props) => {
                             }
                             if (kill.victimId === 0) {
                                 return (
-                                    <Typography>{Math.round(kill.timestamp / 60000)}m - <span style={{ color: participants.find(player => player.participantId === kill.killerId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.killerId).riotIdGameName}</span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }} 
-                                    src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.killerId).championId)).id}.png`}></img> killed <span style={{ color: '#6A00AB', fontWeight: 'bold' }}>{kill.monsterType.toLowerCase()}</span></Typography>
+                                    <Typography>{Math.round(kill.timestamp / 60000)}m - <span style={{ color: participants.find(player => player.participantId === kill.killerId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.killerId).riotIdGameName}</span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
+                                        src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.killerId).championId)).id}.png`}></img> killed <span style={{ color: '#6A00AB', fontWeight: 'bold' }}>{kill.monsterType.toLowerCase()}</span></Typography>
                                 )
                             }
                             if (kill.killerId === 0) {
                                 return (
-                                    <Typography>{Math.round(kill.timestamp / 60000)}m - <span style={{ fontWeight: 'bold', color: 'green' }}>Environment</span> killed <span style={{ color: participants.find(player => player.participantId === kill.victimId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.victimId).riotIdGameName}</span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }} 
-                                    src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.victimId).championId)).id}.png`}></img></Typography>
+                                    <Typography>{Math.round(kill.timestamp / 60000)}m - <span style={{ fontWeight: 'bold', color: 'green' }}>Environment</span> killed <span style={{ color: participants.find(player => player.participantId === kill.victimId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.victimId).riotIdGameName}</span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
+                                        src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.victimId).championId)).id}.png`}></img></Typography>
                                 )
                             }
                         })}

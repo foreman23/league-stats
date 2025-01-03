@@ -25,6 +25,24 @@ const LanePhaseSummaryCardMid = (props) => {
     let winnerChampName = Object.values(champsJSON.data).find(champ => champ.key === String(statsAt15.laneResults.MIDDLE.laneWinner.championId)).id
     let loserChampName = Object.values(champsJSON.data).find(champ => champ.key === String(statsAt15.laneResults.MIDDLE.laneLoser.championId)).id
 
+    // Generate string for advantage description
+    let advantageStr = null;
+    if (statsAt15.laneResults.MIDDLE.goldDifference > 3000) {
+        advantageStr = `almost guaranteeing ${statsAt15.laneResults.MIDDLE.teamWonLane === 100 ? 'blue' : 'red'} team the victory`
+    }
+    else if (statsAt15.laneResults.MIDDLE.goldDifference > 2000) {
+        advantageStr = `giving ${statsAt15.laneResults.MIDDLE.teamWonLane === 100 ? 'blue' : 'red'} team a big lead entering the mid phase`
+    }
+    else if (statsAt15.laneResults.MIDDLE.goldDifference > 650) {
+        advantageStr = `giving ${statsAt15.laneResults.MIDDLE.teamWonLane === 100 ? 'blue' : 'red'} team an advantage entering the mid phase`
+    }
+    else if (statsAt15.laneResults.MIDDLE.goldDifference >= 150) {
+        advantageStr = `giving ${statsAt15.laneResults.MIDDLE.teamWonLane === 100 ? 'blue' : 'red'} team a small advantage entering the mid phase`
+    }
+    else if (statsAt15.laneResults.MIDDLE.goldDifference < 150) {
+        advantageStr = `so we consider middle lane to be a tie`
+    }
+
     return (
         <div id='laningMidAnchor'>
             <Grid className={midSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'} container style={{ flexDirection: 'row', display: 'inline-flex', alignItems: 'center' }}>
@@ -92,7 +110,7 @@ const LanePhaseSummaryCardMid = (props) => {
                             <span style={{ color: statsAt15.laneResults.MIDDLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.MIDDLE.laneWinner.riotIdGameName} </span>
                             ({statsAt15.laneResults.MIDDLE.laneWinner.kdaAlt}, {statsAt15.laneResults.MIDDLE.laneWinner.cs} CS) in the mid lane earned {statsAt15.laneResults.MIDDLE.goldDifference} more gold than
                             <span style={{ color: statsAt15.laneResults.MIDDLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.MIDDLE.laneLoser.riotIdGameName} </span>
-                            ({statsAt15.laneResults.MIDDLE.laneLoser.kdaAlt}, {statsAt15.laneResults.MIDDLE.laneLoser.cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, giving {statsAt15.laneResults.MIDDLE.teamWonLane === 100 ? "blue" : "red"} team an advantage entering the mid phase.
+                            ({statsAt15.laneResults.MIDDLE.laneLoser.kdaAlt}, {statsAt15.laneResults.MIDDLE.laneLoser.cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, {advantageStr}.
                         </Typography>
                     ) : (
                         <Typography>

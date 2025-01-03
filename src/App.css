@@ -256,6 +256,11 @@
     color: #fc578e;
 }
 
+.deleteRecentButton {
+    cursor: pointer;
+    color: rgb(129, 129, 129);
+}
+
 .displayGameGoldBar {
     cursor: default;
 }
@@ -356,10 +361,10 @@
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
-.searchFeaturedContainer:hover {
+/* .searchFeaturedContainer:hover {
     transform: scale(1.01);
     cursor: pointer;
-}
+} */
 
 .searchFavoritesContainer {
     justify-content: center;

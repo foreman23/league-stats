@@ -35,6 +35,26 @@ const LanePhaseSummaryCardBot = (props) => {
     let loserChampName1 = Object.values(champsJSON.data).find(champ => champ.key === String(statsAt15.laneResults.BOTTOM.laneLoser[0].championId)).id
     let loserChampName2 = Object.values(champsJSON.data).find(champ => champ.key === String(statsAt15.laneResults.BOTTOM.laneLoser[1].championId)).id
 
+    // Generate string for advantage description
+    let advantageStr = null;
+    if (statsAt15.laneResults.BOTTOM.goldDifference > 3000) {
+        advantageStr = `almost guaranteeing ${statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? 'blue' : 'red'} team the victory`
+    }
+    else if (statsAt15.laneResults.BOTTOM.goldDifference > 2000) {
+        advantageStr = `giving ${statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? 'blue' : 'red'} team a big lead entering the mid phase`
+    }
+    else if (statsAt15.laneResults.BOTTOM.goldDifference > 650) {
+        advantageStr = `giving ${statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? 'blue' : 'red'} team an advantage entering the mid phase`
+    }
+    else if (statsAt15.laneResults.BOTTOM.goldDifference >= 150) {
+        advantageStr = `giving ${statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? 'blue' : 'red'} team a small advantage entering the mid phase`
+    }
+    else if (statsAt15.laneResults.BOTTOM.goldDifference < 150) {
+        advantageStr = `so we consider bottom lane to be a tie`
+    }
+
+    console.log(advantageStr)
+
     return (
         <div id='laningBotAnchor'>
             <Grid className={botSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'} container style={{ flexDirection: 'row', display: 'inline-flex', alignItems: 'center' }}>
@@ -101,7 +121,7 @@ const LanePhaseSummaryCardBot = (props) => {
                         <span style={{ color: statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>
                             {statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName}</span> ({statsAt15.laneResults.BOTTOM.laneWinner[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[0].cs} CS) and <span style={{ color: statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>
                             {statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName}</span> ({statsAt15.laneResults.BOTTOM.laneWinner[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[1].cs} CS) in the bottom lane earned {statsAt15.laneResults.BOTTOM.goldDifference} more gold than
-                        <span style={{ color: statsAt15.laneResults.BOTTOM.teamWonLane !== 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName}</span> ({statsAt15.laneResults.BOTTOM.laneLoser[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[0].cs} CS) and <span style={{ color: statsAt15.laneResults.BOTTOM.teamWonLane !== 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName}</span> ({statsAt15.laneResults.BOTTOM.laneLoser[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[1].cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, giving {statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? 'blue' : 'red'} team an advantage entering the mid phase.
+                        <span style={{ color: statsAt15.laneResults.BOTTOM.teamWonLane !== 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName}</span> ({statsAt15.laneResults.BOTTOM.laneLoser[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[0].cs} CS) and <span style={{ color: statsAt15.laneResults.BOTTOM.teamWonLane !== 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName}</span> ({statsAt15.laneResults.BOTTOM.laneLoser[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[1].cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, {advantageStr}.
                     </Typography>
                 </Grid>
                 <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>

@@ -109,6 +109,7 @@ const SummonerProfile = () => {
         // console.log(response.data[0])
         const currentVersion = response.data[0];
         setDataDragonVersion(currentVersion);
+        getChampsJSON(currentVersion);
       })
       .catch(function (response) {
         console.log('Error: Error fetching datadragon version')
@@ -131,7 +132,6 @@ const SummonerProfile = () => {
       setMatchesLoaded(true);
       setLoadingMatches(false);
     }
-
     else {
       for (let i = 0; i < 5; i++) {
         // check if match already exists
@@ -422,14 +422,14 @@ const SummonerProfile = () => {
   // Get summoner data on page load
   useEffect(() => {
 
+    setIsLoadingRank(true);
+
     console.log(selectedRegion, summonerName, riotId)
 
     // set alternate routing value
     const americasServers = ['na1', 'br1', 'la1', 'la2'];
     const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
     const europeServer = ['eun1', 'euw1', 'tr1', 'ru'];
-
-    getChampsJSON();
 
     if (americasServers.includes(selectedRegion) && alternateRegion === null) {
       setAlternateRegion('americas');
@@ -457,17 +457,53 @@ const SummonerProfile = () => {
       getUserFromFirestore();
     }
 
-
   }, [summonerName, selectedRegion, alternateRegion, matchRegion, riotId, getUserFromFirestore])
 
   // Handle favorite click
   const handleFavoriteClick = () => {
     const favorites = localStorage.getItem('favorites')
 
-    // add ranked data if applicable
     let rank = null
-    if (summonerData.rankedData[0]) {
-      rank = `${summonerData.rankedData[0].tier} ${summonerData.rankedData[0].rank}`
+    // Select highest rank to display on profile
+    if (summonerData.rankedData.length > 0) {
+      let rankedValues = {
+        'IRON': 0,
+        'BRONZE': 1,
+        'SILVER': 2,
+        'GOLD': 3,
+        'PLATINUM': 4,
+        'EMERALD': 5,
+        'DIAMOND': 6,
+        'MASTER': 7,
+        'GRANDMASTER': 8,
+        'CHALLENGER': 9
+      }
+      let tierValues = {
+        'IV': 0,
+        'III': 1,
+        'II': 2,
+        'I': 3
+      }
+      let highestRank = 0;
+      let highestRankIndex = null;
+      let highestTierValue = 0;
+      for (let i = 0; i < summonerData.rankedData.length; i++) {
+        if (summonerData.rankedData[i].queueType === 'RANKED_FLEX_SR' || summonerData.rankedData[i].queueType === 'RANKED_SOLO_5x5') {
+          if (rankedValues[summonerData.rankedData[i].tier] > highestRank) {
+            highestRank = rankedValues[summonerData.rankedData[i].tier]
+            highestRankIndex = i
+            highestTierValue = tierValues[summonerData.rankedData[i].rank]
+          }
+          // If rank same (eg. silver and silver) pick higher tier
+          else if (rankedValues[summonerData.rankedData[i].tier] == highestRank) {
+            if (tierValues[summonerData.rankedData[i].rank] > highestTierValue) {
+              highestTierValue = summonerData.rankedData[i].rank
+              highestRankIndex = i
+            }
+          }
+        }
+      }
+      rank = `${summonerData.rankedData[highestRankIndex].tier} ${summonerData.rankedData[highestRankIndex].rank}`
     }
 
     const summonerObj = {
@@ -509,9 +545,9 @@ const SummonerProfile = () => {
   }
 
   // Get champion JSON data from riot
-  const getChampsJSON = async () => {
+  const getChampsJSON = async (currentVersion) => {
     try {
-      const response = await fetch('https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/champion.json');
+      const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/data/en_US/champion.json`);
       const data = await response.json();
       setChampsJSON(data);
     } catch (error) {
@@ -521,6 +557,7 @@ const SummonerProfile = () => {
 
   // Render page once data is loaded
   const [rankIndex, setRankIndex] = useState(null);
+  const [isLoadingRank, setIsLoadingRank] = useState(true);
   useEffect(() => {
     if (summonerData !== null && matchesLoaded === true && matchData !== null && summonerData !== undefined && matchData !== undefined) {
       console.log(summonerData)
@@ -566,6 +603,7 @@ const SummonerProfile = () => {
           }
         }
         setRankIndex(highestRankIndex)
+        setIsLoadingRank(false);
       }
 
       // Find player data
@@ -582,11 +620,49 @@ const SummonerProfile = () => {
       // Add summoner to local storage
       const recentSearches = localStorage.getItem('recentSearches')
 
-      // add ranked data if applicable
       let rank = null
-      if (summonerData.rankedData[0]) {
-        rank = `${summonerData.rankedData[0].tier} ${summonerData.rankedData[0].rank}`
+      // Select highest rank to display on profile
+      if (summonerData.rankedData.length > 0) {
+        let rankedValues = {
+          'IRON': 0,
+          'BRONZE': 1,
+          'SILVER': 2,
+          'GOLD': 3,
+          'PLATINUM': 4,
+          'EMERALD': 5,
+          'DIAMOND': 6,
+          'MASTER': 7,
+          'GRANDMASTER': 8,
+          'CHALLENGER': 9
+        }
+        let tierValues = {
+          'IV': 0,
+          'III': 1,
+          'II': 2,
+          'I': 3
+        }
+        let highestRank = 0;
+        let highestRankIndex = null;
+        let highestTierValue = 0;
+        for (let i = 0; i < summonerData.rankedData.length; i++) {
+          if (summonerData.rankedData[i].queueType === 'RANKED_FLEX_SR' || summonerData.rankedData[i].queueType === 'RANKED_SOLO_5x5') {
+            if (rankedValues[summonerData.rankedData[i].tier] > highestRank) {
+              highestRank = rankedValues[summonerData.rankedData[i].tier]
+              highestRankIndex = i
+              highestTierValue = tierValues[summonerData.rankedData[i].rank]
+            }
+            // If rank same (eg. silver and silver) pick higher tier
+            else if (rankedValues[summonerData.rankedData[i].tier] == highestRank) {
+              if (tierValues[summonerData.rankedData[i].rank] > highestTierValue) {
+                highestTierValue = summonerData.rankedData[i].rank
+                highestRankIndex = i
+              }
+            }
+          }
+        }
+        rank = `${summonerData.rankedData[highestRankIndex].tier} ${summonerData.rankedData[highestRankIndex].rank}`
       }
+
       const summonerObj = {
         selectedRegion: selectedRegion,
         summonerName: playerData.riotIdGameName,
@@ -677,7 +753,7 @@ const SummonerProfile = () => {
     }
   }, [matchesLoaded])
 
-  if (isLoading === true) {
+  if (isLoading === true || !playerData === true) {
     return (
       <Box>
         <LinearProgress></LinearProgress>
@@ -740,26 +816,43 @@ const SummonerProfile = () => {
           </Grid>
 
           <Grid display={'flex'} flexDirection={'column'} marginTop={'0px'}>
-          <Divider className='hideDesktop' variant="middle" width={'50%'} style={{ margin: 'auto', marginTop: '10px', marginBottom: '25px' }} flexItem />
+            <Divider className='hideDesktop' variant="middle" width={'50%'} style={{ margin: 'auto', marginTop: '10px', marginBottom: '25px' }} flexItem />
             <Grid marginLeft={'15px'} display={'flex'} flexDirection={'row'}>
-              <Grid>
-                <List style={{ lineHeight: '22px' }}>
-                  {playerData ? (
-                    <ListItem style={{ fontWeight: 'bolder' }}>{playerData.riotIdGameName} #{riotId}</ListItem>
-                  ) : (
-                    <ListItem style={{ fontWeight: 'bolder' }}>{summonerName} #{riotId} ({selectedRegion})</ListItem>
-                  )}
-                  <ListItem style={{ fontWeight: '500', color: '#404040' }}>{regionStr}</ListItem>
-                  {rankIndex !== null ? (
-                    <>
-                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex].rank}</ListItem>
-                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{summonerData.rankedData[rankIndex].wins}W {summonerData.rankedData[rankIndex].losses}L {((summonerData.rankedData[0].wins / (summonerData.rankedData[rankIndex].wins + summonerData.rankedData[rankIndex].losses)) * 100).toFixed(0)}%</ListItem>
-                    </>
-                  ) : <ListItem style={{ fontWeight: '500', color: '#404040' }}>Unranked</ListItem>}
-                </List>
-              </Grid>
+              {rankIndex !== null && !isLoadingRank ? (
+                <Grid>
+                  <List style={{ lineHeight: '22px' }}>
+                    {playerData ? (
+                      <ListItem style={{ fontWeight: 'bolder' }}>{playerData.riotIdGameName} #{riotId}</ListItem>
+                    ) : (
+                      <ListItem style={{ fontWeight: 'bolder' }}><Box><LinearProgress></LinearProgress></Box></ListItem>
+                    )}
+                    <ListItem style={{ fontWeight: '500', color: '#404040' }}>{regionStr}</ListItem>
+                    {summonerData.rankedData &&
+                      <span>
+                        <ListItem style={{ fontWeight: '500', color: '#404040' }}>{(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex].rank}</ListItem>
+                        <ListItem style={{ fontWeight: '500', color: '#404040' }}>{summonerData.rankedData[rankIndex].wins}W {summonerData.rankedData[rankIndex].losses}L {((summonerData.rankedData[0].wins / (summonerData.rankedData[rankIndex].wins + summonerData.rankedData[rankIndex].losses)) * 100).toFixed(0)}%</ListItem>
+                      </span>
+                    }
+                  </List>
+                </Grid>
+              ) : (
+                <Grid style={{ margin: 'auto', marginBottom: '15px' }}>
+                  <List style={{ lineHeight: '22px' }}>
+                    {playerData ? (
+                      <ListItem style={{ fontWeight: 'bolder' }}>{playerData.riotIdGameName} #{riotId}</ListItem>
+                    ) : (
+                      <ListItem style={{ fontWeight: 'bolder' }}>{summonerName} #{riotId}</ListItem>
+                    )}
+                    <ListItem style={{ fontWeight: '500', color: '#404040' }}>{regionStr}</ListItem>
+                    <ListItem style={{ fontWeight: '500', color: '#404040' }}>Unranked</ListItem>
+                  </List>
+                </Grid>
+              )}
+
               <Grid className='summonerProfileInformation'>
-                {rankIndex !== null &&
+                {console.log(summonerData)}
+                {console.log(rankIndex)}
+                {rankIndex !== null && !isLoadingRank &&
                   <div>
                     <Tooltip
                       slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -40] } }] } }}
@@ -768,7 +861,7 @@ const SummonerProfile = () => {
                       disableInteractive
                       title={<>
                         <div>
-                          <span style={{ textDecoration: 'underline', fontWeight: 'bold' }}>{summonerData.rankedData[rankIndex].queueType}<br></br></span>
+                          {/* <span style={{ textDecoration: 'underline', fontWeight: 'bold' }}>{summonerData.rankedData[rankIndex].queueType}<br></br></span> */}
                           {(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex].rank} - {summonerData.rankedData[rankIndex].leaguePoints} lp
                         </div>
                       </>}
@@ -954,65 +1047,69 @@ const SummonerProfile = () => {
             paddingBottom: '25px'
           }}
         >
-          {(loadingMatches) ? (
-            <div style={{ textAlign: 'center' }} >
-              <CircularProgress />
-            </div>
-          ) : (matchData === null || matchData.length === 0 && matchData !== -1) ? (
-            // Display NO MATCHES FOUND
-            <div>
-              <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'}>
-                <Typography style={{ textAlign: 'center' }}>No recent matches!</Typography>
-              </Grid>
-            </div>
-          ) : (
-            matchData.map((gameData, index) => {
-              let gameModeHref = "";
-              if (gameData.info.gameMode === "CLASSIC" && gameData.info.gameDuration > 300) {
-                gameModeHref = `/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
-              }
-              else if (gameData.info.gameMode === "CLASSIC" && gameData.info.gameDuration < 300) {
-                gameModeHref = `/remake/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
-              }
-              else if (gameData.info.gameMode === "ARAM") {
-                gameModeHref = `/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
-              }
-              else if (gameData.info.gameMode === "CHERRY") {
-                gameModeHref = "/Test";
-              }
+          {
+            loadingMatches ? (
+              <div style={{ textAlign: 'center' }}>
+                <CircularProgress />
+              </div>
+            ) : matchData === null || matchData.length === 0 || matchData === -1 ? (
+              // Display NO MATCHES FOUND
+              <div>
+                <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'}>
+                  <Typography style={{ textAlign: 'center' }}>No recent matches!</Typography>
+                </Grid>
+              </div>
+            ) : playerData ? (  // Check if playerData is defined
+              matchData.map((gameData, index) => {
+                let gameModeHref = "";
+                console.log(gameData);
+                console.log(playerData);
 
-              let gameDataPayload = {
-                "gameData": gameData,
-                "alternateRegion": alternateRegion,
-                "dataDragonVersion": dataDragonVersion
-              }
+                if (gameData.info.gameMode === "CLASSIC" && gameData.info.gameDuration > 300) {
+                  gameModeHref = `/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
+                } else if (gameData.info.gameMode === "CLASSIC" && gameData.info.gameDuration < 300) {
+                  gameModeHref = `/remake/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
+                } else if (gameData.info.gameMode === "ARAM") {
+                  gameModeHref = `/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
+                } else if (gameData.info.gameMode === "CHERRY") {
+                  gameModeHref = "/Test";
+                }
 
+                let gameDataPayload = {
+                  "gameData": gameData,
+                  "alternateRegion": alternateRegion,
+                  "dataDragonVersion": dataDragonVersion
+                };
 
-              if (recentOpen === false) return (
-                <a style={{ textDecoration: 'inherit', color: 'inherit' }} onMouseDown={(e) => {
-                  if (e.button === 0 || e.button === 1) {
-                    localStorage.setItem('gameData', JSON.stringify(gameDataPayload))
-                    // Prevent spamming of tabs which leads to incorrect game details
-                    setTimeout(() => {
-                      setRecentOpen(true);
+                if (recentOpen === false) return (
+                  <a style={{ textDecoration: 'inherit', color: 'inherit' }} onMouseDown={(e) => {
+                    if (e.button === 0 || e.button === 1) {
+                      localStorage.setItem('gameData', JSON.stringify(gameDataPayload));
                       setTimeout(() => {
-                        setRecentOpen(false);
-                      }, 200)
-                    }, 200);
-                  }
-                }}
-                  className="DisplayGameContainer" href={gameModeHref} key={index} target="_blank" rel="noopener noreferrer">
-                  <DisplayGame gameData={gameData} dataDragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
-                </a>
-              )
-              if (recentOpen === true) return (
-                <a className="DisplayGameContainer" key={index} target="_blank" rel="noopener noreferrer">
-                  <DisplayGame gameData={gameData} dataDragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
-                </a>
-              )
-            }
+                        setRecentOpen(true);
+                        setTimeout(() => {
+                          setRecentOpen(false);
+                        }, 200)
+                      }, 200);
+                    }
+                  }}
+                    className="DisplayGameContainer" href={gameModeHref} key={index} target="_blank" rel="noopener noreferrer">
+                    <DisplayGame gameData={gameData} dataDragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
+                  </a>
+                );
+                if (recentOpen === true) return (
+                  <a className="DisplayGameContainer" key={index} target="_blank" rel="noopener noreferrer">
+                    <DisplayGame gameData={gameData} dataDragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
+                  </a>
+                );
+              })
+            ) : (
+              <div style={{ textAlign: 'center' }}>
+                <Typography style={{ textAlign: 'center' }}>Player data is not available!</Typography>
+              </div>
             )
-          )}
+          }
+
         </Box>
 
         {!loadingMatches &&

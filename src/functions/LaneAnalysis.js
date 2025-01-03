@@ -107,8 +107,8 @@ const determineWinnersBot = (statsAt15Arr) => {
     }
 
     // Determine resTag based on gold dif
-    if (goldDifference >= 1500) {
-        resTag = 'dominates';
+    if (goldDifference >= 3000) {
+        resTag = 'obliterates';
         bubbleCount = 5;
         if (laneWinner[0].teamId === 100) {
             bubbleColor = '#37B7FF'
@@ -117,9 +117,39 @@ const determineWinnersBot = (statsAt15Arr) => {
             bubbleColor = '#FF3F3F'
         }
     }
-    else if (goldDifference >= 150) {
+    else if (goldDifference >= 2000) {
+        resTag = 'dominates';
+        bubbleCount = 4;
+        if (laneWinner[0].teamId === 100) {
+            bubbleColor = '#37B7FF'
+        }
+        else {
+            bubbleColor = '#FF3F3F'
+        }
+    }
+    else if (goldDifference >= 1000) {
         resTag = 'won';
         bubbleCount = 3;
+        if (laneWinner[0].teamId === 100) {
+            bubbleColor = '#9EDCFF'
+        }
+        else {
+            bubbleColor = '#FF8B8B'
+        }
+    }
+    else if (goldDifference >= 650) {
+        resTag = 'won';
+        bubbleCount = 2;
+        if (laneWinner[0].teamId === 100) {
+            bubbleColor = '#9EDCFF'
+        }
+        else {
+            bubbleColor = '#FF8B8B'
+        }
+    }
+    else if (goldDifference >= 150) {
+        resTag = 'won';
+        bubbleCount = 1;
         if (laneWinner[0].teamId === 100) {
             bubbleColor = '#9EDCFF'
         }
@@ -183,8 +213,8 @@ const determineWinners = (statsAt15Arr) => {
         }
 
         // Determine resTag based on gold dif
-        if (goldDifference >= 1500) {
-            resTag = 'dominates';
+        if (goldDifference >= 3000) {
+            resTag = 'obliterates';
             bubbleCount = 5;
             if (laneWinner.teamId === 100) {
                 bubbleColor = '#37B7FF'
@@ -193,9 +223,39 @@ const determineWinners = (statsAt15Arr) => {
                 bubbleColor = '#FF3F3F'
             }
         }
-        else if (goldDifference >= 150) {
+        else if (goldDifference >= 2000) {
+            resTag = 'dominates';
+            bubbleCount = 4;
+            if (laneWinner.teamId === 100) {
+                bubbleColor = '#37B7FF'
+            }
+            else {
+                bubbleColor = '#FF3F3F'
+            }
+        }
+        else if (goldDifference >= 1000) {
             resTag = 'won';
             bubbleCount = 3;
+            if (laneWinner.teamId === 100) {
+                bubbleColor = '#9EDCFF'
+            }
+            else {
+                bubbleColor = '#FF8B8B'
+            }
+        }
+        else if (goldDifference >= 650) {
+            resTag = 'won';
+            bubbleCount = 2;
+            if (laneWinner.teamId === 100) {
+                bubbleColor = '#9EDCFF'
+            }
+            else {
+                bubbleColor = '#FF8B8B'
+            }
+        }
+        else if (goldDifference >= 150) {
+            resTag = 'won';
+            bubbleCount = 1;
             if (laneWinner.teamId === 100) {
                 bubbleColor = '#9EDCFF'
             }
