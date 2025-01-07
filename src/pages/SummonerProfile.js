@@ -225,13 +225,26 @@ const SummonerProfile = () => {
     console.log('Reading from firestore (checking user)')
     const docSnap = await getDoc(docRef);
 
+    // Reset load more button
+    setAllLoaded(false);
+
     // Load summoner profile from firestore
     if (docSnap.exists()) {
       console.log('user exists in firestore');
       setSummonerData(docSnap.data());
       updateUserMatchInfo(docSnap.data());
       setTimeSinceUpdated(docSnap.data().lastUpdated.seconds);
+      // Reset update button if aplicable
+      const lastUpdatedDate = new Date(docSnap.data().lastUpdated.seconds * 1000);
+      const now = new Date();
+      const timeDifferenceInSeconds = Math.floor((now - lastUpdatedDate) / 1000);
+      if (timeDifferenceInSeconds < 120) {
+        setDisableUpdateButton(true)
+      } else {
+        setDisableUpdateButton(false)
+      }
     }
+
     // Create new summoner profile on firestore
     else {
       try {
@@ -660,6 +673,7 @@ const SummonerProfile = () => {
             }
           }
         }
+        console.log(highestRankIndex)
         rank = `${summonerData.rankedData[highestRankIndex].tier} ${summonerData.rankedData[highestRankIndex].rank}`
       }
 
@@ -1039,7 +1053,7 @@ const SummonerProfile = () => {
         <Box
           sx={{
             justifyContent: 'center',
-            width: { xs: '100%', sm: '60%', lg: '45%', xl: '33%' },
+            width: { xs: '100%', sm: '70%', lg: '50%', xl: '37%' },
             margin: 'auto',
             borderRadius: '5px',
             marginTop: '20px',

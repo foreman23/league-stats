@@ -395,7 +395,8 @@ function Navbar(props) {
                         freeSolo
                         renderInput={(params) => (
                             <TextField
-                                style={{ backgroundColor: 'white', borderRadius: '5px' }}
+                            sx={{ input: { color: '#e5e5e6' } }}
+                                style={{ backgroundColor: '#303030', borderRadius: '5px' }}
                                 {...params}
                                 onKeyDown={(event) => {
                                     if (event.key === 'Enter') {

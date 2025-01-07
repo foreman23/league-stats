@@ -454,18 +454,42 @@ function SummonerSearch() {
               className='searchFeaturedContainer'>
               <Grid>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'column', marginBottom: '10px' }}>
-                  <Typography style={{ fontWeight: 'bold', color: '#7E7E7E', textAlign: 'center', margin: 'auto' }}>Featured Report</Typography>
-                  <Divider color={'#7E7E7E'} style={{ width: '30%', margin: 'auto', marginTop: '10px', marginBottom: '10px' }}></Divider>
-                  <Typography style={{ textAlign: 'right', left: 'auto', right: '30px', color: '#7E7E7E', fontSize: '16px', whiteSpace: 'nowrap', position: 'absolute', fontWeight: 'bold' }}>{selectedRegion.toUpperCase()}</Typography>
+                  {featuredData.gameTier !== 'Unranked' ? (
+                    <span style={{ display: 'flex', flexDirection: 'row', }} className='hideDesktop'>
+                      <span>
+                        <Typography className='featuredGameMainHeader'>Featured Report</Typography>
+                        <Divider className='featuredGameMainDivider' color={'#7E7E7E'}></Divider>
+                      </span>
+                      <span style={{ flexDirection: 'row', display: 'flex' }}>
+                        <Typography className='featuredGameRankHeader'>{timeSinceMatch}</Typography>
+                        <Typography className='featuredGameRankHeader'>{selectedRegion.toUpperCase()}</Typography>
+                      </span>
+                    </span>
+                  ) : (
+                    <span style={{ display: 'flex', flexDirection: 'row' }} className='hideDesktop'>
+                      <span>
+                        <Typography className='featuredGameMainHeader'>Featured Report</Typography>
+                        <Divider className='featuredGameMainDivider' color={'#7E7E7E'}></Divider>
+                      </span>
+                      <span style={{ flexDirection: 'row', display: 'flex' }}>
+                        <Typography className='featuredGameRankHeader'>{timeSinceMatch}</Typography>
+                        <Typography className='featuredGameRankHeader'>{selectedRegion.toUpperCase()}</Typography>
+                      </span>
+                    </span>
+                  )}
+                  <Typography className='featuredGameMainHeader hideMobile'>Featured Report</Typography>
+                  <Divider className='featuredGameMainDivider hideMobile' color={'#7E7E7E'}></Divider>
+                  <Typography className='hideMobile' style={{ textAlign: 'right', left: 'auto', right: '30px', color: '#7E7E7E', fontSize: '16px', whiteSpace: 'nowrap', position: 'absolute', fontWeight: 'bold' }}>{selectedRegion.toUpperCase()}</Typography>
                 </div>
 
+                {/* Display featured game */}
                 {featuredData !== null && champsJSON !== null &&
                   <Grid style={{ display: 'flex' }}>
 
-                    <div style={{ marginLeft: '35px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.8))' }}>
+                    <div className='featuredGamePlayerImgContainer'>
                       <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 90] } }] } }} title={`${featuredData.featuredPlayer.riotIdGameName} #${featuredData.featuredPlayer.riotIdTagline}`}>
                         <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${featuredData.featuredPlayer.riotIdGameName}/${featuredData.featuredPlayer.riotIdTagline.toLowerCase()}`} target="_blank" rel="noopener noreferrer" style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                          <Typography style={{
+                          <Typography className='featuredGamePlayerLevel' style={{
                             fontSize: '12px',
                             position: 'absolute',
                             backgroundColor: featuredData.featuredPlayer.teamId === 100 ? '#568CFF' : '#FF3A54',
@@ -484,11 +508,11 @@ function SummonerSearch() {
                           }}
                           >{17}
                           </Typography>
-                          <img style={{ borderRadius: '100%', width: '102px', backgroundColor: featuredData.featuredPlayer.teamId === 100 ? '#568CFF' : '#FF3A54', padding: '4px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(featuredData.featuredPlayer.championId)).id}.png`}></img>
+                          <img className='featuredGamePlayerImg' style={{ backgroundColor: featuredData.featuredPlayer.teamId === 100 ? '#568CFF' : '#FF3A54' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(featuredData.featuredPlayer.championId)).id}.png`}></img>
                         </a>
                       </Tooltip>
                     </div>
-                    <div style={{ marginLeft: '25px', marginRight: '20px', marginTop: '5px', maxWidth: '200px', overflow: 'hidden' }}>
+                    <div className='featuredGamePlayerInfo'>
                       <Typography style={{ fontWeight: 'bold', fontSize: '18px' }}>{featuredData.featuredPlayer.riotIdGameName}</Typography>
                       <Typography style={{ color: '#7E7E7E' }}>{`${featuredData.featuredPlayer.championName} (${featuredData.featuredPlayer.kills}/${featuredData.featuredPlayer.deaths}/${featuredData.featuredPlayer.assists})`}</Typography>
                     </div>
@@ -497,12 +521,18 @@ function SummonerSearch() {
                     </div>
                     <div style={{ marginRight: '20px', marginTop: '5px' }}>
                       <Typography style={{ fontWeight: 'bold', fontSize: '16px' }}>{queueTitle}</Typography>
-                      <Typography style={{ color: '#7E7E7E' }}>{timeSinceMatch}</Typography>
+                      <Typography className='hideMobile' style={{ color: '#7E7E7E' }}>{timeSinceMatch}</Typography>
+                      {featuredData.gameTier !== 'Unranked' ? (
+                        <Typography className='hideDesktop' style={{ color: '#7E7E7E' }}>{featuredData.gameTier.charAt(0) + featuredData.gameTier.split(' ')[0].substring(1).toLowerCase() + ' ' + featuredData.gameTier.split(' ')[1]}</Typography>
+                      ) : (
+                        <Typography className='hideDesktop' style={{ color: '#7E7E7E' }}>{featuredData.gameTier}</Typography>
+                      )
+                      }
                     </div>
-                    <div style={{ marginRight: '20px', marginTop: '25px' }}>
+                    <div className='hideMobile' style={{ marginRight: '20px', marginTop: '25px' }}>
                       <Box marginTop={'3px'} marginBottom={'3px'} alignSelf={'center'} width={'10px'} height={'10px'} borderRadius={'100%'} backgroundColor={'#DDDDDD'}></Box>
                     </div>
-                    <div style={{ marginRight: '20px', marginTop: '5px' }}>
+                    <div className='hideMobile' style={{ marginRight: '20px', marginTop: '5px' }}>
                       <Typography style={{ fontWeight: 'bold', fontSize: '16px' }}>Tier</Typography>
                       {featuredData.gameTier !== 'Unranked' ? (
                         <Typography style={{ color: '#7E7E7E' }}>{featuredData.gameTier.charAt(0) + featuredData.gameTier.split(' ')[0].substring(1).toLowerCase() + ' ' + featuredData.gameTier.split(' ')[1]}</Typography>
@@ -514,8 +544,32 @@ function SummonerSearch() {
                   </Grid>
                 }
 
+                {/* Participant Champs (MOBILE) */}
+                <div className='featuredGameChamps hideDesktop' style={{ display: 'flex', marginLeft: '170px', position: 'absolute', top: 'auto', bottom: '45px' }}>
+                  {/* Team 1 */}
+                  <Grid style={{ marginTop: '15px' }}>
+                    {featuredData.featuredGameData.matchData.info.participants
+                      .filter(player => player.summonerId !== featuredData.featuredPlayer.summonerId)
+                      .sort((a, b) => {
+                        // Sort players by teamId: Featured player's team (100 or 200) comes first
+                        const featuredTeamId = featuredData.featuredPlayer.teamId;
+                        if (a.teamId === featuredTeamId && b.teamId !== featuredTeamId) return -1;
+                        if (a.teamId !== featuredTeamId && b.teamId === featuredTeamId) return 1;
+                        return 0;
+                      })
+                      .map((player, index) => (
+                        <Tooltip arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
+                          <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} target="_blank" rel="noopener noreferrer" style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                            <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '32px', marginRight: '3px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
+                            <Box style={{ position: 'absolute', width: '32px', height: '5px', bottom: '0px', left: '0px', backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
+                          </a>
+                        </Tooltip>
+                      ))}
+                  </Grid>
+                </div>
+
                 {/* Participant Champs */}
-                <div style={{ display: 'flex', marginLeft: '170px', position: 'absolute', top: 'auto', bottom: '45px' }}>
+                <div className='featuredGameChamps hideMobile' style={{ display: 'flex', marginLeft: '170px', position: 'absolute', top: 'auto', bottom: '45px' }}>
                   {/* Team 1 */}
                   <Grid>
                     {featuredData.featuredGameData.matchData.info.participants.filter(player => player.teamId === featuredData.featuredPlayer.teamId && player.summonerId !== featuredData.featuredPlayer.summonerId).map((player, index) => (
@@ -528,7 +582,7 @@ function SummonerSearch() {
                     ))}
                   </Grid>
 
-                  <img style={{ width: '27px', opacity: '0.65', marginLeft: '25px', marginRight: '25px' }} src='/images/swords.svg'></img>
+                  <img className='hideMobile' style={{ width: '27px', opacity: '0.65', marginLeft: '25px', marginRight: '25px' }} src='/images/swords.svg'></img>
 
                   {/* Team 2 */}
                   <Grid>
@@ -597,38 +651,38 @@ function SummonerSearch() {
             )}
 
             {recentArr !== null && currentTab === 'recent' ? (
-                <List>
-                  <Grid style={{ justifyContent: 'center', alignItems: 'center', marginLeft: '5px' }} container>
-                    {recentArr.map((item, index) => (
-                      <Grid item xs={12} sm={4}>
-                        <CloseIcon className='deleteRecentButton' onClick={() => handleRemoveRecent(item)} style={{ display: 'flex', marginRight: 'auto', marginLeft: '0px', marginTop: '10px', fontSize: '14px', position: 'absolute', zIndex: 1 }}></CloseIcon>
-                        <a className='recentSearchItem' href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`} target="_blank" rel="noopener noreferrer">
-                          <ListItem style={{ justifyContent: 'center' }} key={index}>
-                            <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
-                            <Grid style={{ marginLeft: '60px', textAlign: 'center' }}>
-                              <Grid>
-                                <b style={{ fontSize: '14px' }}>{item.summonerName}</b>
-                              </Grid>
-                              <Grid>
-                                <b style={{ fontSize: '14px' }}>#{item.riotId}</b>
-                              </Grid>
-                              <Grid>
-                                <span style={{ fontSize: '14px' }}>Level: {item.level}</span>
-                              </Grid>
-                              <Grid>
-                                {item.rank !== null ? (
-                                  <span style={{ fontSize: '14px' }}>{item.rank.charAt(0) + item.rank.split(' ')[0].substring(1).toLowerCase() + ' ' + item.rank.split(' ')[1]}</span>
-                                ) : (
-                                  <span style={{ fontSize: '14px' }}>Unranked</span>
-                                )}
-                              </Grid>
+              <List>
+                <Grid style={{ justifyContent: 'center', alignItems: 'center', marginLeft: '5px' }} container>
+                  {recentArr.map((item, index) => (
+                    <Grid item xs={12} sm={4}>
+                      <CloseIcon className='deleteRecentButton' onClick={() => handleRemoveRecent(item)} style={{ display: 'flex', marginRight: 'auto', marginLeft: '0px', marginTop: '10px', fontSize: '14px', position: 'absolute', zIndex: 1 }}></CloseIcon>
+                      <a className='recentSearchItem' href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`} target="_blank" rel="noopener noreferrer">
+                        <ListItem style={{ justifyContent: 'center' }} key={index}>
+                          <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
+                          <Grid style={{ marginLeft: '60px', textAlign: 'center' }}>
+                            <Grid>
+                              <b style={{ fontSize: '14px' }}>{item.summonerName}</b>
                             </Grid>
-                          </ListItem>
-                        </a>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </List>
+                            <Grid>
+                              <b style={{ fontSize: '14px' }}>#{item.riotId}</b>
+                            </Grid>
+                            <Grid>
+                              <span style={{ fontSize: '14px' }}>Level: {item.level}</span>
+                            </Grid>
+                            <Grid>
+                              {item.rank !== null ? (
+                                <span style={{ fontSize: '14px' }}>{item.rank.charAt(0) + item.rank.split(' ')[0].substring(1).toLowerCase() + ' ' + item.rank.split(' ')[1]}</span>
+                              ) : (
+                                <span style={{ fontSize: '14px' }}>Unranked</span>
+                              )}
+                            </Grid>
+                          </Grid>
+                        </ListItem>
+                      </a>
+                    </Grid>
+                  ))}
+                </Grid>
+              </List>
             ) : (
               <div></div>
             )}

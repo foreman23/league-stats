@@ -300,16 +300,80 @@
     display: flex;
     flex-direction: row;
     margin: auto;
+    justify-content: center;
+    align-items: center;
+    margin-top: 60px;
 }
 
 .displayGameMainContainer {
     justify-content: center;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     display: flex;
+    flex-direction: column !important;
     padding: 10px;
-    padding-top: 35px;
-    padding-bottom: 35px;
+    padding-top: 14px;
+    padding-bottom: 10px;
     border-radius: 10px;
+    position: relative;
+}
+
+.displayGameTeamChamps {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    width: 28px;
+    margin-right: 5px;
+}
+
+.displayGameTeamChampsBox {
+    position: absolute;
+    width: 28px;
+    height: 5px;
+    bottom: 0px;
+    left: 0px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.displayGameMainChampImg {
+    border-radius: 100%;
+    margin-bottom: 3px;
+    width: 90px;
+    align-self: center;
+}
+
+.displayGameSummonerSpells {
+    position: absolute;
+    top: auto;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+@media only screen and (max-width: 1920px) {
+    .displayGameTeamChamps {
+        width: 24px;
+    }
+    .displayGameTeamChampsBox {
+        width: 24px;
+    }
+    .displayGameMainChampImg {
+        width: 80px;
+    }
+    .displayGameSummonerSpells {
+        bottom: 8px;
+    }
+}
+
+@media only screen and (max-width: 1360px) {
+    .displayGameRiotName {
+        font-size: 14px !important;
+    }
+    .displayGameMainChampImg {
+        width: 64px;
+    }
 }
 
 .navBarSearchBar {
@@ -402,6 +466,13 @@
     }
 }
 
+.displayGameMatchInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+}
+
 
 .displayGameHeader {
     font-weight: bold !important;
@@ -448,8 +519,153 @@
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)) !important;
 }
 
+.featuredGamePlayerImgContainer {
+    margin-left: 35px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.8));
+
+}
+
+.featuredGamePlayerImg {
+    border-radius: 100%;
+    width: 102px;
+    padding: 4px;
+}
+
+.featuredGamePlayerLevel {
+    font-size: 12px !important;
+    position: absolute !important;
+    color: white !important;
+    font-weight: bold !important;
+    border-radius: 100% !important;
+    padding-left: 5px !important;
+    padding-top: 1px !important;
+    padding-right: 5px !important;
+    padding-bottom: 1px !important;
+    text-align: center !important;
+    right: auto !important;
+    top: auto !important;
+    left: 76px !important;
+    justify-content: center !important;
+}
+
+.featuredGamePlayerInfo {
+    margin-left: 25px;
+    margin-right: 20px;
+    margin-top: 5px;
+    max-width: 200px;
+    overflow: hidden;
+}
+
+.featuredGameMainHeader {
+    font-weight: bold !important;
+    color: #7E7E7E !important;
+    text-align: center !important;
+    margin: auto !important;
+}
+
+.featuredGameMainDivider {
+    width: 30% !important;
+    margin: auto !important;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.featuredGameRankHeader {
+    text-align: right !important;
+    left: 20px !important;
+    right: auto !important;
+    color: #999999 !important;
+    font-size: 16px !important;
+    white-space: nowrap !important;
+    font-weight: bold !important;
+}
+
+.displayGameTimeHeader {
+    text-align: right !important;
+    left: auto !important;
+    top: 18px !important;
+    bottom: auto !important;
+    right: 20px !important;
+    color: #7E7E7E !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    position: absolute !important;
+    font-weight: bold !important;
+}
+
+.displayGamePlayerProfileContainer {
+    margin-top: 15px !important;
+    justify-content: end !important;
+}
+
+.displayGameOpposingProfileContainer {
+    margin-top: 15px !important;
+    justify-content: start !important;
+}
+
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
+
+    .featuredGameMainHeader {
+        font-weight: bold !important;
+        color: #7E7E7E !important;
+        text-align: start !important;
+        margin-left: 10px !important;
+        margin-right: auto !important;
+    }
+
+    .featuredGameMainDivider {
+        width: 138px !important;
+        margin-left: 10px !important;
+        margin-right: auto !important;
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .featuredGameRankHeader {
+        text-align: left !important;
+        margin-left: 10px !important;
+        margin-right: 25px !important;
+        color: #999999 !important;
+        font-size: 16px !important;
+        white-space: nowrap !important;
+        position: relative !important;
+        font-weight: bold !important;
+    }
+
+    .featuredGamePlayerInfo {
+        margin-left: 25px;
+        margin-right: 20px;
+        margin-top: 5px;
+        max-width: 200px;
+        overflow: visible;
+    }
+
+    .featuredGameChamps {
+        display: unset !important;
+        margin-top: 100px !important;
+        position: unset !important;
+        text-align: center !important;
+    }
+
+    .featuredGamePlayerImgContainer {
+        margin-left: 10px;
+        margin-top: 0px;
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.8));
+    }
+
+    .featuredGamePlayerLevel {
+        text-align: center !important;
+        right: auto !important;
+        top: auto !important;
+        left: 50px !important;
+        bottom: 60px !important;
+        justify-content: center !important;
+    }
+
+    .featuredGamePlayerImg {
+        width: 64px;
+    }
 
     .summonerSearchContainer {
         background-color: #ffffff;
