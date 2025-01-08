@@ -836,7 +836,9 @@ const SummonerProfile = () => {
                 <Grid>
                   <List style={{ lineHeight: '22px' }}>
                     {playerData ? (
-                      <ListItem style={{ fontWeight: 'bolder' }}>{playerData.riotIdGameName} #{riotId}</ListItem>
+                      <Tooltip placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${playerData.riotIdGameName} #${riotId}`}>
+                        <ListItem className='summonerProfileRiotName'>{playerData.riotIdGameName} #{riotId}</ListItem>
+                      </Tooltip>
                     ) : (
                       <ListItem style={{ fontWeight: 'bolder' }}><Box><LinearProgress></LinearProgress></Box></ListItem>
                     )}
@@ -1003,7 +1005,7 @@ const SummonerProfile = () => {
                   </Grid>
                 }
                 {summonerData.masteryData.length >= 3 &&
-                  <Grid marginRight={'20px'} flex={'column'}>
+                  <Grid marginRight={'0px'} flex={'column'}>
                     <Tooltip disableInteractive
                       placement='top'
                       arrow
@@ -1051,9 +1053,10 @@ const SummonerProfile = () => {
         </Grid>
 
         <Box
+          className='displayGamesMainContainer'
           sx={{
             justifyContent: 'center',
-            width: { xs: '100%', sm: '70%', lg: '50%', xl: '37%' },
+            width: { xs: '100%', sm: '80%', lg: '50%', xl: '37%' },
             margin: 'auto',
             borderRadius: '5px',
             marginTop: '20px',

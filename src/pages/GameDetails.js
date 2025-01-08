@@ -160,8 +160,7 @@ function GameDetails() {
 
     if (gameData && alternateRegion && timelineData && playerData) {
       document.title = `${playerData.riotIdGameName}#${playerData.riotIdTagline} - ${new Date(gameData.info.gameCreation).toLocaleDateString()} @${new Date(gameData.info.gameCreation).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase().replace(/\s/g, '')}`
-      const { matchSummaryText, highestDamageDealt, playersWithScores } = calculateOpScores(gameData, playerData);
-      setMatchSummaryDesc(matchSummaryText)
+      const { highestDamageDealt, playersWithScores } = calculateOpScores(gameData, playerData);
       setHighestDamageDealt(highestDamageDealt)
       setPlayersWithScore(playersWithScores)
 
@@ -446,21 +445,21 @@ function GameDetails() {
       let teamLeadingSentence = '';
       if (!closeGame && !blowout) {
         if (graphData.leadChanges === 1) {
-          teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} most of the game which had ${graphData.leadChanges} lead change.`
+          teamLeadingSentence = (<>{playerData.riotIdGameName}'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} most of the game</u> which had {graphData.leadChanges} lead change.</>)
         } else {
-          teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} most of the game which had ${graphData.leadChanges} lead changes.`
+          teamLeadingSentence = (<>{playerData.riotIdGameName}'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} most of the game</u> which had {graphData.leadChanges} lead changes.</>)
         }
       } if (blowout) {
-        teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} the whole game.`
+        teamLeadingSentence = (<>{playerData.riotIdGameName}'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} the whole game.</u></>)
       } else if (nearBlowout) {
         if (graphData.leadChanges > 1) {
-          teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} for almost the whole game which had ${graphData.leadChanges} lead changes.`
+          teamLeadingSentence = (<>{playerData.riotIdGameName}'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} for almost the whole game</u> which had {graphData.leadChanges} lead changes.</>)
         } else {
-          teamLeadingSentence = `${playerData.riotIdGameName}'s team was ${playerTeamLeading ? 'winning' : 'losing'} for almost the whole game which had ${graphData.leadChanges} lead change.`
+          teamLeadingSentence = (<>{playerData.riotIdGameName}'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} for almost the whole game</u> which had {graphData.leadChanges} lead change.</>)
         }
       }
       else if (closeGame) {
-        teamLeadingSentence = `The game was evenly matched, with both teams fighting hard.`
+        teamLeadingSentence = (<><u>The game was evenly matched</u>, with both teams fighting hard.</>)
       }
 
       // Determine closing sentence
@@ -486,7 +485,9 @@ function GameDetails() {
         lastSentence = `In the end that resulted in defeat.`
       }
 
-      setMatchSummaryDesc(`${teamLeadingSentence} ${lastSentence} `)
+      console.log(teamLeadingSentence)
+
+      setMatchSummaryDesc(<>{teamLeadingSentence} {lastSentence}</>)
     }
   }, [graphData])
 
@@ -533,163 +534,255 @@ function GameDetails() {
           <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '20px' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
             {/* Section 1 */}
-            <Grid container marginLeft={'2%'} marginRight={'2%'} marginTop={'2%'} maxWidth={'90%'}>
-              <Grid style={{ textAlign: 'center', display: 'flex', alignItems: 'center' }} justifyContent={'center'} item xs={5}>
-                {/* Player Win */}
-                {playerData.win ? (
-                  <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                    <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
-                      <img
-                        style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''>
-                      </img>
-                    </Tooltip>
-                    <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/accept.png' alt='Crown'></img>
-                    <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
-                  </a>
-                ) : (
-                  // Player Lose
-                  <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                    <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
-                      <img
-                        style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''>
-                      </img>
-                    </Tooltip>
-                    <img style={{ position: 'absolute', top: '8px', right: '8px', width: '36px' }} src='/images/close.png' alt='Crown'></img>
-                    <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId === 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
-                  </a>
-                )}
-                <img style={{ width: '55px' }} src='/images/swords.svg'></img>
-                {/* Player Win */}
-                {playerData.win ? (
-                  <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                    <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
-                      <img
-                        style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`} alt=''>
-                      </img>
-                    </Tooltip>
-                    <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId !== 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}></Box>
-                  </a>
-                ) : (
-                  // Player Lose
-                  <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', color: 'red', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                    <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
-                      <img
-                        style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`} alt=''>
-                      </img>
-                    </Tooltip>
-                    <Box style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', width: '110px', height: '10px', backgroundColor: playerData.teamId !== 100 ? '#37B7FF' : '#FF3F3F', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
-                  </a>
-                )}
-              </Grid>
-              <Grid justifyContent={'center'} item xs={7}>
-                <Typography style={{ paddingTop: '10px' }} fontSize={26} fontWeight={600}>
-                  <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
-                    <a className='clickableName' style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`}>
-                      {playerData.riotIdGameName}
+            <Grid width={'80%'} container marginTop={'40px'} justifyContent={'center'}>
+              <Box width={'100%'} style={{ display: 'flex', paddingLeft: '25px', paddingRight: '25px' }}>
+                <Grid style={{ textAlign: 'center', display: 'flex', alignItems: 'center', paddingRight: '0px' }} justifyContent={'right'} item xs={5}>
+                  {/* Player Win */}
+                  {playerData.win ? (
+                    <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
+                      <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                        <div style={{ border: playerData.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
+                          <Typography className='displayGameChampLevel' style={{
+                            fontSize: '14px',
+                            position: 'absolute',
+                            backgroundColor: playerData.teamId === 200 ? '#FF3A54' : '#568CFF',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            borderRadius: '100%',
+                            paddingLeft: '8px',
+                            paddingRight: '8px',
+                            paddingTop: '1px',
+                            paddingBottom: '1px',
+                            textAlign: 'center',
+                            right: '10px',
+                            bottom: 'auto',
+                            top: '-5px',
+                            left: 'auto',
+                            justifyContent: 'center',
+                            zIndex: 1
+                          }}
+                          >{playerData.champLevel}
+                          </Typography>
+                          <img className='gameDetailsSummaryMainChampImg'
+                            src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''>
+                          </img>
+                        </div>
+                      </Tooltip>
+                      <Grid className='gameDetailsSummarySpells'>
+                        <Tooltip
+                          title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).description}</span></>}
+                          disableInteractive
+                          arrow
+                        >
+                          <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id}.png`}></img>
+                        </Tooltip>
+                        <Tooltip
+                          title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).description}</span></>}
+                          disableInteractive
+                          arrow
+                        >
+                          <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id}.png`}></img>
+                        </Tooltip>
+                      </Grid>
                     </a>
-                  </Tooltip>
-                  <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for <span style={{ color: playerData.teamId === 100 ? '#3374FF' : '#FF3F3F' }}>{playerData.teamId === 100 ? 'blue team' : 'red team'}</span> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
-                </Typography>
-                <Typography style={{ paddingTop: '10px', paddingBottom: '10px' }} fontSize={14}>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
-                <span style={{ textAlign: 'start' }}>
-                  <Button sx={{ fontWeight: 'bold' }} onClick={() => scrollToSection('SummaryAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Summary</Button>
-                  <Button sx={{ fontWeight: 'bold' }} onClick={() => scrollToSection('LaningAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Laning</Button>
-                  <Button sx={{ fontWeight: 'bold' }} onClick={() => scrollToSection('GraphsAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Graphs</Button>
-                  <Button sx={{ fontWeight: 'bold' }} onClick={() => scrollToSection('TeamfightsAnchor')} className='GameDetailsCatBtn' color='grey' variant='contained'>Timeline</Button>
-                  {/* <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Builds</Button> */}
-                </span>
-                {/* <Button onClick={() => determineFeatsFails(gameData, playerData.teamId, timelineData)}>Debug feats and fails</Button> */}
-              </Grid>
+                  ) : (
+                    // Player Lose
+                    <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
+                      <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                        <div style={{ border: playerData.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
+                          <Typography className='displayGameChampLevel' style={{
+                            fontSize: '14px',
+                            position: 'absolute',
+                            backgroundColor: playerData.teamId === 200 ? '#FF3A54' : '#568CFF',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            borderRadius: '100%',
+                            paddingLeft: '8px',
+                            paddingRight: '8px',
+                            paddingTop: '1px',
+                            paddingBottom: '1px',
+                            textAlign: 'center',
+                            right: '10px',
+                            bottom: 'auto',
+                            top: '-5px',
+                            left: 'auto',
+                            justifyContent: 'center',
+                            zIndex: 1
+                          }}
+                          >{playerData.champLevel}
+                          </Typography>
+                          <img className='gameDetailsSummaryMainChampImg'
+                            style={{ filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''>
+                          </img>
+                        </div>
+                      </Tooltip>
+                      <Grid className='gameDetailsSummarySpells'>
+                        <Tooltip
+                          title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).description}</span></>}
+                          disableInteractive
+                          arrow
+                        >
+                          <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id}.png`}></img>
+                        </Tooltip>
+                        <Tooltip
+                          title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).description}</span></>}
+                          disableInteractive
+                          arrow
+                        >
+                          <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id}.png`}></img>
+                        </Tooltip>
+                      </Grid>
+                    </a>
+                  )}
+                  <img style={{ width: '30px', marginTop: '10px', opacity: '65%' }} src='/images/swords.svg'></img>
+                  {/* Player Win */}
+                  {playerData.win ? (
+                    <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
+                      <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
+                        <div style={{ border: playerData.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
+                          <Typography className='displayGameChampLevel' style={{
+                            fontSize: '14px',
+                            position: 'absolute',
+                            backgroundColor: opposingLaner.teamId === 200 ? '#FF3A54' : '#568CFF',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            borderRadius: '100%',
+                            paddingLeft: '8px',
+                            paddingRight: '8px',
+                            paddingTop: '1px',
+                            paddingBottom: '1px',
+                            textAlign: 'center',
+                            right: '10px',
+                            bottom: 'auto',
+                            top: '-5px',
+                            left: 'auto',
+                            justifyContent: 'center',
+                            zIndex: 1
+                          }}
+                          >{opposingLaner.champLevel}
+                          </Typography>
+                          <img className='gameDetailsSummaryMainChampImg'
+                            style={{ filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`} alt=''>
+                          </img>
+                        </div>
+                      </Tooltip>
+                      <Grid className='gameDetailsSummarySpells'>
+                        <Tooltip
+                          title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).description}</span></>}
+                          disableInteractive
+                          arrow
+                        >
+                          <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).id}.png`}></img>
+                        </Tooltip>
+                        <Tooltip
+                          title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).description}</span></>}
+                          disableInteractive
+                          arrow
+                        >
+                          <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).id}.png`}></img>
+                        </Tooltip>
+                      </Grid>
+                    </a>
+                  ) : (
+                    // Player Lose
+                    <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', color: 'red', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
+                      <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
+                        <div style={{ border: playerData.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
+                          <Typography className='displayGameChampLevel' style={{
+                            fontSize: '14px',
+                            position: 'absolute',
+                            backgroundColor: opposingLaner.teamId === 200 ? '#FF3A54' : '#568CFF',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            borderRadius: '100%',
+                            paddingLeft: '8px',
+                            paddingRight: '8px',
+                            paddingTop: '1px',
+                            paddingBottom: '1px',
+                            textAlign: 'center',
+                            right: '10px',
+                            bottom: 'auto',
+                            top: '-5px',
+                            left: 'auto',
+                            justifyContent: 'center',
+                            zIndex: 1
+                          }}
+                          >{opposingLaner.champLevel}
+                          </Typography>
+                          <img className='gameDetailsSummaryMainChampImg'
+                            src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`} alt=''>
+                          </img>
+                        </div>
+                      </Tooltip>
+                      <Grid className='gameDetailsSummarySpells'>
+                        <Tooltip
+                          title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).description}</span></>}
+                          disableInteractive
+                          arrow
+                        >
+                          <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).id}.png`}></img>
+                        </Tooltip>
+                        <Tooltip
+                          title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).description}</span></>}
+                          disableInteractive
+                          arrow
+                        >
+                          <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).id}.png`}></img>
+                        </Tooltip>
+                      </Grid>
+                    </a>
+                  )}
+                </Grid>
+                <Grid justifyContent={'left'} paddingLeft={'30px'} item xs={7}>
+                  <Typography style={{ paddingTop: '10px', lineHeight: '1.4' }} fontSize={23} fontWeight={600} maxWidth={'460px'}>
+                    <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                      <a className='clickableName' style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`}>
+                        {playerData.riotIdGameName}
+                      </a>
+                    </Tooltip>
+                    <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
+                  </Typography>
+                  <Typography style={{ paddingTop: '10px', paddingBottom: '10px', fontWeight: 'bold', color: '#7E7E7E', marginBottom: '5px' }} fontSize={14}>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
+                  <span style={{ textAlign: 'start' }}>
+                    <Button onClick={() => scrollToSection('SummaryAnchor')} className='GameDetailsCatBtn' variant='contained'>Details</Button>
+                    <Button onClick={() => scrollToSection('LaningAnchor')} className='GameDetailsCatBtn' variant='contained'>Laning</Button>
+                    <Button onClick={() => scrollToSection('GraphsAnchor')} className='GameDetailsCatBtn' variant='contained'>Graphs</Button>
+                    <Button onClick={() => scrollToSection('TeamfightsAnchor')} className='GameDetailsCatBtn' variant='contained'>Timeline</Button>
+                    <Button onClick={() => scrollToSection('TeamfightsAnchor')} className='GameDetailsCatBtn' variant='contained'>Builds</Button>
+                    {/* <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Builds</Button> */}
+                  </span>
+                  {/* <Button onClick={() => determineFeatsFails(gameData, playerData.teamId, timelineData)}>Debug feats and fails</Button> */}
+                </Grid>
+              </Box>
+
             </Grid>
 
             {/* Section 2 */}
-            <Grid style={{ overflow: 'clip' }} marginLeft={'0%'} marginRight={'5%'} container marginTop={'15px'} paddingBottom={'15px'}>
-
-              <Grid style={{ display: 'flex' }}>
-                <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={7}>
-                  <Typography fontSize={20} fontWeight={600}>Match Summary</Typography>
-                  <ul>
-                    <li><Typography style={{ marginRight: '15%', marginTop: '5px' }} fontSize={16}>{shortSummary}</Typography></li>
+            <Grid width={'65%'} container justifyContent={'center'} marginTop={'50px'} >
+              <Box minWidth={'100%'} style={{ display: 'flex', padding: '20px', boxShadow: '0px 6px 24px 0px rgba(0, 0, 0, 0.25)' }} border={'1px solid #BBBBBB'} borderRadius={'10px'}>
+                <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={6}>
+                  <Typography marginLeft={'15px'} fontSize={20} fontWeight={'bold'}>Match Summary</Typography>
+                  <ul className='gameDetailsMatchSummaryList'>
+                    <li style={{ marginBottom: '20px' }}>{shortSummary}</li>
                     <li>{matchSummaryDesc}</li>
                   </ul>
                 </Grid>
-                <Grid backgroundColor='white' item xs={5}>
+                <Grid style={{ borderRadius: '10px', marginLeft: '30px' }} backgroundColor='white' item xs={6}>
                   {graphData ? (
-                    <TeamGoldDifGraph width={600} teamId={playerData.teamId} height={250} hideTitle yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
+                    <TeamGoldDifGraph width={400} teamId={playerData.teamId} height={250} hideTitle yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
                   ) : (
                     <CircularProgress style={{ justifyContent: 'center', marginTop: '20px' }}></CircularProgress>
                   )}
                 </Grid>
-              </Grid>
+              </Box>
+            </Grid>
 
-              {/* Divider */}
-              <Divider
-                width='75%'
-                style={{ borderColor: '#BFBFBF', margin: 'auto', marginTop: '5px', marginBottom: '10px' }}
-              />
-
-              <Grid container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto', marginTop: '-10px' }}>
-                {/* Red Team */}
-                <Grid item xs={3} style={{ textAlign: 'right', paddingRight: '16px' }}>
-                  <Typography style={{ color: '#FF3F3F', fontWeight: 'bold', fontSize: '22px' }}>Red Team</Typography>
-                  <Table size='small' style={{ borderCollapse: "collapse" }}>
-                    <TableBody>
-                      {/* Row 1 */}
-                      <TableRow style={{ height: "30px" }}>
-                        <TableCell style={{ border: "none", padding: '0px' }}><img style={{ maxWidth: '30px' }} src='/images/objIcons/tower-200.webp'></img></TableCell>
-                        <TableCell style={{ border: "none" }}>Grubs: {gameData.info.teams[1].objectives.horde.kills}</TableCell>
-                        <TableCell style={{ border: "none" }}>Herald: {gameData.info.teams[1].objectives.riftHerald.kills}</TableCell>
-                        <TableCell style={{ border: "none", fontWeight: 'bold' }}>{gameData.info.teams[1].objectives.champion.kills} kills</TableCell>
-                      </TableRow>
-
-                      {/* Row 2 */}
-                      <TableRow style={{ height: "30px" }}>
-                        <TableCell style={{ border: "none", padding: '0px' }}><img style={{ maxWidth: '24px', marginLeft: '3px' }} src='/images/objIcons/inhibitor-200.webp'></img></TableCell>
-                        <TableCell style={{ border: "none" }}>Dragons: {gameData.info.teams[1].objectives.dragon.kills}</TableCell>
-                        <TableCell style={{ border: "none" }}>Barons: {gameData.info.teams[1].objectives.baron.kills}</TableCell>
-                        <TableCell style={{ border: "none", fontWeight: 'bold' }}>43,235g</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </Grid>
-
-                {/* Divider */}
-                <Divider
-                  orientation="vertical"
-                  flexItem
-                  style={{ borderColor: '#BFBFBF', margin: '0 16px', height: '60px', alignSelf: 'center', marginTop: '30px' }}
-                />
-
-                {/* Blue Team */}
-                <Grid item xs={3} style={{ textAlign: 'left', paddingRight: '16px' }}>
-                  <Typography style={{ color: '#37B7FF', fontWeight: 'bold', fontSize: '22px' }}>Blue Team</Typography>
-                  <Table size='small' style={{ borderCollapse: "collapse" }}>
-                    <TableBody>
-                      {/* Row 1 */}
-                      <TableRow style={{ height: "30px" }}>
-                        <TableCell style={{ border: "none", fontWeight: 'bold' }}>{gameData.info.teams[0].objectives.champion.kills} kills</TableCell>
-                        <TableCell style={{ border: "none" }}>Herald: {gameData.info.teams[0].objectives.riftHerald.kills}</TableCell>
-                        <TableCell style={{ border: "none" }}>Grubs: {gameData.info.teams[0].objectives.horde.kills}</TableCell>
-                        <TableCell style={{ border: "none", padding: '0px' }}>
-                          <img style={{ maxWidth: '30px' }} src='/images/objIcons/tower-100.webp'></img>
-                        </TableCell>
-                      </TableRow>
-
-                      {/* Row 2 */}
-                      <TableRow style={{ height: "30px" }}>
-                        <TableCell style={{ border: "none", fontWeight: 'bold' }}>43,235g</TableCell>
-                        <TableCell style={{ border: "none" }}>Barons: {gameData.info.teams[0].objectives.baron.kills}</TableCell>
-                        <TableCell style={{ border: "none" }}>Dragons: {gameData.info.teams[0].objectives.dragon.kills}</TableCell>
-                        <TableCell style={{ border: "none", padding: '0px' }}>
-                          <img style={{ maxWidth: '24px', marginLeft: '3px' }} src='/images/objIcons/inhibitor-100.webp'></img>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </Grid>
-                <Grid xs={3} style={{ margin: '0', marginLeft: '35px', display: 'flex', marginTop: '15px', paddingTop: '20px' }}>
+            {/* Section 3 */}
+            <Grid width={'65%'} container justifyContent={'center'} marginTop={'20px'}>
+              <Box minWidth={'100%'} style={{ display: 'flex', padding: '20px', boxShadow: '0px 6px 24px 0px rgba(0, 0, 0, 0.25)' }} border={'1px solid #BBBBBB'} borderRadius={'10px'}>
+                <Grid xs={6} style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
                   {/* MVP */}
-                  <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', marginRight: '35px' }}>
                     <Tooltip placement='top'
                       arrow
                       disableInteractive
@@ -721,7 +814,7 @@ function GameDetails() {
                       <img style={{
                         borderRadius: '100%',
                         border: `4px solid ${gameData.info.participants.reduce((maxPlayer, player) => player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null).teamId === 100 ? '#37B7FF' : '#FF3F3F'}`,
-                        width: '70px',
+                        width: '82px',
                         filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
                         marginRight: '20px',
                         margin: 'auto'
@@ -730,21 +823,20 @@ function GameDetails() {
                       >
                       </img>
                     </Tooltip>
-                    <img style={{ margin: 'auto', marginTop: '0px' }} src='/images/text/MVP.png'></img>
+                    <Typography className='standoutDescActive'>MVP</Typography>
+                    <Divider color='#2b2b2b' style={{ width: '40%', margin: 'auto' }}></Divider>
                   </div>
                   {/* 2ND */}
-                  <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', marginRight: '35px' }}>
                     {(() => {
                       // Find the highest scoring player
                       const highestPlayer = gameData.info.participants.reduce((maxPlayer, player) =>
                         player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null);
-
                       // Find the second highest scoring player by filtering out the highest player
                       const secondHighestPlayer = gameData.info.participants
                         .filter(player => player !== highestPlayer)
                         .reduce((maxPlayer, player) =>
                           player.score > (maxPlayer?.score || 0) ? player : maxPlayer, null);
-
                       return (
                         <>
                           <Tooltip
@@ -772,7 +864,7 @@ function GameDetails() {
                               style={{
                                 borderRadius: '100%',
                                 border: `4px solid ${secondHighestPlayer?.teamId === 100 ? '#37B7FF' : '#FF3F3F'}`,
-                                width: '70px',
+                                width: '82px',
                                 filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
                                 marginRight: '20px',
                                 margin: 'auto',
@@ -781,84 +873,152 @@ function GameDetails() {
                               alt=''
                             />
                           </Tooltip>
-                          <img style={{ margin: 'auto', marginTop: '0px' }} src='/images/text/2ND.png' />
+                          <Typography className='standoutDescInactive'>2ND</Typography>
                         </>
                       );
                     })()}
                   </div>
+                  {/* INT */}
+                  <div style={{ display: 'flex', flexDirection: 'column', marginRight: '0px' }}>
+                    <Tooltip
+                      placement='top'
+                      arrow
+                      disableInteractive
+                      title={
+                        <>
+                          <div>
+                            {(() => {
+                              const minPlayer = gameData.info.participants.reduce(
+                                (min, player) => (player.score < (min?.score ?? Infinity) ? player : min),
+                                null
+                              );
 
-                  <Tooltip
-                    placement='top'
-                    arrow
-                    disableInteractive
-                    title={
-                      <>
-                        <div>
-                          {(() => {
-                            const minPlayer = gameData.info.participants.reduce(
-                              (min, player) => (player.score < (min?.score ?? Infinity) ? player : min),
-                              null
-                            );
+                              if (!minPlayer) return "No data";
 
-                            if (!minPlayer) return "No data";
+                              const champion = Object.values(champsJSON.data).find(
+                                (champ) => champ.key === String(minPlayer.championId)
+                              );
 
-                            const champion = Object.values(champsJSON.data).find(
-                              (champ) => champ.key === String(minPlayer.championId)
-                            );
-
-                            return (
-                              <>
-                                {minPlayer.riotIdGameName} ({champion?.name || "Unknown Champion"})<br />
-                                {minPlayer.kills}/{minPlayer.deaths}/{minPlayer.assists}<br />
-                                Score: {minPlayer.score.toFixed(1)}
-                              </>
-                            );
-                          })()}
-                        </div>
-                      </>
-                    }
-                  >
-                    {/* INT */}
-                    <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
-                      <div
-                        style={{
-                          borderRadius: '50%',
-                          border: `4px solid ${gameData.info.participants.reduce(
-                            (minPlayer, player) =>
-                              player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
-                            null
-                          ).teamId === 100
-                            ? '#37B7FF'
-                            : '#FF3F3F'
-                            }`,
-                          width: '70px',
-                          height: '70px',
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-                          marginRight: '20px',
-                          margin: 'auto',
-                        }}
-                      >
-                        <img
+                              return (
+                                <>
+                                  {minPlayer.riotIdGameName} ({champion?.name || "Unknown Champion"})<br />
+                                  {minPlayer.kills}/{minPlayer.deaths}/{minPlayer.assists}<br />
+                                  Score: {minPlayer.score.toFixed(1)}
+                                </>
+                              );
+                            })()}
+                          </div>
+                        </>
+                      }
+                    >
+                      {/* INT */}
+                      <div style={{ display: 'flex', flexDirection: 'column', marginRight: '0px' }}>
+                        <div
                           style={{
                             borderRadius: '50%',
-                            width: '70px',
-                            height: '70px',
-                            filter: 'grayscale(80%)',
+                            border: `4px solid ${gameData.info.participants.reduce(
+                              (minPlayer, player) =>
+                                player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
+                              null
+                            ).teamId === 100
+                              ? '#37B7FF'
+                              : '#FF3F3F'
+                              }`,
+                            width: '82px',
+                            height: '82px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+                            marginRight: '20px',
+                            margin: 'auto',
                           }}
-                          src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(gameData.info.participants.reduce((minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer, null).championId)).id}.png`} alt=''
-                        />
+                        >
+                          <img
+                            style={{
+                              borderRadius: '50%',
+                              width: '82px',
+                              height: '82px',
+                              filter: 'grayscale(80%)',
+                            }}
+                            src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(gameData.info.participants.reduce((minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer, null).championId)).id}.png`} alt=''
+                          />
+                        </div>
+                        <Typography className='standoutDescInactive'>INT</Typography>
                       </div>
-                      <img style={{ margin: 'auto', marginTop: '0px' }} src='/images/text/INT.png' />
-                    </div>
-                  </Tooltip>
-
+                    </Tooltip>
+                  </div>
                 </Grid>
+                <Grid xs={6} style={{ display: 'flex' }}>
+                  <div style={{ flexDirection: 'column', marginLeft: '15px', marginTop: '10px' }}>
+                    <Typography style={{ fontWeight: 'bold', fontSize: '20px' }}>Standout Performances</Typography>
+                    <Typography style={{ color: '#4B4B4B', fontSize: '16px', maxWidth: '400px' }}>BeefCake223 (Rammus) carried the match. Their domination of objectives in the early game started red team on the path to victory.</Typography>
+                  </div>
+                </Grid>
+              </Box>
+            </Grid>
+
+
+            {/* USE THIS */}
+            <Grid container style={{ display: 'flex', display: 'none', justifyContent: 'center', alignItems: 'center', margin: 'auto', marginTop: '-10px' }}>
+              {/* Red Team */}
+              <Grid item xs={3} style={{ textAlign: 'right', paddingRight: '16px' }}>
+                <Typography style={{ color: '#FF3F3F', fontWeight: 'bold', fontSize: '22px' }}>Red Team</Typography>
+                <Table size='small' style={{ borderCollapse: "collapse" }}>
+                  <TableBody>
+                    {/* Row 1 */}
+                    <TableRow style={{ height: "30px" }}>
+                      <TableCell style={{ border: "none", padding: '0px' }}><img style={{ maxWidth: '30px' }} src='/images/objIcons/tower-200.webp'></img></TableCell>
+                      <TableCell style={{ border: "none" }}>Grubs: {gameData.info.teams[1].objectives.horde.kills}</TableCell>
+                      <TableCell style={{ border: "none" }}>Herald: {gameData.info.teams[1].objectives.riftHerald.kills}</TableCell>
+                      <TableCell style={{ border: "none", fontWeight: 'bold' }}>{gameData.info.teams[1].objectives.champion.kills} kills</TableCell>
+                    </TableRow>
+
+                    {/* Row 2 */}
+                    <TableRow style={{ height: "30px" }}>
+                      <TableCell style={{ border: "none", padding: '0px' }}><img style={{ maxWidth: '24px', marginLeft: '3px' }} src='/images/objIcons/inhibitor-200.webp'></img></TableCell>
+                      <TableCell style={{ border: "none" }}>Dragons: {gameData.info.teams[1].objectives.dragon.kills}</TableCell>
+                      <TableCell style={{ border: "none" }}>Barons: {gameData.info.teams[1].objectives.baron.kills}</TableCell>
+                      <TableCell style={{ border: "none", fontWeight: 'bold' }}>43,235g</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
               </Grid>
 
+              {/* Divider */}
+              <Divider
+                orientation="vertical"
+                flexItem
+                style={{ borderColor: '#BFBFBF', margin: '0 16px', height: '60px', alignSelf: 'center', marginTop: '30px' }}
+              />
 
+              {/* Blue Team */}
+              <Grid item xs={3} style={{ textAlign: 'left', paddingRight: '16px' }}>
+                <Typography style={{ color: '#37B7FF', fontWeight: 'bold', fontSize: '22px' }}>Blue Team</Typography>
+                <Table size='small' style={{ borderCollapse: "collapse" }}>
+                  <TableBody>
+                    {/* Row 1 */}
+                    <TableRow style={{ height: "30px" }}>
+                      <TableCell style={{ border: "none", fontWeight: 'bold' }}>{gameData.info.teams[0].objectives.champion.kills} kills</TableCell>
+                      <TableCell style={{ border: "none" }}>Herald: {gameData.info.teams[0].objectives.riftHerald.kills}</TableCell>
+                      <TableCell style={{ border: "none" }}>Grubs: {gameData.info.teams[0].objectives.horde.kills}</TableCell>
+                      <TableCell style={{ border: "none", padding: '0px' }}>
+                        <img style={{ maxWidth: '30px' }} src='/images/objIcons/tower-100.webp'></img>
+                      </TableCell>
+                    </TableRow>
+
+                    {/* Row 2 */}
+                    <TableRow style={{ height: "30px" }}>
+                      <TableCell style={{ border: "none", fontWeight: 'bold' }}>43,235g</TableCell>
+                      <TableCell style={{ border: "none" }}>Barons: {gameData.info.teams[0].objectives.baron.kills}</TableCell>
+                      <TableCell style={{ border: "none" }}>Dragons: {gameData.info.teams[0].objectives.dragon.kills}</TableCell>
+                      <TableCell style={{ border: "none", padding: '0px' }}>
+                        <img style={{ maxWidth: '24px', marginLeft: '3px' }} src='/images/objIcons/inhibitor-100.webp'></img>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </Grid>
             </Grid>
           </Grid>
         </div>

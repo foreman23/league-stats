@@ -329,10 +329,10 @@ function Navbar(props) {
                                 {favorites !== null &&
                                     <List>
                                         {favorites.map((item, index) => (
-                                            <ListItem style={{ alignItems: 'center' }} key={index}>
+                                            <ListItem style={{ alignItems: 'center'}} key={index}>
                                                 <a onClick={() => toggleDrawer(false)} href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: '25px' }}>
                                                     <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '52px', marginRight: '10px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
-                                                    {item.summonerName} #{item.riotId}
+                                                    <span style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'  }}>{item.summonerName} #{item.riotId}</span>
                                                 </a>
                                                 <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>
                                             </ListItem>

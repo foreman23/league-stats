@@ -276,40 +276,18 @@ const DisplayGame = (props) => {
                     )
                     }
                     {/* <Divider style={{ margin: 'auto', marginTop: '3px', marginBottom: '3px' }} color={participant.win === true ? '#BED3FF' : '#FFC4CC'} width={'55%'}></Divider> */}
-                    <Typography className='hideMobile displayGameTimeHeader' style={{ fontSize: '12px' }}>{timeSinceMatch}</Typography>
-                </Grid>
-
-                {/* Match Information (Mobile) */}
-                <Grid className='displayGameMatchInfoContainerMobile' xs={12} sm={3} display={'flex'} justifyContent={'center'} margin={'auto'} textAlign={'start'} marginBottom={'10px'} flexDirection={'column'}>
-                    {props.gameData.info.gameDuration > 180 ? (
-                        <div className='displayGameMatchInfo'>
-                            <Typography className='displayGameHeader' style={{ color: `${participant.win === true ? '#3374ff' : '#ff3352'}` }} >{queueTitle}</Typography>
-                            <Typography className='displayGameSubHeader'>{(participant.teamId === 100) ? '(Blue Team)' : '(Red Team)'}</Typography>
-                            <Box margin={'10px'} alignSelf={'center'} width={'7px'} height={'7px'} borderRadius={'100%'} backgroundColor={'#BFBFBF'}></Box>
-                            <Typography className='displayGameSubHeader'>{participant.win === true ? 'Victory' : 'Defeat'}</Typography>
-                            <Box margin={'10px'} alignSelf={'center'} width={'7px'} height={'7px'} borderRadius={'100%'} backgroundColor={'#BFBFBF'}></Box>
-                            <Typography className='displayGameSubHeader'>{timeSinceMatch}</Typography>
-                        </div>
-                    ) : (
-                        <div className='displayGameMatchInfo'>
-                            <Typography style={{ fontWeight: 'bold', color: 'black' }} >{queueTitle}</Typography>
-                            <Typography className='displayGameSubHeader'>Remake</Typography>
-                            <Typography className='displayGameSubHeader'>{timeSinceMatch}</Typography>
-                        </div>
-                    )
-                    }
-                    <Divider style={{ margin: 'auto', marginTop: '3px', marginBottom: '3px' }} color={participant.win === true ? '#BED3FF' : '#FFC4CC'} width={'80%'}></Divider>
+                    <Typography className='displayGameTimeHeader' style={{ fontSize: '12px' }}>{timeSinceMatch}</Typography>
                 </Grid>
 
                 {/* Main Container */}
                 <Grid style={{ display: 'flex', marginTop: '8px' }}>
                     {/* Summoner profile for game */}
-                    <Grid className='displayGamePlayerProfileContainer' order={{ xs: 1 }} xs={4} sm={5} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
+                    <Grid className='displayGamePlayerProfileContainer' order={{ xs: 1 }} xs={5} sm={5} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
                         <Grid display={'flex'} flexDirection={'column'} alignSelf={'center'} marginRight={'10%'}>
-                            <Typography className='displayGameRiotName' style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '3px' }}>{participant.riotIdGameName}</Typography>
-                            <Typography style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '3px', color: '#7E7E7E' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).name}</Typography>
-                            <Typography style={{ fontSize: '14px', color: '#7E7E7E' }}>{`${participant.kills}/${participant.deaths}/${participant.assists} (${participant.totalMinionsKilled + participant.neutralMinionsKilled} CS)`}</Typography>
-                            <Grid style={{ marginTop: '10px' }}>
+                            <Typography className='displayGameRiotName'>{participant.riotIdGameName}</Typography>
+                            <Typography className='displayGameSubheader' style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '3px', color: '#7E7E7E' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).name}</Typography>
+                            <Typography className='displayGameSubheader' style={{ fontSize: '14px', color: '#7E7E7E' }}>{`${participant.kills}/${participant.deaths}/${participant.assists} (${participant.totalMinionsKilled + participant.neutralMinionsKilled} CS)`}</Typography>
+                            <Grid style={{ marginTop: '10px'}}>
                                 {participants.filter(player => player.teamId === participant.teamId && player.summonerId !== participant.summonerId).map((player, index) => (
                                     <Tooltip arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
                                         <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} target="_blank" rel="noopener noreferrer" style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
@@ -323,7 +301,7 @@ const DisplayGame = (props) => {
                         <Grid display={'flex'} flexDirection={'column'} position={'relative'}>
                             <Tooltip arrow placement='top' title={`${participant.riotIdGameName} #${participant.riotIdTagline}`}>
                                 <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${participant.riotIdGameName}/${participant.riotIdTagline.toLowerCase()}`} target="_blank" rel="noopener noreferrer" style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                                    <Typography style={{
+                                    <Typography className='displayGameChampLevel' style={{
                                         fontSize: '14px',
                                         position: 'absolute',
                                         backgroundColor: participant.teamId === 200 ? '#FF3A54' : '#568CFF',
@@ -349,8 +327,20 @@ const DisplayGame = (props) => {
                                 </a>
                             </Tooltip>
                             <Grid className='displayGameSummonerSpells'>
-                                <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpell1.id}.png`}></img>
-                                <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpell2.id}.png`}></img>
+                                <Tooltip
+                                    title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === participant.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === participant.summoner1Id.toString()).description}</span></>}
+                                    disableInteractive
+                                    arrow
+                                >
+                                    <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpell1.id}.png`}></img>
+                                </Tooltip>
+                                <Tooltip
+                                    title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === participant.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === participant.summoner2Id.toString()).description}</span></>}
+                                    disableInteractive
+                                    arrow
+                                >
+                                    <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpell2.id}.png`}></img>
+                                </Tooltip>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -359,22 +349,22 @@ const DisplayGame = (props) => {
                         <div style={{ display: 'flex' }}>
                             <div style={{ marginRight: '-50px' }}>
                                 <Tooltip className='displayGameGoldBar' title={`Overall: ${playerScore.score.toFixed(1)}`}>
-                                    <LinearProgress variant='determinate' value={(playerScore.score * 10).toFixed(2)} sx={{ backgroundColor: participant.teamId === 100 ? '#BED3FF' : '#FFC3CC', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#568CFF' : '#FF3A54' } }} style={{ width: '74px', height: '15px', transform: 'rotate(270deg)', borderRadius: '5px' }}></LinearProgress>
+                                    <LinearProgress className='displayGameOpScoreBar' variant='determinate' value={(playerScore.score * 10).toFixed(2)} sx={{ backgroundColor: participant.teamId === 100 ? '#BED3FF' : '#FFC3CC', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#568CFF' : '#FF3A54' } }}></LinearProgress>
                                 </Tooltip>
                             </div>
                             <div style={{ marginLeft: '0px' }}>
                                 <Tooltip className='displayGameGoldBar' title={`Overall: ${oppScore.score.toFixed(1)}`}>
-                                    <LinearProgress variant='determinate' value={(oppScore.score * 10).toFixed(2)} sx={{ backgroundColor: participant.teamId === 100 ? '#FFC3CC' : '#BED3FF', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#FF3A54' : '#568CFF' } }} style={{ width: '74px', height: '15px', transform: 'rotate(270deg)', borderRadius: '5px' }}></LinearProgress>
+                                    <LinearProgress className='displayGameOpScoreBar' variant='determinate' value={(oppScore.score * 10).toFixed(2)} sx={{ backgroundColor: participant.teamId === 100 ? '#FFC3CC' : '#BED3FF', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#FF3A54' : '#568CFF' } }}></LinearProgress>
                                 </Tooltip>
                             </div>
                         </div>
                     </Grid>
                     {/* Opposing summoner profile */}
-                    <Grid className='displayGameOpposingProfileContainer' order={{ xs: 3 }} xs={4} sm={5} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
+                    <Grid className='displayGameOpposingProfileContainer' order={{ xs: 3 }} xs={5} sm={5} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
                         <Grid display={'flex'} flexDirection={'column'} position={'relative'}>
                             <Tooltip arrow placement='top' title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
                                 <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} target="_blank" rel="noopener noreferrer" style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                                    <Typography style={{
+                                    <Typography className='displayGameChampLevel' style={{
                                         fontSize: '14px',
                                         position: 'absolute',
                                         backgroundColor: participant.teamId === 100 ? '#FF3A54' : '#568CFF',
@@ -400,14 +390,26 @@ const DisplayGame = (props) => {
                                 </a>
                             </Tooltip>
                             <Grid className='displayGameSummonerSpells'>
-                                <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${opposingSummonerSpell1.id}.png`}></img>
-                                <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${opposingSummonerSpell2.id}.png`}></img>
+                                <Tooltip
+                                    title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).description}</span></>}
+                                    disableInteractive
+                                    arrow
+                                >
+                                    <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${opposingSummonerSpell1.id}.png`}></img>
+                                </Tooltip>
+                                <Tooltip
+                                    title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).description}</span></>}
+                                    disableInteractive
+                                    arrow
+                                >
+                                    <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${opposingSummonerSpell2.id}.png`}></img>
+                                </Tooltip>
                             </Grid>
                         </Grid>
                         <Grid display={'flex'} flexDirection={'column'} alignSelf={'center'} marginLeft={'10%'}>
-                            <Typography className='displayGameRiotName' style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '3px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{opposingLaner.riotIdGameName}</Typography>
-                            <Typography style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '3px', color: '#7E7E7E' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).name}</Typography>
-                            <Typography style={{ fontSize: '14px', color: '#7E7E7E' }}>{`${opposingLaner.kills}/${opposingLaner.deaths}/${opposingLaner.assists} (${opposingLaner.totalMinionsKilled + opposingLaner.neutralMinionsKilled} CS)`}</Typography>
+                            <Typography className='displayGameRiotName'>{opposingLaner.riotIdGameName}</Typography>
+                            <Typography className='displayGameSubheader' style={{ fontWeight: 'bold', marginBottom: '3px', color: '#7E7E7E' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).name}</Typography>
+                            <Typography className='displayGameSubheader' style={{ color: '#7E7E7E' }}>{`${opposingLaner.kills}/${opposingLaner.deaths}/${opposingLaner.assists} (${opposingLaner.totalMinionsKilled + opposingLaner.neutralMinionsKilled} CS)`}</Typography>
                             <Grid style={{ marginTop: '10px' }}>
                                 {participants.filter(player => player.teamId !== participant.teamId && player.summonerId !== opposingLaner.summonerId).map((player, index) => (
                                     <Tooltip arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
