@@ -113,7 +113,7 @@ const DisplayGame = (props) => {
         let queue = await findQueueInfo();
         console.log(props.gameData.info)
 
-        let queueTitle = queue.description;
+        let queueTitle = queue?.description || null;
         console.log(queueTitle)
         if (queueTitle === '5v5 Ranked Solo games') {
             setQueueTitle('Ranked Solo');
@@ -138,6 +138,10 @@ const DisplayGame = (props) => {
         else if (queueTitle === 'Arena') {
             setQueueTitle('Arena')
             setIsLaning(false);
+        }
+        // CHANGE THIS ONCE RIOT UPDATES THEIR QUEUES JSON
+        else if (queueTitle === null) {
+            setQueueTitle('Swiftplay')
         }
     }
 

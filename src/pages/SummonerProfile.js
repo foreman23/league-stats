@@ -273,6 +273,7 @@ const SummonerProfile = () => {
 
         const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`);
         const historyData = historyResponse.data;
+        console.log(historyData)
 
         const masteryResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
         const masteryData = masteryResponse.data;
@@ -312,6 +313,8 @@ const SummonerProfile = () => {
   // Update user document in firestore
   const updateUserFirestore = async () => {
     try {
+      setIsLoadingRank(true);
+      setRankIndex(null);
       console.log('CALLING RIOT API 4 times')
 
       const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
@@ -350,6 +353,7 @@ const SummonerProfile = () => {
       setTimeLastUpdated('Just now');
       setDisableUpdateButton(true);
       console.log('updated user info firestore')
+      setIsLoadingRank(false);
     }
     catch (error) {
       console.error(error)
@@ -852,7 +856,7 @@ const SummonerProfile = () => {
                   </List>
                 </Grid>
               ) : (
-                <Grid style={{ margin: 'auto', marginBottom: '15px' }}>
+                <Grid style={{ marginBottom: '15px' }}>
                   <List style={{ lineHeight: '22px' }}>
                     {playerData ? (
                       <ListItem style={{ fontWeight: 'bolder' }}>{playerData.riotIdGameName} #{riotId}</ListItem>
@@ -1086,11 +1090,16 @@ const SummonerProfile = () => {
                   gameModeHref = `/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
                 } else if (gameData.info.gameMode === "CLASSIC" && gameData.info.gameDuration < 300) {
                   gameModeHref = `/remake/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
+                } else if (gameData.info.gameMode === "SWIFTPLAY") {
+                  gameModeHref = `/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`
                 } else if (gameData.info.gameMode === "ARAM") {
                   gameModeHref = `/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
                 } else if (gameData.info.gameMode === "CHERRY") {
                   gameModeHref = "/Test";
+                } else {
+                  gameModeHref = "/Test";
                 }
+
 
                 let gameDataPayload = {
                   "gameData": gameData,
