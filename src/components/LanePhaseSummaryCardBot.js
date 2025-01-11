@@ -57,7 +57,7 @@ const LanePhaseSummaryCardBot = (props) => {
 
     return (
         <div id='laningBotAnchor'>
-            <Grid className={botSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'} container style={{ flexDirection: 'row', display: 'inline-flex', alignItems: 'center' }}>
+            <Grid className={botSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'} container>
                 <Grid item xs={12} style={{ display: 'inline-flex', alignItems: 'center' }}>
                     <Grid style={{ marginRight: '35px' }} xs={6}>
                         {statsAt15.laneResults.BOTTOM.resTag === 'draw' ? (
@@ -68,17 +68,15 @@ const LanePhaseSummaryCardBot = (props) => {
                     </Grid>
 
                     <Grid xs={6} style={{ flexDirection: 'row', display: 'inline-flex', marginRight: '50px' }}>
-                        <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 0 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
-                        <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 1 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
-                        <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 2 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
-                        <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 3 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
-                        <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 4 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                        <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 0 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                        <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 1 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                        <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 2 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                        <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 3 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+                        <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 4 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                     </Grid>
                     <Grid xs={6} style={{ flexDirection: 'row', display: 'inline-flex' }}>
                         <Button
-                            className={lastButtonPressedBot === 'laneSumBot1'
-                                ? (statsAt15.laneResults.BOTTOM.resTag === 'draw' ? 'LanePhaseSummaryBtnClickedDraw' : (statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? 'LanePhaseSummaryBtnClickedBlue' : 'LanePhaseSummaryBtnClicked'))
-                                : (statsAt15.laneResults.BOTTOM.resTag === 'draw' ? 'LanePhaseSummaryBtnDraw' : (statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? 'LanePhaseSummaryBtnBlue' : 'LanePhaseSummaryBtn'))}
+                            className={lastButtonPressedBot === 'laneSumBot1' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'}
                             onClick={() => handleLaneCard('bot', 'laneSumBot1')}
                             style={{ marginRight: '20px', width: '125px', height: '50px' }}
                             color='grey'
@@ -88,9 +86,7 @@ const LanePhaseSummaryCardBot = (props) => {
                         </Button>
 
                         <Button
-                            className={lastButtonPressedBot === 'laneSumBot2'
-                                ? (statsAt15.laneResults.BOTTOM.resTag === 'draw' ? 'LanePhaseSummaryBtnClickedDraw' : (statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? 'LanePhaseSummaryBtnClickedBlue' : 'LanePhaseSummaryBtnClicked'))
-                                : (statsAt15.laneResults.BOTTOM.resTag === 'draw' ? 'LanePhaseSummaryBtnDraw' : (statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? 'LanePhaseSummaryBtnBlue' : 'LanePhaseSummaryBtn'))}
+                            className={lastButtonPressedBot === 'laneSumBot2' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'}
                             onClick={() => handleLaneCard('bot', 'laneSumBot2')}
                             style={{ marginRight: '20px', width: '125px', height: '50px' }}
                             color='grey'
@@ -100,9 +96,7 @@ const LanePhaseSummaryCardBot = (props) => {
                         </Button>
 
                         <Button
-                            className={lastButtonPressedBot === 'laneSumBot3'
-                                ? (statsAt15.laneResults.BOTTOM.resTag === 'draw' ? 'LanePhaseSummaryBtnClickedDraw' : (statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? 'LanePhaseSummaryBtnClickedBlue' : 'LanePhaseSummaryBtnClicked'))
-                                : (statsAt15.laneResults.BOTTOM.resTag === 'draw' ? 'LanePhaseSummaryBtnDraw' : (statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? 'LanePhaseSummaryBtnBlue' : 'LanePhaseSummaryBtn'))}
+                            className={lastButtonPressedBot === 'laneSumBot3' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'}
                             onClick={() => handleLaneCard('bot', 'laneSumBot3')}
                             style={{ marginRight: '20px', width: '125px', height: '50px' }}
                             color='grey'
@@ -126,24 +120,24 @@ const LanePhaseSummaryCardBot = (props) => {
                 </Grid>
                 <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
-                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 42] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName}`}>
-                            <img className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName1}.png`}></img>
+                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName}`}>
+                            <img style={{ border: statsAt15.laneResults.BOTTOM.laneWinner[0].teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', marginRight: '2px' }} className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName1}.png`}></img>
                         </Tooltip>
                     </div>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
-                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 42] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName}`}>
-                            <img className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName2}.png`}></img>
+                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName}`}>
+                            <img style={{ border: statsAt15.laneResults.BOTTOM.laneWinner[1].teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid' }} className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName2}.png`}></img>
                         </Tooltip>
                     </div>
-                    <img style={{ maxWidth: '30px', maxHeight: '115px', marginLeft: '10px', marginRight: '10px' }} src='/images/swords.svg'></img>
+                    <img className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
-                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 42] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName}`}>
-                            <img className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName1}.png`}></img>
+                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName}`}>
+                            <img style={{ border: statsAt15.laneResults.BOTTOM.laneLoser[0].teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', marginRight: '2px' }} className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName1}.png`}></img>
                         </Tooltip>
                     </div>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
-                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 42] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName}`}>
-                            <img className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName2}.png`}></img>
+                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName}`}>
+                            <img style={{ border: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid' }} className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName2}.png`}></img>
                         </Tooltip>
                     </div>
                     <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', objectFit: 'contain' }} src='/images/laneIcons/Bottom.png'></img>
@@ -189,27 +183,27 @@ const LanePhaseSummaryCardBot = (props) => {
                 <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
                         <Tooltip
-                            arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 42] } }] } }}
+                            arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }}
                             title={`${statsAt15.laneResults.BOTTOM.laneWinner[0].riotIdGameName}`}>
-                            <img className='lanePhaseChampImgBotLarge'
+                            <img style={{ border: statsAt15.laneResults.BOTTOM.laneWinner[0].teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', marginRight: '2px' }} className='lanePhaseChampImgBotLarge'
                                 src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName1}.png`}>
                             </img>
                         </Tooltip>
                     </div>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
-                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 42] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName}`}>
-                            <img className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName2}.png`}></img>
+                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneWinner[1].riotIdGameName}`}>
+                            <img style={{ border: statsAt15.laneResults.BOTTOM.laneWinner[1].teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid' }} className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName2}.png`}></img>
                         </Tooltip>
                     </div>
-                    <img style={{ maxWidth: '30px', maxHeight: '115px', marginLeft: '10px', marginRight: '10px' }} src='/images/swords.svg'></img>
+                    <img className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
-                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 42] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName}`}>
-                            <img className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName1}.png`}></img>
+                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[0].riotIdGameName}`}>
+                            <img style={{ border: statsAt15.laneResults.BOTTOM.laneLoser[0].teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', marginRight: '2px' }} className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName1}.png`}></img>
                         </Tooltip>
                     </div>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
-                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 42] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName}`}>
-                            <img className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName2}.png`}></img>
+                        <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} title={`${statsAt15.laneResults.BOTTOM.laneLoser[1].riotIdGameName}`}>
+                            <img style={{ border: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid' }} className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName2}.png`}></img>
                         </Tooltip>
                     </div>
                     <img style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', objectFit: 'contain' }} src='/images/laneIcons/Bottom.png'></img>

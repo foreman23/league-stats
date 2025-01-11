@@ -237,7 +237,7 @@ const determineWinners = (statsAt15Arr) => {
             resTag = 'won';
             bubbleCount = 3;
             if (laneWinner.teamId === 100) {
-                bubbleColor = '#9EDCFF'
+                bubbleColor = '#80d0ff'
             }
             else {
                 bubbleColor = '#FF8B8B'
@@ -247,7 +247,7 @@ const determineWinners = (statsAt15Arr) => {
             resTag = 'won';
             bubbleCount = 2;
             if (laneWinner.teamId === 100) {
-                bubbleColor = '#9EDCFF'
+                bubbleColor = '#80d0ff'
             }
             else {
                 bubbleColor = '#FF8B8B'
@@ -257,7 +257,7 @@ const determineWinners = (statsAt15Arr) => {
             resTag = 'won';
             bubbleCount = 1;
             if (laneWinner.teamId === 100) {
-                bubbleColor = '#9EDCFF'
+                bubbleColor = '#80d0ff'
             }
             else {
                 bubbleColor = '#FF8B8B'

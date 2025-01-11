@@ -26,6 +26,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../FirebaseConfig';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
+import DamagePie from '../components/DamagePie';
 
 function GameDetails() {
 
@@ -66,6 +67,23 @@ function GameDetails() {
 
   // Create runes object
   const runesObj = Object.values(runes);
+
+  // graph colors
+  let blueColors = [
+    '#568CFF', // Lightest
+    '#5081E8',
+    '#4A76D2',
+    '#456BBB',
+    '#3F60A5' // Darkest
+  ]
+
+  let redColors = [
+    '#FF3F3F',  // Lightest
+    '#E83B3B',
+    '#D23838',
+    '#BB3535',
+    '#A53131' // Darkest
+  ]
 
   // Returns keystone url
   const getKeystoneIconUrl = (player, runesObj) => {
@@ -154,37 +172,45 @@ function GameDetails() {
   const [playersWithScores, setPlayersWithScore] = useState([]);
   const [matchSummaryDesc, setMatchSummaryDesc] = useState(null);
   const [highestDamageDealt, setHighestDamageDealt] = useState(null);
+  const [highestDamageTaken, setHighestDamageTaken] = useState(null);
 
   const [statsAt15, setStatsAt15] = useState(null);
   const [shortSummary, setShortSummary] = useState(null);
   const [graphData, setGraphData] = useState(null);
   const [totalTeamGoldBlue, setTotalTeamGoldBlue] = useState(null);
   const [totalTeamGoldRed, setTotalTeamGoldRed] = useState(null);
+  const [totalDamageBothTeams, setTotalDamageBothTeams] = useState(null);
   useEffect(() => {
 
     if (gameData && alternateRegion && timelineData && playerData) {
 
       let blueGoldSum = 0;
       let redGoldSum = 0;
+      let blueDmgSum = 0;
+      let redDmgSum = 0;
       let bluePlayers = gameData.info.participants.filter(players => players.teamId === 100)
       for (let i = 0; i < bluePlayers.length; i++) {
         let curr = bluePlayers[i]
         blueGoldSum += curr.goldEarned
+        blueDmgSum += curr.totalDamageDealtToChampions
       }
 
       let redPlayers = gameData.info.participants.filter(players => players.teamId === 200)
       for (let i = 0; i < redPlayers.length; i++) {
         let curr = redPlayers[i]
         redGoldSum += curr.goldEarned
+        redDmgSum += curr.totalDamageDealtToChampions
       }
 
       setTotalTeamGoldBlue(blueGoldSum);
-      setTotalTeamGoldRed(redGoldSum)
+      setTotalTeamGoldRed(redGoldSum);
+      setTotalDamageBothTeams(blueDmgSum + redDmgSum);
 
 
       document.title = `${playerData.riotIdGameName}#${playerData.riotIdTagline} - ${new Date(gameData.info.gameCreation).toLocaleDateString()} @${new Date(gameData.info.gameCreation).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase().replace(/\s/g, '')}`
-      const { highestDamageDealt, playersWithScores } = calculateOpScores(gameData, playerData);
+      const { highestDamageDealt, highestDamageTaken, playersWithScores } = calculateOpScores(gameData, playerData);
       setHighestDamageDealt(highestDamageDealt)
+      setHighestDamageTaken(highestDamageTaken)
       setPlayersWithScore(playersWithScores)
 
       console.log(timelineData)
@@ -789,6 +815,18 @@ function GameDetails() {
                   <ul className='gameDetailsMatchSummaryList'>
                     <li style={{ marginBottom: '20px' }}>{shortSummary}</li>
                     <li>{matchSummaryDesc}</li>
+                    {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === false &&
+                      <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s team surrendered the game at {gameDuration}.</li>
+                    }
+                    {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === true &&
+                      <li style={{ marginTop: '20px' }}>{playerData.teamId === 100 ? 'Red' : 'Blue'} team surrendered the game at {gameDuration}.</li>
+                    }
+                    {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === false &&
+                      <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s nexus was destroyed at {gameDuration}.</li>
+                    }
+                    {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === true &&
+                      <li style={{ marginTop: '20px' }}>{playerData.teamId === 100 ? 'Red' : 'Blue'} team's nexus was destroyed at {gameDuration}.</li>
+                    }
                   </ul>
                 </Grid>
                 <Grid style={{ borderRadius: '10px', marginLeft: '30px' }} backgroundColor='white' item xs={6}>
@@ -945,7 +983,7 @@ function GameDetails() {
                                 player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer,
                               null
                             ).teamId === 100
-                              ? '#37B7FF'
+                              ? '#568CFF'
                               : '#FF3F3F'
                               }`,
                             width: '82px',
@@ -989,9 +1027,9 @@ function GameDetails() {
           <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '20px' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             {/* Details */}
             <Grid id='DetailsAnchor' width={'65%'} justifyContent={'center'} margin={'auto'} container marginTop={'20px'}>
-              <div style={{ display: 'flex', marginLeft: '0', marginRight: 'auto' }}>
-                <Typography style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px', marginRight: '30px' }}>Match Details</Typography>
-                <Typography style={{ fontSize: '20px', marginBottom: '10px', color: '#4B4B4B' }}>Results @ the end of game</Typography>
+              <div style={{ display: 'flex', marginLeft: '0', marginRight: 'auto', flexDirection: 'column' }}>
+                <Typography style={{ fontWeight: 'bold', fontSize: '20px', marginRight: '30px' }}>Match Details</Typography>
+                <Typography style={{ fontSize: '20px', marginBottom: '20px', color: '#4B4B4B' }}>Results @ the end of game</Typography>
               </div>
               <Box minWidth={'100%'} style={{ display: 'flex', backgroundColor: 'white', padding: '20px', boxShadow: '0px 6px 24px 0px rgba(0, 0, 0, 0.25)' }} border={'1px solid #BBBBBB'} borderRadius={'10px'}>
                 {/* Red Team */}
@@ -1188,7 +1226,7 @@ function GameDetails() {
                         </TableCell>
                         <TableCell align='center'>
                           <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
-                          <Tooltip disableInteractive title={<div>{`Physical: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`Magical: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
+                          <Tooltip disableInteractive title={<div>{`AD: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`AP: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
                             <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#37B7FF' }, width: '50%', height: '10px' }}></LinearProgress>
                           </Tooltip>
                         </TableCell>
@@ -1467,7 +1505,7 @@ function GameDetails() {
                         </TableCell>
                         <TableCell align='center'>
                           <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
-                          <Tooltip disabledInteractive title={<div>{`Physical: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`Magical: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
+                          <Tooltip disabledInteractive title={<div>{`AD: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`AP: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
                             <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#FF3F3F' }, width: '50%', height: '10px' }}></LinearProgress>
                           </Tooltip>
                         </TableCell>
@@ -1663,13 +1701,15 @@ function GameDetails() {
           ) : (
             <Grid width={'65%'} xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginTop: '30px', textAlign: 'center', marginBottom: '45px' }}>
               <Grid sx={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '73%' }}>
-                <Typography fontSize={20} fontWeight={600}>Laning Phase Results</Typography>
-                {gameData.info.gameDuration > 900 ? (
-                  <Typography marginBottom={'20px'}>How each lane was performing @ 15 minutes</Typography>
-                ) : (
-                  <Typography marginBottom={'20px'}>{`How each lane was performing @ ${gameDuration} (game ended early)`}</Typography>
-                )
-                }
+                <div style={{ marginLeft: '15px', marginBottom: '20px', }}>
+                  <Typography fontSize={20} fontWeight={600}>Laning Phase Results</Typography>
+                  {gameData.info.gameDuration > 900 ? (
+                    <Typography style={{ fontSize: '20px', color: '#4B4B4B' }}>How each lane was performing @ 15 minutes</Typography>
+                  ) : (
+                    <Typography style={{ fontSize: '20px', color: '#4B4B4B' }}>{`How each lane was performing @ ${gameDuration} (game ended early)`}</Typography>
+                  )
+                  }
+                </div>
                 <LanePhaseSummaryCardTop gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedTop={lastButtonPressedTop} topSummaryCardStatus={topSummaryCardStatus}></LanePhaseSummaryCardTop>
                 <LanePhaseSummaryCardJg gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedJg={lastButtonPressedJg} jgSummaryCardStatus={jgSummaryCardStatus}></LanePhaseSummaryCardJg>
                 <LanePhaseSummaryCardMid gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedMid={lastButtonPressedMid} midSummaryCardStatus={midSummaryCardStatus}></LanePhaseSummaryCardMid>
@@ -1683,15 +1723,129 @@ function GameDetails() {
 
         {/* Graphs */}
         <div id='GraphsAnchor' style={{ backgroundColor: '#f2f2f2' }}>
+          <Grid className='GameDetailsContainer' width={'65%'} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '30px', textAlign: 'flex-start' }}>
+            <Box minWidth={'65%'} style={{ display: 'flex', flexDirection: 'column', textAlign: 'flex-start', justifyContent: 'start', padding: '0px' }} borderRadius={'10px'}>
+              <Typography style={{ fontWeight: 'bold', fontSize: '20px' }}>Graphs</Typography>
+              <Typography style={{ fontSize: '20px', marginBottom: '20px', color: '#4B4B4B' }}>Match Data Visualized</Typography>
+            </Box>
+          </Grid>
           {statsAt15 && graphData ? (
-            <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '45px', textAlign: 'center' }}>
-              <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
-                <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
-                  <Typography fontSize={20} fontWeight={600}>Graphs</Typography>
-                  <Typography marginBottom={'20px'}>Match data visualized</Typography>
-                  <Graphs gameData={gameData} teamId={playerData.teamId} timelineData={timelineData} graphData={graphData}></Graphs>
+            <Grid className='GameDetailsContainer' width={'65%'} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', textAlign: 'center' }}>
+
+              <Divider color='#a6a6a6' width='65%'></Divider>
+
+
+              {/* Damage Dealt */}
+              <Box width={'65%'} justifyContent={'space-between'} style={{ display: 'flex', alignItems: 'center', padding: '20px' }} border={'0px solid #BBBBBB'} borderRadius={'10px'}>
+                <div>
+                  <Typography className='damageDealtGraphHeader'>DMG<br></br>DEALT</Typography>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                  {/* Red Team */}
+                  <Grid style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2} xs={6}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
+                        <div className='matchDetailsObjectiveContainer'>
+                          <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageDealtToChampions / 1000)}k</Typography>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
+                            <Box className='graphDamageBar' height={`${(item.totalDamageDealtToChampions / highestDamageDealt) * 200}px`} backgroundColor={redColors[index]}></Box>
+                          </Tooltip>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
+                              <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                            </a>
+                          </Tooltip>
+                        </div>
+                      ))}
+                    </div>
+                  </Grid>
+                  {/* Blue Team */}
+                  <Grid style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2} xs={6}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
+                        <div className='matchDetailsObjectiveContainer'>
+                          <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageDealtToChampions / 1000)}k</Typography>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
+                            <Box className='graphDamageBar' height={`${(item.totalDamageDealtToChampions / highestDamageDealt) * 200}px`} backgroundColor={blueColors[index]}></Box>
+                          </Tooltip>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
+                              <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                            </a>
+                          </Tooltip>
+                        </div>
+                      ))}
+                    </div>
+                  </Grid>
+                </div>
+                <Grid order={3}>
+                  <DamagePie type={'given'} participants={gameData.info.participants}></DamagePie>
                 </Grid>
-              </Grid>
+              </Box>
+
+              <Divider color='#a6a6a6' width='65%'></Divider>
+
+              {/* Damage Taken */}
+              <Box width={'65%'} justifyContent={'space-between'} style={{ display: 'flex', alignItems: 'center', padding: '20px' }} border={'0px solid #BBBBBB'} borderRadius={'10px'}>
+                <div>
+                  <Typography className='damageDealtGraphHeader'>DMG<br></br>TAKEN</Typography>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                  {/* Red Team */}
+                  <Grid style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
+                        <div className='matchDetailsObjectiveContainer'>
+                          <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageTaken / 1000)}k</Typography>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
+                            <Box className='graphDamageBar' height={`${(item.totalDamageTaken / highestDamageTaken) * 200}px`} backgroundColor={redColors[index]}></Box>
+                          </Tooltip>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
+                              <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                            </a>
+                          </Tooltip>
+                        </div>
+                      ))}
+                    </div>
+                  </Grid>
+                  {/* Blue Team */}
+                  <Grid style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
+                        <div className='matchDetailsObjectiveContainer'>
+                          <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageTaken / 1000)}k</Typography>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
+                            <Box className='graphDamageBar' height={`${(item.totalDamageTaken / highestDamageTaken) * 200}px`} backgroundColor={blueColors[index]}></Box>
+                          </Tooltip>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
+                              <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                            </a>
+                          </Tooltip>
+                        </div>
+                      ))}
+                    </div>
+                  </Grid>
+                </div>
+                <Grid order={3}>
+                  <DamagePie type={'taken'} participants={gameData.info.participants}></DamagePie>
+                </Grid>
+              </Box>
+
+              <Divider color='#a6a6a6' width='65%'></Divider>
+
+              {/* Gold Advantage */}
+              <Box width={'65%'} justifyContent={'space-between'} style={{ display: 'flex', alignItems: 'center', padding: '20px', marginTop: '20px' }} border={'0px solid #BBBBBB'} borderRadius={'10px'}>
+                {graphData ? (
+                  <TeamGoldDifGraph teamId={playerData.teamId} height={350} yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
+                ) : (
+                  <CircularProgress style={{ justifyContent: 'center', marginTop: '20px' }}></CircularProgress>
+                )}
+              </Box>
+
+              <Divider color='#a6a6a6' style={{ marginBottom: '30px' }} width='65%'></Divider>
+
             </Grid>
           ) : (
             <Box sx={{ display: 'flex', height: '300px', justifyContent: 'center', margin: 'auto', alignItems: 'center' }}>

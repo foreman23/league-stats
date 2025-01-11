@@ -12,25 +12,21 @@ const TeamGoldDifGraph = (props) => {
         height = props.height;
     }
 
-    console.log(props.yAxisGold)
-    console.log(props.xAxisGold)
-
-
     // If player team is red flip negative gold to positive
     let yAxisGold = [...props.yAxisGold];
-    let colors = ['#ff6666', '#66c7ff'];
+    let colors = ['#FF3F3F', '#568CFF'];
     if (props.teamId === 200) {
         yAxisGold = yAxisGold.map((value) => value * -1);  
-        colors = ['#66c7ff', '#ff6666'];    
+        colors = ['#568CFF', '#FF3F3F'];    
     }
 
     return (
-        <div>
-            <Grid style={{ display: 'flex' }} xs={12}>
+        <div style={{ overflow: 'hidden' }}>
+            <Grid style={{ display: 'flex', flexDirection: props.hideTitle ? 'row' : 'column' }} xs={12}>
                 {props.hideTitle ? (
                     <div></div>
                 ) : (
-                    <Typography fontWeight={'bold'} className='GraphHeader'>Team Gold Advantage</Typography>
+                    <Typography className='damageDealtGraphHeader'>GOLD ADVANTAGE</Typography>
                 )}
                 <LineChart
                     width={width}

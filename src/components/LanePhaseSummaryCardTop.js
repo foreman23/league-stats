@@ -59,17 +59,15 @@ const LanePhaseSummaryCardTop = (props) => {
             )}
           </Grid>
           <Grid xs={6} style={{ flexDirection: 'row', display: 'inline-flex', marginRight: '50px' }}>
-            <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 0 ? statsAt15.laneResults.TOP.bubbleColor : '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
-            <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 1 ? statsAt15.laneResults.TOP.bubbleColor : '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
-            <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 2 ? statsAt15.laneResults.TOP.bubbleColor : '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
-            <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 3 ? statsAt15.laneResults.TOP.bubbleColor : '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
-            <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 4 ? statsAt15.laneResults.TOP.bubbleColor : '#D9D9D9', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+            <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 0 ? statsAt15.laneResults.TOP.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+            <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 1 ? statsAt15.laneResults.TOP.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+            <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 2 ? statsAt15.laneResults.TOP.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+            <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 3 ? statsAt15.laneResults.TOP.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
+            <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 4 ? statsAt15.laneResults.TOP.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
           </Grid>
           <Grid item xs={6} style={{ display: 'inline-flex' }}>
 
-            <Button className={lastButtonPressedTop === 'laneSumTop1'
-              ? (statsAt15.laneResults.TOP.resTag === 'draw' ? 'LanePhaseSummaryBtnClickedDraw' : (statsAt15.laneResults.TOP.teamWonLane === 100 ? 'LanePhaseSummaryBtnClickedBlue' : 'LanePhaseSummaryBtnClicked'))
-              : (statsAt15.laneResults.TOP.resTag === 'draw' ? 'LanePhaseSummaryBtnDraw' : (statsAt15.laneResults.TOP.teamWonLane === 100 ? 'LanePhaseSummaryBtnBlue' : 'LanePhaseSummaryBtn'))}
+            <Button className={lastButtonPressedTop === 'laneSumTop1' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'}
               onClick={() => handleLaneCard('top', 'laneSumTop1')}
               style={{ marginRight: '20px', width: '125px', height: '50px' }}
               color='grey'
@@ -79,9 +77,7 @@ const LanePhaseSummaryCardTop = (props) => {
             </Button>
 
             <Button
-              className={lastButtonPressedTop === 'laneSumTop2'
-                ? (statsAt15.laneResults.TOP.resTag === 'draw' ? 'LanePhaseSummaryBtnClickedDraw' : (statsAt15.laneResults.TOP.teamWonLane === 100 ? 'LanePhaseSummaryBtnClickedBlue' : 'LanePhaseSummaryBtnClicked'))
-                : (statsAt15.laneResults.TOP.resTag === 'draw' ? 'LanePhaseSummaryBtnDraw' : (statsAt15.laneResults.TOP.teamWonLane === 100 ? 'LanePhaseSummaryBtnBlue' : 'LanePhaseSummaryBtn'))}
+              className={lastButtonPressedTop === 'laneSumTop2' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'}
               onClick={() => handleLaneCard('top', 'laneSumTop2')}
               style={{ marginRight: '20px', width: '125px', height: '50px' }}
               color='grey'
@@ -91,9 +87,7 @@ const LanePhaseSummaryCardTop = (props) => {
             </Button>
 
             <Button
-              className={lastButtonPressedTop === 'laneSumTop3'
-                ? (statsAt15.laneResults.TOP.resTag === 'draw' ? 'LanePhaseSummaryBtnClickedDraw' : (statsAt15.laneResults.TOP.teamWonLane === 100 ? 'LanePhaseSummaryBtnClickedBlue' : 'LanePhaseSummaryBtnClicked'))
-                : (statsAt15.laneResults.TOP.resTag === 'draw' ? 'LanePhaseSummaryBtnDraw' : (statsAt15.laneResults.TOP.teamWonLane === 100 ? 'LanePhaseSummaryBtnBlue' : 'LanePhaseSummaryBtn'))}
+              className={lastButtonPressedTop === 'laneSumTop3' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'}
               onClick={() => handleLaneCard('top', 'laneSumTop3')}
               style={{ marginRight: '20px', width: '125px', height: '50px' }}
               color='grey'
@@ -125,13 +119,13 @@ const LanePhaseSummaryCardTop = (props) => {
           )}
         </Grid>
         <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
-          <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -25] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner.riotIdGameName}`}>
+          <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner.riotIdGameName}`}>
             <div style={{ display: 'inline-block' }}>
               <img style={{ border: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img>
             </div>
           </Tooltip>
-          <img style={{ maxWidth: '30px', maxHeight: '115px' }} src='/images/swords.svg'></img>
-          <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -25] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser.riotIdGameName}`}>
+          <img className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
+          <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser.riotIdGameName}`}>
             <div style={{ position: 'relative', display: 'inline-block' }}>
               <img style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img>
             </div>
@@ -175,17 +169,17 @@ const LanePhaseSummaryCardTop = (props) => {
         </Grid>
         <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
           <div style={{ position: 'relative', display: 'inline-block' }}>
-            <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 52] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner.riotIdGameName}`}>
-              <div style={{ border: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
-                <img className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img>
+            <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner.riotIdGameName}`}>
+              <div style={{ position: 'relative', display: 'inline-flex' }}>
+                <img style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img>
               </div>
             </Tooltip>
           </div>
-          <img style={{ maxWidth: '30px', maxHeight: '115px' }} src='/images/swords.svg'></img>
+          <img className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
           <div style={{ position: 'relative', display: 'inline-block' }}>
-            <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 52] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser.riotIdGameName}`}>
-              <div style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
-                <img style={{ filter: 'grayscale(80%)' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img>
+            <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser.riotIdGameName}`}>
+              <div style={{  borderRadius: '50%', display: 'inline-flex' }}>
+                <img style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img>
               </div>
             </Tooltip>
           </div>

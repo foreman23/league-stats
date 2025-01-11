@@ -13,7 +13,7 @@ const Graphs = (props) => {
                 <Grid xs={6}>
                     <Typography fontWeight={'bold'} className='GraphHeader'>Damage Dealt</Typography>
                     <BarChart
-                        width={600}
+                        width={550}
                         height={300}
                         layout='horizontal'
                         yAxis={[{
@@ -37,7 +37,7 @@ const Graphs = (props) => {
                 <Grid xs={6}>
                     <Typography fontWeight={'bold'} className='GraphHeader'>Damage Taken</Typography>
                     <BarChart
-                        width={600}
+                        width={550}
                         height={300}
                         layout='horizontal'
                         yAxis={[{

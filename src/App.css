@@ -37,9 +37,18 @@
     width: 97%;
 }
 
+.lanePhaseSummarySwords {
+    max-width: 30px;
+    max-height: 115px;
+    margin-left: 10px;
+    margin-right: 10px;
+    opacity: 65%;
+}
+
 .lanePhaseChampImgLarge {
     border-radius: 100%;
     margin: 0px;
+    margin-top: 10px;
     max-width: 75px;
     max-height: 75px;
 }
@@ -107,96 +116,56 @@
     margin-left: 3px;
 }
 
+/* .GameDetailsCatBtn {
+    margin: 3px !important;
+    text-transform: none !important;
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+} */
+
 .LanePhaseSummaryBtn {
     background-color: white !important;
     color: black !important;
     box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
     text-transform: none !important;
+    font-weight: bold !important;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
 }
-
-.LanePhaseSummaryBtnBlue {
-    background-color: white !important;
-    color: black !important;
-    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
-    text-transform: none !important;
-}
-
-.LanePhaseSummaryBtnDraw {
-    background-color: white !important;
-    color: black !important;
-    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
-    text-transform: none !important;
-}
-
-/* .LanePhaseSummaryBtnClicked {
-    background-color: #FF3F3F !important;
-    color: white !important;
-    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
-    text-transform: none !important;
-}
-
-.LanePhaseSummaryBtnClickedBlue {
-    background-color: #37B7FF !important;
-    color: white !important;
-    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
-    text-transform: none !important;
-} */
 
 .LanePhaseSummaryBtnClicked {
-    background-color: #8c8c8c !important;
+    background-color: rgb(116, 116, 116) !important;
     color: white !important;
     box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
     text-transform: none !important;
+    font-weight: bold !important;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
 }
 
-.LanePhaseSummaryBtnClickedBlue {
-    background-color: #8c8c8c !important;
-    color: white !important;
-    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
-    text-transform: none !important;
-}
-
-.LanePhaseSummaryBtnClickedDraw {
-    background-color: #8c8c8c !important;
-    color: white !important;
-    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
-    text-transform: none !important;
-}
-
-/* .LanePhaseSummaryBtn:hover {
-    background-color: #FF3F3F !important;
-    color: white !important;
-    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
-}
-
-.LanePhaseSummaryBtnBlue:hover {
-    background-color: #37B7FF !important;
-    color: white !important;
+/* 
+.LanePhaseSummaryBtn:hover {
+    background-color: #f0f0f0 !important;
+    color: rgb(0, 0, 0) !important;
     box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
 } */
 
-.LanePhaseSummaryBtn:hover {
-    background-color: #8c8c8c !important;
-    color: white !important;
-    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
-}
+/* style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} */
 
-.LanePhaseSummaryBtnBlue:hover {
-    background-color: #8c8c8c !important;
-    color: white !important;
-    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
-}
-
-.LanePhaseSummaryBtnDraw:hover {
-    background-color: #8c8c8c !important;
-    color: white !important;
-    box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px !important;
+.lanePhaseLaneIcon {
+    margin: 20px !important;
+    max-width: 50px !important;
+    max-height: 50px !important;
 }
 
 .LanePhaseSummaryCardActive {
     padding: 10px;
     padding-left: 20px;
-    background-color: #EDEDED;
+    background-color: rgb(230, 230, 230);
     margin-bottom: 0px !important;
     margin-top: 0px !important;
     border-radius: 5px !important;
@@ -595,6 +564,26 @@
     width: 36px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    filter: drop-shadow(0px 4px 2px rgba(0, 0, 0, 0.25))
+}
+
+.graphDamageBar {
+    margin: auto;
+    width: 32px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    filter: drop-shadow(0px 4px 2px rgba(0, 0, 0, 0.25))
+}
+
+.graphChampIcon {
+    width: 32px;
+    margin-top: 3px;
+}
+
+.damageDealtGraphHeader {
+    font-weight: bold !important;
+    font-size: 26px !important;
+    text-align: start !important;
 }
 
 @media only screen and (min-width: 600px) {

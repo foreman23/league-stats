@@ -71,11 +71,16 @@ const calculateOpScores = (gameData, playerData) => {
     // Sort players by score
     let sortedPlayers = playersWithOpScores.sort((a, b) => b.opScore - a.opScore);
 
-    // Assign game standing and find highest damage dealt
+    // Assign game standing and find highest damage dealt/taken
     let highestDamageDealt = 0;
+    let highestDamageTaken = 0;
     sortedPlayers.forEach((player, index) => {
         if (player.totalDamageDealtToChampions > highestDamageDealt) {
             highestDamageDealt = player.totalDamageDealtToChampions;
+        }
+
+        if (player.totalDamageTaken > highestDamageTaken) {
+            highestDamageTaken = player.totalDamageTaken;
         }
 
         let standing = index + 1;
@@ -101,7 +106,7 @@ const calculateOpScores = (gameData, playerData) => {
     const updatedGameData = { ...gameData };
     updatedGameData.info.participants = reSortedPlayers;
 
-    return { highestDamageDealt, playersWithScores: updatedGameData.info.participants }
+    return { highestDamageDealt, highestDamageTaken, playersWithScores: updatedGameData.info.participants }
 
     // setMatchSummaryDesc(matchSummaryText);
 
