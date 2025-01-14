@@ -24,10 +24,12 @@ const Battles = (props) => {
     let blueDragonKills = 0;
     let blueBaronKills = 0;
     let blueHordeKills = 0;
+    let blueHeraldKills = 0;
 
     let redDragonKills = 0;
     let redBaronKills = 0;
     let redHordeKills = 0;
+    let redHeraldKills = 0;
 
     let blueTowerKills = 0;
     let blueInhibKills = 0;
@@ -207,6 +209,15 @@ const Battles = (props) => {
                                         redHordeKills += 1;
                                     }
                                 }
+                                if (kill.monsterType === 'RIFTHERALD') {
+                                    console.log(kill.monsterType)
+                                    if (kill.killerTeamId === 100) {
+                                        blueHeraldKills += 1;
+                                    }
+                                    else {
+                                        redHeraldKills += 1;
+                                    }
+                                }
                                 let eventObj = {
                                     eventType: 'MONSTER_KILL',
                                     position: kill.position,
@@ -340,14 +351,39 @@ const Battles = (props) => {
                         battleSpecial = `${blueFirstBlood > 0 ? 'Blue' : 'Red'} draws first blood`
                     }
 
-                    if (blueHordeKills > 0 || redHordeKills > 0) {
-                        battleSpecial = 'Fight for Void Grubs'
+                    if ((blueHordeKills > 0 || redHordeKills > 0) && (blueDragonKills === 0 && blueBaronKills === 0 && redDragonKills === 0 && redDragonKills === 0)) {
+                        if (location !== 'jg') {
+                            battleSpecial = 'Global fighting'
+                        }
+                        if ((blueKills + redKills > 0) || (blueHordeKills > 0 && redHordeKills > 0)) {
+                            battleSpecial = 'Fight for Void Grubs'
+                        } else {
+                            battleSpecial = `${blueHordeKills > 0 ? 'Blue secures void grubs' : 'Red secures void grubs'}`
+                        }
                     }
-                    if ((blueDragonKills > 0 || redDragonKills > 0) && location === 'jg') {
-                        locationPayload = ' bot Jungle'
+                    if ((blueHeraldKills > 0 || redHeraldKills > 0) && (blueDragonKills === 0 && blueBaronKills === 0 && redDragonKills === 0 && redDragonKills === 0)) {
+                        if (location !== 'jg') {
+                            battleSpecial = 'Global fighting'
+                        }
+                        if ((blueKills + redKills > 0) || (blueHeraldKills > 0 && redHeraldKills > 0)) {
+                            battleSpecial = 'Fight for herald'
+                        } else {
+                            battleSpecial = `${blueHeraldKills > 0 ? 'Blue secures herald' : 'Red secures herald'}`
+                        }
                     }
-                    if ((blueBaronKills > 0 || redBaronKills > 0) && location === 'jg') {
-                        locationPayload = ' top Jungle'
+                    if ((blueDragonKills > 0 || redDragonKills > 0)) {
+                        if ((blueKills + redKills > 0) || (blueDragonKills > 0 && redDragonKills > 0)) {
+                            battleSpecial = 'Fight for dragon'
+                        } else {
+                            battleSpecial = `${blueDragonKills > 0 ? 'Blue secures a dragon' : 'Red secures a dragon'}`
+                        }
+                    }
+                    if ((blueBaronKills > 0 || redBaronKills > 0)) {
+                        if ((blueKills + redKills > 0) || (blueBaronKills > 0 && redBaronKills > 0)) {
+                            battleSpecial = 'Fight for baron'
+                        } else {
+                            battleSpecial = `${blueBaronKills > 0 ? 'Blue secures baron' : 'Red secures baron'}`
+                        }
                     }
 
                     // Set Battle Name
@@ -356,14 +392,38 @@ const Battles = (props) => {
                     if ((blueKills + redKills) <= 2) {
                         battlePrefix = 'Skirmish in'
                     }
-                    if (blueTowerKills + blueInhibKills > 1 || redTowerKills + redInhibKills > 1 && battleLocation !== ' Jungle') {
+                    if ((blueKills >= 5 && redKills <= 1) || redKills >= 5 && blueKills <= 1) {
+                        battlePrefix = 'Slaughter in'
+                    }
+
+                    // No kills, only objectives
+                    if (blueKills + redKills === 0 && (blueBaronKills > 0 || blueDragonKills > 0) && (redBaronKills === 0 && redDragonKills === 0)) {
+                        battleSpecial = 'Blue secures jungle objectives'
+                    }
+                    if (blueKills + redKills === 0 && (redBaronKills > 0 || redDragonKills > 0) && (blueBaronKills === 0 && blueDragonKills === 0)) {
+                        battleSpecial = 'Red secures jungle objectives'
+                    }
+                    if (blueKills + redKills === 0 && (redBaronKills > 0 || redDragonKills > 0 || redHordeKills > 0) && (blueBaronKills > 0 || blueDragonKills > 0 || blueHordeKills > 0)) {
+                        battleSpecial = 'Both teams secure jungle objectives'
+                    }
+
+                    // Building destruction outweighs kills
+                    else if (((blueTowerKills + blueInhibKills) >= (blueKills + redKills) && (blueTowerKills + blueInhibKills) >= 3) || (blueTowerKills + blueInhibKills) >= 5) {
+                        battleSpecial = 'Blue demolishes red base'
+                    }
+                    else if (((redTowerKills + redInhibKills) >= (blueKills + redKills) && (redTowerKills + redInhibKills) >= 3) || (redTowerKills + redInhibKills) >= 5) {
+                        battleSpecial = 'Red demolishes blue base'
+                    }
+
+                    // Push into
+                    if ((blueTowerKills + blueInhibKills > 1 || redTowerKills + redInhibKills > 1) && battleLocation !== ' Jungle') {
                         if (blueTowerKills + blueInhibKills > redTowerKills + redInhibKills) {
                             battlePrefix = 'Blue push into'
                         }
                         if (blueTowerKills + blueInhibKills < redTowerKills + redInhibKills) {
                             battlePrefix = 'Red push into'
                         }
-                        else if (blueTowerKills + blueInhibKills == redTowerKills + redInhibKills) {
+                        else if (((blueTowerKills + blueInhibKills) - (redTowerKills + redInhibKills) >= 0 && (blueTowerKills + blueInhibKills) - (redTowerKills + redInhibKills) <= 1) || ((redTowerKills + redInhibKills) - (blueTowerKills + blueInhibKills) >= 0 && (redTowerKills + redInhibKills) - (blueTowerKills + blueInhibKills) <= 1)) {
                             battleSpecial = 'Mutual base destruction'
                         }
                     }
@@ -404,11 +464,13 @@ const Battles = (props) => {
                     blueDragonKills = 0;
                     blueBaronKills = 0;
                     blueHordeKills = 0;
+                    blueHeraldKills = 0;
                     blueTowerKills = 0;
                     blueInhibKills = 0;
                     redDragonKills = 0;
                     redBaronKills = 0;
                     redHordeKills = 0;
+                    redHeraldKills = 0;
                     redTowerKills = 0;
                     redInhibKills = 0;
                     blueFirstBlood = 0;
@@ -463,9 +525,20 @@ const Battles = (props) => {
                 detailsArr.push(eventObj)
                 // detailsStr += `${victim.riotIdGameName} (${Object.values(champsJSON.data).find(champ => champ.key === String(victim.championId)).name}) died. `;
             }
+            else if (kill.type === 'CHAMPION_SPECIAL_KILL') {
+                const killer = participants.find(killer => killer.participantId === kill.killerId)
+                if (kill.killType === 'KILL_FIRST_BLOOD') {
+                    console.log(killer.teamId)
+                    if (killer.teamId === 100) {
+                        blueFirstBlood = 1;
+                    }
+                    if (killer.teamId === 200) {
+                        redFirstBlood = 1;
+                    }
+                }
+            }
             else if (kill.type === 'BUILDING_KILL') {
                 let buildingName = null;
-                // console.log(kill)
                 const killer = participants.find(killer => killer.participantId === kill.killerId)
                 let towerType = null;
                 if (kill.buildingType === 'TOWER_BUILDING') {
@@ -492,6 +565,8 @@ const Battles = (props) => {
                     }
                 }
                 let eventObj = {
+                    redFirstBlood: redFirstBlood,
+                    blueFirstBlood: blueFirstBlood,
                     eventType: 'BUILDING_DESTROY',
                     position: kill.position,
                     timestamp: kill.timestamp,
@@ -549,6 +624,15 @@ const Battles = (props) => {
                             redHordeKills += 1;
                         }
                     }
+                    if (kill.monsterType === 'RIFTHERALD') {
+                        console.log(kill.monsterType)
+                        if (kill.killerTeamId === 100) {
+                            blueHeraldKills += 1;
+                        }
+                        else {
+                            redHeraldKills += 1;
+                        }
+                    }
                     let eventObj = {
                         eventType: 'MONSTER_KILL',
                         position: kill.position,
@@ -576,8 +660,194 @@ const Battles = (props) => {
             outcome = `Even trade ${blueKills} - ${redKills}`;
         }
 
-        // Determine Battle Name
-        let battleName = 'PLACEHOLDER';
+        // Find locations where events occurred
+        let locationCount = {
+            top: 0,
+            other: 0,
+            jg: 0,
+            mid: 0,
+            bot: 0,
+            blueBase: 0,
+            redBase: 0
+        }
+        for (let i = 0; i < detailsArr.length; i++) {
+            let currPos = detailsArr[i].position
+            let x = currPos.x;
+            let y = currPos.y;
+            // Top lane (x between 0 and 5000, y between 5000 and 16000, including the base area)
+            if (x >= 0 && x <= 5000 && y >= 5000 && y <= 16000) {
+                locationCount.top++; // Top lane
+            }
+
+            // Bot lane (x between 5000 and 16000, y between 0 and 5000, including the base area)
+            if (x >= 5000 && x <= 16000 && y >= 0 && y <= 5000) {
+                locationCount.bot++; // Bot lane
+            }
+
+            // Mid lane (x between 5000 and 10000, y between 5000 and 10000)
+            if ((x >= 6000 && x <= 9000) && (y >= 6000 && y <= 10000)) {
+                locationCount.mid++; // Mid lane
+            }
+
+            // Jungle (x and y between 4000 and 11000, excluding lanes and bases)
+            if (
+                ((x > 4000 && x < 12000) && (y > 5000 && y < 11000)) && // Central area
+                !((x >= 6800 && x <= 8500) && (y >= 6800 && y <= 9200)) && // Exclude mid lane
+                !(x >= 0 && x <= 5000 && y >= 5000 && y <= 16000) && // Exclude top lane
+                !(x >= 5000 && x <= 16000 && y >= 0 && y <= 5000) // Exclude bot lane
+            ) {
+                locationCount.jg++;
+            }
+
+            // Blue base (x < 5000, y < 5000)
+            if (x < 5000 && y < 5000) {
+                locationCount.blueBase++; // Blue base
+            }
+
+            // Red base (x > 11000, y > 11000)
+            if ((x > 11000 && y > 11000)) {
+                locationCount.redBase++; // Red base
+            }
+        }
+        let countArr = Object.values(locationCount)
+        let maxCount = Math.max(...countArr);
+
+        let location = Object.keys(locationCount).reduce((a, b) => locationCount[a] > locationCount[b] ? a : b, '');
+
+        if (maxCount === 0) {
+            location = 'jg'
+        }
+
+        // Map location keys to human-readable names
+        const locationNames = {
+            top: ' Top',
+            jg: ' Jungle',
+            mid: ' Mid',
+            bot: ' Bottom',
+            blueBase: ' Blue Base',
+            redBase: ' Red Base'
+        };
+
+        // Determine Battle Feats
+        let locationPayload = locationNames[location]
+        let battleSpecial = ''
+
+        let maxValue = -Infinity
+        let maxKey = null;
+        for (const key in locationCount) {
+            if (locationCount[key] > maxValue) {
+                maxValue = locationCount[key];
+                maxKey = key
+            }
+        }
+
+        //console.log(locationCount, outcome)
+        // If multiple fights in different locations
+        for (const key in locationCount) {
+            if (key === maxKey || locationCount[key] === 0) continue;
+            if (Math.abs(maxValue - locationCount[key]) < 1) {
+                if (locationCount['jg'] === locationCount[key]) {
+                    if (key !== 'mid') {
+                        locationPayload = ' Jungle'
+                    } else {
+                        locationPayload = ' Mid'
+                    }
+                }
+                else {
+                    battleSpecial = 'Global fighting';
+                }
+                break;
+            }
+        }
+
+        if (blueFirstBlood > 0 || redFirstBlood > 0) {
+            battleSpecial = `${blueFirstBlood > 0 ? 'Blue' : 'Red'} draws first blood`
+        }
+
+        if ((blueHordeKills > 0 || redHordeKills > 0) && (blueDragonKills === 0 && blueBaronKills === 0 && redDragonKills === 0 && redDragonKills === 0)) {
+            if (location !== 'jg') {
+                battleSpecial = 'Global fighting'
+            }
+            if ((blueKills + redKills > 0) || (blueHordeKills > 0 && redHordeKills > 0)) {
+                battleSpecial = 'Fight for Void Grubs'
+            } else {
+                battleSpecial = `${blueHordeKills > 0 ? 'Blue secures void grubs' : 'Red secures void grubs'}`
+            }
+        }
+        if ((blueHeraldKills > 0 || redHeraldKills > 0) && (blueDragonKills === 0 && blueBaronKills === 0 && redDragonKills === 0 && redDragonKills === 0)) {
+            if (location !== 'jg') {
+                battleSpecial = 'Global fighting'
+            }
+            if ((blueKills + redKills > 0) || (blueHeraldKills > 0 && redHeraldKills > 0)) {
+                battleSpecial = 'Fight for herald'
+            } else {
+                battleSpecial = `${blueHeraldKills > 0 ? 'Blue secures herald' : 'Red secures herald'}`
+            }
+        }
+        if ((blueDragonKills > 0 || redDragonKills > 0)) {
+            if ((blueKills + redKills > 0) || (blueDragonKills > 0 && redDragonKills > 0)) {
+                battleSpecial = 'Fight for dragon'
+            } else {
+                battleSpecial = `${blueDragonKills > 0 ? 'Blue secures a dragon' : 'Red secures a dragon'}`
+            }
+        }
+        if ((blueBaronKills > 0 || redBaronKills > 0)) {
+            if ((blueKills + redKills > 0) || (blueBaronKills > 0 && redBaronKills > 0)) {
+                battleSpecial = 'Fight for baron'
+            } else {
+                battleSpecial = `${blueBaronKills > 0 ? 'Blue secures baron' : 'Red secures baron'}`
+            }
+        }
+
+        // Set Battle Name
+        let battlePrefix = 'Battle in';
+        let battleLocation = locationPayload
+        if ((blueKills + redKills) <= 2) {
+            battlePrefix = 'Skirmish in'
+        }
+        if ((blueKills >= 5 && redKills <= 1) || redKills >= 5 && blueKills <= 1) {
+            battlePrefix = 'Slaughter in'
+        }
+
+        // No kills, only objectives
+        if (blueKills + redKills === 0 && (blueBaronKills > 0 || blueDragonKills > 0) && (redBaronKills === 0 && redDragonKills === 0)) {
+            battleSpecial = 'Blue secures jungle objectives'
+        }
+        if (blueKills + redKills === 0 && (redBaronKills > 0 || redDragonKills > 0) && (blueBaronKills === 0 && blueDragonKills === 0)) {
+            battleSpecial = 'Red secures jungle objectives'
+        }
+        if (blueKills + redKills === 0 && (redBaronKills > 0 || redDragonKills > 0 || redHordeKills > 0) && (blueBaronKills > 0 || blueDragonKills > 0 || blueHordeKills > 0)) {
+            battleSpecial = 'Both teams secure jungle objectives'
+        }
+
+        // Building destruction outweighs kills
+        else if (((blueTowerKills + blueInhibKills) >= (blueKills + redKills) && (blueTowerKills + blueInhibKills) >= 3) || (blueTowerKills + blueInhibKills) >= 5) {
+            battleSpecial = 'Blue demolishes red base'
+        }
+        else if (((redTowerKills + redInhibKills) >= (blueKills + redKills) && (redTowerKills + redInhibKills) >= 3) || (redTowerKills + redInhibKills) >= 5) {
+            battleSpecial = 'Red demolishes blue base'
+        }
+
+        // Push into
+        if ((blueTowerKills + blueInhibKills > 1 || redTowerKills + redInhibKills > 1) && battleLocation !== ' Jungle') {
+            if (blueTowerKills + blueInhibKills > redTowerKills + redInhibKills) {
+                battlePrefix = 'Blue push into'
+            }
+            if (blueTowerKills + blueInhibKills < redTowerKills + redInhibKills) {
+                battlePrefix = 'Red push into'
+            }
+            else if (((blueTowerKills + blueInhibKills) - (redTowerKills + redInhibKills) >= 0 && (blueTowerKills + blueInhibKills) - (redTowerKills + redInhibKills) <= 1) || ((redTowerKills + redInhibKills) - (blueTowerKills + blueInhibKills) >= 0 && (redTowerKills + redInhibKills) - (blueTowerKills + blueInhibKills) <= 1)) {
+                battleSpecial = 'Mutual base destruction'
+            }
+        }
+
+        let battleName = null;
+        if (battleSpecial.length > 0) {
+            battleName = battleSpecial
+        }
+        else {
+            battleName = battlePrefix + battleLocation
+        }
 
         const battlePayload = {
             battleName: battleName,
@@ -612,7 +882,7 @@ const Battles = (props) => {
                         <Typography fontSize={20} fontWeight={600}>Battles</Typography>
                         <Typography style={{ position: 'absolute', top: '0px', right: '0px', left: 'auto' }}><span style={{ backgroundColor: 'purple', color: 'white', padding: '10px', borderRadius: '20px', fontSize: '14px', fontWeight: 'bold', filter: 'drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.25))' }}>BETA*</span></Typography>
                     </div>
-                    <Typography style={{ fontSize: '14px', marginTop: '12px', marginBottom: '7px', color: 'rgb(133, 133, 133)' }}>*Information presented below may not be 100% accurate!</Typography>
+                    <Typography style={{ fontSize: '14px', marginTop: '12px', marginBottom: '7px', color: 'rgb(133, 133, 133)' }}>*Descriptions provided below may not be 100% accurate</Typography>
                     <Typography style={{ fontSize: '20px', color: 'rgb(75, 75, 75)' }} marginBottom={'20px'}>Fights that occurred during the match</Typography>
                 </Grid>
                 <Grid style={{ textAlign: 'end' }} xs={6}>
@@ -798,7 +1068,7 @@ const Battles = (props) => {
                                                         />
                                                         {details.killer?.riotIdGameName ? (
                                                             <Typography style={{ fontSize: '14px', marginLeft: '10px' }}>
-                                                                {<><a href={`/profile/${gameData.info.platformId.toLowerCase()}/${details.killer?.riotIdGameName}/${details.killer?.riotIdTagline.toLowerCase()}`} style={{ color: details.killer.teamId === 100 ? '#568CFF' : '#FF3A54', fontWeight: 'bold', textDecoration: 'none' }}>{details.killer?.riotIdGameName || 'Minion'}</a> killed <span style={{ color: '#EF00D3', fontWeight: 'bold' }}>{details.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</span></>}
+                                                                {<><a href={`/profile/${gameData.info.platformId.toLowerCase()}/${details.killer?.riotIdGameName}/${details.killer?.riotIdTagline?.toLowerCase()}`} style={{ color: details.killer?.teamId === 100 ? '#568CFF' : '#FF3A54', fontWeight: 'bold', textDecoration: 'none' }}>{details.killer?.riotIdGameName || 'Minion'}</a> killed <span style={{ color: '#EF00D3', fontWeight: 'bold' }}>{details.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</span></>}
                                                             </Typography>
                                                         ) : (
                                                             <Typography style={{ fontSize: '14px', marginLeft: '10px' }}>
