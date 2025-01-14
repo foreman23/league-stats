@@ -797,7 +797,7 @@ function GameDetails() {
                     <Button onClick={() => scrollToSection('DetailsAnchor')} className='GameDetailsCatBtn' variant='contained'>Details</Button>
                     <Button onClick={() => scrollToSection('LaningAnchor')} className='GameDetailsCatBtn' variant='contained'>Laning</Button>
                     <Button onClick={() => scrollToSection('GraphsAnchor')} className='GameDetailsCatBtn' variant='contained'>Graphs</Button>
-                    <Button onClick={() => scrollToSection('TeamfightsAnchor')} className='GameDetailsCatBtn' variant='contained'>Timeline</Button>
+                    <Button onClick={() => scrollToSection('TeamfightsAnchor')} className='GameDetailsCatBtn' variant='contained'>Battles</Button>
                     <Button onClick={() => scrollToSection('TeamfightsAnchor')} className='GameDetailsCatBtn' variant='contained'>Builds</Button>
                     {/* <Button className='GameDetailsCatBtn' color='grey' variant='contained'>Builds</Button> */}
                   </span>
@@ -1838,7 +1838,7 @@ function GameDetails() {
               {/* Gold Advantage */}
               <Box width={'65%'} justifyContent={'space-between'} style={{ display: 'flex', alignItems: 'center', padding: '20px', marginTop: '20px' }} border={'0px solid #BBBBBB'} borderRadius={'10px'}>
                 {graphData ? (
-                  <TeamGoldDifGraph teamId={playerData.teamId} height={350} yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
+                  <TeamGoldDifGraph teamId={playerData.teamId} height={300} yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
                 ) : (
                   <CircularProgress style={{ justifyContent: 'center', marginTop: '20px' }}></CircularProgress>
                 )}
@@ -1861,12 +1861,10 @@ function GameDetails() {
               <CircularProgress />
             </Box>
           ) : (
-            <Grid xs={12} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '45px', textAlign: 'center', marginBottom: '150px' }}>
-              <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
-                <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', maxWidth: '1000px' }}>
-                  <Battles gameData={gameData} champsJSON={champsJSON} timelineData={timelineData}></Battles>
+            <Grid className='GameDetailsContainer' width={'65%'} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '30px', textAlign: 'flex-start' }}>
+                <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', width: '65%', margin: 'auto' }}>
+                  <Battles dataDragonVersion={dataDragonVersion} gameData={gameData} champsJSON={champsJSON} timelineData={timelineData}></Battles>
                 </Grid>
-              </Grid>
             </Grid>
           )}
         </div>

@@ -74,7 +74,7 @@ const DamagePie = (props) => {
                             hidden: true
                         },
                     }}
-                    width={255}
+                    width={265}
                     height={200}
                 />
             </foreignObject>
