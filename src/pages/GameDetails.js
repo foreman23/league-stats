@@ -662,7 +662,7 @@ function GameDetails() {
                           >{playerData.champLevel}
                           </Typography>
                           <img className='gameDetailsSummaryMainChampImg'
-                            style={{ filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''>
+                            style={{ filter: 'grayscale(100%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''>
                           </img>
                         </div>
                       </Tooltip>
@@ -712,7 +712,7 @@ function GameDetails() {
                           >{opposingLaner.champLevel}
                           </Typography>
                           <img className='gameDetailsSummaryMainChampImg'
-                            style={{ filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`} alt=''>
+                            style={{ filter: 'grayscale(100%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`} alt=''>
                           </img>
                         </div>
                       </Tooltip>
@@ -1001,7 +1001,7 @@ function GameDetails() {
                               borderRadius: '50%',
                               width: '82px',
                               height: '82px',
-                              filter: 'grayscale(80%)',
+                              filter: 'grayscale(100%)',
                             }}
                             src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(gameData.info.participants.reduce((minPlayer, player) => player.score < (minPlayer?.score ?? Infinity) ? player : minPlayer, null).championId)).id}.png`} alt=''
                           />
@@ -1863,7 +1863,7 @@ function GameDetails() {
           ) : (
             <Grid className='GameDetailsContainer' width={'65%'} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '30px', textAlign: 'flex-start' }}>
                 <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', width: '65%', margin: 'auto' }}>
-                  <Battles dataDragonVersion={dataDragonVersion} gameData={gameData} champsJSON={champsJSON} timelineData={timelineData}></Battles>
+                  <Battles dataDragonVersion={dataDragonVersion} gameData={gameData} playerData={playerData} graphData={graphData} champsJSON={champsJSON} timelineData={timelineData}></Battles>
                 </Grid>
             </Grid>
           )}
