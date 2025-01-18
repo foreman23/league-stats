@@ -11,9 +11,7 @@ const getChampsJSON = async (dataDragonVersion) => {
 
 const generateShortSummary = async (gameData, playerData, timelineData, stats15, dataDragonVersion) => {
     const champsJSON = await getChampsJSON(dataDragonVersion)
-    console.log(champsJSON)
     let lanes = stats15.laneResults;
-    console.log(lanes)
     let roles = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM'];
 
     // Calculate win/loss strings
@@ -22,7 +20,6 @@ const generateShortSummary = async (gameData, playerData, timelineData, stats15,
     let midDescEndGame = null;
     let botDescEndGame = null;
     for (let i = 0; i < roles.length; i++) {
-        console.log(roles[i])
         let currLane = lanes[roles[i]]
         let resStr = null;
         if (currLane.bubbleCount > 3) {
@@ -173,8 +170,6 @@ const generateShortSummary = async (gameData, playerData, timelineData, stats15,
         }
     }
 
-
-    console.log(matchSummaryText)
 
     return (matchSummaryText)
 

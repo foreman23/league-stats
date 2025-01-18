@@ -17,7 +17,7 @@ const TeamGoldDifGraph = (props) => {
         height = props.height;
     }
 
-    console.log(props.xAxisGold, props.yAxisGold)
+    // console.log(props.xAxisGold, props.yAxisGold)
 
     // If player team is red flip negative gold to positive
     let yAxisGold = [...props.yAxisGold];

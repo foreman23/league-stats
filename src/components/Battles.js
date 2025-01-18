@@ -12,7 +12,6 @@ const Battles = (props) => {
     const champsJSON = props.champsJSON;
     const dataDragonVersion = props.dataDragonVersion;
     // console.log(timelineData)
-    console.log(gameData)
 
     // Isolate teamfights from timeline
     const frames = timelineData.info.frames;
@@ -51,7 +50,6 @@ const Battles = (props) => {
     let blueTotalFightsWon = 0;
     let redTotalFightsWon = 0;
 
-    console.log(frames)
 
     for (const index in frames) {
         const frame = frames[index]
@@ -115,7 +113,6 @@ const Battles = (props) => {
                         else if (kill.type === 'CHAMPION_SPECIAL_KILL') {
                             const killer = participants.find(killer => killer.participantId === kill.killerId)
                             if (kill.killType === 'KILL_FIRST_BLOOD') {
-                                console.log(killer.teamId)
                                 if (killer.teamId === 100) {
                                     blueFirstBlood = 1;
                                 }
@@ -212,7 +209,6 @@ const Battles = (props) => {
                                     }
                                 }
                                 if (kill.monsterType === 'RIFTHERALD') {
-                                    console.log(kill.monsterType)
                                     if (kill.killerTeamId === 100) {
                                         blueHeraldKills += 1;
                                     }
@@ -483,7 +479,6 @@ const Battles = (props) => {
 
                     if (battleName === 'Battle for dragon') {
                         let dragonEvent = detailsArr.find(event => event.eventType === "MONSTER_KILL" && event.monsterType?.includes("DRAGON"))
-                        console.log(dragonEvent)
                         battleDesc = `The ${dragonEvent.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())} was slain by ${dragonEvent.killer.championName || 'a minion'} (${dragonEvent.killer.riotIdGameName || 'a minion'}) for the ${dragonEvent.teamId === 100 ? 'blue' : 'red'} team.`
                     }
 
@@ -493,7 +488,6 @@ const Battles = (props) => {
 
                     if (battleName === 'Battle for baron') {
                         let baronEvent = detailsArr.find(event => event.eventType === "MONSTER_KILL" && event.monsterType?.includes("BARON_NASHOR"))
-                        console.log(baronEvent)
                         battleDesc = `Baron was slain by ${baronEvent.killer?.championName || 'a minion'} (${baronEvent.killer?.riotIdGameName || 'a minion'}) for the ${baronEvent.teamId === 100 ? 'blue' : 'red'} team.`
                     }
 
@@ -745,7 +739,6 @@ const Battles = (props) => {
             else if (kill.type === 'CHAMPION_SPECIAL_KILL') {
                 const killer = participants.find(killer => killer.participantId === kill.killerId)
                 if (kill.killType === 'KILL_FIRST_BLOOD') {
-                    console.log(killer.teamId)
                     if (killer.teamId === 100) {
                         blueFirstBlood = 1;
                     }
@@ -842,7 +835,6 @@ const Battles = (props) => {
                         }
                     }
                     if (kill.monsterType === 'RIFTHERALD') {
-                        console.log(kill.monsterType)
                         if (kill.killerTeamId === 100) {
                             blueHeraldKills += 1;
                         }
@@ -1127,7 +1119,6 @@ const Battles = (props) => {
 
         if (battleName === 'Battle for dragon') {
             let dragonEvent = detailsArr.find(event => event.eventType === "MONSTER_KILL" && event.monsterType?.includes("DRAGON"))
-            console.log(dragonEvent)
             battleDesc = `The ${dragonEvent.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())} was slain by ${dragonEvent.killer.championName || 'a minion'} (${dragonEvent.killer.riotIdGameName || 'a minion'}) for the ${dragonEvent.teamId === 100 ? 'blue' : 'red'} team.`
         }
 
@@ -1137,7 +1128,6 @@ const Battles = (props) => {
 
         if (battleName === 'Battle for baron') {
             let baronEvent = detailsArr.find(event => event.eventType === "MONSTER_KILL" && event.monsterType?.includes("BARON_NASHOR"))
-            console.log(baronEvent)
             battleDesc = `Baron was slain by ${baronEvent.killer?.championName || 'a minion'} (${baronEvent.killer?.riotIdGameName || 'a minion'}) for the ${baronEvent.teamId === 100 ? 'blue' : 'red'} team.`
         }
 
@@ -1318,9 +1308,6 @@ const Battles = (props) => {
         }
         teamfights.push(battlePayload);
     }
-
-    console.log(teamfights)
-    console.log(Math.round((teamfights[0].details[teamfights[0].details.length - 1].timestamp) / 60000))
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', margin: '0' }}>

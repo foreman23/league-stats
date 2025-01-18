@@ -27,6 +27,7 @@ const generateGraphData = async (gameData, timelineData) => {
     let redLeadingTime = 0;
     const xAxisGold = frames.map((_, index) => index).slice(2, frames.length);
 
+    // Find gold amounts
     let yAxisGold = frames.map((frame) => {
         let team1Gold = 0;
         let team2Gold = 0;

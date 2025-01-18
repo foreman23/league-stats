@@ -53,8 +53,6 @@ const LanePhaseSummaryCardBot = (props) => {
         advantageStr = `so we consider bottom lane to be a tie`
     }
 
-    console.log(advantageStr)
-
     return (
         <div id='laningBotAnchor'>
             <Grid className={botSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'} container>
