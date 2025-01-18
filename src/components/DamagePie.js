@@ -64,6 +64,7 @@ const DamagePie = (props) => {
         <svg viewBox={`0 0 180 200`} width={'200px'} height={'200px'}>
             <foreignObject width="100%" height="100%">
                 <PieChart
+                sx={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}
                     series={[
                         {
                             data: data

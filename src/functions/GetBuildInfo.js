@@ -1,6 +1,6 @@
 const getBuildInfo = async (gameData, timelineData) => {
 
-    let participants = gameData.info.participants;
+    let participants = [...gameData.info.participants];
     participants.sort((a, b) => a.participantId - b.participantId)
     console.log(participants)
     const frames = timelineData.info.frames;

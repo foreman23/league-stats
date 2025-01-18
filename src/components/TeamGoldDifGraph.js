@@ -101,6 +101,7 @@ const TeamGoldDifGraph = (props) => {
                     <Typography className='damageDealtGraphHeader'>GOLD ADVANTAGE</Typography>
                 )}
                 <LineChart
+                    sx={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2))' }}
                     width={width}
                     height={height}
                     xAxis={[{
