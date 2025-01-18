@@ -3,46 +3,78 @@ const getBuildInfo = async (gameData, timelineData) => {
     let participants = gameData.info.participants;
     participants.sort((a, b) => a.participantId - b.participantId)
     console.log(participants)
-    const frames = timelineData.info.frames;    
+    const frames = timelineData.info.frames;
 
     // Init timeline array
     let itemTimeline = [];
+    let skillTimeline = [];
     let champInfo = [];
+
     for (let i = 0; i < participants.length; i++) {
         const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/15.1.1/data/en_US/champion/${participants[i].championName}.json`);
         const data = await response.json();
-        console.log(data)
-        itemTimeline.push([])
-        champInfo.push(data)
+        let itemChampObj = {
+            name: participants[i].championName,
+            participantId: participants[i].participantId,
+            itemHistory: []
+        };
+        itemTimeline.push(itemChampObj);
+        skillTimeline.push([]);
+        champInfo.push(data);
     }
 
-    // Find items and skill ups
-    frames.map((frame, index) => {
-        let events = frame.events
-        for (let i = 0; i < events.length; i++) {
-            if (events[i].type === 'ITEM_PURCHASED' || events[i].type === 'ITEM_DESTROYED') {
-                let itemObj = {
-                    itemId: events[i].itemId,
-                    participantId: events[i].participantId,
-                    timestamp: events[i].timestamp,
-                    type: events[i].type
+    console.log(itemTimeline);
+
+    // Process frames to group items and skills
+    frames.forEach((frame) => {
+        const events = frame.events;
+
+        events.forEach((event) => {
+            if (event.type === 'ITEM_PURCHASED' || event.type === 'ITEM_UNDO') {
+                const participantIndex = event.participantId - 1;
+                const itemObj = {
+                    itemId: event.itemId,
+                    participantId: event.participantId,
+                    timestamp: event.timestamp,
+                    type: event.type
+                };
+
+                const itemHistory = itemTimeline[participantIndex].itemHistory;
+
+                if (event.type === 'ITEM_UNDO') {
+                    itemHistory.pop()
                 }
-                itemTimeline[events[i].participantId - 1].push(itemObj)
-            }
-            if (events[i].type === 'SKILL_LEVEL_UP') {
-                let skillObj = {
-                    participantId: events[i].participantId,
-                    timestamp: events[i].timestamp,
-                    skillSlot: events[i].skillSlot,
-                    type: events[i].type
+
+                else {
+                    if (itemHistory.length === 0 || event.timestamp - itemHistory[itemHistory.length - 1][itemHistory[itemHistory.length - 1].length - 1].timestamp > 15000) {
+                        // Start a new group if no group exists or time gap exceeds 10 seconds
+                        itemHistory.push([itemObj]);
+                    } else {
+                        // Add to the last group
+                        itemHistory[itemHistory.length - 1].push(itemObj);
+                    }
                 }
-                itemTimeline[events[i].participantId - 1].push(skillObj)
+
             }
-        }
-    })
+
+            if (event.type === 'SKILL_LEVEL_UP') {
+                const skillObj = {
+                    participantId: event.participantId,
+                    timestamp: event.timestamp,
+                    skillSlot: event.skillSlot,
+                    type: event.type
+                };
+                skillTimeline[event.participantId - 1].push(skillObj);
+            }
+        });
+    });
+
+
+    console.log(itemTimeline)
 
     let payload = {
         itemTimeline: itemTimeline,
+        skillTimeline: skillTimeline,
         champInfo: champInfo
     }
 
