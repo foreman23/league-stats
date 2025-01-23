@@ -1,4 +1,4 @@
-import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress, Tooltip, Divider } from '@mui/material';
+import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress, Tooltip, Divider, Skeleton } from '@mui/material';
 import React, { useCallback } from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -261,14 +261,14 @@ const SummonerProfile = () => {
         }
 
         const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
-        const summonerData = summonerResponse.data;
+        const summonerResData = summonerResponse.data;
 
         // If summoner not found return 404
-        if (summonerData.status === 404) {
+        if (summonerResData.status === 404) {
           console.log(`summoner not found in region ${selectedRegion} :(`)
         }
 
-        const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`);
+        const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerResData.id}`);
         const rankedData = rankedResponse.data;
 
         const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`);
@@ -287,14 +287,14 @@ const SummonerProfile = () => {
         const newDocRef = doc(collection(firestore, `${selectedRegion}-users`), `${summonerName}-${riotId}`);
         const data = {
           lastUpdated: lastUpdated,
-          summonerData: summonerData,
+          summonerData: summonerResData,
           rankedData: rankedData,
           historyData: historyData,
           masteryData: masteryData
         }
         await setDoc(newDocRef, {
           lastUpdated: lastUpdated,
-          summonerData: summonerData,
+          summonerData: summonerResData,
           rankedData: rankedData,
           historyData: historyData,
           masteryData: masteryData
@@ -471,6 +471,7 @@ const SummonerProfile = () => {
 
     // Get summonerData from firestore
     if (summonerName !== null && selectedRegion !== null && alternateRegion !== null) {
+      console.log(summonerName, selectedRegion, alternateRegion)
       getUserFromFirestore();
     }
 
@@ -620,6 +621,11 @@ const SummonerProfile = () => {
           }
         }
         setRankIndex(highestRankIndex)
+        setIsLoadingRank(false);
+      }
+
+      else {
+        setRankIndex(null);
         setIsLoadingRank(false);
       }
 
@@ -850,11 +856,19 @@ const SummonerProfile = () => {
                     {summonerData.rankedData &&
                       <span>
                         <ListItem style={{ fontWeight: '500', color: '#404040' }}>{(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex].rank}</ListItem>
-                        <ListItem style={{ fontWeight: '500', color: '#404040' }}>{summonerData.rankedData[rankIndex].wins}W {summonerData.rankedData[rankIndex].losses}L {((summonerData.rankedData[0].wins / (summonerData.rankedData[rankIndex].wins + summonerData.rankedData[rankIndex].losses)) * 100).toFixed(0)}%</ListItem>
+                        <ListItem style={{ fontWeight: '500', color: '#404040' }}>{summonerData.rankedData[rankIndex].wins}W {summonerData.rankedData[rankIndex].losses}L {((summonerData.rankedData[rankIndex].wins / (summonerData.rankedData[rankIndex].wins + summonerData.rankedData[rankIndex].losses)) * 100).toFixed(0)}%</ListItem>
                       </span>
                     }
                   </List>
                 </Grid>
+              ) : isLoadingRank ? (
+                // skeleton loader
+                <div style={{ marginTop: '20px', marginRight: '12px', marginLeft: '10px' }}>
+                  <Skeleton animation='wave' style={{ marginBottom: '12px', borderRadius: '3px' }} variant='rectangular' width={150} height={23} />
+                  <Skeleton animation='wave' style={{ marginBottom: '12px', borderRadius: '3px' }} variant='rectangular' width={150} height={23} />
+                  <Skeleton animation='wave' style={{ marginBottom: '12px', borderRadius: '3px' }} variant='rectangular' width={150} height={23} />
+                  <Skeleton animation='wave' style={{ marginBottom: '12px', borderRadius: '3px' }} variant='rectangular' width={150} height={23} />
+                </div>
               ) : (
                 <Grid style={{ marginBottom: '15px' }}>
                   <List style={{ lineHeight: '22px' }}>
@@ -872,7 +886,7 @@ const SummonerProfile = () => {
               <Grid className='summonerProfileInformation'>
                 {console.log(summonerData)}
                 {console.log(rankIndex)}
-                {rankIndex !== null && !isLoadingRank &&
+                {rankIndex !== null && !isLoadingRank ? (
                   <div>
                     <Tooltip
                       slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -40] } }] } }}
@@ -881,7 +895,7 @@ const SummonerProfile = () => {
                       disableInteractive
                       title={<>
                         <div>
-                          {/* <span style={{ textDecoration: 'underline', fontWeight: 'bold' }}>{summonerData.rankedData[rankIndex].queueType}<br></br></span> */}
+                          <span style={{ textDecoration: 'underline', fontWeight: 'bold' }}>{summonerData.rankedData[rankIndex].queueType}<br></br></span>
                           {(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex].rank} - {summonerData.rankedData[rankIndex].leaguePoints} lp
                         </div>
                       </>}
@@ -916,12 +930,19 @@ const SummonerProfile = () => {
                       {summonerData.rankedData[0].leaguePoints} lp
                     </Typography>
                   </div>
+                ) : isLoadingRank ? (
+                  // skeleton loader
+                  <div>
+                    <Skeleton animation='wave' style={{ marginTop: '5px' }} variant='circular' width={150} height={150}></Skeleton>
+                  </div>
+                ) : (
+                  <div></div>
+                )
                 }
               </Grid>
             </Grid>
             {summonerData.masteryData &&
               <Grid className='summonerProfileMastery' xs={12}>
-
                 {summonerData.masteryData.length >= 1 &&
                   <Grid marginRight={'20px'} flex={'column'}>
                     <Tooltip disableInteractive

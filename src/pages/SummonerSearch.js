@@ -261,7 +261,10 @@ function SummonerSearch() {
     console.log(queue)
 
     // Set queue title
-    let tempQueueTitle = queue.description;
+    let tempQueueTitle = queue?.description;
+    if (tempQueueTitle === undefined) {
+      setQueueTitle('Swiftplay')
+    }
     if (tempQueueTitle === '5v5 Ranked Solo games') {
       setQueueTitle('Ranked Solo');
     }
@@ -438,7 +441,7 @@ function SummonerSearch() {
           {featuredData !== null && champsJSON !== null &&
             <a
               href={
-                featuredData.featuredGameData.matchData.info.gameMode === "CLASSIC" &&
+                featuredData.featuredGameData.matchData.info.gameMode === "CLASSIC" || featuredData.featuredGameData.matchData.info.gameMode ==="SWIFTPLAY" &&
                   featuredData.featuredGameData.matchData.info.gameDuration > 300
                   ? `/match/${featuredData.featuredGameData.matchData.metadata.matchId}/${featuredData.featuredPlayer.riotIdGameName}/${featuredData.featuredPlayer.riotIdTagline}`
                   : featuredData.featuredGameData.matchData.info.gameMode === "CLASSIC" &&

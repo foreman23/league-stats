@@ -9,7 +9,7 @@
 }
 
 .pointer:hover {
-    cursor: pointer; 
+    cursor: pointer;
 }
 
 .recentSearchItem {
@@ -119,15 +119,6 @@
 .LanePhaseSummaryBubble {
     margin-left: 3px;
 }
-
-/* .GameDetailsCatBtn {
-    margin: 3px !important;
-    text-transform: none !important;
-    background-color: #000000 !important;
-    color: #ffffff !important;
-    font-weight: bold !important;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-} */
 
 .LanePhaseSummaryBtn {
     background-color: white !important;
@@ -402,6 +393,14 @@
     text-overflow: ellipsis;
     max-width: 215px;
 
+}
+
+.GameDetailsHeader {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    padding-right: 0px;
+    justify-content: right;
 }
 
 .gameDetailsSummaryMainChampImg {
@@ -752,8 +751,120 @@
     font-size: 16px !important;
 }
 
+.GameDetailsSubContainer {
+    justify-content: center !important;
+    margin-top: 50px !important;
+    width: 65% !important;
+}
+
+.GameDetailsBox {
+    display: flex;
+    padding: 20px;
+    box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.25);
+    border: 1px solid #BBBBBB;
+    border-radius: 10px;
+    min-width: 100%;
+}
+
+.GameDetailsHeaderContainer {
+    width: 100%;
+    display: flex;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.GameDetailsHeaderMainContainer {
+    width: 80% !important;
+    margin-top: 40px !important;
+    justify-content: center !important;
+}
+
+.GameDetailsCatBtnContainer {
+    text-align: start !important;
+}
+
+.StandoutContainer {
+    width: 65% !important;
+    justify-content: center !important;
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+}
+
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
+
+    .StandoutContainer {
+        width: 85% !important;
+        justify-content: center !important;
+        margin-top: 20px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .GameDetailsCatBtnContainer {
+        text-align: center !important;
+        margin-top: 20px !important;
+    }
+
+    .GameDetailsCatBtn {
+        margin: auto !important;
+        margin: 5px !important;
+        min-width: 30vw !important;
+        height: 50px !important;
+        text-transform: none !important;
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        font-weight: bold !important;
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    }
+
+    .GameDetailsHeaderMainContainer {
+        width: 90% !important;
+    }
+
+    .GameDetailsHeaderContainer {
+        flex-direction: column;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .GameDetailsContainer {
+        width: 100% !important;
+    }
+
+    .GameDetailsSubContainer {
+        margin-top: 35px !important;
+        width: 95% !important;
+    }
+
+    .GameDetailsHeader {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 25px !important;
+    }
+
+    .GameDetailsBox {
+        padding: 0px;
+        padding-bottom: 10px;
+    }
+
+    .MatchSummaryText {
+        margin-left: 0px !important;
+        margin-top: 10px !important;
+    }
+
+    .gameDetailsMatchSummaryList {
+        padding-left: 20px !important;
+    }
+
+    .gameDetailsMatchSummaryList li {
+        color: #4B4B4B;
+        font-size: 16px;
+        width: 100%;
+    }
 
     .summonerProfileInformation {
         margin-left: 0px !important;
