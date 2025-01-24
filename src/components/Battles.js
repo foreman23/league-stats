@@ -1312,7 +1312,7 @@ const Battles = (props) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', margin: '0' }}>
             <Grid container>
-                <Grid xs={6}>
+                <Grid xs={12} sm={6}>
                     <div style={{ position: 'relative', width: '140px' }}>
                         <Typography fontSize={20} fontWeight={600}>Battles</Typography>
                         <Typography style={{ position: 'absolute', top: '0px', right: '0px', left: 'auto' }}><span style={{ backgroundColor: 'purple', color: 'white', padding: '10px', borderRadius: '20px', fontSize: '14px', fontWeight: 'bold', filter: 'drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.25))' }}>BETA*</span></Typography>
@@ -1320,7 +1320,7 @@ const Battles = (props) => {
                     <Typography style={{ fontSize: '14px', marginTop: '12px', marginBottom: '7px', color: 'rgb(133, 133, 133)' }}>*Descriptions provided below may not be 100% accurate</Typography>
                     <Typography style={{ fontSize: '20px', color: 'rgb(75, 75, 75)' }} marginBottom={'20px'}>Fights that occurred during the match</Typography>
                 </Grid>
-                <Grid style={{ textAlign: 'end' }} xs={6}>
+                <Grid className='BattlesCollapseBtnContainer' xs={12} sm={6}>
                     {/* <Typography style={{ marginTop: '4px' }} fontSize={16} fontWeight={600}>Fights Won:</Typography>
                     <Typography marginBottom={'20px'}><span style={{ color: '#3374FF', marginRight: '10px', fontWeight: 'bold' }}>{`Blue: ${blueTotalFightsWon} `}</span><span style={{ color: '#FF3F3F', fontWeight: 'bold' }}>{`Red: ${redTotalFightsWon}`}</span></Typography> */}
                     <Button variant='contained' style={{ textTransform: 'none', color: 'white', backgroundColor: '#8B8B8B', marginTop: '15px' }}>Collapse All</Button>
@@ -1328,156 +1328,20 @@ const Battles = (props) => {
 
                 {teamfights.map((fight, fightIndex) => (
                     <Box style={{ width: '100%', border: '0px solid black', boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', backgroundColor: '#EDEDED', padding: '20px' }}>
+                        <div className='BattlesHeaderContainer'>
                             {fight.outcome[0] === 'E' && fight.blueKills === 0 && fight.redKills === 0 ? (
-                                <div style={{ marginRight: '45px', minWidth: '175px' }}><Typography style={{ color: '#404040', fontWeight: 'bold', fontSize: '20px' }}>No Contest 0 - 0</Typography></div>
+                                <div className='BattlesHeader'><Typography style={{ color: '#404040', fontWeight: 'bold', fontSize: '20px' }}>No Contest 0 - 0</Typography></div>
                             ) : (
-                                <div style={{ marginRight: '45px', minWidth: '175px' }}><Typography style={{ color: fight.outcome[0] === 'E' ? '#404040' : fight.outcome[0] === 'B' ? '#3374FF' : '#FF3F3F', fontWeight: 'bold', fontSize: '20px' }}>{fight.outcome}</Typography></div>
+                                <div className='BattlesHeader'><Typography style={{ color: fight.outcome[0] === 'E' ? '#404040' : fight.outcome[0] === 'B' ? '#3374FF' : '#FF3F3F', fontWeight: 'bold', fontSize: '20px' }}>{fight.outcome}</Typography></div>
                             )
                             }
-                            <div style={{ marginRight: '75px', minWidth: '100px' }}><Typography style={{ color: '#4B4B4B', fontWeight: 'bold', fontSize: '16px' }}>{`(${fight.timespan})`}</Typography></div>
+                            <div className='BattlesHeader2'><Typography style={{ color: '#4B4B4B', fontWeight: 'bold', fontSize: '16px' }}>{`(${fight.timespan})`}</Typography></div>
                             <div><Typography style={{ color: '#000000', fontWeight: 'bold', fontSize: '16px' }}>{fight.battleName}</Typography></div>
-                            <ArrowDropDownIcon style={{ marginRight: '0px', marginLeft: 'auto' }}></ArrowDropDownIcon>
+                            <ArrowDropDownIcon className='hideMobile' style={{ marginRight: '0px', marginLeft: 'auto' }}></ArrowDropDownIcon>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <div style={{ paddingTop: '0px', width: '35%', marginRight: '100px' }} >
+                        <div className='BattlesBodyContainer'>
+                            <div className='BattlesBodySubContainer1'>
                                 <Typography marginTop={'30px'} marginLeft={'20px'} color={'#404040'} fontSize={'14px'}>{fight.battleDesc}</Typography>
-                                {/* <div style={{ display: 'flex', marginLeft: '20px', marginTop: '10px' }}>
-                                    {fight.battleName === "Blue draws first blood" ? (
-                                        <div>
-                                            <Tooltip disableInteractive title='Blue team drew first blood'>
-                                                <img style={{ marginRight: '5px', width: '16px' }} src='/images/objIcons/firstblood-100.svg' />
-                                            </Tooltip>
-                                        </div>
-                                    ) : (
-                                        <div></div>
-                                    )}
-                                    {fight.blueObjectives.hordeKills > 0 ? (
-                                        <div>
-                                            {Array.from({ length: fight.blueObjectives.hordeKills }).map((_, index) => (
-                                                <Tooltip disableInteractive title='Blue team killed a void grub'>
-                                                    <img key={index} style={{ marginRight: '5px' }} width={'24px'} src='/images/objIcons/vilemaw-100.webp' alt={`Horde Kill ${index + 1}`} />
-                                                </Tooltip>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div></div>
-                                    )}
-                                    {fight.blueObjectives.dragonKills > 0 ? (
-                                        <div>
-                                            {Array.from({ length: fight.blueObjectives.dragonKills }).map((_, index) => (
-                                                <Tooltip disableInteractive title='Blue team killed a dragon'>
-                                                    <img style={{ marginRight: '5px' }} key={index} width={'24px'} src='/images/objIcons/dragon-100.webp' alt={`Dragon Kill ${index + 1}`} />
-                                                </Tooltip>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div></div>
-                                    )}
-                                    {fight.blueObjectives.baronKills > 0 ? (
-                                        <div>
-                                            {Array.from({ length: fight.blueObjectives.baronKills }).map((_, index) => (
-                                                <Tooltip disableInteractive title='Blue team killed baron'>
-                                                    <img style={{ marginRight: '5px' }} key={index} width={'24px'} src='/images/objIcons/baron-100.webp' alt={`Baron Kill ${index + 1}`} />
-                                                </Tooltip>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div></div>
-                                    )}
-                                    <div>
-                                        {fight.blueObjectives.towerKills > 0 ? (
-                                            <div>
-                                                {Array.from({ length: fight.blueObjectives.towerKills }).map((_, index) => (
-                                                    <Tooltip disableInteractive title='Blue destroyed a tower'>
-                                                        <img style={{ marginRight: '5px' }} key={index} width={'24px'} src='/images/objIcons/tower-100.webp' alt={`Tower Kill ${index + 1}`} />
-                                                    </Tooltip>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <div></div>
-                                        )}
-                                        {fight.blueObjectives.inhibKills > 0 ? (
-                                            <div>
-                                                {Array.from({ length: fight.blueObjectives.inhibKills }).map((_, index) => (
-                                                    <Tooltip disableInteractive title='Blue destroyed an inhibitor'>
-                                                        <img style={{ marginRight: '5px' }} key={index} width={'24px'} src='/images/objIcons/inhibitor-100.webp' alt={`Inhib Kill ${index + 1}`} />
-                                                    </Tooltip>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <div></div>
-                                        )}
-                                    </div>
-                                </div>
-                                <div style={{ display: 'flex', marginLeft: '20px' }}>
-                                    {fight.battleName === "Red draws first blood" ? (
-                                        <div>
-                                            <Tooltip disableInteractive title='Red team drew first blood'>
-                                                <img style={{ marginRight: '5px', width: '16px' }} src='/images/objIcons/firstblood-200.svg' />
-                                            </Tooltip>
-                                        </div>
-                                    ) : (
-                                        <div></div>
-                                    )}
-                                    {fight.redObjectives.hordeKills > 0 ? (
-                                        <div>
-                                            {Array.from({ length: fight.redObjectives.hordeKills }).map((_, index) => (
-                                                <Tooltip disableInteractive title='Red team killed a void grub'>
-                                                    <img style={{ marginRight: '5px' }} key={index} width={'24px'} src='/images/objIcons/vilemaw-200.webp' alt={`Horde Kill ${index + 1}`} />
-                                                </Tooltip>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div></div>
-                                    )}
-                                    {fight.redObjectives.dragonKills > 0 ? (
-                                        <div>
-                                            {Array.from({ length: fight.redObjectives.dragonKills }).map((_, index) => (
-                                                <Tooltip disableInteractive title='Red team killed a dragon'>
-                                                    <img style={{ marginRight: '5px' }} key={index} width={'24px'} src='/images/objIcons/dragon-200.webp' alt={`Dragon Kill ${index + 1}`} />
-                                                </Tooltip>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div></div>
-                                    )}
-                                    {fight.redObjectives.baronKills > 0 ? (
-                                        <div>
-                                            {Array.from({ length: fight.redObjectives.baronKills }).map((_, index) => (
-                                                <Tooltip disableInteractive title='Red team killed baron'>
-                                                    <img style={{ marginRight: '5px' }} key={index} width={'24px'} src='/images/objIcons/baron-200.webp' alt={`Baron Kill ${index + 1}`} />
-                                                </Tooltip>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div></div>
-                                    )}
-                                    <div>
-                                        {fight.redObjectives.towerKills > 0 ? (
-                                            <div>
-                                                {Array.from({ length: fight.redObjectives.towerKills }).map((_, index) => (
-                                                    <Tooltip disableInteractive title='Red destroyed a tower'>
-                                                        <img style={{ marginRight: '5px' }} key={index} width={'24px'} src='/images/objIcons/tower-200.webp' alt={`Tower Kill ${index + 1}`} />
-                                                    </Tooltip>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <div></div>
-                                        )}
-                                        {fight.redObjectives.inhibKills > 0 ? (
-                                            <div>
-                                                {Array.from({ length: fight.redObjectives.inhibKills }).map((_, index) => (
-                                                    <Tooltip disableInteractive title='Red destroyed an inhibitor'>
-                                                        <img style={{ marginRight: '5px' }} key={index} width={'24px'} src='/images/objIcons/inhibitor-200.webp' alt={`Inhib Kill ${index + 1}`} />
-                                                    </Tooltip>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <div></div>
-                                        )}
-                                    </div>
-                                </div> */}
                                 <div style={{ marginTop: '20px', marginLeft: '25px', marginBottom: '15px' }}>
                                     <TeamGoldDifGraph arrow max={Math.round((fight.details[fight.details.length - 1].timestamp) / 60000) - 1} width={400} height={180} teamId={props.playerData.teamId} hideTitle yAxisGold={props.graphData.yAxisGold} xAxisGold={props.graphData.xAxisGold}></TeamGoldDifGraph>
                                 </div>

@@ -904,8 +904,129 @@
     border-radius: 10px;
 }
 
+.TimelineSubContainer {
+    text-align: start;
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+    margin: auto;
+}
+
+.BattlesCollapseBtnContainer {
+    text-align: end;
+}
+
+.BattlesHeaderContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #EDEDED;
+    padding: 20px;
+}
+
+.BattlesHeader {
+    margin-right: 45px;
+    min-width: 175px;
+}
+
+.BattlesHeader2 {
+    margin-right: 75px;
+    min-width: 100px;
+}
+
+.BattlesBodyContainer {
+    display: flex;
+    align-items: center;
+}
+
+.BattlesBodySubContainer1 {
+    padding-top: 0px;
+    width: 35%;
+    margin-right: 100px;
+}
+
+.BuildsBox {
+    min-width: 65%;
+    display: flex;
+    flex-direction: column;
+    text-align: flex-start;
+    justify-content: start;
+    padding: 0px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+.BuildsBox2 {
+    width: 65%;
+    display: flex;
+    padding: 20px;
+    box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.25);
+    background-color: #FFFFFF;
+    flex-direction: column;
+    border: 1px solid #BBBBBB;
+    border-radius: 10px;
+}
+
+.BuildsChampPicsContainer {
+    display: flex;
+    align-items: center;
+}
+
+.BuildsChampPic {
+    width: 64px;
+}
+
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
+
+    .BuildsChampPic {
+        width: 54px;
+    }
+
+    .BuildsChampPicsContainer {
+        flex-direction: column;
+    }
+
+    .BuildsBox2 {
+        width: 85%;
+    }
+
+    .BuildsBox {
+        min-width: 85%;
+    }
+
+    .BattlesBodySubContainer1 {
+        justify-content: center;
+        margin: auto;
+        width: 100%;
+        margin-right: 100px;
+    }
+
+    .BattlesBodyContainer {
+        flex-direction: column;
+    }
+
+    .BattlesHeader2 {
+        margin-right: 0px;
+        text-align: center;
+    }
+
+    .BattlesHeader {
+        margin-right: 0px;
+        text-align: center;
+    }
+
+    .BattlesHeaderContainer {
+        flex-direction: column;
+    }
+
+    .BattlesCollapseBtnContainer {
+        text-align: start;
+    }
+
+    .TimelineSubContainer {
+        width: 95%;
+    }
 
     .GraphSectionHeaderBox {
         text-align: center;
@@ -925,7 +1046,7 @@
         margin-left: 5px !important;
         margin-right: 5px !important;
     }
-    
+
     .LanePhaseSummaryBtnClicked {
         margin-left: 5px !important;
         margin-right: 5px !important;
@@ -974,7 +1095,7 @@
         border-radius: 5px !important;
         margin-bottom: 20px !important;
     }
-    
+
     .GameOverviewTable2 {
         max-width: 95% !important;
         border-radius: 5px !important;
