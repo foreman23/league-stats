@@ -179,6 +179,8 @@
     padding-left: 20px;
     margin-bottom: 15px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    display: flex;
+    flex-direction: row;
 }
 
 .LanePhaseSummaryDetailsInActive {
@@ -548,6 +550,7 @@
 
 .matchDetailsObjectiveContainer {
     padding: 10px;
+    margin-left: auto;
 }
 
 .matchDetailsObjectiveText {
@@ -751,12 +754,6 @@
     font-size: 16px !important;
 }
 
-.GameDetailsSubContainer {
-    justify-content: center !important;
-    margin-top: 50px !important;
-    width: 65% !important;
-}
-
 .GameDetailsBox {
     display: flex;
     padding: 20px;
@@ -783,6 +780,12 @@
     text-align: start !important;
 }
 
+.GameDetailsSubContainer {
+    justify-content: center !important;
+    margin-top: 50px !important;
+    width: 65% !important;
+}
+
 .StandoutContainer {
     width: 65% !important;
     justify-content: center !important;
@@ -790,12 +793,262 @@
     margin-bottom: 10px !important;
 }
 
+.StandoutTextContainer {
+    flex-direction: column;
+    margin-left: 0px;
+    margin-top: 10px;
+}
+
+.StandoutImagesContainer {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    justify-content: flex-start;
+}
+
+.StandoutImagesSubContainer {
+    display: flex;
+    margin-left: 8px;
+}
+
+.StandoutHeaderContainer {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.StandoutGridHalf1 {
+    display: flex;
+    margin-top: 10px;
+    padding-bottom: 10px;
+}
+
+.StandoutBox {
+    min-height: 175px;
+}
+
+#DetailsAnchor {
+    width: 65%;
+}
+
+.BansBox {
+    min-width: 100%;
+    display: flex;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.25);
+    border: 1px solid #BBBBBB;
+    border-radius: 10px;
+}
+
+.BansGridContainer {
+    width: 65% !important;
+    justify-content: center !important;
+    margin: auto !important;
+    margin-top: 20px !important;
+}
+
+.LaningGridContainer {
+    display: flex !important;
+    justify-content: center !important;
+    margin: auto !important;
+    margin-top: 30px !important;
+    text-align: center !important;
+    margin-bottom: 45px !important;
+    width: 65% !important;
+}
+
+.LaningGridSubContainer {
+    text-align: start !important;
+    display: flex !important;
+    flex-direction: column !important;
+    max-width: 73% !important;
+}
+
+.LaningPhaseGridHeader {
+    display: inline-flex;
+    align-items: center;
+}
+
+.LaneOutcomeTitle {
+    margin-right: 35px !important;
+}
+
+.LaneBubbleContainer {
+    flex-direction: row;
+    display: inline-flex;
+    margin-right: 50px;
+}
+
+.GraphSectionDivContainer {
+    display: flex;
+    align-items: flex-end;
+}
+
+.GraphSectionBox {
+    width: 65%;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border: 0px solid #BBBBBB;
+    border-radius: 10px;
+}
+
+.GraphSectionHeaderBox {
+    min-width: 65%;
+    display: flex;
+    flex-direction: column;
+    text-align: flex-start;
+    justify-content: start;
+    padding: 0px;
+    border-radius: 10px;
+}
+
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
 
-    .StandoutContainer {
+    .GraphSectionHeaderBox {
+        text-align: center;
+        justify-content: center;
+    }
+
+    .GraphSectionBox {
+        flex-direction: column;
+    }
+
+    .GraphSectionDivContainer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .LanePhaseSummaryBtn {
+        margin-left: 5px !important;
+        margin-right: 5px !important;
+    }
+    
+    .LanePhaseSummaryBtnClicked {
+        margin-left: 5px !important;
+        margin-right: 5px !important;
+    }
+
+    .LaneBubbleContainer {
+        margin-right: 0px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .LanePhaseSummaryCardActive {
+        padding: 0px;
+        padding-left: 0px;
+        justify-content: center;
+        margin: auto !important;
+        background-color: rgb(230, 230, 230);
+    }
+
+    .LaneOutcomeTitle {
+        margin-top: 10px !important;
+        margin-right: 0px !important;
+    }
+
+    .LanePhaseSummaryDetailsActive {
+        flex-direction: column !important;
+    }
+
+    .LaningPhaseGridHeader {
+        flex-direction: column !important;
+    }
+
+    .LaningGridSubContainer {
+        text-align: start !important;
+        display: flex !important;
+        flex-direction: column !important;
+        max-width: 95% !important;
+    }
+
+    .LaningGridContainer {
+        width: 100% !important;
+    }
+
+    .GameOverviewTable1 {
+        max-width: 95% !important;
+        border-radius: 5px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .GameOverviewTable2 {
+        max-width: 95% !important;
+        border-radius: 5px !important;
+    }
+
+    .BansTeamContainer {
+        justify-content: center !important;
+    }
+
+    .BansGridContainer {
         width: 85% !important;
         justify-content: center !important;
+        margin: auto !important;
+        margin-top: 20px !important;
+    }
+
+    .BansBox {
+        flex-direction: column;
+    }
+
+    .matchDetailsTeamNameText {
+        margin-top: 20px !important;
+    }
+
+    .matchDetailsObjectiveContainer {
+        padding: 5px;
+        margin-left: auto;
+    }
+
+    #DetailsAnchor {
+        width: 85%;
+    }
+
+    .MatchDetailsGraphBox {
+        flex-direction: column;
+    }
+
+    .StandoutBox {
+        flex-direction: column;
+        min-height: 325px;
+    }
+
+    .StandoutHeaderContainer {
+        display: flex;
+        margin-bottom: 20px;
+        justify-content: flex-start;
+    }
+
+    .StandoutImagesSubContainer {
+        display: flex;
+        margin-left: 0px;
+    }
+
+    .StandoutImagesContainer {
+        display: flex;
+        flex-direction: column;
+        margin-left: 0px;
+        justify-content: flex-start;
+    }
+
+    .StandoutTextContainer {
+        flex-direction: column;
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 10px;
+    }
+
+    .GameDetailsSubContainer {
+        margin-top: 35px !important;
+        width: 95% !important;
+    }
+
+    .StandoutContainer {
+        width: 95% !important;
         margin-top: 20px !important;
         margin-bottom: 10px !important;
     }
@@ -829,11 +1082,6 @@
 
     .GameDetailsContainer {
         width: 100% !important;
-    }
-
-    .GameDetailsSubContainer {
-        margin-top: 35px !important;
-        width: 95% !important;
     }
 
     .GameDetailsHeader {

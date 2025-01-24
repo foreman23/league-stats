@@ -50,22 +50,22 @@ const LanePhaseSummaryCardJg = (props) => {
                 container
                 style={{ marginBottom: '20px', marginTop: '250px' }}
             >
-                <Grid item xs={12} style={{ display: 'inline-flex', alignItems: 'center' }}>
-                    <Grid style={{ marginRight: '35px' }} xs={6}>
+                <Grid className='LaningPhaseGridHeader' item xs={12} sm={12}>
+                    <Grid className='LaneOutcomeTitle' item xs={12} sm={6}>
                         {statsAt15.laneResults.JUNGLE.resTag === 'draw' ? (
                             <Typography fontWeight={'bold'}>{`Jungle was a draw`}</Typography>
                         ) : (
                             <Typography fontWeight={'bold'}>{`${statsAt15.laneResults.JUNGLE.teamWonLane === 100 ? 'Blue' : 'Red'} ${statsAt15.laneResults.JUNGLE.resTag} jungle`}</Typography>
                         )}
                     </Grid>
-                    <Grid xs={6} style={{ flexDirection: 'row', display: 'inline-flex', marginRight: '50px' }}>
+                    <Grid className='LaneBubbleContainer' xs={12} sm={6}>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.JUNGLE.bubbleCount > 0 ? statsAt15.laneResults.JUNGLE.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.JUNGLE.bubbleCount > 1 ? statsAt15.laneResults.JUNGLE.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.JUNGLE.bubbleCount > 2 ? statsAt15.laneResults.JUNGLE.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.JUNGLE.bubbleCount > 3 ? statsAt15.laneResults.JUNGLE.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.JUNGLE.bubbleCount > 4 ? statsAt15.laneResults.JUNGLE.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                     </Grid>
-                    <Grid xs={6} style={{ flexDirection: 'row', display: 'inline-flex' }}>
+                    <Grid item xs={12} sm={6} style={{ flexDirection: 'row', display: 'inline-flex' }}>
 
                         <Button
                             className={lastButtonPressedJg === 'laneSumJg1' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'}
@@ -102,24 +102,24 @@ const LanePhaseSummaryCardJg = (props) => {
             </Grid>
 
             <Grid className={jgSummaryCardStatus && lastButtonPressedJg === 'laneSumJg1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
-                <Grid xs={6}>
+                <Grid xs={12} sm={6}>
                     {statsAt15.laneResults.JUNGLE.resTag !== 'draw' ? (
-                        <Typography>
+                        <p>
                             <span style={{ color: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName} </span>
                             ({statsAt15.laneResults.JUNGLE.laneWinner.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneWinner.cs} CS) in the jungle earned {statsAt15.laneResults.JUNGLE.goldDifference} more gold than
                             <span style={{ color: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneLoser.riotIdGameName} </span>
                             ({statsAt15.laneResults.JUNGLE.laneLoser.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneLoser.cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, {advantageStr}.
-                        </Typography>
+                        </p>
                     ) : (
-                        <Typography>
+                        <p>
                             <span style={{ color: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName} </span>
                             ({statsAt15.laneResults.JUNGLE.laneWinner.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneWinner.cs} CS) in the jungle only earned a small gold lead of {statsAt15.laneResults.JUNGLE.goldDifference} over
                             <span style={{ color: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneLoser.riotIdGameName} </span>
                             ({statsAt15.laneResults.JUNGLE.laneLoser.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneLoser.cs} CS), so we consider jungle to be a draw.
-                        </Typography>
+                        </p>
                     )}
                 </Grid>
-                <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
+                <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={12} sm={6}>
                     <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName}`}>
                         <div style={{ position: 'relative', display: 'inline-block' }}>
                             <img style={{ border: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img>
@@ -131,19 +131,19 @@ const LanePhaseSummaryCardJg = (props) => {
                             <img style={{ border: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img>
                         </div>
                     </Tooltip>
-                    <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
+                    <img className='hideMobile' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
                 </Grid>
             </Grid>
 
             <Grid className={jgSummaryCardStatus && lastButtonPressedJg === 'laneSumJg2' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
-                <Grid xs={6}>
-                    <Typography style={{ marginBottom: '15px' }}>
+                <Grid xs={12} sm={6}>
+                    <p style={{ marginBottom: '15px' }}>
                         Results of the deaths and objectives affecting
                         <span style={{ color: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName} </span>
                         ({statsAt15.laneResults.JUNGLE.laneWinner.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneWinner.cs} CS) and
                         <span style={{ color: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneLoser.riotIdGameName} </span>
                         ({statsAt15.laneResults.JUNGLE.laneLoser.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneLoser.cs} CS) during laning phase.
-                    </Typography>
+                    </p>
                     <Typography style={{ marginBottom: '10px' }}>
                         {jgLaneKillTimeline.map((kill, index) => {
                             if (kill.victimId !== 0 && kill.killerId !== 0) {
@@ -174,7 +174,7 @@ const LanePhaseSummaryCardJg = (props) => {
                         })}
                     </Typography>
                 </Grid>
-                <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
+                <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={12} sm={6}>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
                         <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName}`}>
                             <img style={{ border: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img>
@@ -186,37 +186,39 @@ const LanePhaseSummaryCardJg = (props) => {
                             <img style={{ border: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img>
                         </Tooltip>
                     </div>
-                    <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
+                    <img className='hideMobile' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
                 </Grid>
             </Grid>
 
             <Grid className={jgSummaryCardStatus && lastButtonPressedJg === 'laneSumJg3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
                 <Grid xs={12}>
-                    <Typography style={{ marginBottom: '15px' }}>
+                    <p style={{ marginBottom: '15px' }}>
                         Graph of CS killed each minute by
                         <span style={{ color: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName} </span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img>
                         ({statsAt15.laneResults.JUNGLE.laneWinner.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneWinner.cs} CS) and
                         <span style={{ color: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneLoser.riotIdGameName} </span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img>
                         ({statsAt15.laneResults.JUNGLE.laneLoser.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneLoser.cs} CS) during laning phase.
-                    </Typography>
-                    <LineChart
-                        xAxis={[{ data: xAxisData, label: 'Minutes' }]}
-                        yAxis={[{ label: 'Total CS' }]}
-                        series={[
-                            {
-                                data: yAxisDataWinner,
-                                color: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#37B7FF' : '#FF3F3F',
-                                label: statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName,
-                            },
-                            {
-                                data: yAxisDataLoser,
-                                color: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#37B7FF' : '#FF3F3F',
-                                label: statsAt15.laneResults.JUNGLE.laneLoser.riotIdGameName,
-                            }
-                        ]}
-                        width={800}
-                        height={300}
-                    />
+                    </p>
+                    <div style={{ height: '300px', width: '100%' }}>
+                        <LineChart
+                            xAxis={[{ data: xAxisData, label: 'Minutes' }]}
+                            yAxis={[{ label: 'Total CS' }]}
+                            series={[
+                                {
+                                    data: yAxisDataWinner,
+                                    color: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#37B7FF' : '#FF3F3F',
+                                    label: statsAt15.laneResults.JUNGLE.laneWinner.riotIdGameName,
+                                },
+                                {
+                                    data: yAxisDataLoser,
+                                    color: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#37B7FF' : '#FF3F3F',
+                                    label: statsAt15.laneResults.JUNGLE.laneLoser.riotIdGameName,
+                                }
+                            ]}
+                        // width={800}
+                        // height={300}
+                        />
+                    </div>
                 </Grid>
             </Grid>
         </div>

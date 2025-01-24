@@ -859,6 +859,954 @@ function GameDetails() {
           </Grid>
         </div>
 
+        <div style={{ backgroundColor: '#f2f2f2' }}>
+          <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '20px' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            {/* Details */}
+            <Grid id='DetailsAnchor' justifyContent={'center'} margin={'auto'} container marginTop={'20px'}>
+              <div style={{ display: 'flex', marginLeft: '0', marginRight: 'auto', flexDirection: 'column' }}>
+                <Typography style={{ fontWeight: 'bold', fontSize: '20px', marginRight: '30px' }}>Match Details</Typography>
+                <Typography style={{ fontSize: '20px', marginBottom: '20px', color: '#4B4B4B' }}>Results @ the end of game</Typography>
+              </div>
+              <Box className='MatchDetailsGraphBox' minWidth={'100%'} style={{ display: 'flex', backgroundColor: 'white', padding: '20px', boxShadow: '0px 6px 24px 0px rgba(0, 0, 0, 0.25)' }} border={'1px solid #BBBBBB'} borderRadius={'10px'}>
+                {/* Red Team */}
+                <Grid order={playerData.teamId === 100 ? 2 : 1} xs={12} sm={6}>
+                  <Typography style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>Red Team</Typography>
+
+                  <div style={{ display: 'flex' }}>
+                    <Typography fontWeight={'bold'} fontSize={'18px'} marginRight={'50px'} color={'#FF3F3F'}>{gameData.info.teams[1].objectives.champion.kills} kills</Typography>
+                    <Typography fontWeight={'bold'} fontSize={'18px'} color={'#FF3F3F'}>{totalTeamGoldRed.toLocaleString()}g</Typography>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'flex-end', height: '180px' }}>
+
+                    <div className='matchDetailsObjectiveContainer'>
+                      <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.horde.kills}</Typography>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 6) * gameData.info.teams[1].objectives.horde.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Typography className='matchDetailsObjectiveText'>Grubs</Typography>
+                    </div>
+
+                    <div style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
+                      {gameData.info.teams[1].objectives.riftHerald.kills >= 1 ? (
+                        <CheckIcon style={{ fontSize: '40px', color: '#17BA6C' }}></CheckIcon>
+                      ) : (
+                        <CloseIcon style={{ fontSize: '40px', color: '#777777' }}></CloseIcon>
+                      )}
+                      <Typography className='matchDetailsObjectiveText'>Herald</Typography>
+                    </div>
+
+                    <div className='matchDetailsObjectiveContainer'>
+                      <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.dragon.kills}</Typography>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[1].objectives.dragon.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Typography className='matchDetailsObjectiveText'>Dragons</Typography>
+                    </div>
+
+                    <div className='matchDetailsObjectiveContainer'>
+                      <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.baron.kills}</Typography>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 2) * gameData.info.teams[1].objectives.baron.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Typography className='matchDetailsObjectiveText'>Barons</Typography>
+                    </div>
+
+                    <div className='matchDetailsObjectiveContainer'>
+                      <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.tower.kills}</Typography>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 11) * gameData.info.teams[1].objectives.tower.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Typography className='matchDetailsObjectiveText'>Towers</Typography>
+                    </div>
+
+                    <div className='matchDetailsObjectiveContainer'>
+                      <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.inhibitor.kills}</Typography>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 3) * gameData.info.teams[1].objectives.inhibitor.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Typography className='matchDetailsObjectiveText'>Inhibs.</Typography>
+                    </div>
+
+                  </div>
+                </Grid>
+                {/* Blue Team */}
+                <Grid order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
+                  <Typography className='matchDetailsTeamNameText' style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>Blue Team</Typography>
+                  <div style={{ display: 'flex' }}>
+                    <Typography fontWeight={'bold'} fontSize={'18px'} marginRight={'50px'} color={'#568CFF'}>{gameData.info.teams[0].objectives.champion.kills} kills</Typography>
+                    <Typography fontWeight={'bold'} fontSize={'18px'} color={'#568CFF'}>{totalTeamGoldBlue.toLocaleString()}g</Typography>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'flex-end', height: '180px' }}>
+                    <div className='matchDetailsObjectiveContainer'>
+                      <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.horde.kills}</Typography>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 6) * gameData.info.teams[0].objectives.horde.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Typography className='matchDetailsObjectiveText'>Grubs</Typography>
+                    </div>
+                    <div style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
+                      {gameData.info.teams[0].objectives.riftHerald.kills >= 1 ? (
+                        <CheckIcon style={{ fontSize: '40px', color: '#17BA6C' }}></CheckIcon>
+                      ) : (
+                        <CloseIcon style={{ fontSize: '40px', color: '#777777' }}></CloseIcon>
+                      )}
+                      <Typography className='matchDetailsObjectiveText'>Herald</Typography>
+                    </div>
+                    <div className='matchDetailsObjectiveContainer'>
+                      <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.dragon.kills}</Typography>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[0].objectives.dragon.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Typography className='matchDetailsObjectiveText'>Dragons</Typography>
+                    </div>
+                    <div className='matchDetailsObjectiveContainer'>
+                      <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.baron.kills}</Typography>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 2) * gameData.info.teams[0].objectives.baron.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Typography className='matchDetailsObjectiveText'>Barons</Typography>
+                    </div>
+                    <div className='matchDetailsObjectiveContainer'>
+                      <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.tower.kills}</Typography>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 11) * gameData.info.teams[0].objectives.tower.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Typography className='matchDetailsObjectiveText'>Towers</Typography>
+                    </div>
+                    <div className='matchDetailsObjectiveContainer'>
+                      <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.inhibitor.kills}</Typography>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 3) * gameData.info.teams[0].objectives.inhibitor.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Typography className='matchDetailsObjectiveText'>Inhibs.</Typography>
+                    </div>
+                  </div>
+                </Grid>
+              </Box>
+            </Grid>
+            {/* Bans */}
+            {gameData.info.teams[0].bans.length > 0 && gameData.info.teams[1].bans.length > 0 ? (
+              <Grid container className='BansGridContainer'>
+                <Box className='BansBox'>
+                  <Typography className='hideDesktop' style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px' }}>Bans</Typography>
+                  {/* Blue team */}
+                  <Grid className='BansTeamContainer' order={{ xs: playerData.teamId === 100 ? 1 : 3 }} style={{ display: 'flex', justifyContent: playerData.teamId === 100 ? 'flex-end' : 'flex-start' }} xs={12} sm={6}>
+                    {playerData.teamId === 100 &&
+                      <div className='hideMobile' style={{ alignSelf: 'center', marginRight: '25px' }}>
+                        <Typography style={{ fontWeight: 'bold', fontSize: '20px' }}>Bans</Typography>
+                      </div>
+                    }
+                    {gameData.info.teams[0].bans.map((item, index) => {
+                      if (item.championId === -1) {
+                        return (
+                          <img style={{
+                            width: '58px',
+                            borderRadius: '100%',
+                            marginRight: '1.5px',
+                            marginLeft: '1.5px',
+                            border: '3px #568CFF solid',
+                            filter: 'brightness(1.2) saturate(0.6) hue-rotate(180deg)'
+                          }}
+                            src={`/images/novalue.webp`}>
+                          </img>
+                        )
+                      }
+                      else {
+                        return (
+                          item.championId !== -1 &&
+                          <Tooltip disableInteractive arrow placement='top'
+                            title={<>{Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).name} banned by blue</>}>
+                            <div style={{ border: '3px #568CFF solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
+                              <img style={{
+                                width: '58px',
+                                borderRadius: '100%',
+                                filter: 'brightness(.8) invert(5%) sepia(97%) hue-rotate(202deg) brightness(101%) contrast(101%)'
+                              }}
+                                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}>
+                              </img>
+                            </div>
+                          </Tooltip>
+                        )
+                      }
+                    })}
+                  </Grid>
+                  <Grid className='hideMobile' style={{ alignSelf: 'center' }} order={{ xs: 2 }}>
+                    <Box marginBottom={'3px'} marginLeft={'20px'} marginRight={'20px'} width={'10px'} height={'10px'} borderRadius={'100%'} backgroundColor={'#C3C3C3'}></Box>
+                  </Grid>
+                  {/* Red team */}
+                  <Grid className='BansTeamContainer' order={{ xs: playerData.teamId === 200 ? 1 : 3 }} style={{ display: 'flex', justifyContent: playerData.teamId === 200 ? 'flex-end' : 'flex-start' }} xs={12} sm={6}>
+                    {playerData.teamId === 200 &&
+                      <div className='hideMobile' style={{ alignSelf: 'center', marginRight: '25px' }}>
+                        <Typography style={{ fontWeight: 'bold', fontSize: '20px' }}>Bans</Typography>
+                      </div>
+                    }
+                    {gameData.info.teams[1].bans.map((item, index) => {
+                      if (item.championId === -1) {
+                        return (
+                          <img style={{
+                            width: '58px',
+                            borderRadius: '100%',
+                            marginRight: '1.5px',
+                            marginLeft: '1.5px',
+                            border: '3px #FF3F3F solid'
+                          }}
+                            src={`/images/novalue.webp`}>
+                          </img>
+                        )
+                      }
+                      else {
+                        return (
+                          item.championId !== -1 &&
+                          <Tooltip disableInteractive arrow placement='top'
+                            title={<>{Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).name} banned by red</>}>
+                            <div style={{ border: '3px #FF3F3F solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
+                              <img style={{
+                                width: '58px',
+                                borderRadius: '100%',
+                                filter: 'brightness(.8) invert(5%) sepia(97%) hue-rotate(328deg) brightness(101%) contrast(101%)'
+                              }}
+                                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}>
+                              </img>
+                            </div>
+                          </Tooltip>
+                        )
+                      }
+                    })}
+                  </Grid>
+                </Box>
+              </Grid>
+            ) : (
+              <div></div>
+            )}
+
+            {/* Table */}
+            <Grid width={'65%'} style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '10px', paddingTop: '40px', maxWidth: '100vw' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+              {/* Blue Team */}
+              <Grid order={playerData.teamId === 100 ? 1 : 2} width={'100%'} className={playerData.teamId === 100 ? 'GameOverviewTable1' : 'GameOverviewTable2'} style={{ display: 'flex', justifyContent: 'center', margin: 'auto', textAlign: 'center' }} justifyContent={'center'} backgroundColor='#EDF8FF' boxShadow={'rgba(100, 100, 111, 0.1) 0px 7px 29px 0px'} item xs={12}>
+                <TableContainer justifyContent='center'>
+                  <Table size='small'>
+                    <TableHead>
+                      <TableRow style={{ alignItems: 'center' }}>
+                        <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <Typography color={gameData.info.teams[0].win ? '#3374FF' : '#FF3F3F'} fontWeight={'bold'} fontSize={'18px'}>{gameData.info.teams[0].win ? "Victory" : "Defeat"}</Typography>
+                            <Typography style={{ marginLeft: '10px', fontWeight: '600' }} fontSize={'14px'}>(Blue Team)</Typography>
+                          </div>
+                        </TableCell>
+                        <TableCell align='center' style={{ fontWeight: '600' }}>Role</TableCell>
+                        <TableCell align='center' style={{ fontWeight: '600' }}>KDA</TableCell>
+                        <TableCell align='center' style={{ fontWeight: '600' }}>Damage</TableCell>
+                        <TableCell align='center' style={{ fontWeight: '600' }}>Gold</TableCell>
+                        <TableCell align='center' style={{ fontWeight: '600' }}>CS</TableCell>
+                        <TableCell align='center' style={{ fontWeight: '600' }}>Wards</TableCell>
+                        <TableCell align='left' style={{ fontWeight: '600' }}>Build</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    {gameData.info.participants.filter(player => player.teamId === 100).map((player, index) => (
+                      <TableRow key={index}>
+                        <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <Tooltip title={Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).name} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                              <div style={{ position: 'relative', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                                <Typography style={{
+                                  fontSize: '11px',
+                                  position: 'absolute',
+                                  backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                  color: 'white',
+                                  borderRadius: '100%',
+                                  paddingLeft: '4px',
+                                  paddingRight: '4px',
+                                  paddingTop: '1px',
+                                  paddingBottom: '1px',
+                                  textAlign: 'center',
+                                  right: 'auto',
+                                  bottom: 'auto',
+                                  top: '-5px',
+                                  left: '0px',
+                                  justifyContent: 'center'
+                                }}>{player.champLevel}
+                                </Typography>
+                                <img style={{
+                                  width: '38px',
+                                  borderRadius: '100%',
+                                  marginRight: '3px',
+                                  border: player.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid'
+                                }}
+                                  src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}>
+                                </img>
+                              </div>
+                            </Tooltip>
+                            <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
+                              <Tooltip
+                                title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).description}</span></>}
+                                disableInteractive
+                                placement='top'
+                                arrow
+                                slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                                <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                              </Tooltip>
+                              <Tooltip
+                                title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
+                                disableInteractive
+                                placement='top'
+                                arrow
+                                slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                                <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                              </Tooltip>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
+                              <img style={{ width: '19px', borderRadius: '2px' }} src={getKeystoneIconUrl(player, runesObj)} alt="Keystone"></img>
+                              <Tooltip
+                                title={<>{runesObj.find(keystone => keystone.id === player.perks.styles[0].style).key}</>}
+                                disableInteractive
+                                placement='top'
+                                arrow
+                                slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                                <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
+                              </Tooltip>
+                            </div>
+                            <Tooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
+                              <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><a style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}><Typography className='summonerNameTable' fontSize={'12px'}>{player.riotIdGameName}</Typography></a>
+                                <span className={
+                                  (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
+                                    'TableStandingMVP' :
+                                    'TableStanding')
+                                }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}
+                                </span> {player.score.toFixed(1)}
+                              </Typography>
+                            </Tooltip>
+                          </div>
+                        </TableCell>
+                        <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
+                        <TableCell align='center'>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{(player.kills / player.deaths).toFixed(1)}</Typography>
+                        </TableCell>
+                        <TableCell align='center'>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
+                          <Tooltip disableInteractive title={<div>{`AD: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`AP: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
+                            <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#37B7FF' }, width: '50%', height: '10px' }}></LinearProgress>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
+                        <TableCell align='center'>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.totalMinionsKilled + player.neutralMinionsKilled) / (gameData.info.gameDuration / 60)).toFixed(1)}/m</Typography>
+                        </TableCell>                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
+                        <TableCell align='center'>
+                          <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                              {player?.item0 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item0]?.name}</span><br />
+                                    <span>{items.data[player.item0]?.plaintext || items.data[player.item0]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item0 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item0}.png`}
+                                    alt="Item1">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item0 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item0}.png`}
+                                  alt="Item1">
+                                </img>
+                              )
+                              }
+                              {player?.item1 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item1]?.name}</span><br />
+                                    <span>{items.data[player.item1]?.plaintext || items.data[player.item1]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item1 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item1}.png`}
+                                    alt="Item2">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item1 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item1}.png`}
+                                  alt="Item2">
+                                </img>
+                              )
+                              }
+                              {player?.item2 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item2]?.name}</span><br />
+                                    <span>{items.data[player.item2]?.plaintext || items.data[player.item2]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item2 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item2}.png`}
+                                    alt="Item3">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item2 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item2}.png`}
+                                  alt="Item3">
+                                </img>
+                              )
+                              }
+                              {player?.item6 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item6]?.name}</span><br />
+                                    <span>{items.data[player.item6]?.plaintext || items.data[player.item6]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item6}.png`}
+                                    alt="Ward">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item6}.png`}
+                                  alt="Ward">
+                                </img>
+                              )
+                              }
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                              {player?.item3 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item3]?.name}</span><br />
+                                    <span>{items.data[player.item3]?.plaintext || items.data[player.item3]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item3 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item3}.png`}
+                                    alt="Item4">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item3 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item3}.png`}
+                                  alt="Item4">
+                                </img>
+                              )
+                              }
+                              {player?.item4 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item4]?.name}</span><br />
+                                    <span>{items.data[player.item4]?.plaintext || items.data[player.item4]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item4 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item4}.png`}
+                                    alt="Item5">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item4 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item4}.png`}
+                                  alt="Item5">
+                                </img>
+                              )
+                              }
+                              {player?.item5 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item5]?.name}</span><br />
+                                    <span>{items.data[player.item5]?.plaintext || items.data[player.item5]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item5 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item5}.png`}
+                                    alt="Item6">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item5 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item5}.png`}
+                                  alt="Item6">
+                                </img>
+                              )
+                              }
+                            </div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </Table>
+                </TableContainer>
+              </Grid>
+              {/* Red Team */}
+              <Grid order={playerData.teamId === 200 ? 1 : 2} className={playerData.teamId === 200 ? 'GameOverviewTable1' : 'GameOverviewTable2'} style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginLeft: '0%', marginRight: '0%' }} marginLeft={'10%'} marginRight={'10%'} backgroundColor='#FFF1F3' boxShadow={'rgba(100, 100, 111, 0.1) 0px 7px 29px 0px'} item xs={12}>
+                <TableContainer justifyContent='center'>
+                  <Table size='small'>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <Typography color={gameData.info.teams[1].win ? '#3374FF' : '#FF3F3F'} fontWeight={'bold'} fontSize={'18px'}>{gameData.info.teams[1].win ? "Victory" : "Defeat"}</Typography>
+                            <Typography style={{ marginLeft: '10px', fontWeight: '600' }} fontSize={'14px'}>(Red Team)</Typography>
+                          </div>
+                        </TableCell>
+                        <TableCell align='center' style={{ fontWeight: '600' }}>Role</TableCell>
+                        <TableCell align='center' style={{ fontWeight: '600' }}>KDA</TableCell>
+                        <TableCell align='center' style={{ fontWeight: '600' }}>Damage</TableCell>
+                        <TableCell align='center' style={{ fontWeight: '600' }}>Gold</TableCell>
+                        <TableCell align='center' style={{ fontWeight: '600' }}>CS</TableCell>
+                        <TableCell align='center' style={{ fontWeight: '600' }}>Wards</TableCell>
+                        <TableCell align='left' style={{ fontWeight: '600' }}>Build</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    {gameData.info.participants.filter(player => player.teamId === 200).map((player, index) => (
+                      <TableRow key={index}>
+                        <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <Tooltip title={Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).name} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                              <div style={{ position: 'relative', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                                <Typography style={{
+                                  fontSize: '11px',
+                                  position: 'absolute',
+                                  backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                  color: 'white',
+                                  borderRadius: '100%',
+                                  paddingLeft: '4px',
+                                  paddingRight: '4px',
+                                  paddingTop: '1px',
+                                  paddingBottom: '1px',
+                                  textAlign: 'center',
+                                  right: 'auto',
+                                  bottom: 'auto',
+                                  top: '-5px',
+                                  left: '0px',
+                                  justifyContent: 'center'
+                                }}>{player.champLevel}
+                                </Typography>
+                                <img style={{
+                                  width: '38px',
+                                  borderRadius: '100%',
+                                  marginRight: '3px',
+                                  border: player.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid'
+                                }}
+                                  src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}>
+                                </img>
+                              </div>
+                            </Tooltip>
+                            <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
+                              <Tooltip
+                                title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).description}</span></>}
+                                disableInteractive
+                                placement='top'
+                                arrow
+                                slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                                <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                              </Tooltip>
+                              <Tooltip
+                                title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
+                                disableInteractive
+                                placement='top'
+                                arrow
+                                slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                                <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                              </Tooltip>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
+                              <img style={{ width: '19px', borderRadius: '2px' }} src={getKeystoneIconUrl(player, runesObj)} alt="Keystone"></img>
+                              <Tooltip
+                                title={<>{runesObj.find(keystone => keystone.id === player.perks.styles[0].style).key}</>}
+                                disableInteractive
+                                placement='top'
+                                arrow
+                                slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                                <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
+                              </Tooltip>
+                            </div>
+                            <Tooltip disabledInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
+                              <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}><a style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}><Typography className='summonerNameTable' fontSize={'12px'}>{player.riotIdGameName}</Typography></a>
+                                <span className={
+                                  (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
+                                    'TableStandingMVP' :
+                                    'TableStanding')
+                                }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}
+                                </span> {player.score.toFixed(1)}
+                              </Typography>
+                            </Tooltip>
+                          </div>
+                        </TableCell>
+                        <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
+                        <TableCell align='center'>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{(player.kills / player.deaths).toFixed(1)}</Typography>
+                        </TableCell>
+                        <TableCell align='center'>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
+                          <Tooltip disabledInteractive title={<div>{`AD: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`AP: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
+                            <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#FF3F3F' }, width: '50%', height: '10px' }}></LinearProgress>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
+                        <TableCell align='center'>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.totalMinionsKilled + player.neutralMinionsKilled) / (gameData.info.gameDuration / 60)).toFixed(1)}/m</Typography>
+                        </TableCell>
+                        <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
+                        <TableCell align='center'>
+                          <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                              {player?.item0 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item0]?.name}</span><br />
+                                    <span>{items.data[player.item0]?.plaintext || items.data[player.item0]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item0 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item0}.png`}
+                                    alt="Item1">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item0 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item0}.png`}
+                                  alt="Item1">
+                                </img>
+                              )
+                              }
+
+                              {player?.item1 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item1]?.name}</span><br />
+                                    <span>{items.data[player.item1]?.plaintext || items.data[player.item1]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item1 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item1}.png`}
+                                    alt="Item2">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item1 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item1}.png`}
+                                  alt="Item2">
+                                </img>
+                              )
+                              }
+
+                              {player?.item2 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item2]?.name}</span><br />
+                                    <span>{items.data[player.item2]?.plaintext || items.data[player.item2]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item2 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item2}.png`}
+                                    alt="Item3">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item2 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item2}.png`}
+                                  alt="Item3">
+                                </img>
+                              )
+                              }
+
+                              {player?.item6 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item6]?.name}</span><br />
+                                    <span>{items.data[player.item6]?.plaintext || items.data[player.item6]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item6}.png`}
+                                    alt="Ward">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item6}.png`}
+                                  alt="Ward">
+                                </img>
+                              )
+                              }
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                              {player?.item3 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item3]?.name}</span><br />
+                                    <span>{items.data[player.item3]?.plaintext || items.data[player.item3]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item3 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item3}.png`}
+                                    alt="Item4">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item3 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item3}.png`}
+                                  alt="Item4">
+                                </img>
+                              )
+                              }
+
+                              {player?.item4 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item4]?.name}</span><br />
+                                    <span>{items.data[player.item4]?.plaintext || items.data[player.item4]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item4 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item4}.png`}
+                                    alt="Item5">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item4 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item4}.png`}
+                                  alt="Item5">
+                                </img>
+                              )
+                              }
+
+                              {player?.item5 ? (
+                                <Tooltip
+                                  arrow
+                                  disableInteractive
+                                  slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                                  placement='top'
+                                  title={<><span style={{ textDecoration: 'underline' }}>
+                                    {items.data[player.item5]?.name}</span><br />
+                                    <span>{items.data[player.item5]?.plaintext || items.data[player.item5]?.tags[0]}</span><br />
+                                  </>}>
+                                  <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                    src={player.item5 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item5}.png`}
+                                    alt="Item6">
+                                  </img>
+                                </Tooltip>
+                              ) : (
+                                <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
+                                  src={player.item5 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item5}.png`}
+                                  alt="Item6">
+                                </img>
+                              )
+                              }
+                            </div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </Table>
+                </TableContainer>
+              </Grid>
+            </Grid>
+          </Grid>
+        </div>
+
+        {/* Laning */}
+        <div id='LaningAnchor' style={{ backgroundColor: 'white' }}>
+          {statsAt15 === null ? (
+            <Box sx={{ display: 'flex', height: '300px', justifyContent: 'center', margin: 'auto', alignItems: 'center' }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Grid className='LaningGridContainer' xs={12} container >
+              <Grid className='LaningGridSubContainer'>
+                <div style={{ marginLeft: '15px', marginBottom: '20px', }}>
+                  <Typography fontSize={20} fontWeight={600}>Laning Phase Results</Typography>
+                  {gameData.info.gameDuration > 900 ? (
+                    <Typography style={{ fontSize: '20px', color: '#4B4B4B' }}>How each lane was performing @ 15 minutes</Typography>
+                  ) : (
+                    <Typography style={{ fontSize: '20px', color: '#4B4B4B' }}>{`How each lane was performing @ ${gameDuration} (game ended early)`}</Typography>
+                  )
+                  }
+                </div>
+                <LanePhaseSummaryCardTop gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedTop={lastButtonPressedTop} topSummaryCardStatus={topSummaryCardStatus}></LanePhaseSummaryCardTop>
+                <LanePhaseSummaryCardJg gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedJg={lastButtonPressedJg} jgSummaryCardStatus={jgSummaryCardStatus}></LanePhaseSummaryCardJg>
+                <LanePhaseSummaryCardMid gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedMid={lastButtonPressedMid} midSummaryCardStatus={midSummaryCardStatus}></LanePhaseSummaryCardMid>
+                <LanePhaseSummaryCardBot gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedBot={lastButtonPressedBot} botSummaryCardStatus={botSummaryCardStatus}></LanePhaseSummaryCardBot>
+              </Grid>
+            </Grid>
+
+          )}
+        </div>
+
+        {/* Graphs */}
+        <div id='GraphsAnchor' style={{ backgroundColor: '#f2f2f2' }}>
+          <Grid className='GameDetailsContainer' width={'65%'} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '30px', textAlign: 'flex-start' }}>
+            <Box className='GraphSectionHeaderBox'>
+              <Typography style={{ fontWeight: 'bold', fontSize: '20px' }}>Graphs</Typography>
+              <Typography style={{ fontSize: '20px', marginBottom: '20px', color: '#4B4B4B' }}>Match Data Visualized</Typography>
+            </Box>
+          </Grid>
+          {statsAt15 && graphData ? (
+            <Grid className='GameDetailsContainer' width={'65%'} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', textAlign: 'center' }}>
+
+              <Divider color='#a6a6a6' width='65%'></Divider>
+
+
+              {/* Damage Dealt */}
+              <Box className='GraphSectionBox'>
+                <div>
+                  <Typography className='damageDealtGraphHeader'>DMG<br></br>DEALT</Typography>
+                </div>
+                <div className='GraphSectionDivContainer'>
+                  {/* Red Team */}
+                  <Grid style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2} xs={12} sm={6}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
+                        <div className='matchDetailsObjectiveContainer'>
+                          <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageDealtToChampions / 1000)}k</Typography>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
+                            <Box className='graphDamageBar' height={`${(item.totalDamageDealtToChampions / highestDamageDealt) * 200}px`} backgroundColor={redColors[index]}></Box>
+                          </Tooltip>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
+                              <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                            </a>
+                          </Tooltip>
+                        </div>
+                      ))}
+                    </div>
+                  </Grid>
+                  {/* Blue Team */}
+                  <Grid style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
+                        <div className='matchDetailsObjectiveContainer'>
+                          <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageDealtToChampions / 1000)}k</Typography>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
+                            <Box className='graphDamageBar' height={`${(item.totalDamageDealtToChampions / highestDamageDealt) * 200}px`} backgroundColor={blueColors[index]}></Box>
+                          </Tooltip>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
+                              <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                            </a>
+                          </Tooltip>
+                        </div>
+                      ))}
+                    </div>
+                  </Grid>
+                </div>
+                <Grid className='hideMobile' order={3}>
+                  <DamagePie type={'given'} participants={gameData.info.participants}></DamagePie>
+                </Grid>
+              </Box>
+
+              <Divider color='#a6a6a6' width='65%'></Divider>
+
+              {/* Damage Taken */}
+              <Box className='GraphSectionBox'>
+                <div>
+                  <Typography className='damageDealtGraphHeader'>DMG<br></br>TAKEN</Typography>
+                </div>
+                <div className='GraphSectionDivContainer'>
+                  {/* Red Team */}
+                  <Grid style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
+                        <div className='matchDetailsObjectiveContainer'>
+                          <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageTaken / 1000)}k</Typography>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
+                            <Box className='graphDamageBar' height={`${(item.totalDamageTaken / highestDamageTaken) * 200}px`} backgroundColor={redColors[index]}></Box>
+                          </Tooltip>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
+                              <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                            </a>
+                          </Tooltip>
+                        </div>
+                      ))}
+                    </div>
+                  </Grid>
+                  {/* Blue Team */}
+                  <Grid style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
+                        <div className='matchDetailsObjectiveContainer'>
+                          <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageTaken / 1000)}k</Typography>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
+                            <Box className='graphDamageBar' height={`${(item.totalDamageTaken / highestDamageTaken) * 200}px`} backgroundColor={blueColors[index]}></Box>
+                          </Tooltip>
+                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
+                              <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                            </a>
+                          </Tooltip>
+                        </div>
+                      ))}
+                    </div>
+                  </Grid>
+                </div>
+                <Grid className='hideMobile' order={3}>
+                  <DamagePie type={'taken'} participants={gameData.info.participants}></DamagePie>
+                </Grid>
+              </Box>
+
+              <Divider color='#a6a6a6' width='65%'></Divider>
+
+              {/* Gold Advantage */}
+              <Box width={'65%'} justifyContent={'space-between'} style={{ display: 'flex', alignItems: 'center', padding: '20px', marginTop: '20px' }} border={'0px solid #BBBBBB'} borderRadius={'10px'}>
+                {graphData ? (
+                  <TeamGoldDifGraph teamId={playerData.teamId} height={300} yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
+                ) : (
+                  <CircularProgress style={{ justifyContent: 'center', marginTop: '20px' }}></CircularProgress>
+                )}
+              </Box>
+
+              <Divider color='#a6a6a6' style={{ marginBottom: '30px' }} width='65%'></Divider>
+
+            </Grid>
+          ) : (
+            <Box sx={{ display: 'flex', height: '300px', justifyContent: 'center', margin: 'auto', alignItems: 'center' }}>
+              <CircularProgress />
+            </Box>
+          )}
+        </div>
+
+        {/* Timeline */}
+        <div id='TeamfightsAnchor'>
+          {statsAt15 === null ? (
+            <Box sx={{ display: 'flex', height: '300px', justifyContent: 'center', margin: 'auto', alignItems: 'center' }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Grid className='GameDetailsContainer' width={'65%'} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '30px', textAlign: 'flex-start' }}>
+              <Grid style={{ textAlign: 'start', display: 'flex', flexDirection: 'column', width: '65%', margin: 'auto' }}>
+                <Battles dataDragonVersion={dataDragonVersion} gameData={gameData} playerData={playerData} graphData={graphData} champsJSON={champsJSON} timelineData={timelineData}></Battles>
+              </Grid>
+            </Grid>
+          )}
+        </div>
+
       </div>
     )
   }

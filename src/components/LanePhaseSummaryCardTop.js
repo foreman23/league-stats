@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Typography, Box, Button, Tooltip } from '@mui/material';
 import { LineChart } from '@mui/x-charts';
+import { ResponsiveChartContainer } from '@mui/x-charts/ResponsiveChartContainer';
 
 const LanePhaseSummaryCardTop = (props) => {
   const { statsAt15, handleLaneCard, lastButtonPressedTop, topSummaryCardStatus, gameData, timelineData, dataDragonVersion, champsJSON, gameDuration } = props;
@@ -50,22 +51,22 @@ const LanePhaseSummaryCardTop = (props) => {
         container
         style={{ marginBottom: '20px', marginTop: '250px' }}
       >
-        <Grid item xs={12} style={{ display: 'inline-flex', alignItems: 'center' }}>
-          <Grid item style={{ marginRight: '35px' }} xs={6}>
+        <Grid className='LaningPhaseGridHeader' item xs={12} sm={12}>
+          <Grid className='LaneOutcomeTitle' item xs={12} sm={6}>
             {statsAt15.laneResults.TOP.resTag === 'draw' ? (
               <Typography fontWeight={'bold'}>{`Top lane was a draw`}</Typography>
             ) : (
               <Typography fontWeight={'bold'}>{`${statsAt15.laneResults.TOP.teamWonLane === 100 ? 'Blue' : 'Red'} ${statsAt15.laneResults.TOP.resTag} top lane`}</Typography>
             )}
           </Grid>
-          <Grid xs={6} style={{ flexDirection: 'row', display: 'inline-flex', marginRight: '50px' }}>
+          <Grid className='LaneBubbleContainer' xs={12} sm={6}>
             <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 0 ? statsAt15.laneResults.TOP.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
             <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 1 ? statsAt15.laneResults.TOP.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
             <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 2 ? statsAt15.laneResults.TOP.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
             <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 3 ? statsAt15.laneResults.TOP.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
             <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.TOP.bubbleCount > 4 ? statsAt15.laneResults.TOP.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
           </Grid>
-          <Grid item xs={6} style={{ display: 'inline-flex' }}>
+          <Grid item xs={12} sm={6} style={{ display: 'inline-flex' }}>
 
             <Button className={lastButtonPressedTop === 'laneSumTop1' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'}
               onClick={() => handleLaneCard('top', 'laneSumTop1')}
@@ -100,25 +101,25 @@ const LanePhaseSummaryCardTop = (props) => {
         </Grid>
       </Grid>
 
-      <Grid className={topSummaryCardStatus && lastButtonPressedTop === 'laneSumTop1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
-        <Grid xs={6}>
+      <Grid className={topSummaryCardStatus && lastButtonPressedTop === 'laneSumTop1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'}>
+        <Grid xs={12} sm={6}>
           {statsAt15.laneResults.TOP.resTag !== 'draw' ? (
-            <Typography>
+            <p>
               <span style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner.riotIdGameName} </span>
               ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) in the top lane earned {statsAt15.laneResults.TOP.goldDifference} more gold than
               <span style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser.riotIdGameName} </span>
               ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, {advantageStr}.
-            </Typography>
+            </p>
           ) : (
-            <Typography>
+            <p>
               <span style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner.riotIdGameName} </span>
               ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) in the top lane only earned a small gold lead of {statsAt15.laneResults.TOP.goldDifference} over
               <span style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser.riotIdGameName} </span>
               ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS), so we consider top lane to be a draw.
-            </Typography>
+            </p>
           )}
         </Grid>
-        <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
+        <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={12} sm={6}>
           <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner.riotIdGameName}`}>
             <div style={{ display: 'inline-block' }}>
               <img style={{ border: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img>
@@ -130,19 +131,19 @@ const LanePhaseSummaryCardTop = (props) => {
               <img style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img>
             </div>
           </Tooltip>
-          <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/TopLane.png'></img>
+          <img className='hideMobile' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/TopLane.png'></img>
         </Grid>
       </Grid>
 
       <Grid className={topSummaryCardStatus && lastButtonPressedTop === 'laneSumTop2' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
-        <Grid xs={6}>
-          <Typography style={{ marginBottom: '15px' }}>
+        <Grid xs={12} sm={6}>
+          <p style={{ marginBottom: '15px' }}>
             Results of the deaths and objectives affecting
             <span style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneWinner.riotIdGameName} </span>
             ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) and
             <span style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser.riotIdGameName} </span>
             ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) during laning phase.
-          </Typography>
+          </p>
           <Typography style={{ marginBottom: '10px' }}>
             {topLaneKillTimeline.map((kill, index) => {
               if (kill.victimId !== 0 && kill.killerId !== 0) {
@@ -167,7 +168,7 @@ const LanePhaseSummaryCardTop = (props) => {
             })}
           </Typography>
         </Grid>
-        <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={6}>
+        <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={12} sm={6}>
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner.riotIdGameName}`}>
               <div style={{ position: 'relative', display: 'inline-flex' }}>
@@ -178,42 +179,42 @@ const LanePhaseSummaryCardTop = (props) => {
           <img className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser.riotIdGameName}`}>
-              <div style={{  borderRadius: '50%', display: 'inline-flex' }}>
+              <div style={{ borderRadius: '50%', display: 'inline-flex' }}>
                 <img style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img>
               </div>
             </Tooltip>
           </div>
-          <img style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/TopLane.png'></img>
+          <img className='hideMobile' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/TopLane.png'></img>
         </Grid>
       </Grid>
 
       <Grid className={topSummaryCardStatus && lastButtonPressedTop === 'laneSumTop3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
         <Grid xs={12}>
-          <Typography style={{ marginBottom: '15px' }}>
+          <p style={{ marginBottom: '15px' }}>
             Graph of CS killed each minute by
             <span style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneWinner.riotIdGameName} </span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img>
             ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) and
             <span style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser.riotIdGameName} </span><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img>
             ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) during laning phase.
-          </Typography>
-          <LineChart
-            xAxis={[{ data: xAxisData, label: 'Minutes' }]}
-            yAxis={[{ label: 'Total CS' }]}
-            series={[
-              {
-                data: yAxisDataWinner,
-                color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#37B7FF' : '#FF3F3F',
-                label: statsAt15.laneResults.TOP.laneWinner.riotIdGameName,
-              },
-              {
-                data: yAxisDataLoser,
-                color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#37B7FF' : '#FF3F3F',
-                label: statsAt15.laneResults.TOP.laneLoser.riotIdGameName,
-              }
-            ]}
-            width={800}
-            height={300}
-          />
+          </p>
+          <div style={{ height: '300px', width: '100%' }}>
+            <LineChart
+              xAxis={[{ data: xAxisData, label: 'Minutes' }]}
+              yAxis={[{ label: 'Total CS' }]}
+              series={[
+                {
+                  data: yAxisDataWinner,
+                  color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#37B7FF' : '#FF3F3F',
+                  label: statsAt15.laneResults.TOP.laneWinner.riotIdGameName,
+                },
+                {
+                  data: yAxisDataLoser,
+                  color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#37B7FF' : '#FF3F3F',
+                  label: statsAt15.laneResults.TOP.laneLoser.riotIdGameName,
+                }
+              ]}
+            />
+          </div>
         </Grid>
       </Grid>
 

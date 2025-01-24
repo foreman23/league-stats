@@ -73,7 +73,7 @@ const TeamGoldDifGraph = (props) => {
     }
 
     return (
-        <div style={{ overflow: 'hidden', position: 'relative' }}>
+        <div style={{ overflow: 'hidden', position: 'relative', width: '100%' }}>
             {props.arrow &&
                 <div style={{ position: 'absolute', left: 'auto', right: '0px', top: '0px', display: 'flex', alignItems: 'center', backgroundColor: arrowColor === 'black' ? '#E9E9E9' : arrowColor === '#568CFF' ? '#ECF2FF' : '#FFF1F3', padding: '5px', borderRadius: '10px' }}>
                     <Typography style={{ textAlign: 'center', color: arrowColor, fontSize: '15px' }}>{`${valueChange > 0 ? '+' : ''}${valueChange.toLocaleString()}g`}</Typography>
@@ -100,30 +100,30 @@ const TeamGoldDifGraph = (props) => {
                 ) : (
                     <Typography className='damageDealtGraphHeader'>GOLD ADVANTAGE</Typography>
                 )}
-                <LineChart
-                    sx={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2))' }}
-                    width={width}
-                    height={height}
-                    xAxis={[{
-                        data: xAxisGold,
-                        min: 2,
-                        max: Math.max(...xAxisGold)
-                    }]}
-                    yAxis={[{
-                        colorMap: {
-                            type: 'piecewise',
-                            data: yAxisGold,
-                            thresholds: [0],
-                            colors: colors,
-                        },
-                    }]}
-                    series={[
-                        {
-                            data: yAxisGold,
-                            area: true,
-                        },
-                    ]}
-                />
+                <div style={{ height: height, width: '100%' }}>
+                    <LineChart
+                        sx={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2))' }}
+                        xAxis={[{
+                            data: xAxisGold,
+                            min: 2,
+                            max: Math.max(...xAxisGold)
+                        }]}
+                        yAxis={[{
+                            colorMap: {
+                                type: 'piecewise',
+                                data: yAxisGold,
+                                thresholds: [0],
+                                colors: colors,
+                            },
+                        }]}
+                        series={[
+                            {
+                                data: yAxisGold,
+                                area: true,
+                            },
+                        ]}
+                    />
+                </div>
             </Grid>
         </div>
     )

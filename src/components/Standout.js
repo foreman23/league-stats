@@ -145,19 +145,15 @@ const Standout = (props) => {
 
     return (
         <Box
-            minWidth={'100%'}
-            minHeight={'175px'}
+        className='GameDetailsBox StandoutBox'
             alignItems={'center'}
-            style={{ display: 'flex', padding: '20px', boxShadow: '0px 6px 24px 0px rgba(0, 0, 0, 0.25)' }}
-            border={'1px solid #BBBBBB'}
-            borderRadius={'10px'}
         >
-            <Grid xs={6} style={{ display: 'flex', marginTop: '10px', paddingBottom: '10px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '20px', justifyContent: 'flex-start' }}>
-                    <div style={{ display: 'flex', marginBottom: '20px' }}>
+            <Grid xs={12} sm={6} className='StandoutGridHalf1'>
+                <div className='StandoutImagesContainer'>
+                    <div className='StandoutHeaderContainer'>
                         <Typography style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '6px' }}>Standout Performances</Typography>
                     </div>
-                    <div style={{ display: 'flex', marginLeft: '8px' }}>
+                    <div className='StandoutImagesSubContainer'>
                         {performances.map(({ title, player, activeIndex: index }) => {
                             const { name, img } = getChampionData(player?.championId);
                             const teamColor = player?.teamId === 100 ? '#568CFF' : '#FF3F3F';
@@ -216,9 +212,9 @@ const Standout = (props) => {
                     </div>
                 </div>
             </Grid>
-            <Grid xs={6} style={{ display: 'flex' }}>
-                <div style={{ flexDirection: 'column', marginLeft: '0px', marginTop: '10px' }}>
-                    <Typography style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px' }}>{activePlayer.title}</Typography>
+            <Grid xs={12} sm={6} style={{ display: 'flex' }}>
+                <div className='StandoutTextContainer'>
+                    <Typography className='hideMobile' style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px' }}>{activePlayer.title}</Typography>
                     <p style={{ color: '#4B4B4B', fontSize: '16px', maxWidth: '425px' }}>
                         <a className='matchSummaryPlayerLink' href={`/profile/${gameData.info.platformId.toLowerCase()}/${activePlayer.player.riotIdGameName}/${activePlayer.player.riotIdTagline.toLowerCase()}`}>'{activePlayer?.player.riotIdGameName || "Unknown Player"}' ({championName})</a> {descStr}
                     </p>
