@@ -1885,7 +1885,7 @@ function GameDetails() {
                     {`${currBuildChamp?.championName} (${currBuildChamp?.riotIdGameName} #${currBuildChamp?.riotIdTagline})`}
                   </Typography>
                   <Typography fontSize={'20px'} color={'#4B4B4B'} marginTop={'10px'}>Skill Order</Typography>
-                  <div style={{ display: 'flex', backgroundColor: '#E6E6E6', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', justifyContent: 'start', padding: '10px', paddingTop: '20px', paddingBottom: '10px', borderRadius: '10px', marginTop: '20px' }}>
+                  <div style={{ display: 'flex', overflowX: 'auto', backgroundColor: '#E6E6E6', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', justifyContent: 'start', padding: '10px', paddingTop: '20px', paddingBottom: '10px', borderRadius: '10px', marginTop: '20px' }}>
                     {Array.from({ length: 18 }).map((_, index) => {
                       const skillEvent = buildData.skillTimeline[currBuildChamp.participantId - 1].filter(event => event.type === 'SKILL_LEVEL_UP')[index];
 
@@ -1955,7 +1955,7 @@ function GameDetails() {
                 </div>
 
                 {/* Item build */}
-                {/* <div style={{ display: 'flex', marginLeft: '0px', marginTop: '20px', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', marginLeft: '0px', marginTop: '20px', flexDirection: 'column' }}>
                   <Typography fontSize={'20px'} color={'#4B4B4B'} marginTop={'10px'}>Item Build</Typography>
                   <div style={{ display: 'flex', justifyContent: 'start', padding: '10px', paddingLeft: '3px', paddingTop: '10px', paddingBottom: '10px', borderRadius: '10px', marginTop: '0px', flexWrap: 'wrap' }}>
                     {buildData.itemTimeline[currBuildChamp.participantId - 1].itemHistory.map((itemGroup, itemGroupIndex) => (
@@ -1982,7 +1982,7 @@ function GameDetails() {
                       </div>
                     ))}
                   </div>
-                </div> */}
+                </div>
               </Box>
             </Grid>
           )}
