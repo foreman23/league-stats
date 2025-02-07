@@ -416,9 +416,9 @@
     }
 }
 
-@media (min-width:1000px) and (max-width:1200px) {
-    .displayGamesMainContainer {
-        width: 55% !important;
+@media only screen and (max-width: 1024px) {
+    .GameDetailsSubContainer {
+        width: 90% !important;
     }
 }
 
@@ -976,6 +976,17 @@
     width: 64px;
 }
 
+.GraphSectionGoldAdvantage {
+    width: 65%;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+    border: 0px solid #BBBBBB;
+    border-radius: 10px;
+}
+
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
 
@@ -1495,6 +1506,242 @@
     .hideMobile {
         display: none !important;
     }
+}
+
+/* Small tablets */
+@media only screen and (min-width: 768px) and (max-width: 820px) {
+
+    .gameDetailsMatchSummaryGraph {
+        align-content: center;
+    }
+
+    .gameDetailsMatchSummaryList li {
+        color: #4B4B4B;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    .hideSmallTablet {
+        display: none;
+    }
+
+    .LaneOutcomeTitle {
+        margin-right: 20px !important;
+    }
+
+    .lanePhaseChampImgLarge {
+        max-width: 62px;
+        max-height: 62px;
+        margin-top: 20px;
+    }
+
+    .lanePhaseChampImgBotLarge {
+        max-width: 52px;
+        max-height: 52px;
+        margin-top: 25px;
+    }
+
+    .LanePhaseSummaryBubble {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    .BuildsBox {
+        min-width: 90%;
+    }
+
+    .BuildsBox2 {
+        min-width: 90%;
+    }
+
+    .TimelineSubContainer {
+        width: 90%;
+    }
+
+    .GraphSectionHeaderBox {
+        min-width: 90%;
+    }
+
+    .GraphSectionGoldAdvantage {
+        width: 90%;
+    }
+
+    .GraphSectionBox {
+        width: 90%;
+        justify-content: space-between;
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border: 0px solid #BBBBBB;
+        border-radius: 10px;
+    }
+
+    .GameDetailsSubContainer {
+        width: 90% !important;
+    }
+
+    .StandoutContainer {
+        width: 90% !important;
+    }
+
+    #DetailsAnchor {
+        width: 90% !important;
+    }
+
+    .BansGridContainer {
+        width: 90% !important;
+    }
+
+    .GameOverViewContainer {
+        min-width: 95vw !important;
+    }
+
+    .GameOverviewTable1 {
+        max-width: 85% !important;
+        padding: 0px !important;
+    }
+
+    .GameOverviewTable2 {
+        max-width: 85% !important;
+        padding: 0px !important;
+    }
+
+    .LaningGridContainer {
+        width: 95% !important;
+    }
+
+    .LaningGridSubContainer {
+        max-width: 90% !important;
+    }
+
+    .GameDetailsContainer {
+        width: 90% !important;
+    }
+
+    .hideTablet {
+        display: none !important;
+    }
+
+    .BansTeamContainer img {
+        width: 42px !important;
+    }
+
+    .matchDetailsObjectiveContainer {
+        padding: 0px;
+    }
+
+    .matchDetailsObjectiveBar {
+        width: 32px;
+    }
+
+    .StandoutImagesSubContainer img {
+        width: 54px !important;
+    }
+
+    .gameDetailsSummaryMainChampImg {
+        width: 95px;
+    }
+
+    .GameDetailsHeaderMainContainer {
+        width: 90% !important;
+    }
+
+    .GameDetailsHeaderContainer {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+}
+
+/* Tablet */
+@media only screen and (min-width: 821px) and (max-width: 1200px) {
+
+    .gameDetailsMatchSummaryGraph {
+        align-content: center;
+    }
+
+    .gameDetailsMatchSummaryList li {
+        color: #4B4B4B;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    .BuildsBox {
+        min-width: 90%;
+    }
+
+    .BuildsBox2 {
+        min-width: 90%;
+    }
+
+    .TimelineSubContainer {
+        width: 90%;
+    }
+
+    .GraphSectionHeaderBox {
+        min-width: 90%;
+    }
+
+    .GraphSectionGoldAdvantage {
+        width: 90%;
+    }
+
+    .GraphSectionBox {
+        width: 90%;
+        justify-content: space-between;
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border: 0px solid #BBBBBB;
+        border-radius: 10px;
+    }
+
+    .GameDetailsSubContainer {
+        width: 90% !important;
+    }
+
+    .StandoutContainer {
+        width: 90% !important;
+    }
+
+    #DetailsAnchor {
+        width: 90% !important;
+    }
+
+    .BansGridContainer {
+        width: 90% !important;
+    }
+
+    .GameOverViewContainer {
+        min-width: 95vw !important;
+    }
+
+    .GameOverviewTable1 {
+        max-width: 85% !important;
+        padding: 0px !important;
+    }
+
+    .GameOverviewTable2 {
+        max-width: 85% !important;
+        padding: 0px !important;
+    }
+
+    .LaningGridContainer {
+        width: 95% !important;
+    }
+
+    .LaningGridSubContainer {
+        max-width: 90% !important;
+    }
+
+    .GameDetailsContainer {
+        width: 90% !important;
+    }
+
+    .hideTablet {
+        display: none !important;
+    }
+
 }
 
 /* For galaxy fold 5 and other tiny phones */

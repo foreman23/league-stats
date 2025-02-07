@@ -214,7 +214,7 @@ const Standout = (props) => {
             </Grid>
             <Grid xs={12} sm={6} style={{ display: 'flex' }}>
                 <div className='StandoutTextContainer'>
-                    <Typography className='hideMobile' style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px' }}>{activePlayer.title}</Typography>
+                    <Typography className='hideMobile hideTablet' style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px' }}>{activePlayer.title}</Typography>
                     <p style={{ color: '#4B4B4B', fontSize: '16px', maxWidth: '425px' }}>
                         <a className='matchSummaryPlayerLink' href={`/profile/${gameData.info.platformId.toLowerCase()}/${activePlayer.player.riotIdGameName}/${activePlayer.player.riotIdTagline.toLowerCase()}`}>'{activePlayer?.player.riotIdGameName || "Unknown Player"}' ({championName})</a> {descStr}
                     </p>

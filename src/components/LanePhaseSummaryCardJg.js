@@ -131,7 +131,7 @@ const LanePhaseSummaryCardJg = (props) => {
                             <img style={{ border: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img>
                         </div>
                     </Tooltip>
-                    <img className='hideMobile' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
+                    <img className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
                 </Grid>
             </Grid>
 
@@ -186,7 +186,7 @@ const LanePhaseSummaryCardJg = (props) => {
                             <img style={{ border: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img>
                         </Tooltip>
                     </div>
-                    <img className='hideMobile' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
+                    <img className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
                 </Grid>
             </Grid>
 

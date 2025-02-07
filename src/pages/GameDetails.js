@@ -822,7 +822,7 @@ function GameDetails() {
             {/* Match Summary */}
             <Grid className='GameDetailsSubContainer' container >
               <Box className='GameDetailsBox'>
-                <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={12} sm={6}>
+                <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={12} sm={8} md={7} lg={6}>
                   <Typography className='MatchSummaryText' marginLeft={'15px'} fontSize={20} fontWeight={'bold'}>Match Summary</Typography>
                   <ul className='gameDetailsMatchSummaryList'>
                     <li style={{ marginBottom: '20px' }}>{shortSummary}</li>
@@ -841,7 +841,7 @@ function GameDetails() {
                     }
                   </ul>
                 </Grid>
-                <Grid className='hideMobile' style={{ borderRadius: '10px', marginLeft: '30px' }} backgroundColor='white' item xs={12} sm={6}>
+                <Grid className='gameDetailsMatchSummaryGraph hideMobile' style={{ borderRadius: '10px', marginLeft: '30px' }} backgroundColor='white' item xs={12} sm={4} md={5} lg={6}>
                   {graphData ? (
                     <TeamGoldDifGraph width={400} teamId={playerData.teamId} height={250} hideTitle yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
                   ) : (
@@ -1061,7 +1061,7 @@ function GameDetails() {
             )}
 
             {/* Table */}
-            <Grid width={'65%'} style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '10px', paddingTop: '40px', maxWidth: '100vw' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid className='GameOverViewContainer' width={'65%'} style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '10px', paddingTop: '40px', maxWidth: '100vw' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
               {/* Blue Team */}
               <Grid order={playerData.teamId === 100 ? 1 : 2} width={'100%'} className={playerData.teamId === 100 ? 'GameOverviewTable1' : 'GameOverviewTable2'} style={{ display: 'flex', justifyContent: 'center', margin: 'auto', textAlign: 'center' }} justifyContent={'center'} backgroundColor='#EDF8FF' boxShadow={'rgba(100, 100, 111, 0.1) 0px 7px 29px 0px'} item xs={12}>
                 <TableContainer justifyContent='center'>
@@ -1774,7 +1774,7 @@ function GameDetails() {
               <Divider color='#a6a6a6' width='65%'></Divider>
 
               {/* Gold Advantage */}
-              <Box width={'65%'} justifyContent={'space-between'} style={{ display: 'flex', alignItems: 'center', padding: '20px', marginTop: '20px' }} border={'0px solid #BBBBBB'} borderRadius={'10px'}>
+              <Box className='GraphSectionGoldAdvantage'>
                 {graphData ? (
                   <TeamGoldDifGraph teamId={playerData.teamId} height={300} yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
                 ) : (
