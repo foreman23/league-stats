@@ -1848,7 +1848,7 @@ function GameDetails() {
                       </div>
                     ))}
                   </Grid>
-                  <Grid className='hideMobile' style={{ alignSelf: 'center' }} order={{ xs: 2 }}>
+                  <Grid className='hideMobile hideSmallTablet' style={{ alignSelf: 'center' }} order={{ xs: 2 }}>
                     <Box marginBottom={'3px'} marginLeft={'20px'} marginRight={'20px'} width={'10px'} height={'10px'} borderRadius={'100%'} backgroundColor={'#C3C3C3'}></Box>
                   </Grid>
                   <Grid order={{ xs: playerData.teamId === 200 ? 1 : 3 }}>
@@ -1893,6 +1893,7 @@ function GameDetails() {
                         <div key={index}>
                           <div style={{ filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
                             <Typography
+                            className='BuildSectionSkillLetter'
                               style={{
                                 backgroundColor: skillEvent ? (skillEvent.skillSlot !== 4 ? '#FFFFFF' : '#6E6E6E') : '#f2f2f2',
                                 color: skillEvent
@@ -1906,33 +1907,13 @@ function GameDetails() {
                                           ? 'white'
                                           : 'black'
                                   : 'black',
-                                fontWeight: 'bold',
-                                margin: '3px',
-                                fontSize: '28px',
-                                padding: '0',
-                                textAlign: 'center',
-                                marginBottom: '0px',
-                                lineHeight: '38px',
-                                width: '42px',
-                                height: '42px',
-                                borderTopLeftRadius: '5px',
-                                borderTopRightRadius: '5px',
-                                overflow: 'hidden',
-                                whiteSpace: 'nowrap',
                               }}
                             >
                               {skillEvent ? (skillEvent.skillSlot === 1 ? 'Q' : skillEvent.skillSlot === 2 ? 'W' : skillEvent.skillSlot === 3 ? 'E' : 'R') : ' '}
                             </Typography>
 
                             <img
-                              style={{
-                                height: '42px',
-                                width: '42px',
-                                margin: '3px',
-                                marginTop: '0px',
-                                borderBottomLeftRadius: '5px',
-                                borderBottomRightRadius: '5px',
-                              }}
+                              className='BuildSectionSkillIcon'
                               src={skillEvent
                                 ? `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${buildData.champInfo[currBuildChamp.participantId - 1].data[
                                   gameData.info.participants
@@ -1957,14 +1938,14 @@ function GameDetails() {
                 {/* Item build */}
                 <div style={{ display: 'flex', marginLeft: '0px', marginTop: '20px', flexDirection: 'column' }}>
                   <Typography fontSize={'20px'} color={'#4B4B4B'} marginTop={'10px'}>Item Build</Typography>
-                  <div style={{ display: 'flex', justifyContent: 'start', padding: '10px', paddingLeft: '3px', paddingTop: '10px', paddingBottom: '10px', borderRadius: '10px', marginTop: '0px', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', justifyContent: 'center', padding: '10px', paddingLeft: '3px', paddingTop: '10px', paddingBottom: '10px', borderRadius: '10px', marginTop: '0px', flexWrap: 'wrap' }}>
                     {buildData.itemTimeline[currBuildChamp.participantId - 1].itemHistory.map((itemGroup, itemGroupIndex) => (
                       <div style={{ display: 'flex', alignItems: 'center' }}>
 
                         <div style={{ display: 'flex', filter: 'drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.25))', boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px', margin: '15px', marginRight: '0px', marginLeft: '0px', backgroundColor: '#E6E6E6', padding: '10px', paddingBottom: '5px', borderRadius: '5px', flexDirection: 'column' }}>
                           <div style={{ display: 'flex' }}>
                             {itemGroup.map((item, itemIndex) => (
-                              <img style={{ height: '42px', width: '42px', borderRadius: '5px', margin: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${item.itemId}.png`}></img>
+                              <img key={itemIndex} className='BuildSectionItemImg' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${item.itemId}.png`}></img>
                             ))}
                           </div>
                           <div>
