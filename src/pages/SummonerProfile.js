@@ -665,7 +665,7 @@ const SummonerProfile = () => {
           'I': 3
         }
         let highestRank = 0;
-        let highestRankIndex = null;
+        let highestRankIndex = 0;
         let highestTierValue = 0;
         for (let i = 0; i < summonerData.rankedData.length; i++) {
           if (summonerData.rankedData[i].queueType === 'RANKED_FLEX_SR' || summonerData.rankedData[i].queueType === 'RANKED_SOLO_5x5') {
@@ -683,6 +683,7 @@ const SummonerProfile = () => {
             }
           }
         }
+        console.log(summonerData.rankedData)
         console.log(highestRankIndex)
         rank = `${summonerData.rankedData[highestRankIndex].tier} ${summonerData.rankedData[highestRankIndex].rank}`
       }
