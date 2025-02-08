@@ -451,8 +451,6 @@ function SummonerSearch() {
                       ? `/aram/${featuredData.featuredGameData.matchData.metadata.matchId}/${featuredData.featuredPlayer.riotIdGameName}/${featuredData.featuredPlayer.riotIdTagline}`
                       : "/default"
               }
-              target='__blank'
-              rel="noopener noreferrer"
               style={{ backgroundColor: featuredData.featuredPlayer.win ? '#ECF2FF' : '#FFF1F3', color: 'inherit', textDecoration: 'inherit' }}
               className='searchFeaturedContainer'>
               <Grid>
@@ -491,7 +489,7 @@ function SummonerSearch() {
 
                     <div className='featuredGamePlayerImgContainer'>
                       <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 90] } }] } }} title={`${featuredData.featuredPlayer.riotIdGameName} #${featuredData.featuredPlayer.riotIdTagline}`}>
-                        <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${featuredData.featuredPlayer.riotIdGameName}/${featuredData.featuredPlayer.riotIdTagline.toLowerCase()}`} target="_blank" rel="noopener noreferrer" style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                        <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${featuredData.featuredPlayer.riotIdGameName}/${featuredData.featuredPlayer.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                           <Typography className='featuredGamePlayerLevel' style={{
                             fontSize: '12px',
                             position: 'absolute',
@@ -562,7 +560,7 @@ function SummonerSearch() {
                       })
                       .map((player, index) => (
                         <Tooltip arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
-                          <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} target="_blank" rel="noopener noreferrer" style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                          <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                             <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '32px', marginRight: '3px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
                             <Box style={{ position: 'absolute', width: '32px', height: '5px', bottom: '0px', left: '0px', backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
                           </a>
@@ -577,7 +575,7 @@ function SummonerSearch() {
                   <Grid>
                     {featuredData.featuredGameData.matchData.info.participants.filter(player => player.teamId === featuredData.featuredPlayer.teamId && player.summonerId !== featuredData.featuredPlayer.summonerId).map((player, index) => (
                       <Tooltip arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
-                        <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} target="_blank" rel="noopener noreferrer" style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                        <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                           <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
                           <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', left: '0px', backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
                         </a>
@@ -591,7 +589,7 @@ function SummonerSearch() {
                   <Grid>
                     {featuredData.featuredGameData.matchData.info.participants.filter(player => player.teamId !== featuredData.featuredPlayer.teamId && player.summonerId !== featuredData.featuredPlayer.summonerId).map((player, index) => (
                       <Tooltip arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
-                        <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} target="_blank" rel="noopener noreferrer" style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                        <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                           <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
                           <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', left: '0px', backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
                         </a>
@@ -621,7 +619,7 @@ function SummonerSearch() {
                   {favorites.map((item, index) => (
                     <Grid item xs={12} sm={4}>
                       <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: 'auto', marginLeft: '0px', marginTop: '10px', fontSize: '18px', position: 'absolute', zIndex: 1 }}></FavoriteIcon>
-                      <a className='recentSearchItem' href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`} target="_blank" rel="noopener noreferrer">
+                      <a className='recentSearchItem' href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`}>
                         <ListItem style={{ justifyContent: 'center' }} key={index}>
                           <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
                           <Grid style={{ marginLeft: '60px', textAlign: 'center' }}>
@@ -659,7 +657,7 @@ function SummonerSearch() {
                   {recentArr.map((item, index) => (
                     <Grid item xs={12} sm={4}>
                       <CloseIcon className='deleteRecentButton' onClick={() => handleRemoveRecent(item)} style={{ display: 'flex', marginRight: 'auto', marginLeft: '0px', marginTop: '10px', fontSize: '14px', position: 'absolute', zIndex: 1 }}></CloseIcon>
-                      <a className='recentSearchItem' href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`} target="_blank" rel="noopener noreferrer">
+                      <a className='recentSearchItem' href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`}>
                         <ListItem style={{ justifyContent: 'center' }} key={index}>
                           <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
                           <Grid style={{ marginLeft: '60px', textAlign: 'center' }}>

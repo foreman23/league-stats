@@ -39,6 +39,7 @@ const Standout = (props) => {
     ];
 
     const activePlayer = performances[activeIndex];
+    console.log(performances)
     const { name: championName } = getChampionData(activePlayer.player?.championId);
 
     // console.log(activePlayer)
@@ -47,105 +48,108 @@ const Standout = (props) => {
     let descStr = '';
 
     // Determine the primary performance descriptor based on title
-    switch (activePlayer.title) {
-        case 'MVP':
-            descStr += `carried the match, ending the game ${activePlayer.player.kills}/${activePlayer.player.deaths}/${activePlayer.player.assists}. `;
-            break;
-        case '2ND':
-            descStr += `displayed a solid performance, finishing ${activePlayer.player.kills}/${activePlayer.player.deaths}/${activePlayer.player.assists}. `;
-            break;
-        case 'INT':
-            descStr += `struggled throughout the match, ending ${activePlayer.player.kills}/${activePlayer.player.deaths}/${activePlayer.player.assists}. `;
-            // Excessive deaths
-            console.log(Math.ceil(gameData.info.gameDuration / 60) * 0.3)
-            if (activePlayer.player.deaths > Math.ceil(gameData.info.gameDuration / 60) * 0.3) {
-                descStr += `Their frequent deaths made it difficult for their team to recover momentum. `;
-            }
-            // Low gold
-            const goldThresholdInt = Math.ceil(((gameData.info.gameDuration / 60) * 500) * 0.7); // 500 gold per minute
-            console.log('gold threshold (int)', goldThresholdInt)
-            if ((activePlayer.player.goldEarned < goldThresholdInt) && activePlayer.player.teamPosition !== "UTILITY") {
-                descStr += `They only earned ${activePlayer.player.goldEarned.toLocaleString()} gold, significantly below the expected amount. `;
-            }
-            // Low damage
-            const damageThresholdInt = Math.ceil(((gameData.info.gameDuration / 60) * 900) * 0.5); // Average 900 damage per minute 
-            console.log('dmg threshold (int)', damageThresholdInt)
-            if ((activePlayer.player.totalDamageDealtToChampions < damageThresholdInt) && activePlayer.player.teamPosition !== "UTILITY") {
-                descStr += `Their contribution to damage was minimal, dealing just ${activePlayer.player.totalDamageDealtToChampions.toLocaleString()} damage. `;
-            }
-            break;
+
+    if (performances[0].player !== null) {
+        switch (activePlayer.title) {
+            case 'MVP':
+                descStr += `carried the match, ending the game ${activePlayer.player.kills}/${activePlayer.player.deaths}/${activePlayer.player.assists}. `;
+                break;
+            case '2ND':
+                descStr += `displayed a solid performance, finishing ${activePlayer.player.kills}/${activePlayer.player.deaths}/${activePlayer.player.assists}. `;
+                break;
+            case 'INT':
+                descStr += `struggled throughout the match, ending ${activePlayer.player.kills}/${activePlayer.player.deaths}/${activePlayer.player.assists}. `;
+                // Excessive deaths
+                console.log(Math.ceil(gameData.info.gameDuration / 60) * 0.3)
+                if (activePlayer.player.deaths > Math.ceil(gameData.info.gameDuration / 60) * 0.3) {
+                    descStr += `Their frequent deaths made it difficult for their team to recover momentum. `;
+                }
+                // Low gold
+                const goldThresholdInt = Math.ceil(((gameData.info.gameDuration / 60) * 500) * 0.7); // 500 gold per minute
+                console.log('gold threshold (int)', goldThresholdInt)
+                if ((activePlayer.player.goldEarned < goldThresholdInt) && activePlayer.player.teamPosition !== "UTILITY") {
+                    descStr += `They only earned ${activePlayer.player.goldEarned.toLocaleString()} gold, significantly below the expected amount. `;
+                }
+                // Low damage
+                const damageThresholdInt = Math.ceil(((gameData.info.gameDuration / 60) * 900) * 0.5); // Average 900 damage per minute 
+                console.log('dmg threshold (int)', damageThresholdInt)
+                if ((activePlayer.player.totalDamageDealtToChampions < damageThresholdInt) && activePlayer.player.teamPosition !== "UTILITY") {
+                    descStr += `Their contribution to damage was minimal, dealing just ${activePlayer.player.totalDamageDealtToChampions.toLocaleString()} damage. `;
+                }
+                break;
+
+                // Add additional performance highlights
+                const goldEarned = activePlayer.player.goldEarned;
+                const goldThreshold = Math.ceil((gameData.info.gameDuration / 60) * 500); // 500 gold per minute
+                console.log(goldThreshold)
+                if (goldEarned > goldThreshold) {
+                    descStr += `They amassed an impressive ${goldEarned.toLocaleString()} gold. `;
+                }
+
+                const totalDamage = activePlayer.player.totalDamageDealtToChampions;
+                const damageThreshold = Math.ceil((gameData.info.gameDuration / 60) * 900); // Average 900 damage per minute
+                console.log(damageThreshold)
+                if (totalDamage > damageThreshold) {
+                    descStr += `With ${totalDamage.toLocaleString()} damage dealt, they were pivotal in helping the ${activePlayer.player.teamId === 100 ? 'blue' : 'red'} team dominate teamfights. `;
+                }
+
+                const kills = activePlayer.player.kills;
+                const killThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.5); // 0.5 kills per minute
+                console.log(killThreshold)
+                if (kills > killThreshold) {
+                    descStr += `Their ${kills} kills ${activePlayer.player.win ? 'helped to secure a decisive victory' : 'kept their team in contention'} for the ${activePlayer.player.teamId === 100 ? 'blue' : 'red'} team. `;
+                }
+
+                // Add jungle objectives to the description
+                const dragonsTaken = activePlayer.player.challenges.dragonTakedowns || 0;
+                const baronsTaken = activePlayer.player.challenges.baronTakedowns || 0;
+
+                // Dynamic thresholds based on game duration
+                const dragonThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.1);
+                const baronThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.05);
+
+                if (dragonsTaken > dragonThreshold) {
+                    descStr += `They dominated the jungle by securing ${dragonsTaken} dragons, giving their team a strong advantage. `;
+                }
+
+                if (baronsTaken > baronThreshold) {
+                    descStr += `Their impact was felt in the late game, where they secured ${baronsTaken} Baron Nashor buffs, shifting momentum in their team's favor. `;
+                }
+
+                // Include summary for high-impact jungle objectives
+                const totalObjectives = dragonsTaken + baronsTaken;
+                if (totalObjectives > (dragonThreshold + baronThreshold)) {
+                    descStr += `Overall, they contributed significantly by taking ${totalObjectives} major jungle objectives, leading their team to success. `;
+                }
+
+                const kda = ((kills + activePlayer.player.assists) / activePlayer.player.deaths).toFixed(1);
+                if (kda > 5) {
+                    descStr += `They maintained an impressive KDA of ${kda}, showcasing their effectiveness. `;
+                }
+
+                // Add tower and inhibitor takedowns to the description
+                const towersTaken = activePlayer.player.challenges.turretTakedowns || 0;
+
+                // Dynamic thresholds based on game duration
+                const towerThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.2);
+
+                if (towersTaken > towerThreshold) {
+                    descStr += `They pushed objectives relentlessly, taking down ${towersTaken} towers to secure map control. `;
+                }
+
+                // Include summary for high-impact structural objectives
+                if (towersTaken > towerThreshold) {
+                    descStr += `Overall, they contributed significantly by taking ${towersTaken} towers, paving the way for their team's victory. `;
+                }
+
+                // Final description string
+                descStr = descStr.trim();
+        }
     }
 
-    // Add additional performance highlights
-    const goldEarned = activePlayer.player.goldEarned;
-    const goldThreshold = Math.ceil((gameData.info.gameDuration / 60) * 500); // 500 gold per minute
-    console.log(goldThreshold)
-    if (goldEarned > goldThreshold) {
-        descStr += `They amassed an impressive ${goldEarned.toLocaleString()} gold. `;
-    }
-
-    const totalDamage = activePlayer.player.totalDamageDealtToChampions;
-    const damageThreshold = Math.ceil((gameData.info.gameDuration / 60) * 900); // Average 900 damage per minute
-    console.log(damageThreshold)
-    if (totalDamage > damageThreshold) {
-        descStr += `With ${totalDamage.toLocaleString()} damage dealt, they were pivotal in helping the ${activePlayer.player.teamId === 100 ? 'blue' : 'red'} team dominate teamfights. `;
-    }
-
-    const kills = activePlayer.player.kills;
-    const killThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.5); // 0.5 kills per minute
-    console.log(killThreshold)
-    if (kills > killThreshold) {
-        descStr += `Their ${kills} kills ${activePlayer.player.win ? 'helped to secure a decisive victory' : 'kept their team in contention'} for the ${activePlayer.player.teamId === 100 ? 'blue' : 'red'} team. `;
-    }
-
-    // Add jungle objectives to the description
-    const dragonsTaken = activePlayer.player.challenges.dragonTakedowns || 0;
-    const baronsTaken = activePlayer.player.challenges.baronTakedowns || 0;
-
-    // Dynamic thresholds based on game duration
-    const dragonThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.1);
-    const baronThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.05);
-
-    if (dragonsTaken > dragonThreshold) {
-        descStr += `They dominated the jungle by securing ${dragonsTaken} dragons, giving their team a strong advantage. `;
-    }
-
-    if (baronsTaken > baronThreshold) {
-        descStr += `Their impact was felt in the late game, where they secured ${baronsTaken} Baron Nashor buffs, shifting momentum in their team's favor. `;
-    }
-
-    // Include summary for high-impact jungle objectives
-    const totalObjectives = dragonsTaken + baronsTaken;
-    if (totalObjectives > (dragonThreshold + baronThreshold)) {
-        descStr += `Overall, they contributed significantly by taking ${totalObjectives} major jungle objectives, leading their team to success. `;
-    }
-
-    const kda = ((kills + activePlayer.player.assists) / activePlayer.player.deaths).toFixed(1);
-    if (kda > 5) {
-        descStr += `They maintained an impressive KDA of ${kda}, showcasing their effectiveness. `;
-    }
-
-    // Add tower and inhibitor takedowns to the description
-    const towersTaken = activePlayer.player.challenges.turretTakedowns || 0;
-
-    // Dynamic thresholds based on game duration
-    const towerThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.2);
-
-    if (towersTaken > towerThreshold) {
-        descStr += `They pushed objectives relentlessly, taking down ${towersTaken} towers to secure map control. `;
-    }
-
-    // Include summary for high-impact structural objectives
-    if (towersTaken > towerThreshold) {
-        descStr += `Overall, they contributed significantly by taking ${towersTaken} towers, paving the way for their team's victory. `;
-    }
-
-    // Final description string
-    descStr = descStr.trim();
-
-    return (
+    if (performances[0].player !== null) return (
         <Box
-        className='GameDetailsBox StandoutBox'
+            className='GameDetailsBox StandoutBox'
             alignItems={'center'}
         >
             <Grid xs={12} sm={6} className='StandoutGridHalf1'>

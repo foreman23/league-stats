@@ -1107,13 +1107,11 @@ const SummonerProfile = () => {
                 console.log(gameData);
                 console.log(playerData);
 
-                if (gameData.info.gameMode === "CLASSIC" && gameData.info.gameDuration > 300) {
+                if ((gameData.info.gameMode === "CLASSIC" || gameData.info.gameMode === "SWIFTPLAY") && gameData.info.gameDuration > 300) {
                   gameModeHref = `/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
                 } else if (gameData.info.gameMode === "CLASSIC" && gameData.info.gameDuration < 300) {
                   gameModeHref = `/remake/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
-                } else if (gameData.info.gameMode === "SWIFTPLAY") {
-                  gameModeHref = `/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`
-                } else if (gameData.info.gameMode === "ARAM") {
+                } else if (gameData.info.gameMode === "ARAM" || gameData.info.gameMode === "URF") {
                   gameModeHref = `/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
                 } else if (gameData.info.gameMode === "CHERRY") {
                   gameModeHref = "/Test";
@@ -1140,12 +1138,12 @@ const SummonerProfile = () => {
                       }, 200);
                     }
                   }}
-                    className="DisplayGameContainer" href={gameModeHref} key={index} target="_blank" rel="noopener noreferrer">
+                    className="DisplayGameContainer" href={gameModeHref} key={index}>
                     <DisplayGame gameData={gameData} dataDragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
                   </a>
                 );
                 if (recentOpen === true) return (
-                  <a className="DisplayGameContainer" key={index} target="_blank" rel="noopener noreferrer">
+                  <a className="DisplayGameContainer" key={index}>
                     <DisplayGame gameData={gameData} dataDragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
                   </a>
                 );

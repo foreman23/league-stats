@@ -1336,12 +1336,16 @@ const Battles = (props) => {
                             )
                             }
                             <div className='BattlesHeader2'><Typography style={{ color: '#4B4B4B', fontWeight: 'bold', fontSize: '16px' }}>{`(${fight.timespan})`}</Typography></div>
-                            <div><Typography style={{ color: '#000000', fontWeight: 'bold', fontSize: '16px' }}>{fight.battleName}</Typography></div>
+                            {!props.aram &&
+                                <div><Typography style={{ color: '#000000', fontWeight: 'bold', fontSize: '16px' }}>{fight.battleName}</Typography></div>
+                            }
                             <ArrowDropDownIcon className='hideMobile' style={{ marginRight: '0px', marginLeft: 'auto' }}></ArrowDropDownIcon>
                         </div>
                         <div className='BattlesBodyContainer'>
                             <div className='BattlesBodySubContainer1'>
-                                <Typography marginTop={'30px'} marginLeft={'20px'} color={'#404040'} fontSize={'14px'}>{fight.battleDesc}</Typography>
+                                {!props.aram &&
+                                    <Typography marginTop={'30px'} marginLeft={'20px'} color={'#404040'} fontSize={'14px'}>{fight.battleDesc}</Typography>
+                                }
                                 <div style={{ marginTop: '20px', marginLeft: '25px', marginBottom: '15px' }}>
                                     <TeamGoldDifGraph arrow max={Math.round((fight.details[fight.details.length - 1].timestamp) / 60000) - 1} width={400} height={180} teamId={props.playerData.teamId} hideTitle yAxisGold={props.graphData.yAxisGold} xAxisGold={props.graphData.xAxisGold}></TeamGoldDifGraph>
                                 </div>

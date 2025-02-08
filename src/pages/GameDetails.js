@@ -228,10 +228,10 @@ function GameDetails() {
 
       console.log(timelineData)
       const fetch15Stats = async () => {
-        if (timelineData) {
+        if (timelineData && champsJSON) {
           const graphData = await generateGraphData(gameData, timelineData);
           const stats15 = await getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData);
-          const buildData = await getBuildInfo(gameData, timelineData, champsJSON);
+          const buildData = await getBuildInfo(gameData, timelineData, champsJSON, dataDragonVersion);
           console.log(stats15)
           console.log(buildData)
           setGraphData(graphData);
@@ -245,7 +245,7 @@ function GameDetails() {
       fetch15Stats();
     }
 
-  }, [gameData, alternateRegion, timelineData, playerData]);
+  }, [gameData, alternateRegion, timelineData, playerData, champsJSON]);
 
   const findQueueInfo = async () => {
     const queue = queues.find(queue => queue.queueId === gameData.info.queueId);
@@ -797,7 +797,7 @@ function GameDetails() {
                     </a>
                   )}
                 </Grid>
-                <Grid className='' justifyContent={'left'} paddingLeft={'30px'} item xs={12} sm={7}>
+                <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={7}>
                   <Typography style={{ paddingTop: '10px', lineHeight: '1.4' }} fontSize={23} fontWeight={600} maxWidth={'460px'}>
                     <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
                       <a className='clickableName' style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`}>
@@ -831,13 +831,13 @@ function GameDetails() {
                       <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s team surrendered the game at {gameDuration}.</li>
                     }
                     {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === true &&
-                      <li style={{ marginTop: '20px' }}>{playerData.teamId === 100 ? 'Red' : 'Blue'} team surrendered the game at {gameDuration}.</li>
+                      <li style={{ marginTop: '20px' }}>The enemy team surrendered the game at {gameDuration}.</li>
                     }
                     {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === false &&
                       <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s nexus was destroyed at {gameDuration}.</li>
                     }
                     {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === true &&
-                      <li style={{ marginTop: '20px' }}>{playerData.teamId === 100 ? 'Red' : 'Blue'} team's nexus was destroyed at {gameDuration}.</li>
+                      <li style={{ marginTop: '20px' }}>The enemy team's nexus was destroyed at {gameDuration}.</li>
                     }
                   </ul>
                 </Grid>
@@ -1161,7 +1161,7 @@ function GameDetails() {
                         <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
                         <TableCell align='center'>
                           <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography>
-                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{(player.kills / player.deaths).toFixed(1)}</Typography>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.kills + player.assists)  / player.deaths).toFixed(1)}</Typography>
                         </TableCell>
                         <TableCell align='center'>
                           <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
@@ -1440,7 +1440,7 @@ function GameDetails() {
                         <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
                         <TableCell align='center'>
                           <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography>
-                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{(player.kills / player.deaths).toFixed(1)}</Typography>
+                          <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.kills + player.assists)  / player.deaths).toFixed(1)}</Typography>
                         </TableCell>
                         <TableCell align='center'>
                           <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
@@ -1792,7 +1792,7 @@ function GameDetails() {
           )}
         </div>
 
-        {/* Timeline */}
+        {/* Battles */}
         <div id='TeamfightsAnchor'>
           {statsAt15 === null ? (
             <Box sx={{ display: 'flex', height: '300px', justifyContent: 'center', margin: 'auto', alignItems: 'center' }}>
@@ -1893,7 +1893,7 @@ function GameDetails() {
                         <div key={index}>
                           <div style={{ filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
                             <Typography
-                            className='BuildSectionSkillLetter'
+                              className='BuildSectionSkillLetter'
                               style={{
                                 backgroundColor: skillEvent ? (skillEvent.skillSlot !== 4 ? '#FFFFFF' : '#6E6E6E') : '#f2f2f2',
                                 color: skillEvent
@@ -1914,14 +1914,24 @@ function GameDetails() {
 
                             <img
                               className='BuildSectionSkillIcon'
-                              src={skillEvent
-                                ? `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${buildData.champInfo[currBuildChamp.participantId - 1].data[
-                                  gameData.info.participants
-                                    .slice() // Create a shallow copy of the array
-                                    .sort((a, b) => a.participantId - b.participantId)[currBuildChamp.participantId - 1]
-                                    .championName
-                                ]?.spells[skillEvent.skillSlot - 1].image.full}`
-                                : '/images/blankItem.webp'}
+                              src={
+                                skillEvent
+                                  ? `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${buildData.champInfo[currBuildChamp.participantId - 1].data[
+                                    Object.values(champsJSON.data).find(
+                                      champ =>
+                                        champ.key ===
+                                        String(
+                                          gameData.info.participants
+                                            .slice() // Create a shallow copy of the array
+                                            .sort((a, b) => a.participantId - b.participantId)[
+                                            currBuildChamp.participantId - 1
+                                          ].championId
+                                        )
+                                    )?.id
+                                  ]?.spells[skillEvent.skillSlot - 1].image.full
+                                  }`
+                                  : '/images/blankItem.webp'
+                              }
                               alt={skillEvent ? `${skillEvent.skillSlot} Skill` : 'Empty'}
                             />
                           </div>

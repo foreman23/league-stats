@@ -397,6 +397,11 @@
 
 }
 
+.GameDetailsCatBtnMainContainer {
+    justify-content: 'left' !important;
+    padding-left: 30px !important;
+}
+
 .GameDetailsHeader {
     text-align: center;
     display: flex;
@@ -569,7 +574,7 @@
     margin-left: auto;
     align-items: center;
     display: inline-flex;
-    width: 25%;
+    width: 33%;
 }
 
 .footerContainer {
@@ -810,6 +815,19 @@
 
 .displayGameTimeHeader {
     text-align: right !important;
+    left: 20px !important;
+    top: 18px !important;
+    bottom: auto !important;
+    right: auto !important;
+    color: #7E7E7E !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    position: absolute !important;
+    font-weight: bold !important;
+}
+
+.displayGameDurationHeader {
+    text-align: left !important;
     left: auto !important;
     top: 18px !important;
     bottom: auto !important;
@@ -1082,6 +1100,13 @@
 
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
+
+    .GameDetailsCatBtnMainContainer {
+        justify-content: 'center' !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        text-align: center !important;
+    }
 
     .BuildsChampPic {
         width: 48px;
@@ -1604,6 +1629,10 @@
 /* Small tablets */
 @media only screen and (min-width: 768px) and (max-width: 820px) {
 
+    .navBarSearchBar {
+        width: 50%;
+    }
+
     .BuildsChampPic {
         width: 42px;
     }
@@ -1752,6 +1781,10 @@
 
 /* Tablet */
 @media only screen and (min-width: 821px) and (max-width: 1200px) {
+
+    .navBarSearchBar {
+        width: 60%;
+    }
 
     .BuildsChampPic {
         width: 50px;

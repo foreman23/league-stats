@@ -1,4 +1,4 @@
-const getBuildInfo = async (gameData, timelineData) => {
+const getBuildInfo = async (gameData, timelineData, champsJSON, dataDragonVersion) => {
 
     let participants = [...gameData.info.participants];
     participants.sort((a, b) => a.participantId - b.participantId)
@@ -11,7 +11,7 @@ const getBuildInfo = async (gameData, timelineData) => {
     let champInfo = [];
 
     for (let i = 0; i < participants.length; i++) {
-        const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/15.1.1/data/en_US/champion/${participants[i].championName}.json`);
+        const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participants[i].championId)).id}.json`);
         const data = await response.json();
         let itemChampObj = {
             name: participants[i].championName,
