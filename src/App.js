@@ -47,7 +47,7 @@ function App() {
           <Route path='/match/:matchId/:summonerName/:riotId' element={<GameDetails></GameDetails>}></Route>
           <Route path='/arena/:matchId/:summonerName/:riotId' element={<ArenaDetails></ArenaDetails>}></Route>
           <Route path='/aram/:matchId/:summonerName/:riotId' element={<AramDetails></AramDetails>}></Route>
-          <Route path='/remake/:matchId/:summonerName/:riotId' element={<GenericDetails></GenericDetails>}></Route>
+          <Route path='/altmatch/:matchId/:summonerName/:riotId' element={<GenericDetails></GenericDetails>}></Route>
           <Route path='/nosummoner' element={<SummonerNotFound></SummonerNotFound>}></Route>
           <Route path='/loading' element={<Loading></Loading>}></Route>
           <Route path='/*' element={<PageNotFound></PageNotFound>}></Route>

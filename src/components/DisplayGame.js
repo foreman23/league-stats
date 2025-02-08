@@ -135,6 +135,9 @@ const DisplayGame = (props) => {
             setQueueTitle('ARAM Clash')
             setIsLaning(false);
         }
+        else if (queueTitle === 'ARURF games') {
+            setQueueTitle('ARURF')
+        }
         else if (queueTitle === 'Arena') {
             setQueueTitle('Arena')
             setIsLaning(false);

@@ -1110,10 +1110,14 @@ const SummonerProfile = () => {
                 if ((gameData.info.gameMode === "CLASSIC" || gameData.info.gameMode === "SWIFTPLAY") && gameData.info.gameDuration > 300) {
                   gameModeHref = `/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
                 } else if (gameData.info.gameMode === "CLASSIC" && gameData.info.gameDuration < 300) {
-                  gameModeHref = `/remake/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
-                } else if (gameData.info.gameMode === "ARAM" || gameData.info.gameMode === "URF") {
+                  gameModeHref = `/altmatch/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
+                } else if (gameData.info.gameMode === "ARAM") {
                   gameModeHref = `/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
-                } else if (gameData.info.gameMode === "CHERRY") {
+                }
+                else if (gameData.info.gameMode === "URF") {
+                  gameModeHref = `/altmatch/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`
+                }
+                else if (gameData.info.gameMode === "CHERRY") {
                   gameModeHref = "/Test";
                 } else {
                   gameModeHref = "/Test";
