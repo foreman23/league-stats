@@ -8,6 +8,10 @@ body, .MuiTypography-root {
     flex-direction: column;
 }
 
+.hide {
+    display: none !important;
+}
+
 .DisplayGameContainer:hover {
     cursor: pointer;
 }
@@ -841,6 +845,8 @@ body, .MuiTypography-root {
     white-space: nowrap !important;
     position: absolute !important;
     font-weight: bold !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
 .displayGamePlayerProfileContainer {
@@ -1037,6 +1043,7 @@ body, .MuiTypography-root {
     justify-content: flex-start;
     background-color: #EDEDED;
     padding: 20px;
+    cursor: pointer;
 }
 
 .BattlesHeader {

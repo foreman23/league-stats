@@ -4,6 +4,7 @@ import { Typography, Grid, Divider, LinearProgress, Box, Tooltip } from '@mui/ma
 import summonerSpells from '../jsonData/summonerSpells.json'
 import calculateOpScores from '../functions/CalculateOpScores';
 import calculateOpScoresAram from '../functions/CalculateOpScoresAram';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const DisplayGame = (props) => {
 
@@ -283,7 +284,10 @@ const DisplayGame = (props) => {
                     )
                     }
                     {/* <Divider style={{ margin: 'auto', marginTop: '3px', marginBottom: '3px' }} color={participant.win === true ? '#BED3FF' : '#FFC4CC'} width={'55%'}></Divider> */}
-                    <Typography className='displayGameDurationHeader' style={{ fontSize: '12px' }}>Duration: {Math.floor(props.gameData.info.gameDuration / 60)}m</Typography>
+                    <div className='displayGameDurationHeader'>
+                        <Typography style={{ fontSize: '12px' }}>{Math.floor(props.gameData.info.gameDuration / 60)}m</Typography>
+                        <AccessTimeIcon style={{ fontSize: '20px', marginLeft: '6px' }}></AccessTimeIcon>
+                    </div>
                     <Typography className='displayGameTimeHeader' style={{ fontSize: '12px' }}>{timeSinceMatch}</Typography>
                 </Grid>
 
@@ -295,7 +299,7 @@ const DisplayGame = (props) => {
                             <Typography className='displayGameRiotName'>{participant.riotIdGameName}</Typography>
                             <Typography className='displayGameSubheader' style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '3px', color: '#7E7E7E' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).name}</Typography>
                             <Typography className='displayGameSubheader' style={{ fontSize: '14px', color: '#7E7E7E' }}>{`${participant.kills}/${participant.deaths}/${participant.assists} (${participant.totalMinionsKilled + participant.neutralMinionsKilled} CS)`}</Typography>
-                            <Grid style={{ marginTop: '10px'}}>
+                            <Grid style={{ marginTop: '10px' }}>
                                 {participants.filter(player => player.teamId === participant.teamId && player.summonerId !== participant.summonerId).map((player, index) => (
                                     <Tooltip arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
                                         <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
