@@ -283,7 +283,7 @@ const DisplayGame = (props) => {
                     )
                     }
                     {/* <Divider style={{ margin: 'auto', marginTop: '3px', marginBottom: '3px' }} color={participant.win === true ? '#BED3FF' : '#FFC4CC'} width={'55%'}></Divider> */}
-                    <Typography className='displayGameDurationHeader' style={{ fontSize: '12px' }}>{Math.floor(props.gameData.info.gameDuration / 60)} minutes</Typography>
+                    <Typography className='displayGameDurationHeader' style={{ fontSize: '12px' }}>Duration: {Math.floor(props.gameData.info.gameDuration / 60)}m</Typography>
                     <Typography className='displayGameTimeHeader' style={{ fontSize: '12px' }}>{timeSinceMatch}</Typography>
                 </Grid>
 

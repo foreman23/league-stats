@@ -220,7 +220,7 @@ const Standout = (props) => {
                 <div className='StandoutTextContainer'>
                     <Typography className='hideMobile hideTablet' style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px' }}>{activePlayer.title}</Typography>
                     <p style={{ color: '#4B4B4B', fontSize: '16px', maxWidth: '425px' }}>
-                        <a style={{ color: activePlayer.player.teamId === 100 ? '#568CFF' : '#FF3F3F' }} className='matchSummaryPlayerLink' href={`/profile/${gameData.info.platformId.toLowerCase()}/${activePlayer.player.riotIdGameName}/${activePlayer.player.riotIdTagline.toLowerCase()}`}>'{activePlayer?.player.riotIdGameName || "Unknown Player"}' ({championName})</a> {descStr}
+                        <a style={{ color: activePlayer.player.teamId === 100 ? '#568CFF' : '#FF3F3F', textDecoration: 'underline' }} className='matchSummaryPlayerLink' href={`/profile/${gameData.info.platformId.toLowerCase()}/${activePlayer.player.riotIdGameName}/${activePlayer.player.riotIdTagline.toLowerCase()}`}>'{activePlayer?.player.riotIdGameName || "Unknown Player"}' <span style={{ textDecoration: 'none' }}>({championName})</span></a> {descStr}
                     </p>
                 </div>
             </Grid>

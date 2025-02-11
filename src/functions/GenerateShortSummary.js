@@ -1,17 +1,10 @@
-// Get champion JSON data from riot
-const getChampsJSON = async (dataDragonVersion) => {
-    try {
-      const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
-      const data = await response.json();
-      return data
-    } catch (error) {
-      console.error('Error fetching champion JSON data:', error);
-    }
-  }
+import { Tooltip } from '@mui/material';
 
-const generateShortSummary = async (gameData, playerData, timelineData, stats15, dataDragonVersion) => {
-    const champsJSON = await getChampsJSON(dataDragonVersion)
+const generateShortSummary = async (gameData, playerData, timelineData, stats15, dataDragonVersion, champsJSON) => {
     let lanes = stats15.laneResults;
+
+    console.log(lanes)
+
     let roles = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM'];
 
     // Calculate win/loss strings
