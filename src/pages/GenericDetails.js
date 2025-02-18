@@ -666,8 +666,12 @@ const GenericDetails = () => {
                                 )}
                                 <img style={{ width: '30px', marginTop: '10px', opacity: '65%' }} src='/images/swords.svg'></img>
 
-                                <img style={{ marginLeft: '15px', border: '4px solid black', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='gameDetailsSummaryMainChampImg' src='/images/The_Thinking_Manatee_profileicon.webp'></img>
-
+                                {/* Manatee image for URF */}
+                                {queueTitle === 'ARURF' ? (
+                                    <img style={{ marginLeft: '15px', border: '4px solid black', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='gameDetailsSummaryMainChampImg' src='/images/The_Thinking_Manatee_profileicon.webp'></img>
+                                ) : (
+                                    <img style={{ marginLeft: '15px', border: playerData.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='gameDetailsSummaryMainChampImg' src='/images/novalue.webp'></img>
+                                )}
 
                             </Grid>
                             <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={7}>

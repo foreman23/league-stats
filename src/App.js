@@ -14,6 +14,11 @@ import Footer from './components/Footer';
 import axios from 'axios';
 import Test from './pages/Test';
 import Navbar from './components/Navbar';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import About from './pages/About';
+import Terms from './pages/Terms';
+import Cookies from './pages/Cookies';
+import Contact from './pages/Contact';
 
 function App() {
 
@@ -50,6 +55,11 @@ function App() {
           <Route path='/altmatch/:matchId/:summonerName/:riotId' element={<GenericDetails></GenericDetails>}></Route>
           <Route path='/nosummoner' element={<SummonerNotFound></SummonerNotFound>}></Route>
           <Route path='/loading' element={<Loading></Loading>}></Route>
+          <Route path='/privacy' element={<PrivacyPolicy></PrivacyPolicy>}></Route>
+          <Route path='/terms' element={<Terms></Terms>}></Route>
+          <Route path='/cookies' element={<Cookies></Cookies>}></Route>
+          <Route path='/about' element={<About></About>}></Route>
+          <Route path='/contact' element={<Contact></Contact>}></Route>
           <Route path='/*' element={<PageNotFound></PageNotFound>}></Route>
           <Route path='/Test/:matchId/:summonerName/:riotId' element={<Test></Test>}></Route>
         </Routes>

@@ -27,6 +27,11 @@ const Builds = (props) => {
                 <Typography style={{ fontSize: '20px', marginBottom: '20px', color: '#4B4B4B' }}>Player Items & Level Ups</Typography>
             </Box>
             <Box className='BuildsBox2'>
+                <a style={{ color: currBuildChamp?.teamId === 100 ? '#568CFF' : '#FF3F3F' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${currBuildChamp?.riotIdGameName}/${currBuildChamp?.riotIdTagline.toLowerCase()}`}>
+                    <Typography fontSize={'20px'} marginBottom={'20px'} fontWeight={'bold'}>
+                        {`${currBuildChamp?.championName} (${currBuildChamp?.riotIdGameName} #${currBuildChamp?.riotIdTagline})`}
+                    </Typography>
+                </a>
                 <div className='BuildsChampPicsContainer'>
                     <Grid order={{ xs: playerData.teamId === 100 ? 1 : 3 }} style={{}}>
                         {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
@@ -88,11 +93,6 @@ const Builds = (props) => {
                 </div>
                 {/* Skill Order */}
                 <div style={{ display: 'flex', marginLeft: '0px', marginTop: '15px', flexDirection: 'column' }}>
-                    <a style={{ color: currBuildChamp?.teamId === 100 ? '#568CFF' : '#FF3F3F' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${currBuildChamp?.riotIdGameName}/${currBuildChamp?.riotIdTagline.toLowerCase()}`}>
-                        <Typography fontSize={'20px'} marginBottom={'15px'} fontWeight={'bold'}>
-                            {`${currBuildChamp?.championName} (${currBuildChamp?.riotIdGameName} #${currBuildChamp?.riotIdTagline})`}
-                        </Typography>
-                    </a>
                     <Typography fontSize={'20px'} color={'#4B4B4B'} marginTop={'10px'}>Skill Order</Typography>
                     <div style={{ display: 'flex', overflowX: 'auto', backgroundColor: '#E6E6E6', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', justifyContent: 'start', padding: '10px', paddingTop: '20px', paddingBottom: '10px', borderRadius: '10px', marginTop: '20px' }}>
                         {Array.from({ length: 18 }).map((_, index) => {

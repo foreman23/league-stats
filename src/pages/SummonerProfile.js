@@ -122,17 +122,22 @@ const SummonerProfile = () => {
   const updateUserMatchInfo = useCallback(async (data) => {
     let historyData = data.historyData
     setHistoryState(historyData)
+    console.log(historyData)
     let newMatchDataArray = [];
     let riotApiCallCount = 0;
 
     setLoadingMatches(true)
+
+    if (historyData.status === 400) {
+      navigate('/nosummoner');
+    }
 
     if (historyData.length < 1) {
       setMatchData(null);
       setMatchesLoaded(true);
       setLoadingMatches(false);
     }
-    else {
+    else if (historyData.length >= 1) {
       for (let i = 0; i < 5; i++) {
         // check if match already exists
         const docRef = doc(firestore, `${selectedRegion}-matches`, historyData[i]);
@@ -253,6 +258,8 @@ const SummonerProfile = () => {
         console.log('CALLING RIOT API 4 times')
         const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
         const puuidData = puuidResponse.data;
+
+        console.log(puuidData)
 
         // If summoner does not exist anywhere
         if (puuidData.status === 404) {
