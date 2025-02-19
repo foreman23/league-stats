@@ -1,7 +1,7 @@
 import { Typography, Grid, Table, TableContainer, Paper, TableHead, TableBody, TableCell, TableRow, Tooltip, Button, Box, List, ListItem } from '@mui/material'
 import React, { useState } from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import TeamGoldDifGraph from './TeamGoldDifGraph';
 
@@ -1360,7 +1360,7 @@ const Battles = (props) => {
                                 <div><Typography style={{ color: '#000000', fontWeight: 'bold', fontSize: '16px' }}>{fight.battleName}</Typography></div>
                             }
                             <ArrowDropDownIcon id={`down_icon_${fightIndex}`} className='hideMobile' style={{ marginRight: '0px', marginLeft: 'auto' }}></ArrowDropDownIcon>
-                            <ArrowDropUpIcon id={`up_icon_${fightIndex}`} className='hideMobile hide' style={{ marginRight: '0px', marginLeft: 'auto' }}></ArrowDropUpIcon>
+                            <ArrowRightIcon id={`up_icon_${fightIndex}`} className='hideMobile hide' style={{ marginRight: '0px', marginLeft: 'auto' }}></ArrowRightIcon>
                         </div>
                         <div id={`body_${fightIndex}`} className='BattlesBodyContainer'>
                             <div className='BattlesBodySubContainer1'>

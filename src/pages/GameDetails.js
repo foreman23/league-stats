@@ -862,7 +862,7 @@ function GameDetails() {
                 <Typography style={{ fontWeight: 'bold', fontSize: '20px', marginRight: '30px' }}>Match Details</Typography>
                 <Typography style={{ fontSize: '20px', marginBottom: '20px', color: '#4B4B4B' }}>Results @ the end of game</Typography>
               </div>
-              <Box className='MatchDetailsGraphBox' minWidth={'100%'} style={{ display: 'flex', backgroundColor: 'white', padding: '20px', boxShadow: '0px 6px 24px 0px rgba(0, 0, 0, 0.25)' }} border={'1px solid #BBBBBB'} borderRadius={'10px'}>
+              <Box className='MatchDetailsGraphBox' minWidth={'100%'} maxWidth={'100%'} style={{ display: 'flex', backgroundColor: 'white', padding: '20px', boxShadow: '0px 6px 24px 0px rgba(0, 0, 0, 0.25)' }} border={'1px solid #BBBBBB'} borderRadius={'10px'}>
                 {/* Red Team */}
                 <Grid order={playerData.teamId === 100 ? 2 : 1} xs={12} sm={6}>
                   <Typography style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>Red Team</Typography>
@@ -872,48 +872,57 @@ function GameDetails() {
                     <Typography fontWeight={'bold'} fontSize={'18px'} color={'#FF3F3F'}>{totalTeamGoldRed.toLocaleString()}g</Typography>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'flex-end', height: '180px' }}>
+                  <Grid container style={{ display: 'flex', alignItems: 'flex-end', height: '180px' }}>
 
-                    <div className='matchDetailsObjectiveContainer'>
+                    <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.horde.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 6) * gameData.info.teams[1].objectives.horde.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[1].objectives.horde.kills}px`} backgroundColor={'#FF3F3F'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Grubs</Typography>
-                    </div>
+                    </Grid>
 
-                    <div style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
+                    <Grid style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
                       {gameData.info.teams[1].objectives.riftHerald.kills >= 1 ? (
                         <CheckIcon style={{ fontSize: '40px', color: '#17BA6C' }}></CheckIcon>
                       ) : (
                         <CloseIcon style={{ fontSize: '40px', color: '#777777' }}></CloseIcon>
                       )}
                       <Typography className='matchDetailsObjectiveText'>Herald</Typography>
-                    </div>
+                    </Grid>
 
-                    <div className='matchDetailsObjectiveContainer'>
+                    <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.dragon.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[1].objectives.dragon.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 4) * gameData.info.teams[1].objectives.dragon.kills}px`} backgroundColor={'#FF3F3F'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Dragons</Typography>
-                    </div>
+                    </Grid>
 
-                    <div className='matchDetailsObjectiveContainer'>
+                    <Grid style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
+                      {gameData.info.teams[1].objectives.atakhan.kills >= 1 ? (
+                        <CheckIcon style={{ fontSize: '40px', color: '#17BA6C' }}></CheckIcon>
+                      ) : (
+                        <CloseIcon style={{ fontSize: '40px', color: '#777777' }}></CloseIcon>
+                      )}
+                      <Typography className='matchDetailsObjectiveText'>Atakhan</Typography>
+                    </Grid>
+
+                    <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.baron.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 2) * gameData.info.teams[1].objectives.baron.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 1) * gameData.info.teams[1].objectives.baron.kills}px`} backgroundColor={'#FF3F3F'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Barons</Typography>
-                    </div>
+                    </Grid>
 
-                    <div className='matchDetailsObjectiveContainer'>
+                    <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.tower.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 11) * gameData.info.teams[1].objectives.tower.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 10) * gameData.info.teams[1].objectives.tower.kills}px`} backgroundColor={'#FF3F3F'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Towers</Typography>
-                    </div>
+                    </Grid>
 
-                    <div className='matchDetailsObjectiveContainer'>
+                    <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.inhibitor.kills}</Typography>
                       <Box className='matchDetailsObjectiveBar' height={`${(100 / 3) * gameData.info.teams[1].objectives.inhibitor.kills}px`} backgroundColor={'#FF3F3F'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Inhibs.</Typography>
-                    </div>
+                    </Grid>
 
-                  </div>
+                  </Grid>
                 </Grid>
                 {/* Blue Team */}
                 <Grid order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
@@ -922,41 +931,55 @@ function GameDetails() {
                     <Typography fontWeight={'bold'} fontSize={'18px'} marginRight={'50px'} color={'#568CFF'}>{gameData.info.teams[0].objectives.champion.kills} kills</Typography>
                     <Typography fontWeight={'bold'} fontSize={'18px'} color={'#568CFF'}>{totalTeamGoldBlue.toLocaleString()}g</Typography>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'flex-end', height: '180px' }}>
-                    <div className='matchDetailsObjectiveContainer'>
+                  <Grid container style={{ display: 'flex', alignItems: 'flex-end', height: '180px' }}>
+
+                    <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.horde.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 6) * gameData.info.teams[0].objectives.horde.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[0].objectives.horde.kills}px`} backgroundColor={'#568CFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Grubs</Typography>
-                    </div>
-                    <div style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
+                    </Grid>
+
+                    <Grid style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
                       {gameData.info.teams[0].objectives.riftHerald.kills >= 1 ? (
                         <CheckIcon style={{ fontSize: '40px', color: '#17BA6C' }}></CheckIcon>
                       ) : (
                         <CloseIcon style={{ fontSize: '40px', color: '#777777' }}></CloseIcon>
                       )}
                       <Typography className='matchDetailsObjectiveText'>Herald</Typography>
-                    </div>
-                    <div className='matchDetailsObjectiveContainer'>
+                    </Grid>
+
+                    <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.dragon.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[0].objectives.dragon.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 4) * gameData.info.teams[0].objectives.dragon.kills}px`} backgroundColor={'#568CFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Dragons</Typography>
-                    </div>
-                    <div className='matchDetailsObjectiveContainer'>
+                    </Grid>
+
+                    <Grid style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
+                      {gameData.info.teams[0].objectives.atakhan.kills >= 1 ? (
+                        <CheckIcon style={{ fontSize: '40px', color: '#17BA6C' }}></CheckIcon>
+                      ) : (
+                        <CloseIcon style={{ fontSize: '40px', color: '#777777' }}></CloseIcon>
+                      )}
+                      <Typography className='matchDetailsObjectiveText'>Atakhan</Typography>
+                    </Grid>
+
+                    <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.baron.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 2) * gameData.info.teams[0].objectives.baron.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 1.5) * gameData.info.teams[0].objectives.baron.kills}px`} backgroundColor={'#568CFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Barons</Typography>
-                    </div>
-                    <div className='matchDetailsObjectiveContainer'>
+                    </Grid>
+
+                    <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.tower.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 11) * gameData.info.teams[0].objectives.tower.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 10) * gameData.info.teams[0].objectives.tower.kills}px`} backgroundColor={'#568CFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Towers</Typography>
-                    </div>
-                    <div className='matchDetailsObjectiveContainer'>
+                    </Grid>
+                    <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.inhibitor.kills}</Typography>
                       <Box className='matchDetailsObjectiveBar' height={`${(100 / 3) * gameData.info.teams[0].objectives.inhibitor.kills}px`} backgroundColor={'#568CFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Inhibs.</Typography>
-                    </div>
-                  </div>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Box>
             </Grid>
@@ -975,8 +998,9 @@ function GameDetails() {
                     {gameData.info.teams[0].bans.map((item, index) => {
                       if (item.championId === -1) {
                         return (
-                          <img style={{
-                            width: '58px',
+                          <img 
+                          className='BannedChampImg'
+                          style={{
                             borderRadius: '100%',
                             marginRight: '1.5px',
                             marginLeft: '1.5px',
@@ -993,11 +1017,12 @@ function GameDetails() {
                           <Tooltip disableInteractive arrow placement='top'
                             title={<>{Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).name} banned by blue</>}>
                             <div style={{ border: '3px #568CFF solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
-                              <img style={{
-                                width: '58px',
-                                borderRadius: '100%',
-                                filter: 'brightness(.8) invert(5%) sepia(97%) hue-rotate(202deg) brightness(101%) contrast(101%)'
-                              }}
+                              <img
+                                className='BannedChampImg'
+                                style={{
+                                  borderRadius: '100%',
+                                  filter: 'brightness(.8) invert(5%) sepia(97%) hue-rotate(202deg) brightness(101%) contrast(101%)'
+                                }}
                                 src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}>
                               </img>
                             </div>
@@ -1019,13 +1044,14 @@ function GameDetails() {
                     {gameData.info.teams[1].bans.map((item, index) => {
                       if (item.championId === -1) {
                         return (
-                          <img style={{
-                            width: '58px',
-                            borderRadius: '100%',
-                            marginRight: '1.5px',
-                            marginLeft: '1.5px',
-                            border: '3px #FF3F3F solid'
-                          }}
+                          <img
+                            className='BannedChampImg'
+                            style={{
+                              borderRadius: '100%',
+                              marginRight: '1.5px',
+                              marginLeft: '1.5px',
+                              border: '3px #FF3F3F solid'
+                            }}
                             src={`/images/novalue.webp`}>
                           </img>
                         )
@@ -1036,11 +1062,12 @@ function GameDetails() {
                           <Tooltip disableInteractive arrow placement='top'
                             title={<>{Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).name} banned by red</>}>
                             <div style={{ border: '3px #FF3F3F solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
-                              <img style={{
-                                width: '58px',
-                                borderRadius: '100%',
-                                filter: 'brightness(.8) invert(5%) sepia(97%) hue-rotate(328deg) brightness(101%) contrast(101%)'
-                              }}
+                              <img
+                                className='BannedChampImg'
+                                style={{
+                                  borderRadius: '100%',
+                                  filter: 'brightness(.8) invert(5%) sepia(97%) hue-rotate(328deg) brightness(101%) contrast(101%)'
+                                }}
                                 src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}>
                               </img>
                             </div>
@@ -1257,13 +1284,13 @@ function GameDetails() {
               <CircularProgress />
             </Box>
           ) : (
-            <Builds 
-            playerData={playerData}
-            gameData={gameData}
-            dataDragonVersion={dataDragonVersion}
-            champsJSON={champsJSON}
-            items={items}
-            buildData={buildData}
+            <Builds
+              playerData={playerData}
+              gameData={gameData}
+              dataDragonVersion={dataDragonVersion}
+              champsJSON={champsJSON}
+              items={items}
+              buildData={buildData}
             >
 
             </Builds>

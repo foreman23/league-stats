@@ -196,12 +196,9 @@ const Standout = (props) => {
                                             }}
                                         >
                                             <img
+                                                className='standoutChampImage'
                                                 style={{
-                                                    borderRadius: '50%',
-                                                    width: '82px',
                                                     filter: activeIndex === index ? 'grayscale(0%)' : 'grayscale(100%)',
-                                                    marginRight: '20px',
-                                                    margin: 'auto',
                                                 }}
                                                 src={img}
                                                 alt=''

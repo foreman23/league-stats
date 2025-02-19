@@ -133,7 +133,8 @@ const SummonerProfile = () => {
     }
 
     if (historyData.length < 1) {
-      setMatchData(null);
+      // console.log('hi')
+      setMatchData([]);
       setMatchesLoaded(true);
       setLoadingMatches(false);
     }
@@ -163,7 +164,8 @@ const SummonerProfile = () => {
           const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyData[i]);
           await setDoc(newDocRef, {
             dateRetrieved: dateRetrieved,
-            matchData: matchData
+            matchData: matchData,
+            expiration: new Date(matchData.info.gameStartTimestamp)
             // timelineData: timelineData
           });
           // setMatchData(matchData);
@@ -214,7 +216,8 @@ const SummonerProfile = () => {
           const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyState[i]);
           await setDoc(newDocRef, {
             dateRetrieved: dateRetrieved,
-            matchData: matchData
+            matchData: matchData,
+            expiration: new Date(matchData.info.gameStartTimestamp)
             // timelineData: timelineData
           });
           // setMatchData(matchData);
@@ -272,16 +275,18 @@ const SummonerProfile = () => {
         console.log(puuidData)
 
         // If summoner does not exist anywhere
-        if (puuidData.status === 404) {
+        if (puuidData.status === 404 || puuidData.status === 400) {
           console.log(`summoner does not exist :(`)
           navigate(`/nosummoner`)
         }
+
+        console.log(puuidData)
 
         const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
         const summonerResData = summonerResponse.data;
 
         // If summoner not found return 404
-        if (summonerResData.status === 404) {
+        if (summonerResData.status === 404 || puuidData.status === 400) {
           console.log(`summoner not found in region ${selectedRegion} :(`)
         }
 
@@ -309,13 +314,15 @@ const SummonerProfile = () => {
           historyData: historyData,
           masteryData: masteryData
         }
-        await setDoc(newDocRef, {
-          lastUpdated: lastUpdated,
-          summonerData: summonerResData,
-          rankedData: rankedData,
-          historyData: historyData,
-          masteryData: masteryData
-        });
+        if (puuidData.status !== 400 && puuidData.status !== 404) {
+          await setDoc(newDocRef, {
+            lastUpdated: lastUpdated,
+            summonerData: summonerResData,
+            rankedData: rankedData,
+            historyData: historyData,
+            masteryData: masteryData
+          });
+        }
         setSummonerData(data);
         updateUserMatchInfo(data);
         setTimeLastUpdated('Just now');
@@ -648,7 +655,15 @@ const SummonerProfile = () => {
 
       // Find player data
       if (matchData.length > 0) {
+        console.log(matchData[0].info.participants.find(player => player.puuid === summonerData.summonerData.puuid))
         setPlayerData(matchData[0].info.participants.find(player => player.puuid === summonerData.summonerData.puuid))
+      }
+      else {
+        let dummyPlayerData = {
+          riotIdGameName: summonerName,
+          riotIdTagline: riotId
+        }
+        setPlayerData(dummyPlayerData)
       }
     }
   }, [summonerData, matchData, matchesLoaded])
@@ -747,6 +762,8 @@ const SummonerProfile = () => {
         localStorage.setItem('favorites', JSON.stringify([]))
       }
 
+      console.log(summonerObj)
+
       if (recentSearches === null) {
         const newArr = [summonerObj]
         localStorage.setItem('recentSearches', JSON.stringify(newArr))
@@ -777,13 +794,18 @@ const SummonerProfile = () => {
     }
   }, [playerData]);
 
+
   useEffect(() => {
+    // console.log(matchData)
+    // console.log(playerData)
+
     if (matchesLoaded && playerData !== undefined && matchData !== undefined && matchData !== null) {
       console.log(matchData)
       console.log(playerData)
       console.log('loading done')
       setIsLoading(false);
     }
+
   }, [playerData])
 
   useEffect(() => {
@@ -859,7 +881,7 @@ const SummonerProfile = () => {
 
           <Grid display={'flex'} flexDirection={'column'} marginTop={'0px'}>
             <Divider className='hideDesktop' variant="middle" width={'50%'} style={{ margin: 'auto', marginTop: '10px', marginBottom: '25px' }} flexItem />
-            <Grid marginLeft={'15px'} display={'flex'} flexDirection={'row'}>
+            <Grid className='summonerRankedInfoContainer'>
               {rankIndex !== null && !isLoadingRank ? (
                 <Grid>
                   <List style={{ lineHeight: '22px' }}>
@@ -888,7 +910,7 @@ const SummonerProfile = () => {
                   <Skeleton animation='wave' style={{ marginBottom: '12px', borderRadius: '3px' }} variant='rectangular' width={150} height={23} />
                 </div>
               ) : (
-                <Grid style={{ marginBottom: '15px' }}>
+                <Grid className='summonerRankedInfoUnranked' style={{ marginBottom: '15px' }}>
                   <List style={{ lineHeight: '22px' }}>
                     {playerData ? (
                       <ListItem style={{ fontWeight: 'bolder' }}>{playerData.riotIdGameName} #{riotId}</ListItem>
@@ -959,7 +981,7 @@ const SummonerProfile = () => {
                 }
               </Grid>
             </Grid>
-            {summonerData.masteryData &&
+            {summonerData.masteryData.length > 0 ? (
               <Grid className='summonerProfileMastery' xs={12}>
                 {summonerData.masteryData.length >= 1 &&
                   <Grid marginRight={'20px'} flex={'column'}>
@@ -1091,6 +1113,40 @@ const SummonerProfile = () => {
                   </Grid>
                 }
               </Grid>
+            ) : (
+              // If no mastery at all
+              <Grid className='summonerProfileMastery '>
+                <Grid flex={'column'}>
+                  <img style={{
+                    marginRight: '20px',
+                    borderRadius: '100%',
+                    border: '3px solid white',
+                    width: '65px',
+                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                  }}
+                    src={`/images/novalue.webp`} alt=''>
+                  </img>
+                  <img style={{
+                    marginRight: '20px',
+                    borderRadius: '100%',
+                    border: '3px solid white',
+                    width: '65px',
+                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                  }}
+                    src={`/images/novalue.webp`} alt=''>
+                  </img>
+                  <img style={{
+                    marginRight: '0px',
+                    borderRadius: '100%',
+                    border: '3px solid white',
+                    width: '65px',
+                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                  }}
+                    src={`/images/novalue.webp`} alt=''>
+                  </img>
+                </Grid>
+              </Grid>
+            )
             }
           </Grid>
         </Grid>
@@ -1109,13 +1165,13 @@ const SummonerProfile = () => {
         >
           {
             loadingMatches ? (
-              <div style={{ textAlign: 'center' }}>
+              <div style={{ textAlign: 'center', marginTop: '50px' }}>
                 <CircularProgress />
               </div>
             ) : matchData === null || matchData.length === 0 || matchData === -1 ? (
               // Display NO MATCHES FOUND
               <div>
-                <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'}>
+                <Grid xs={12} display={'flex'} justifyContent={'center'} flexDirection={'column'} margin={'auto'} marginTop={'20px'}>
                   <Typography style={{ textAlign: 'center' }}>No recent matches!</Typography>
                 </Grid>
               </div>
@@ -1182,14 +1238,18 @@ const SummonerProfile = () => {
         {!loadingMatches &&
           <Grid style={{ justifyContent: 'center', display: 'flex', alignItems: 'center', marginBottom: '35px' }}>
             {!allLoaded ? (
-              !loadingMore ? (
+              !loadingMore && !(matchData === null || matchData.length === 0 || matchData === -1) ? (
                 <Button onClick={() => handleLoadMore()} variant="contained">
                   Load more
                 </Button>
               ) : (
-                <Button variant="contained" disabled>
-                  <CircularProgress style={{ color: 'white' }} />
-                </Button>
+                !(matchData === null || matchData.length === 0 || matchData === -1) ? (
+                  <Button variant="contained" disabled>
+                    <CircularProgress style={{ color: 'white' }} />
+                  </Button>
+                ) : (
+                  <div></div>
+                )
               )
             ) : (
               <div></div>
