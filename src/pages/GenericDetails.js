@@ -746,7 +746,6 @@ const GenericDetails = () => {
                         runesObj={runesObj}
                         highestDamageDealt={highestDamageDealt}
                         items={items}
-                        aram
                     >
                     </DetailsTable>
                 </Grid>

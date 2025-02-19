@@ -9,6 +9,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CloseIcon from '@mui/icons-material/Close';
 import { sum } from 'firebase/firestore';
+import DisplayGame from '../components/DisplayGame';
 
 function SummonerSearch() {
 
@@ -24,6 +25,8 @@ function SummonerSearch() {
   const [queueTitle, setQueueTitle] = useState(null);
   const [timeSinceMatch, setTimeSinceMatch] = useState(null);
   const [rankedTierMatch, setRankedTierMatch] = useState(null);
+
+  const [recentOpen, setRecentOpen] = useState(false);
 
   const initialFavHeight = 115
 
@@ -355,252 +358,167 @@ function SummonerSearch() {
   }, [])
 
   return (
-    <div className='summonerSearchContainer'>
+    <body className='summonerSearchBody'>
 
       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-        <Grid style={{ alignItems: 'center', display: 'flex', marginTop: '50px', flexDirection: 'column' }} container>
+        <Grid style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }} container>
 
-          <Grid xs={12} display={'flex'} margin={'auto'}>
-            <div className='searchMainImageContainer'>
-              <img className='searchMainImage' alt='site logo' src='/images/sorakaLogo.webp'></img>
-              <Typography style={{
-                textAlign: 'center', margin: 'auto', fontSize: '32px', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
-              }}>RiftReport.gg</Typography>
+          <div className='summonerSearchContainer'>
+
+
+            <Grid xs={12} display={'flex'} margin={'auto'}>
+              <div className='searchMainImageContainer'>
+                <img className='searchMainImage' alt='site logo' src='/images/sorakaLogo.webp'></img>
+                <Typography style={{
+                  textAlign: 'center', margin: 'auto', fontSize: '32px', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
+                }}>RiftReport.gg</Typography>
+              </div>
+            </Grid>
+
+            <Grid className='searchSearchContainer' xs={12}>
+              <Select
+                sx={{
+                  backgroundColor: '#519EDD',
+                  color: 'white',
+                  fontSize: '14px',
+                  fontWeight: 'bold',
+                  width: '80px',
+                  height: 'auto',
+                  border: 'none',
+                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                }}
+                value={dropdownDefaultValue}
+                onChange={(event) => handleRegionChange(event)}
+              >
+                <MenuItem value={10}>NA</MenuItem>
+                <MenuItem value={20}>EUW</MenuItem>
+                <MenuItem value={30}>BR</MenuItem>
+                <MenuItem value={40}>EUNE</MenuItem>
+                <MenuItem value={50}>LAN</MenuItem>
+                <MenuItem value={60}>LAS</MenuItem>
+                <MenuItem value={70}>OCE</MenuItem>
+                <MenuItem value={80}>RU</MenuItem>
+                <MenuItem value={90}>TR</MenuItem>
+                <MenuItem value={100}>JP</MenuItem>
+                <MenuItem value={110}>KR</MenuItem>
+                <MenuItem value={120}>PH</MenuItem>
+                <MenuItem value={130}>SG</MenuItem>
+                <MenuItem value={140}>TW</MenuItem>
+                <MenuItem value={150}>TH</MenuItem>
+                <MenuItem value={160}>VN</MenuItem>
+              </Select>
+              <Autocomplete
+                options={recentArr || []}
+                getOptionLabel={(option) =>
+                  typeof option === 'string' ? option : `${option.summonerName} #${option.riotId}`
+                }
+                value={summonerName || ''}
+                onInputChange={(event, newInputValue) => {
+                  setSummonerName(newInputValue)
+                }}
+                onChange={(event, newValue) => {
+                  if (typeof newValue === 'string') {
+                    setSummonerName(newValue);
+                  } else if (newValue && typeof newValue === 'object') {
+                    setSummonerName(newValue.summonerName + ' #' + newValue.riotId)
+                    handleAutoCompleteSelect(newValue)
+                  }
+                }}
+                fullWidth
+                style={{ width: '495px' }}
+                freeSolo
+                renderInput={(params) => (
+                  <TextField
+                    style={{ backgroundColor: 'white', borderTopRightRadius: '5px', borderBottomRightRadius: '5px', borderTopLeftRadius: '5px', borderBottomLeftRadius: '5px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}
+                    {...params}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        handleSearchSubmit();
+                      }
+                    }}
+                    placeholder="Search by Riot ID (e.g., Teemo#NA1)"
+                  />
+                )}
+              />
+              <Button onClick={handleSearchSubmit} className='summonerSearchButton' variant='contained'>Search</Button>
+            </Grid>
+
+            <div className="searchFeaturedContainer">
+              {featuredData !== null && champsJSON !== null &&
+                (() => {
+                  let gameData = featuredData.featuredGameData.matchData
+                  let playerData = featuredData.featuredPlayer
+                  let selectedRegion = gameData.info.platformId.toLowerCase()
+                  let alternateRegion = null;
+                  // set alternate routing value
+                  const americasServers = ['na1', 'br1', 'la1', 'la2'];
+                  const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
+                  const europeServer = ['eun1', 'euw1', 'tr1', 'ru'];
+
+                  if (americasServers.includes(selectedRegion) && alternateRegion === null) {
+                    alternateRegion = 'americas'
+                  }
+                  if (asiaServers.includes(selectedRegion) && alternateRegion === null) {
+                    alternateRegion = 'asia'
+                  }
+                  if (europeServer.includes(selectedRegion) && alternateRegion === null) {
+                    alternateRegion = 'europe'
+                  }
+
+                  let gameModeHref;
+                  if ((gameData.info.gameMode === "CLASSIC" || gameData.info.gameMode === "SWIFTPLAY") && gameData.info.gameDuration > 300) {
+                    gameModeHref = `/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
+                  } else if (gameData.info.gameMode === "CLASSIC" && gameData.info.gameDuration < 300) {
+                    gameModeHref = `/altmatch/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
+                  } else if (gameData.info.gameMode === "ARAM") {
+                    gameModeHref = `/aram/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
+                  } else if (gameData.info.gameMode === "URF") {
+                    gameModeHref = `/altmatch/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
+                  } else if (gameData.info.gameMode === "CHERRY") {
+                    gameModeHref = "/Test";
+                  } else {
+                    gameModeHref = "/Test";
+                  }
+
+                  const gameDataPayload = {
+                    gameData,
+                    alternateRegion,
+                    dataDragonVersion,
+                  };
+
+                  return (
+                    <a
+                      style={{ textDecoration: "inherit", color: "inherit" }}
+                      onMouseDown={(e) => {
+                        if (e.button === 0 || e.button === 1) {
+                          localStorage.setItem("gameData", JSON.stringify(gameDataPayload));
+                          setTimeout(() => {
+                            setRecentOpen(true);
+                            setTimeout(() => {
+                              setRecentOpen(false);
+                            }, 200);
+                          }, 200);
+                        }
+                      }}
+                      href={gameModeHref}
+                    >
+                      <DisplayGame
+                        featured
+                        gameData={gameData}
+                        dataDragonVersion={dataDragonVersion}
+                        puuid={playerData.puuid}
+                      />
+                    </a>
+                  );
+                })()}
             </div>
-          </Grid>
 
-          <Grid className='searchSearchContainer' xs={12}>
-            <Select
-              sx={{
-                backgroundColor: '#519EDD',
-                color: 'white',
-                fontSize: '14px',
-                fontWeight: 'bold',
-                width: '80px',
-                height: 'auto',
-                border: 'none',
-                filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-              }}
-              value={dropdownDefaultValue}
-              onChange={(event) => handleRegionChange(event)}
-            >
-              <MenuItem value={10}>NA</MenuItem>
-              <MenuItem value={20}>EUW</MenuItem>
-              <MenuItem value={30}>BR</MenuItem>
-              <MenuItem value={40}>EUNE</MenuItem>
-              <MenuItem value={50}>LAN</MenuItem>
-              <MenuItem value={60}>LAS</MenuItem>
-              <MenuItem value={70}>OCE</MenuItem>
-              <MenuItem value={80}>RU</MenuItem>
-              <MenuItem value={90}>TR</MenuItem>
-              <MenuItem value={100}>JP</MenuItem>
-              <MenuItem value={110}>KR</MenuItem>
-              <MenuItem value={120}>PH</MenuItem>
-              <MenuItem value={130}>SG</MenuItem>
-              <MenuItem value={140}>TW</MenuItem>
-              <MenuItem value={150}>TH</MenuItem>
-              <MenuItem value={160}>VN</MenuItem>
-            </Select>
-            <Autocomplete
-              options={recentArr || []}
-              getOptionLabel={(option) =>
-                typeof option === 'string' ? option : `${option.summonerName} #${option.riotId}`
-              }
-              value={summonerName || ''}
-              onInputChange={(event, newInputValue) => {
-                setSummonerName(newInputValue)
-              }}
-              onChange={(event, newValue) => {
-                if (typeof newValue === 'string') {
-                  setSummonerName(newValue);
-                } else if (newValue && typeof newValue === 'object') {
-                  setSummonerName(newValue.summonerName + ' #' + newValue.riotId)
-                  handleAutoCompleteSelect(newValue)
-                }
-              }}
-              fullWidth
-              style={{ width: '495px' }}
-              freeSolo
-              renderInput={(params) => (
-                <TextField
-                  style={{ backgroundColor: 'white', borderTopRightRadius: '5px', borderBottomRightRadius: '5px', borderTopLeftRadius: '5px', borderBottomLeftRadius: '5px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}
-                  {...params}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter') {
-                      handleSearchSubmit();
-                    }
-                  }}
-                  placeholder="Search by Riot ID (e.g., Teemo#NA1)"
-                />
-              )}
-            />
-            <Button onClick={handleSearchSubmit} className='summonerSearchButton' variant='contained'>Search</Button>
-          </Grid>
+          </div>
 
-          {featuredData !== null && champsJSON !== null &&
-            <a
-              href={
-                featuredData.featuredGameData.matchData.info.gameMode === "CLASSIC" || featuredData.featuredGameData.matchData.info.gameMode ==="SWIFTPLAY" &&
-                  featuredData.featuredGameData.matchData.info.gameDuration > 300
-                  ? `/match/${featuredData.featuredGameData.matchData.metadata.matchId}/${featuredData.featuredPlayer.riotIdGameName}/${featuredData.featuredPlayer.riotIdTagline}`
-                  : featuredData.featuredGameData.matchData.info.gameMode === "CLASSIC" &&
-                    featuredData.featuredGameData.matchData.info.gameDuration <= 300
-                    ? `/remake/${featuredData.featuredGameData.matchData.metadata.matchId}/${featuredData.featuredPlayer.riotIdGameName}/${featuredData.featuredPlayer.riotIdTagline}`
-                    : featuredData.featuredGameData.matchData.info.gameMode === "ARAM"
-                      ? `/aram/${featuredData.featuredGameData.matchData.metadata.matchId}/${featuredData.featuredPlayer.riotIdGameName}/${featuredData.featuredPlayer.riotIdTagline}`
-                      : "/default"
-              }
-              style={{ backgroundColor: featuredData.featuredPlayer.win ? '#ECF2FF' : '#FFF1F3', color: 'inherit', textDecoration: 'inherit' }}
-              className='searchFeaturedContainer'>
-              <Grid>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'column', marginBottom: '10px' }}>
-                  {featuredData.gameTier !== 'Unranked' ? (
-                    <span style={{ display: 'flex', flexDirection: 'row', }} className='hideDesktop'>
-                      <span>
-                        <Typography className='featuredGameMainHeader'>Featured Report</Typography>
-                        <Divider className='featuredGameMainDivider' color={'#7E7E7E'}></Divider>
-                      </span>
-                      <span style={{ flexDirection: 'row', display: 'flex' }}>
-                        <Typography className='featuredGameRankHeader'>{timeSinceMatch}</Typography>
-                        <Typography className='featuredGameRankHeader'>{selectedRegion.toUpperCase()}</Typography>
-                      </span>
-                    </span>
-                  ) : (
-                    <span style={{ display: 'flex', flexDirection: 'row' }} className='hideDesktop'>
-                      <span>
-                        <Typography className='featuredGameMainHeader'>Featured Report</Typography>
-                        <Divider className='featuredGameMainDivider' color={'#7E7E7E'}></Divider>
-                      </span>
-                      <span style={{ flexDirection: 'row', display: 'flex' }}>
-                        <Typography className='featuredGameRankHeader'>{timeSinceMatch}</Typography>
-                        <Typography className='featuredGameRankHeader'>{selectedRegion.toUpperCase()}</Typography>
-                      </span>
-                    </span>
-                  )}
-                  <Typography className='featuredGameMainHeader hideMobile'>Featured Report</Typography>
-                  <Divider className='featuredGameMainDivider hideMobile' color={'#7E7E7E'}></Divider>
-                  <Typography className='hideMobile' style={{ textAlign: 'right', left: 'auto', right: '30px', color: '#7E7E7E', fontSize: '16px', whiteSpace: 'nowrap', position: 'absolute', fontWeight: 'bold' }}>{selectedRegion.toUpperCase()}</Typography>
-                </div>
-
-                {/* Display featured game */}
-                {featuredData !== null && champsJSON !== null &&
-                  <Grid style={{ display: 'flex' }}>
-
-                    <div className='featuredGamePlayerImgContainer'>
-                      <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 90] } }] } }} title={`${featuredData.featuredPlayer.riotIdGameName} #${featuredData.featuredPlayer.riotIdTagline}`}>
-                        <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${featuredData.featuredPlayer.riotIdGameName}/${featuredData.featuredPlayer.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                          <Typography className='featuredGamePlayerLevel' style={{
-                            fontSize: '12px',
-                            position: 'absolute',
-                            backgroundColor: featuredData.featuredPlayer.teamId === 100 ? '#568CFF' : '#FF3A54',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            borderRadius: '100%',
-                            paddingLeft: '5px',
-                            paddingRight: '5px',
-                            paddingTop: '1px',
-                            paddingBottom: '1px',
-                            textAlign: 'center',
-                            right: 'auto',
-                            top: 'auto',
-                            left: '76px',
-                            justifyContent: 'center'
-                          }}
-                          >{17}
-                          </Typography>
-                          <img className='featuredGamePlayerImg' style={{ backgroundColor: featuredData.featuredPlayer.teamId === 100 ? '#568CFF' : '#FF3A54' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(featuredData.featuredPlayer.championId)).id}.png`}></img>
-                        </a>
-                      </Tooltip>
-                    </div>
-                    <div className='featuredGamePlayerInfo'>
-                      <Typography style={{ fontWeight: 'bold', fontSize: '18px' }}>{featuredData.featuredPlayer.riotIdGameName}</Typography>
-                      <Typography style={{ color: '#7E7E7E' }}>{`${featuredData.featuredPlayer.championName} (${featuredData.featuredPlayer.kills}/${featuredData.featuredPlayer.deaths}/${featuredData.featuredPlayer.assists})`}</Typography>
-                    </div>
-                    <div style={{ marginRight: '20px', marginTop: '25px' }}>
-                      <Box marginTop={'3px'} marginBottom={'3px'} alignSelf={'center'} width={'10px'} height={'10px'} borderRadius={'100%'} backgroundColor={'#DDDDDD'}></Box>
-                    </div>
-                    <div style={{ marginRight: '20px', marginTop: '5px' }}>
-                      <Typography style={{ fontWeight: 'bold', fontSize: '16px' }}>{queueTitle}</Typography>
-                      <Typography className='hideMobile' style={{ color: '#7E7E7E' }}>{timeSinceMatch}</Typography>
-                      {featuredData.gameTier !== 'Unranked' ? (
-                        <Typography className='hideDesktop' style={{ color: '#7E7E7E' }}>{featuredData.gameTier.charAt(0) + featuredData.gameTier.split(' ')[0].substring(1).toLowerCase() + ' ' + featuredData.gameTier.split(' ')[1]}</Typography>
-                      ) : (
-                        <Typography className='hideDesktop' style={{ color: '#7E7E7E' }}>{featuredData.gameTier}</Typography>
-                      )
-                      }
-                    </div>
-                    <div className='hideMobile' style={{ marginRight: '20px', marginTop: '25px' }}>
-                      <Box marginTop={'3px'} marginBottom={'3px'} alignSelf={'center'} width={'10px'} height={'10px'} borderRadius={'100%'} backgroundColor={'#DDDDDD'}></Box>
-                    </div>
-                    <div className='hideMobile' style={{ marginRight: '20px', marginTop: '5px' }}>
-                      <Typography style={{ fontWeight: 'bold', fontSize: '16px' }}>Tier</Typography>
-                      {featuredData.gameTier !== 'Unranked' ? (
-                        <Typography style={{ color: '#7E7E7E' }}>{featuredData.gameTier.charAt(0) + featuredData.gameTier.split(' ')[0].substring(1).toLowerCase() + ' ' + featuredData.gameTier.split(' ')[1]}</Typography>
-                      ) : (
-                        <Typography style={{ color: '#7E7E7E' }}>{featuredData.gameTier}</Typography>
-                      )
-                      }
-                    </div>
-                  </Grid>
-                }
-
-                {/* Participant Champs (MOBILE) */}
-                <div className='featuredGameChamps hideDesktop' style={{ display: 'flex', marginLeft: '170px', position: 'absolute', top: 'auto', bottom: '45px' }}>
-                  {/* Team 1 */}
-                  <Grid style={{ marginTop: '15px' }}>
-                    {featuredData.featuredGameData.matchData.info.participants
-                      .filter(player => player.summonerId !== featuredData.featuredPlayer.summonerId)
-                      .sort((a, b) => {
-                        // Sort players by teamId: Featured player's team (100 or 200) comes first
-                        const featuredTeamId = featuredData.featuredPlayer.teamId;
-                        if (a.teamId === featuredTeamId && b.teamId !== featuredTeamId) return -1;
-                        if (a.teamId !== featuredTeamId && b.teamId === featuredTeamId) return 1;
-                        return 0;
-                      })
-                      .map((player, index) => (
-                        <Tooltip arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
-                          <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                            <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '32px', marginRight: '3px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
-                            <Box style={{ position: 'absolute', width: '32px', height: '5px', bottom: '0px', left: '0px', backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
-                          </a>
-                        </Tooltip>
-                      ))}
-                  </Grid>
-                </div>
-
-                {/* Participant Champs */}
-                <div className='featuredGameChamps hideMobile' style={{ display: 'flex', marginLeft: '170px', position: 'absolute', top: 'auto', bottom: '45px' }}>
-                  {/* Team 1 */}
-                  <Grid>
-                    {featuredData.featuredGameData.matchData.info.participants.filter(player => player.teamId === featuredData.featuredPlayer.teamId && player.summonerId !== featuredData.featuredPlayer.summonerId).map((player, index) => (
-                      <Tooltip arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
-                        <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                          <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
-                          <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', left: '0px', backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
-                        </a>
-                      </Tooltip>
-                    ))}
-                  </Grid>
-
-                  <img className='hideMobile' style={{ width: '27px', opacity: '0.65', marginLeft: '25px', marginRight: '25px' }} src='/images/swords.svg'></img>
-
-                  {/* Team 2 */}
-                  <Grid>
-                    {featuredData.featuredGameData.matchData.info.participants.filter(player => player.teamId !== featuredData.featuredPlayer.teamId && player.summonerId !== featuredData.featuredPlayer.summonerId).map((player, index) => (
-                      <Tooltip arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
-                        <a href={`/profile/${featuredData.featuredGameData.matchData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                          <img style={{ borderTopLeftRadius: '5px', borderTopRightRadius: '5px', width: '36px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
-                          <Box style={{ position: 'absolute', width: '36px', height: '5px', bottom: '0px', left: '0px', backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54', borderBottomLeftRadius: '3px', borderBottomRightRadius: '3px' }}></Box>
-                        </a>
-                      </Tooltip>
-                    ))}
-                  </Grid>
-                </div>
-
-              </Grid>
-            </a>
-          }
+          {/* <div className='searchFavoritesContainer' style={{ height: `auto` }}>
+            <iframe src='https://www.leagueoflegends.com/en-us/news/game-updates/patch-2025-s1-3-notes/'></iframe>
+          </div> */}
 
           <div className='searchFavoritesContainer' style={{ height: `auto` }}>
             <Grid style={{ display: 'flex', margin: 'auto', justifyContent: 'center' }}>
@@ -689,14 +607,16 @@ function SummonerSearch() {
             )}
           </div>
 
+
+
           <Grid xs={12} className='dataDragonVersionContainer'>
             <Typography>{dataDragonVersion}</Typography>
           </Grid>
 
         </Grid>
       </Box>
-    </div>
 
+    </body>
   );
 }
 

@@ -145,14 +145,21 @@ const SummonerProfile = () => {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           console.log('match already exists')
-          newMatchDataArray.push(docSnap.data().matchData);
+          console.log(docSnap.data())
+          if (!docSnap.data().matchData.status) {
+            newMatchDataArray.push(docSnap.data().matchData);
+          }
         }
         else {
           let dateRetrieved = new Date()
           // get match information
           const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyData[i]}`);
           riotApiCallCount += 1;
-          const matchData = matchResponse.data;
+          console.log(matchResponse)
+          let matchData = null
+          if (matchResponse.status === 200) {
+            matchData = matchResponse.data;
+          }
           const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyData[i]);
           await setDoc(newDocRef, {
             dateRetrieved: dateRetrieved,
@@ -160,11 +167,14 @@ const SummonerProfile = () => {
             // timelineData: timelineData
           });
           // setMatchData(matchData);
-          newMatchDataArray.push(matchData);
+          if (matchData !== null) {
+            newMatchDataArray.push(matchData);
+          }
         }
       }
       console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
       setHistoryIndex(newMatchDataArray.length)
+      console.log(newMatchDataArray)
       setMatchData(newMatchDataArray);
       setMatchesLoaded(true);
       setLoadingMatches(false);

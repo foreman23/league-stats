@@ -343,6 +343,7 @@ function Navbar(props) {
                         </List>
                     </Drawer>
                 </div>
+                
                 <span className='navBarSearchBar'>
                     <Select
                         sx={{
@@ -412,6 +413,7 @@ function Navbar(props) {
                     </IconButton>
                 </span>
 
+                {/* Theme selector */}
                 <div style={{ marginLeft: 'auto' }}>
                     <FormGroup onClick={() => changeTheme()}>
                         <FormControlLabel control={<Switch />} label={theme === 'light' ? <DarkModeIcon style={{ marginTop: '3px' }}></DarkModeIcon> : <LightModeIcon style={{ marginTop: '3px' }}></LightModeIcon>} />

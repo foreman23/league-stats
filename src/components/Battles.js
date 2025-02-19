@@ -1097,13 +1097,13 @@ const Battles = (props) => {
             if (battleName[0] === 'B') {
                 battleDesc = `Blue team ravaged red's base, `
                 if (blueTowerKills > 0) {
-                    battleDesc += `destroying ${blueTowerKills} tower${blueTowerKills > 1 ? 's' : ''} ${blueInhibKills > 0 ? `and ${blueInhibKills} inhibitor${blueInhibKills > 1 ? 's' : ''}` : ''}.`
+                    battleDesc += `destroying ${blueTowerKills} tower${blueTowerKills > 1 ? 's' : ''}${blueInhibKills > 0 ? ` and ${blueInhibKills} inhibitor${blueInhibKills > 1 ? 's' : ''}` : ''}.`
                 }
             }
             if (battleName[0] === 'R') {
                 battleDesc = `Red team ravaged blue's base, `
                 if (blueTowerKills > 0) {
-                    battleDesc += `destroying ${redTowerKills} tower${redTowerKills > 1 ? 's' : ''} ${redInhibKills > 0 ? `and ${redInhibKills} inhibitor${redInhibKills > 1 ? 's' : ''}` : ''}.`
+                    battleDesc += `destroying ${redTowerKills} tower${redTowerKills > 1 ? 's' : ''}${redInhibKills > 0 ? ` and ${redInhibKills} inhibitor${redInhibKills > 1 ? 's' : ''}` : ''}.`
                 }
             }
         }

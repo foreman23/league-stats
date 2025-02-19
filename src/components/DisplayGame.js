@@ -17,6 +17,8 @@ const DisplayGame = (props) => {
 
     const [champsJSON, setChampsJSON] = useState(null);
 
+    console.log(props.gameData)
+
     // Find participant
     const participants = props.gameData.info.participants;
     const participant = props.gameData.info.participants.find(participant => participant.puuid === props.puuid);
@@ -26,6 +28,7 @@ const DisplayGame = (props) => {
 
     // Find summoner spells
     const summonerSpellsObj = Object.values(summonerSpells.data);
+    console.log(participants)
     const summonerSpell1 = summonerSpellsObj.find(spell => spell.key === participant.summoner1Id.toString());
     const summonerSpell2 = summonerSpellsObj.find(spell => spell.key === participant.summoner2Id.toString());
 
@@ -254,7 +257,7 @@ const DisplayGame = (props) => {
 
     else {
         return (
-            <Grid className='displayGameMainContainer' container style={{
+            <Grid className={!props.featured ? 'displayGameMainContainer' : 'displayGameFeaturedMainContainer'} container style={{
                 backgroundColor: `${(props.gameData.info.gameDuration > 180) ? participant.win === true ? '#ECF2FF' : '#FFF1F3' : 'rgb(242, 242, 242)'}`,
                 border: `2px ${(props.gameData.info.gameDuration > 180) ? participant.win === true ? '#DCE7FF' : '#FFE1E6' : 'rgb(224, 224, 224)'} solid`,
             }}>

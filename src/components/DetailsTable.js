@@ -33,7 +33,7 @@ const DetailsTable = (props) => {
                                         <Typography style={{ marginLeft: '10px', fontWeight: '600' }} fontSize={'14px'}>(Blue Team)</Typography>
                                     </div>
                                 </TableCell>
-                                {!props.aram &&
+                                {!props.aram || !props.urf &&
                                     <TableCell align='center' style={{ fontWeight: '600' }}>Role</TableCell>
                                 }
                                 <TableCell align='center' style={{ fontWeight: '600' }}>KDA</TableCell>
@@ -123,7 +123,7 @@ const DetailsTable = (props) => {
                                         </Tooltip>
                                     </div>
                                 </TableCell>
-                                {!props.aram &&
+                                {!props.aram || !props.urf &&
                                     <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
                                 }
                                 <TableCell align='center'>
@@ -323,7 +323,7 @@ const DetailsTable = (props) => {
                                         <Typography style={{ marginLeft: '10px', fontWeight: '600' }} fontSize={'14px'}>(Red Team)</Typography>
                                     </div>
                                 </TableCell>
-                                {!props.aram &&
+                                {!props.aram || !props.urf &&
                                     <TableCell align='center' style={{ fontWeight: '600' }}>Role</TableCell>
                                 }
                                 <TableCell align='center' style={{ fontWeight: '600' }}>KDA</TableCell>
@@ -413,7 +413,7 @@ const DetailsTable = (props) => {
                                         </Tooltip>
                                     </div>
                                 </TableCell>
-                                {!props.aram &&
+                                {!props.aram || !props.urf &&
                                     <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
                                 }
                                 <TableCell align='center'>
