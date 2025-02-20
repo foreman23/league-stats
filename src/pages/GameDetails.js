@@ -906,7 +906,7 @@ function GameDetails() {
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.baron.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 1) * gameData.info.teams[1].objectives.baron.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 2) * gameData.info.teams[1].objectives.baron.kills}px`} backgroundColor={'#FF3F3F'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Barons</Typography>
                     </Grid>
 

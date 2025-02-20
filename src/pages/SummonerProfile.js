@@ -48,8 +48,6 @@ const SummonerProfile = () => {
   let { selectedRegion, summonerName, riotId } = useParams();
   summonerName = summonerName.toLowerCase();
   riotId = riotId.toUpperCase();
-  console.log(selectedRegion, summonerName, riotId)
-  console.log(isLoading)
 
   // Set region string name
   let regionStr = ''
@@ -106,7 +104,6 @@ const SummonerProfile = () => {
   const getDataDragonVersion = async () => {
     axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
       .then(function (response) {
-        // console.log(response.data[0])
         const currentVersion = response.data[0];
         setDataDragonVersion(currentVersion);
         getChampsJSON(currentVersion);
@@ -122,18 +119,16 @@ const SummonerProfile = () => {
   const updateUserMatchInfo = useCallback(async (data) => {
     let historyData = data.historyData
     setHistoryState(historyData)
-    console.log(historyData)
     let newMatchDataArray = [];
     let riotApiCallCount = 0;
 
     setLoadingMatches(true)
 
     if (historyData.status === 400) {
-      navigate('/nosummoner');
+      navigate(`/nosummoner/${summonerName}/${riotId}`);
     }
 
     if (historyData.length < 1) {
-      // console.log('hi')
       setMatchData([]);
       setMatchesLoaded(true);
       setLoadingMatches(false);
@@ -146,7 +141,6 @@ const SummonerProfile = () => {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           console.log('match already exists')
-          console.log(docSnap.data())
           if (!docSnap.data().matchData.status) {
             newMatchDataArray.push(docSnap.data().matchData);
           }
@@ -156,18 +150,34 @@ const SummonerProfile = () => {
           // get match information
           const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyData[i]}`);
           riotApiCallCount += 1;
-          console.log(matchResponse)
+
+          // break loop if game too old
+          if (new Date(matchResponse.data.info.gameStartTimestamp + 7776000000) < new Date()) {
+            console.log(matchResponse.data.info.gameMode)
+            // if first game too old, rest must be
+            if (i === 0) {
+              break;
+            }
+            else {
+              continue;
+            }
+          }
+
           let matchData = null
           if (matchResponse.status === 200) {
             matchData = matchResponse.data;
           }
           const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyData[i]);
-          await setDoc(newDocRef, {
-            dateRetrieved: dateRetrieved,
-            matchData: matchData,
-            expiration: new Date(matchData.info.gameStartTimestamp)
-            // timelineData: timelineData
-          });
+
+          if (matchResponse.status === 200 && (new Date((matchData.info.gameStartTimestamp) + 7776000000)) > new Date()) {
+            console.log('WRITING TO FIRESTORE (match)')
+            await setDoc(newDocRef, {
+              dateRetrieved: dateRetrieved,
+              matchData: matchData,
+              expiration: new Date((matchData.info.gameStartTimestamp) + 7776000000)
+            });
+          }
+
           // setMatchData(matchData);
           if (matchData !== null) {
             newMatchDataArray.push(matchData);
@@ -176,7 +186,6 @@ const SummonerProfile = () => {
       }
       console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
       setHistoryIndex(newMatchDataArray.length)
-      console.log(newMatchDataArray)
       setMatchData(newMatchDataArray);
       setMatchesLoaded(true);
       setLoadingMatches(false);
@@ -189,14 +198,8 @@ const SummonerProfile = () => {
     let newMatchDataArray = [...matchData];
     let riotApiCallCount = 0;
 
-    console.log(newMatchDataArray)
-
-    console.log(historyState)
-    console.log(historyIndex)
-
     if (!allLoaded) {
       for (let i = historyIndex; i < historyIndex + 5; i++) {
-        console.log(historyState[i])
         // check if match already exists
         const docRef = doc(firestore, `${selectedRegion}-matches`, historyState[i]);
         console.log('Reading from firestore (checking match exists)')
@@ -212,16 +215,39 @@ const SummonerProfile = () => {
           // get match information
           const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyState[i]}`);
           riotApiCallCount += 1;
-          const matchData = matchResponse.data;
+
+          // break loop if game too old
+          if (new Date(matchResponse.data.info.gameStartTimestamp + 7776000000) < new Date()) {
+            console.log(new Date(matchResponse.data.info.gameStartTimestamp + 7776000000), new Date())
+            // if first game too old, rest must be
+            if (i === 0) {
+              break;
+            }
+            else {
+              continue;
+            }
+          }
+
+          let matchData = null
+          if (matchResponse.status === 200) {
+            matchData = matchResponse.data;
+          }
+
           const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyState[i]);
-          await setDoc(newDocRef, {
-            dateRetrieved: dateRetrieved,
-            matchData: matchData,
-            expiration: new Date(matchData.info.gameStartTimestamp)
-            // timelineData: timelineData
-          });
+
+          if (matchResponse.status === 200 && (new Date((matchData.info.gameStartTimestamp) + 7776000000)) > new Date()) {
+            console.log('WRITING TO FIRESTORE (match)')
+            await setDoc(newDocRef, {
+              dateRetrieved: dateRetrieved,
+              matchData: matchData,
+              expiration: new Date((matchData.info.gameStartTimestamp) + 7776000000)
+            });
+          }
+
           // setMatchData(matchData);
-          newMatchDataArray.push(matchData);
+          if (matchData !== null) {
+            newMatchDataArray.push(matchData);
+          }
         }
       }
     }
@@ -266,23 +292,20 @@ const SummonerProfile = () => {
     // Create new summoner profile on firestore
     else {
       try {
-        //console.log(alternateRegion)
-
-        console.log('CALLING RIOT API 4 times')
+        let riotApiCallCount = 0
         const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
+        riotApiCallCount += 1
         const puuidData = puuidResponse.data;
 
-        console.log(puuidData)
 
         // If summoner does not exist anywhere
         if (puuidData.status === 404 || puuidData.status === 400) {
           console.log(`summoner does not exist :(`)
-          navigate(`/nosummoner`)
+          navigate(`/nosummoner/${summonerName}/${riotId}`)
         }
 
-        console.log(puuidData)
-
         const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
+        riotApiCallCount += 1
         const summonerResData = summonerResponse.data;
 
         // If summoner not found return 404
@@ -291,14 +314,18 @@ const SummonerProfile = () => {
         }
 
         const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerResData.id}`);
+        riotApiCallCount += 1
         const rankedData = rankedResponse.data;
 
         const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`);
+        riotApiCallCount += 1
         const historyData = historyResponse.data;
-        console.log(historyData)
 
         const masteryResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
+        riotApiCallCount += 1
         const masteryData = masteryResponse.data;
+
+        console.log(`CALLED RIOT API: ${riotApiCallCount} times`)
 
         // if match history is empty set matchesLoaded to true
         if (historyData.length < 1) {
@@ -315,6 +342,7 @@ const SummonerProfile = () => {
           masteryData: masteryData
         }
         if (puuidData.status !== 400 && puuidData.status !== 404) {
+          console.log('WRITING TO FIRESTORE')
           await setDoc(newDocRef, {
             lastUpdated: lastUpdated,
             summonerData: summonerResData,
@@ -339,22 +367,29 @@ const SummonerProfile = () => {
     try {
       setIsLoadingRank(true);
       setRankIndex(null);
-      console.log('CALLING RIOT API 4 times')
+      let riotApiCallCount = 0
 
       const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
+      riotApiCallCount += 1
       const puuidData = puuidResponse.data;
 
       const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
+      riotApiCallCount += 1
       const summonerData = summonerResponse.data;
 
       const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`);
+      riotApiCallCount += 1
       const rankedData = rankedResponse.data;
 
       const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${summonerData.puuid}`);
+      riotApiCallCount += 1
       const historyData = historyResponse.data;
 
       const masteryResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
+      riotApiCallCount += 1
       const masteryData = masteryResponse.data;
+
+      console.log(`CALLED RIOT API: ${riotApiCallCount} times`)
 
       let lastUpdated = new Date()
       const docRef = doc(firestore, `${selectedRegion}-users`, `${summonerName}-${riotId}`);
@@ -387,7 +422,6 @@ const SummonerProfile = () => {
 
   // Update summoner level background color based on rank
   useEffect(() => {
-    console.log(summonerData)
     if (summonerData) {
       if (summonerData.rankedData.length > 0) {
         if (summonerData.rankedData[0].tier === "IRON") {
@@ -465,8 +499,6 @@ const SummonerProfile = () => {
 
     setIsLoadingRank(true);
 
-    console.log(selectedRegion, summonerName, riotId)
-
     // set alternate routing value
     const americasServers = ['na1', 'br1', 'la1', 'la2'];
     const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
@@ -491,11 +523,8 @@ const SummonerProfile = () => {
       setMatchRegion('europe');
     }
 
-    console.log(alternateRegion, matchRegion)
-
     // Get summonerData from firestore
     if (summonerName !== null && selectedRegion !== null && alternateRegion !== null) {
-      console.log(summonerName, selectedRegion, alternateRegion)
       getUserFromFirestore();
     }
 
@@ -602,8 +631,6 @@ const SummonerProfile = () => {
   const [isLoadingRank, setIsLoadingRank] = useState(true);
   useEffect(() => {
     if (summonerData !== null && matchesLoaded === true && matchData !== null && summonerData !== undefined && matchData !== undefined) {
-      console.log(summonerData)
-      console.log(matchData)
 
       // Select highest rank to display on profile
       if (summonerData.rankedData.length > 0) {
@@ -655,7 +682,6 @@ const SummonerProfile = () => {
 
       // Find player data
       if (matchData.length > 0) {
-        console.log(matchData[0].info.participants.find(player => player.puuid === summonerData.summonerData.puuid))
         setPlayerData(matchData[0].info.participants.find(player => player.puuid === summonerData.summonerData.puuid))
       }
       else {
@@ -715,8 +741,6 @@ const SummonerProfile = () => {
             }
           }
         }
-        console.log(summonerData.rankedData)
-        console.log(highestRankIndex)
         rank = `${summonerData.rankedData[highestRankIndex].tier} ${summonerData.rankedData[highestRankIndex].rank}`
       }
 
@@ -732,7 +756,6 @@ const SummonerProfile = () => {
       // Set favorited if in local storage
       let favsStr = localStorage.getItem('favorites')
       let favsArr = JSON.parse(favsStr)
-      console.log(favsArr)
       if (favsArr) {
         if (favsArr.some(obj =>
           obj.selectedRegion === summonerObj.selectedRegion &&
@@ -761,8 +784,6 @@ const SummonerProfile = () => {
       else if (favsArr === null) {
         localStorage.setItem('favorites', JSON.stringify([]))
       }
-
-      console.log(summonerObj)
 
       if (recentSearches === null) {
         const newArr = [summonerObj]
@@ -796,13 +817,8 @@ const SummonerProfile = () => {
 
 
   useEffect(() => {
-    // console.log(matchData)
-    // console.log(playerData)
 
     if (matchesLoaded && playerData !== undefined && matchData !== undefined && matchData !== null) {
-      console.log(matchData)
-      console.log(playerData)
-      console.log('loading done')
       setIsLoading(false);
     }
 
@@ -924,8 +940,6 @@ const SummonerProfile = () => {
               )}
 
               <Grid className='summonerProfileInformation'>
-                {console.log(summonerData)}
-                {console.log(rankIndex)}
                 {rankIndex !== null && !isLoadingRank ? (
                   <div>
                     <Tooltip
@@ -1178,8 +1192,6 @@ const SummonerProfile = () => {
             ) : playerData ? (  // Check if playerData is defined
               matchData.map((gameData, index) => {
                 let gameModeHref = "";
-                console.log(gameData);
-                console.log(playerData);
 
                 if ((gameData.info.gameMode === "CLASSIC" || gameData.info.gameMode === "SWIFTPLAY") && gameData.info.gameDuration > 300) {
                   gameModeHref = `/match/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;

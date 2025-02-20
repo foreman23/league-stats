@@ -53,7 +53,7 @@ function App() {
           <Route path='/arena/:matchId/:summonerName/:riotId' element={<ArenaDetails></ArenaDetails>}></Route>
           <Route path='/aram/:matchId/:summonerName/:riotId' element={<AramDetails></AramDetails>}></Route>
           <Route path='/altmatch/:matchId/:summonerName/:riotId' element={<GenericDetails></GenericDetails>}></Route>
-          <Route path='/nosummoner' element={<SummonerNotFound></SummonerNotFound>}></Route>
+          <Route path='/nosummoner/:summonerName/:riotId' element={<SummonerNotFound></SummonerNotFound>}></Route>
           <Route path='/loading' element={<Loading></Loading>}></Route>
           <Route path='/privacy' element={<PrivacyPolicy></PrivacyPolicy>}></Route>
           <Route path='/terms' element={<Terms></Terms>}></Route>

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Typography, Toolbar, AppBar, TextField, IconButton, Select, MenuItem, Autocomplete, Switch, FormControlLabel, FormGroup, Drawer, ListItem, List } from '@mui/material';
+import { Box, Button, Typography, Toolbar, AppBar, TextField, IconButton, Select, MenuItem, Autocomplete, Switch, FormControlLabel, FormGroup, Drawer, ListItem, List, Menu, styled } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import MenuIcon from '@mui/icons-material/Menu';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-
+import ListIcon from '@mui/icons-material/List';
 
 function Navbar(props) {
 
@@ -25,6 +25,15 @@ function Navbar(props) {
     const [recentSearches, setRecentSearches] = useState(null);
 
     const [theme, setTheme] = useState('light');
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const updateSummonerNameState = async (event) => {
         const inputValue = event.target.value;
@@ -297,13 +306,20 @@ function Navbar(props) {
                                             color: 'white',
                                             fontSize: '14px',
                                             fontWeight: 'bold',
-                                            width: '80px',
+                                            width: '140px',
                                             height: 'auto',
                                             border: 'none',
                                             filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
                                         }}
                                         value={dropdownDefaultValue}
                                         onChange={(event) => handleRegionChange(event)}
+                                        MenuProps={{
+                                            PaperProps: {
+                                                style: {
+                                                    maxHeight: '50vh'
+                                                }
+                                            }
+                                        }}
                                     >
                                         <MenuItem value={10}>NA</MenuItem>
                                         <MenuItem value={20}>EUW</MenuItem>
@@ -329,10 +345,10 @@ function Navbar(props) {
                                 {favorites !== null &&
                                     <List>
                                         {favorites.map((item, index) => (
-                                            <ListItem style={{ alignItems: 'center'}} key={index}>
+                                            <ListItem style={{ alignItems: 'center' }} key={index}>
                                                 <a onClick={() => toggleDrawer(false)} href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: '25px' }}>
                                                     <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '52px', marginRight: '10px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
-                                                    <span style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'  }}>{item.summonerName} #{item.riotId}</span>
+                                                    <span style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.summonerName} #{item.riotId}</span>
                                                 </a>
                                                 <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>
                                             </ListItem>
@@ -343,7 +359,7 @@ function Navbar(props) {
                         </List>
                     </Drawer>
                 </div>
-                
+
                 <span className='navBarSearchBar'>
                     <Select
                         sx={{
@@ -351,11 +367,19 @@ function Navbar(props) {
                             color: '#d9d9d9',
                             fontSize: '14px',
                             fontWeight: 'bold',
+                            width: '100px',
                             borderTopRightRadius: '0px',
                             borderBottomRightRadius: '0px',
                         }}
                         value={dropdownDefaultValue}
                         onChange={(event) => handleRegionChange(event)}
+                        MenuProps={{
+                            PaperProps: {
+                                style: {
+                                    maxHeight: '50vh'
+                                }
+                            }
+                        }}
                     >
                         <MenuItem value={10}>NA</MenuItem>
                         <MenuItem value={20}>EUW</MenuItem>
@@ -396,7 +420,7 @@ function Navbar(props) {
                         freeSolo
                         renderInput={(params) => (
                             <TextField
-                            sx={{ input: { color: '#e5e5e6' } }}
+                                sx={{ input: { color: '#e5e5e6' } }}
                                 style={{ backgroundColor: '#303030', borderRadius: '5px' }}
                                 {...params}
                                 onKeyDown={(event) => {
@@ -411,10 +435,46 @@ function Navbar(props) {
                     <IconButton style={{ marginTop: '2px' }} onClick={handleSearchSubmit} color="inherit">
                         <SearchIcon></SearchIcon>
                     </IconButton>
+                    <IconButton
+                        aria-controls={open ? 'basic-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}
+                    >
+                        <FavoriteIcon style={{ color: 'white' }}></FavoriteIcon>
+                    </IconButton>
+                    <Menu
+                        style={{ maxHeight: '70vh' }}
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                        }}
+                    >
+                        <Typography style={{ marginLeft: '20px', fontWeight: 'bold' }}>Favorites</Typography>
+                        {favorites !== null &&
+                            <List>
+                                {favorites.map((item, index) => (
+                                    <ListItem style={{ alignItems: 'center' }} key={index}>
+                                        <a onClick={() => toggleDrawer(false)} href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: '25px' }}>
+                                            <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '52px', marginRight: '10px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
+                                            <span style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.summonerName} #{item.riotId}</span>
+                                        </a>
+                                        <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        }
+                        {/* <MenuItem onClick={handleClose}>Profile</MenuItem>
+                        <MenuItem onClick={handleClose}>My account</MenuItem>
+                        <MenuItem onClick={handleClose}>Logout</MenuItem> */}
+                    </Menu>
                 </span>
 
                 {/* Theme selector */}
-                <div style={{ marginLeft: 'auto' }}>
+                <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
                     <FormGroup onClick={() => changeTheme()}>
                         <FormControlLabel control={<Switch />} label={theme === 'light' ? <DarkModeIcon style={{ marginTop: '3px' }}></DarkModeIcon> : <LightModeIcon style={{ marginTop: '3px' }}></LightModeIcon>} />
                     </FormGroup>
