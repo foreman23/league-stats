@@ -1,9 +1,17 @@
 import React from 'react';
+import { useState } from 'react';
 import { Grid, Typography, Box, Button, Tooltip } from '@mui/material';
 import { LineChart } from '@mui/x-charts';
 
 const LanePhaseSummaryCardMid = (props) => {
-    const { statsAt15, handleLaneCard, lastButtonPressedMid, midSummaryCardStatus, gameData, timelineData, dataDragonVersion, champsJSON, gameDuration } = props;
+
+    const [lastButtonPressedMid, setLastButtonPressedMid] = useState('laneSumMid1');
+
+    const handleLaneCard = (lane, btnName) => {
+        setLastButtonPressedMid(btnName)
+    }
+
+    const { statsAt15, midSummaryCardStatus, gameData, timelineData, dataDragonVersion, champsJSON, gameDuration } = props;
 
     const participants = gameData.info.participants;
 
@@ -45,7 +53,7 @@ const LanePhaseSummaryCardMid = (props) => {
 
     return (
         <div id='laningMidAnchor'>
-            <Grid className={midSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'} container>
+            <Grid className={'LanePhaseSummaryCardActive'} container>
                 <Grid className='LaningPhaseGridHeader' item xs={12} sm={12}>
                     <Grid className='LaneOutcomeTitle' item xs={12} sm={6}>
                         {statsAt15.laneResults.MIDDLE.resTag === 'draw' ? (
@@ -97,7 +105,7 @@ const LanePhaseSummaryCardMid = (props) => {
                 </Grid>
             </Grid>
 
-            <Grid className={midSummaryCardStatus && lastButtonPressedMid === 'laneSumMid1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+            <Grid className={lastButtonPressedMid === 'laneSumMid1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
                 <Grid xs={12} sm={6}>
                     {statsAt15.laneResults.MIDDLE.resTag !== 'draw' ? (
                         <p>
@@ -125,7 +133,7 @@ const LanePhaseSummaryCardMid = (props) => {
                 </Grid>
             </Grid>
 
-            <Grid className={midSummaryCardStatus && lastButtonPressedMid === 'laneSumMid2' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+            <Grid className={lastButtonPressedMid === 'laneSumMid2' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
                 <Grid xs={12} sm={6}>
                     <p style={{ marginBottom: '15px' }}>
                         Results of the deaths and objectives involving <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.MIDDLE.laneWinner?.riotIdGameName}/${statsAt15.laneResults.MIDDLE.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.MIDDLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.MIDDLE.laneWinner?.riotIdGameName}</a> ({statsAt15.laneResults.MIDDLE.laneWinner.kdaAlt}, {statsAt15.laneResults.MIDDLE.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.MIDDLE.laneLoser?.riotIdGameName}/${statsAt15.laneResults.MIDDLE.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.MIDDLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.MIDDLE.laneLoser?.riotIdGameName}</a> ({statsAt15.laneResults.MIDDLE.laneLoser.kdaAlt}, {statsAt15.laneResults.MIDDLE.laneLoser.cs} CS) during laning phase.
@@ -171,7 +179,7 @@ const LanePhaseSummaryCardMid = (props) => {
                 </Grid>
             </Grid>
 
-            <Grid className={midSummaryCardStatus && lastButtonPressedMid === 'laneSumMid3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+            <Grid className={lastButtonPressedMid === 'laneSumMid3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
                 <Grid xs={12}>
                     <p style={{ marginBottom: '15px' }}>
                         Graph of CS killed each minute by <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.MIDDLE.laneWinner?.riotIdGameName}/${statsAt15.laneResults.MIDDLE.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.MIDDLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.MIDDLE.laneWinner?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img> ({statsAt15.laneResults.MIDDLE.laneWinner.kdaAlt}, {statsAt15.laneResults.MIDDLE.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.MIDDLE.laneLoser?.riotIdGameName}/${statsAt15.laneResults.MIDDLE.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.MIDDLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.MIDDLE.laneLoser?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img> ({statsAt15.laneResults.MIDDLE.laneLoser.kdaAlt}, {statsAt15.laneResults.MIDDLE.laneLoser.cs} CS) during laning phase.

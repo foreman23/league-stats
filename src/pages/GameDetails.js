@@ -55,7 +55,6 @@ function GameDetails() {
   const [champsJSON, setChampsJSON] = useState(null);
 
   // Card states (lane summaries)
-  const [topSummaryCardStatus, setTopSummaryCardStatus] = useState(true);
   const [jgSummaryCardStatus, setJgSummaryCardStatus] = useState(true);
   const [midSummaryCardStatus, setMidSummaryCardStatus] = useState(true);
   const [botSummaryCardStatus, setBotSummaryCardStatus] = useState(true);
@@ -118,58 +117,6 @@ function GameDetails() {
         block: 'start',
       })
     }
-  }
-
-  // Handle lane summary card active status
-  const [lastButtonPressedTop, setLastButtonPressedTop] = useState('laneSumTop1');
-  const [lastButtonPressedJg, setLastButtonPressedJg] = useState('laneSumJg1');
-  const [lastButtonPressedMid, setLastButtonPressedMid] = useState('laneSumMid1');
-  const [lastButtonPressedBot, setLastButtonPressedBot] = useState('laneSumBot1');
-  const handleLaneCard = (lane, btnName) => {
-    if (lane === 'top') {
-      setLastButtonPressedTop(btnName)
-      if (topSummaryCardStatus === false) {
-        setTopSummaryCardStatus(true);
-      }
-      // else if (btnName === lastButtonPressedTop) {
-      //   setTopSummaryCardStatus(false);
-      //   setLastButtonPressedTop(null);
-      // }
-    };
-
-    if (lane === 'mid') {
-      setLastButtonPressedMid(btnName)
-      if (midSummaryCardStatus === false) {
-        setMidSummaryCardStatus(true);
-      }
-      // else if (btnName === lastButtonPressedMid) {
-      //   setMidSummaryCardStatus(false);
-      //   setLastButtonPressedMid(null);
-      // }
-    };
-
-    if (lane === 'jg') {
-      setLastButtonPressedJg(btnName)
-      if (jgSummaryCardStatus === false) {
-        setJgSummaryCardStatus(true);
-      }
-      // else if (btnName === lastButtonPressedJg) {
-      //   setJgSummaryCardStatus(false);
-      //   setLastButtonPressedJg(null);
-      // }
-    };
-
-    if (lane === 'bot') {
-      setLastButtonPressedBot(btnName)
-      if (botSummaryCardStatus === false) {
-        setBotSummaryCardStatus(true);
-      }
-      // else if (btnName === lastButtonPressedBot) {
-      //   setBotSummaryCardStatus(false);
-      //   setLastButtonPressedBot(null);
-      // }
-    };
-
   }
 
   // Calculate individual player scores
@@ -1119,10 +1066,10 @@ function GameDetails() {
                   )
                   }
                 </div>
-                <LanePhaseSummaryCardTop gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedTop={lastButtonPressedTop} topSummaryCardStatus={topSummaryCardStatus}></LanePhaseSummaryCardTop>
-                <LanePhaseSummaryCardJg gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedJg={lastButtonPressedJg} jgSummaryCardStatus={jgSummaryCardStatus}></LanePhaseSummaryCardJg>
-                <LanePhaseSummaryCardMid gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedMid={lastButtonPressedMid} midSummaryCardStatus={midSummaryCardStatus}></LanePhaseSummaryCardMid>
-                <LanePhaseSummaryCardBot gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15} handleLaneCard={handleLaneCard} lastButtonPressedBot={lastButtonPressedBot} botSummaryCardStatus={botSummaryCardStatus}></LanePhaseSummaryCardBot>
+                <LanePhaseSummaryCardTop gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15}></LanePhaseSummaryCardTop>
+                <LanePhaseSummaryCardJg gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15}></LanePhaseSummaryCardJg>
+                <LanePhaseSummaryCardMid gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15}></LanePhaseSummaryCardMid>
+                <LanePhaseSummaryCardBot gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15}></LanePhaseSummaryCardBot>
               </Grid>
             </Grid>
 

@@ -1,9 +1,18 @@
 import React from 'react';
+import { useState } from 'react';
 import { Grid, Typography, Box, Button, Tooltip } from '@mui/material';
 import { LineChart } from '@mui/x-charts';
 
 const LanePhaseSummaryCardJg = (props) => {
-    const { statsAt15, handleLaneCard, lastButtonPressedJg, jgSummaryCardStatus, gameData, timelineData, dataDragonVersion, champsJSON, gameDuration } = props;
+
+    const [lastButtonPressedJg, setLastButtonPressedJg] = useState('laneSumJg1');
+
+    const handleLaneCard = (lane, btnName) => {
+        setLastButtonPressedJg(btnName)
+
+    }
+
+    const { statsAt15, jgSummaryCardStatus, gameData, timelineData, dataDragonVersion, champsJSON, gameDuration } = props;
 
     const participants = gameData.info.participants;
 
@@ -46,7 +55,7 @@ const LanePhaseSummaryCardJg = (props) => {
     return (
         <div id='laningJgAnchor'>
             <Grid
-                className={jgSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'}
+                className={'LanePhaseSummaryCardActive'}
                 container
                 style={{ marginBottom: '20px', marginTop: '250px' }}
             >
@@ -101,7 +110,7 @@ const LanePhaseSummaryCardJg = (props) => {
                 </Grid>
             </Grid>
 
-            <Grid className={jgSummaryCardStatus && lastButtonPressedJg === 'laneSumJg1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+            <Grid className={lastButtonPressedJg === 'laneSumJg1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
                 <Grid xs={12} sm={6}>
                     {statsAt15.laneResults.JUNGLE.resTag !== 'draw' ? (
                         <p>
@@ -129,7 +138,7 @@ const LanePhaseSummaryCardJg = (props) => {
                 </Grid>
             </Grid>
 
-            <Grid className={jgSummaryCardStatus && lastButtonPressedJg === 'laneSumJg2' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+            <Grid className={lastButtonPressedJg === 'laneSumJg2' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
                 <Grid xs={12} sm={6}>
                     <p style={{ marginBottom: '15px' }}>
                         Results of the deaths and objectives involving <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName}</a> ({statsAt15.laneResults.JUNGLE.laneWinner.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName}</a> ({statsAt15.laneResults.JUNGLE.laneLoser.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneLoser.cs} CS) during laning phase.
@@ -180,7 +189,7 @@ const LanePhaseSummaryCardJg = (props) => {
                 </Grid>
             </Grid>
 
-            <Grid className={jgSummaryCardStatus && lastButtonPressedJg === 'laneSumJg3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+            <Grid className={lastButtonPressedJg === 'laneSumJg3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
                 <Grid xs={12}>
                     <p style={{ marginBottom: '15px' }}>
                         Graph of CS killed each minute by <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img> ({statsAt15.laneResults.JUNGLE.laneWinner.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img> ({statsAt15.laneResults.JUNGLE.laneLoser.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneLoser.cs} CS) during laning phase.

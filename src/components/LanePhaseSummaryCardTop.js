@@ -1,10 +1,17 @@
 import React from 'react';
+import { useState } from 'react';
 import { Grid, Typography, Box, Button, Tooltip } from '@mui/material';
 import { LineChart } from '@mui/x-charts';
-import { ResponsiveChartContainer } from '@mui/x-charts/ResponsiveChartContainer';
 
 const LanePhaseSummaryCardTop = (props) => {
-  const { statsAt15, handleLaneCard, lastButtonPressedTop, topSummaryCardStatus, gameData, timelineData, dataDragonVersion, champsJSON, gameDuration } = props;
+
+  const [lastButtonPressedTop, setLastButtonPressedTop] = useState('laneSumTop1');
+
+  const handleLaneCard = (lane, btnName) => {
+    setLastButtonPressedTop(btnName)
+  }
+
+  const { statsAt15, gameData, timelineData, champsJSON } = props;
 
   const participants = gameData.info.participants;
 
@@ -47,7 +54,7 @@ const LanePhaseSummaryCardTop = (props) => {
   return (
     <div id='laningTopAnchor'>
       <Grid
-        className={topSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'}
+        className={'LanePhaseSummaryCardActive'}
         container
         style={{ marginBottom: '20px', marginTop: '250px' }}
       >
@@ -101,7 +108,7 @@ const LanePhaseSummaryCardTop = (props) => {
         </Grid>
       </Grid>
 
-      <Grid className={topSummaryCardStatus && lastButtonPressedTop === 'laneSumTop1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'}>
+      <Grid className={lastButtonPressedTop === 'laneSumTop1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'}>
         <Grid xs={12} sm={6}>
           {statsAt15.laneResults.TOP.resTag !== 'draw' ? (
             <p>
@@ -116,7 +123,7 @@ const LanePhaseSummaryCardTop = (props) => {
         <Grid style={{ display: 'inline-flex', justifyContent: 'center' }} xs={12} sm={6}>
           <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} #${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline}`}>
             <div style={{ display: 'inline-block' }}>
-             <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`}><img style={{ border: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img></a>
+              <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`}><img style={{ border: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img></a>
             </div>
           </Tooltip>
           <img className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
@@ -129,7 +136,7 @@ const LanePhaseSummaryCardTop = (props) => {
         </Grid>
       </Grid>
 
-      <Grid className={topSummaryCardStatus && lastButtonPressedTop === 'laneSumTop2' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+      <Grid className={lastButtonPressedTop === 'laneSumTop2' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
         <Grid xs={12} sm={6}>
           <p style={{ marginBottom: '15px' }}>
             Results of the deaths and objectives involving <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) during laning phase.
@@ -178,7 +185,7 @@ const LanePhaseSummaryCardTop = (props) => {
         </Grid>
       </Grid>
 
-      <Grid className={topSummaryCardStatus && lastButtonPressedTop === 'laneSumTop3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+      <Grid className={lastButtonPressedTop === 'laneSumTop3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
         <Grid xs={12}>
           <p style={{ marginBottom: '15px' }}>
             Graph of CS killed each minute by <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img>({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) during laning phase.
@@ -203,7 +210,6 @@ const LanePhaseSummaryCardTop = (props) => {
           </div>
         </Grid>
       </Grid>
-
 
     </div>
   )

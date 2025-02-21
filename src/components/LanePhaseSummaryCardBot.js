@@ -1,9 +1,17 @@
 import React from 'react';
+import { useState } from 'react';
 import { Grid, Typography, Box, Button, Tooltip } from '@mui/material';
 import { LineChart } from '@mui/x-charts';
 
 const LanePhaseSummaryCardBot = (props) => {
-    const { statsAt15, handleLaneCard, lastButtonPressedBot, botSummaryCardStatus, gameData, timelineData, dataDragonVersion, champsJSON, gameDuration } = props;
+
+    const [lastButtonPressedBot, setLastButtonPressedBot] = useState('laneSumBot1');
+
+    const handleLaneCard = (lane, btnName) => {
+        setLastButtonPressedBot(btnName)
+    }
+
+    const { statsAt15, botSummaryCardStatus, gameData, timelineData, dataDragonVersion, champsJSON, gameDuration } = props;
 
     const participants = gameData.info.participants;
 
@@ -55,7 +63,7 @@ const LanePhaseSummaryCardBot = (props) => {
 
     return (
         <div id='laningBotAnchor'>
-            <Grid className={botSummaryCardStatus ? 'LanePhaseSummaryCardActive' : 'LanePhaseSummaryCardInActive'} container>
+            <Grid className={'LanePhaseSummaryCardActive'} container>
                 <Grid className='LaningPhaseGridHeader' item xs={12} sm={12}>
                     <Grid className='LaneOutcomeTitle' item xs={12} sm={6}>
                         {statsAt15.laneResults.BOTTOM.resTag === 'draw' ? (
@@ -107,7 +115,7 @@ const LanePhaseSummaryCardBot = (props) => {
                 </Grid>
             </Grid>
 
-            <Grid className={botSummaryCardStatus && lastButtonPressedBot === 'laneSumBot1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+            <Grid className={lastButtonPressedBot === 'laneSumBot1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
                 <Grid xs={12} sm={6}>
                     <p>
                         <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.BOTTOM.laneWinner[0]?.riotIdGameName}/${statsAt15.laneResults.BOTTOM.laneWinner[0]?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>
@@ -141,7 +149,7 @@ const LanePhaseSummaryCardBot = (props) => {
                 </Grid>
             </Grid>
 
-            <Grid className={botSummaryCardStatus && lastButtonPressedBot === 'laneSumBot2' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+            <Grid className={lastButtonPressedBot === 'laneSumBot2' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
                 <Grid xs={12} sm={6}>
                     <p style={{ marginBottom: '15px' }}>
                         Results of the deaths and objectives involving <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.BOTTOM.laneWinner[0]?.riotIdGameName}/${statsAt15.laneResults.BOTTOM.laneWinner[0]?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.BOTTOM.laneWinner[0].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneWinner[0]?.riotIdGameName}</a> ({statsAt15.laneResults.BOTTOM.laneWinner[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[0].cs} CS), <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.BOTTOM.laneWinner[1]?.riotIdGameName}/${statsAt15.laneResults.BOTTOM.laneWinner[1]?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.BOTTOM.laneWinner[1].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneWinner[1]?.riotIdGameName}</a> ({statsAt15.laneResults.BOTTOM.laneWinner[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[1].cs} CS), <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.BOTTOM.laneLoser[0]?.riotIdGameName}/${statsAt15.laneResults.BOTTOM.laneLoser[0]?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.BOTTOM.laneLoser[0].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser[0]?.riotIdGameName}</a> ({statsAt15.laneResults.BOTTOM.laneLoser[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[0].cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.BOTTOM.laneLoser[1]?.riotIdGameName}/${statsAt15.laneResults.BOTTOM.laneLoser[1]?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser[1]?.riotIdGameName}</a> ({statsAt15.laneResults.BOTTOM.laneLoser[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[1].cs} CS) during laning phase.
@@ -198,7 +206,7 @@ const LanePhaseSummaryCardBot = (props) => {
                 </Grid>
             </Grid>
 
-            <Grid className={botSummaryCardStatus && lastButtonPressedBot === 'laneSumBot3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
+            <Grid className={lastButtonPressedBot === 'laneSumBot3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
                 <Grid xs={12}>
                     <p style={{ marginBottom: '15px' }}>
                         Graph of CS killed each minute by <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.BOTTOM.laneWinner[0]?.riotIdGameName}/${statsAt15.laneResults.BOTTOM.laneWinner[0]?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.BOTTOM.laneWinner[0].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneWinner[0]?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName1}.png`}></img>({statsAt15.laneResults.BOTTOM.laneWinner[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[0].cs} CS), <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.BOTTOM.laneWinner[1]?.riotIdGameName}/${statsAt15.laneResults.BOTTOM.laneWinner[1]?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.BOTTOM.laneWinner[1].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneWinner[1]?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName2}.png`}></img> ({statsAt15.laneResults.BOTTOM.laneWinner[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneWinner[1].cs} CS), <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.BOTTOM.laneLoser[0]?.riotIdGameName}/${statsAt15.laneResults.BOTTOM.laneLoser[0]?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.BOTTOM.laneLoser[0].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser[0]?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName1}.png`}></img> ({statsAt15.laneResults.BOTTOM.laneLoser[0].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[0].cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.BOTTOM.laneLoser[1]?.riotIdGameName}/${statsAt15.laneResults.BOTTOM.laneLoser[1]?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.BOTTOM.laneLoser[1]?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName2}.png`}></img>({statsAt15.laneResults.BOTTOM.laneLoser[1].kdaAlt}, {statsAt15.laneResults.BOTTOM.laneLoser[1].cs} CS) during laning phase.
