@@ -10,6 +10,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import CloseIcon from '@mui/icons-material/Close';
 import { sum } from 'firebase/firestore';
 import DisplayGame from '../components/DisplayGame';
+import { ClassNames } from '@emotion/react';
 
 function SummonerSearch() {
 
@@ -52,7 +53,7 @@ function SummonerSearch() {
     }
   }
 
-  const [dropdownDefaultValue, setDropdownDefaultValue] = useState(null);
+  const [dropdownDefaultValue, setDropdownDefaultValue] = useState('');
   const handleRegionChange = async (event) => {
     const value = event.target.value;
     const regionValues = {
@@ -347,7 +348,7 @@ function SummonerSearch() {
   }, [])
 
   return (
-    <body className='summonerSearchBody'>
+    <div className='summonerSearchBody'>
 
       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
@@ -519,7 +520,7 @@ function SummonerSearch() {
           </div> */}
 
           <div className='searchFavoritesContainer' style={{ height: `auto` }}>
-            <Grid style={{ display: 'flex', margin: 'auto', justifyContent: 'center' }}>
+            <Grid container style={{ display: 'flex', margin: 'auto', justifyContent: 'center' }}>
               <span onClick={() => handleChangeTab('favorites')} style={{ marginRight: '50px' }}>
                 <Typography style={{ textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', color: currentTab === 'favorites' ? 'black' : '#999999' }}>Favorites</Typography>
                 <Divider color={currentTab === 'favorites' ? 'black' : '#999999'} style={{ width: '100%', margin: 'auto', marginTop: '10px', marginBottom: '10px' }}></Divider>
@@ -537,53 +538,53 @@ function SummonerSearch() {
                 <Grid style={{ justifyContent: 'center', alignItems: 'center', marginLeft: '5px' }} container>
                   {Array.from({ length: favorites.length <= 9 ? 9 : favorites.length }, (_, index) => (
                     favorites.length > index ? (
-                      <Grid key={`favorite_${index}`} item xs={12} sm={4}>
+                      <Grid key={`favorite_${index}`} xs={12} sm={4}>
                         <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(favorites[index])} style={{ display: 'flex', marginRight: 'auto', marginLeft: '0px', marginTop: '10px', fontSize: '18px', position: 'absolute', zIndex: 1 }}></FavoriteIcon>
                         <a className='recentSearchItem' href={`/profile/${favorites[index].selectedRegion}/${favorites[index].summonerName}/${favorites[index].riotId}`}>
                           <ListItem style={{ justifyContent: 'center' }} key={index}>
                             <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${favorites[index].icon}.png`}></img>
-                            <Grid style={{ marginLeft: '60px', textAlign: 'center' }}>
-                              <Grid>
+                            <div style={{ marginLeft: '60px', textAlign: 'center' }}>
+                              <div>
                                 <b style={{ fontSize: '14px' }}>{favorites[index].summonerName}</b>
-                              </Grid>
-                              <Grid>
+                              </div>
+                              <div>
                                 <b style={{ fontSize: '14px' }}>#{favorites[index].riotId}</b>
-                              </Grid>
-                              <Grid>
+                              </div>
+                              <div>
                                 <span style={{ fontSize: '14px' }}>Level: {favorites[index].level}</span>
-                              </Grid>
-                              <Grid>
+                              </div>
+                              <div>
                                 {favorites[index].rank !== null ? (
                                   <span style={{ fontSize: '14px' }}>{favorites[index].rank.charAt(0) + favorites[index].rank.split(' ')[0].substring(1).toLowerCase() + ' ' + favorites[index].rank.split(' ')[1]}</span>
                                 ) : (
                                   <span style={{ fontSize: '14px' }}>Unranked</span>
                                 )}
-                              </Grid>
-                            </Grid>
+                              </div>
+                            </div>
                           </ListItem>
                         </a>
                       </Grid>
                     ) : (
-                      <Grid item xs={12} sm={4} key={index}>
-                        <a className='recentSearchItem'>
+                      <Grid key={index} xs={12} sm={4}>
+                        <div className='recentSearchItem'>
                           <ListItem style={{ justifyContent: 'center' }}>
                             <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`/images/novalue.webp`}></img>
-                            <Grid style={{ marginLeft: '60px', textAlign: 'center' }}>
-                              <Grid>
+                            <div style={{ marginLeft: '60px', textAlign: 'center' }}>
+                              <div>
                                 <b style={{ fontSize: '14px' }}>Summoner</b>
-                              </Grid>
-                              <Grid>
+                              </div>
+                              <div>
                                 <b style={{ fontSize: '14px' }}>#RiotID</b>
-                              </Grid>
-                              <Grid>
+                              </div>
+                              <div>
                                 <span style={{ fontSize: '14px' }}>Level:</span>
-                              </Grid>
-                              <Grid>
+                              </div>
+                              <div>
                                 <span style={{ fontSize: '14px' }}>Rank</span>
-                              </Grid>
-                            </Grid>
+                              </div>
+                            </div>
                           </ListItem>
-                        </a>
+                        </div>
                       </Grid>
                     )
                   ))}
@@ -602,53 +603,53 @@ function SummonerSearch() {
                 <Grid style={{ justifyContent: 'center', alignItems: 'center', marginLeft: '5px' }} container>
                   {Array.from({ length: recentArr.length <= 9 ? 9 : recentArr.length }, (_, index) => (
                     recentArr.length > index ? (
-                      <Grid item xs={12} sm={4}>
+                      <Grid key={`recent_${index}`} xs={12} sm={4}>
                         <CloseIcon className='deleteRecentButton' onClick={() => handleRemoveRecent(recentArr[index])} style={{ display: 'flex', marginRight: 'auto', marginLeft: '0px', marginTop: '10px', fontSize: '14px', position: 'absolute', zIndex: 1 }}></CloseIcon>
                         <a className='recentSearchItem' href={`/profile/${recentArr[index].selectedRegion}/${recentArr[index].summonerName}/${recentArr[index].riotId}`}>
                           <ListItem style={{ justifyContent: 'center' }} key={index}>
                             <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${recentArr[index].icon}.png`}></img>
-                            <Grid style={{ marginLeft: '60px', textAlign: 'center' }}>
-                              <Grid>
+                            <div style={{ marginLeft: '60px', textAlign: 'center' }}>
+                              <div>
                                 <b style={{ fontSize: '14px' }}>{recentArr[index].summonerName}</b>
-                              </Grid>
-                              <Grid>
+                              </div>
+                              <div>
                                 <b style={{ fontSize: '14px' }}>#{recentArr[index].riotId}</b>
-                              </Grid>
-                              <Grid>
+                              </div>
+                              <div>
                                 <span style={{ fontSize: '14px' }}>Level: {recentArr[index].level}</span>
-                              </Grid>
-                              <Grid>
+                              </div>
+                              <div>
                                 {recentArr[index].rank !== null ? (
                                   <span style={{ fontSize: '14px' }}>{recentArr[index].rank.charAt(0) + recentArr[index].rank.split(' ')[0].substring(1).toLowerCase() + ' ' + recentArr[index].rank.split(' ')[1]}</span>
                                 ) : (
                                   <span style={{ fontSize: '14px' }}>Unranked</span>
                                 )}
-                              </Grid>
-                            </Grid>
+                              </div>
+                            </div>
                           </ListItem>
                         </a>
                       </Grid>
                     ) : (
-                      <Grid item xs={12} sm={4} key={index}>
-                        <a className='recentSearchItem'>
+                      <Grid key={`recent_${index}`} xs={12} sm={4}>
+                        <div className='recentSearchItem'>
                           <ListItem style={{ justifyContent: 'center' }}>
                             <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`/images/novalue.webp`}></img>
-                            <Grid style={{ marginLeft: '60px', textAlign: 'center' }}>
-                              <Grid>
+                            <div style={{ marginLeft: '60px', textAlign: 'center' }}>
+                              <div>
                                 <b style={{ fontSize: '14px' }}>Summoner</b>
-                              </Grid>
-                              <Grid>
+                              </div>
+                              <div>
                                 <b style={{ fontSize: '14px' }}>#RiotID</b>
-                              </Grid>
-                              <Grid>
+                              </div>
+                              <div>
                                 <span style={{ fontSize: '14px' }}>Level:</span>
-                              </Grid>
-                              <Grid>
+                              </div>
+                              <div>
                                 <span style={{ fontSize: '14px' }}>Rank</span>
-                              </Grid>
-                            </Grid>
+                              </div>
+                            </div>
                           </ListItem>
-                        </a>
+                        </div>
                       </Grid>
                     )
                   ))}
@@ -659,8 +660,6 @@ function SummonerSearch() {
             )}
           </div>
 
-
-
           <Grid xs={12} className='dataDragonVersionContainer'>
             <Typography>{dataDragonVersion}</Typography>
           </Grid>
@@ -668,7 +667,7 @@ function SummonerSearch() {
         </Grid>
       </Box>
 
-    </body>
+    </div>
   );
 }
 

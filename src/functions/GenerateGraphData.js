@@ -20,7 +20,6 @@ const generateGraphData = async (gameData, timelineData) => {
 
     // Calculate total gold each minute
     const frames = timelineData.info.frames;
-    console.log(frames)
     let leadChanges = 0;
     let leadingTeam = null;
     let blueLeadingTime = 0;

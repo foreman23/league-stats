@@ -92,7 +92,6 @@ const AramDetails = () => {
         if (style) {
             const keystone = style.slots[0].runes.find(rune => rune.id === keystoneId);
             if (keystone) {
-                // console.log(keystone.icon)
                 return `https://ddragon.canisback.com/img/${keystone.icon}`;
             } else {
                 console.error(`Keystone with ID ${keystoneId} not found in style ${styleId}`);
@@ -162,8 +161,6 @@ const AramDetails = () => {
             return { ...player, score: score + (index * 0.001) }; // Adjust for uniqueness
         });
 
-        console.log(normalizedPlayers)
-
         const minScore = Math.min(...normalizedPlayers.map(p => p.score));
         const maxScore = Math.max(...normalizedPlayers.map(p => p.score));
 
@@ -171,8 +168,6 @@ const AramDetails = () => {
             ...player,
             opScore: ((player.score - minScore) / (maxScore - minScore)) * 10
         }));
-
-        console.log(playersWithOpScores)
 
         // Sort players by score
         let sortedPlayers = playersWithOpScores.sort((a, b) => b.opScore - a.opScore);
@@ -215,7 +210,6 @@ const AramDetails = () => {
     // Get item JSON data from riot
     const getItemsJSON = async () => {
         try {
-            console.log(dataDragonVersion)
             const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/item.json`);
             const data = await response.json();
             setItems(data);
@@ -230,7 +224,6 @@ const AramDetails = () => {
             const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
             const data = await response.json();
             setChampsJSON(data);
-            console.log(data)
         } catch (error) {
             console.error('Error fetching champion JSON data:', error);
         }
@@ -266,7 +259,6 @@ const AramDetails = () => {
     const getDataDragonVersion = async () => {
         axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
             .then(function (response) {
-                // console.log(response.data[0])
                 const currentVersion = response.data[0];
                 setDataDragonVersion(currentVersion);
             })
@@ -278,7 +270,6 @@ const AramDetails = () => {
     const fetchGameData = async () => {
         let riotApiCallCount = 0;
         let region = matchId.split('_')[0].toLowerCase()
-        console.log(region)
         const docRef = doc(firestore, `${region}-matches`, matchId)
         console.log('Reading from firestore (checking match exists)')
         const docSnap = await getDoc(docRef);
@@ -362,7 +353,6 @@ const AramDetails = () => {
 
             // Find duration and date of game start
             setGameStartDate(new Date(gameData.info.gameCreation));
-            // console.log(gameStartDate)
             let gameDuration = gameData.info.gameDuration;
             if (gameDuration >= 3600) {
                 gameDuration = `${(gameDuration / 3600).toFixed(1)} hrs`
@@ -486,7 +476,6 @@ const AramDetails = () => {
     const [isLoading, setIsLoading] = useState(true);
     // Render page once data is loaded
     useEffect(() => {
-        console.log(playersWithScores)
         if (playersWithScores.length > 0) {
             setIsLoading(false);
         }

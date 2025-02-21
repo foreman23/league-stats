@@ -38,7 +38,6 @@ function Navbar(props) {
     const updateSummonerNameState = async (event) => {
         const inputValue = event.target.value;
         setSummonerName(inputValue.toLowerCase());
-        console.log(inputValue)
     }
 
     const [openDrawer, setOpenDrawer] = useState(false);
@@ -73,7 +72,6 @@ function Navbar(props) {
                 }
                 arr.push(temp)
             }
-            console.log(arr)
             setRecentArr(arr)
         }
     }
@@ -99,7 +97,6 @@ function Navbar(props) {
             else if (summonerName.includes("#")) {
                 summonerNamePayload = summonerName.split("#")[0];
                 riotTagPayload = summonerName.split("#")[1];
-                console.log(summonerNamePayload, riotTagPayload)
                 if (riotTagPayload === undefined || riotTagPayload === null) {
                 }
             }
@@ -169,7 +166,7 @@ function Navbar(props) {
         }
     }
 
-    const [dropdownDefaultValue, setDropdownDefaultValue] = useState(null);
+    const [dropdownDefaultValue, setDropdownDefaultValue] = useState('');
     const handleRegionChange = async (event) => {
         const value = event.target.value;
         const regionValues = {
@@ -194,7 +191,6 @@ function Navbar(props) {
         localStorage.setItem('searchRegion', regionValues[value])
         setSelectedRegion(regionValues[value]);
         setDropdownDefaultValue(value);
-        //console.log(value)
     }
 
     const changeTheme = () => {

@@ -2,7 +2,6 @@ const getBuildInfo = async (gameData, timelineData, champsJSON, dataDragonVersio
 
     let participants = [...gameData.info.participants];
     participants.sort((a, b) => a.participantId - b.participantId)
-    console.log(participants)
     const frames = timelineData.info.frames;
 
     // Init timeline array
@@ -22,8 +21,6 @@ const getBuildInfo = async (gameData, timelineData, champsJSON, dataDragonVersio
         skillTimeline.push([]);
         champInfo.push(data);
     }
-
-    console.log(itemTimeline);
 
     // Process frames to group items and skills
     frames.forEach((frame) => {
@@ -68,9 +65,6 @@ const getBuildInfo = async (gameData, timelineData, champsJSON, dataDragonVersio
             }
         });
     });
-
-
-    console.log(itemTimeline)
 
     let payload = {
         itemTimeline: itemTimeline,

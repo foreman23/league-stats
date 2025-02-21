@@ -812,7 +812,7 @@ function GameDetails() {
               </div>
               <Box className='MatchDetailsGraphBox' minWidth={'100%'} maxWidth={'100%'} style={{ display: 'flex', backgroundColor: 'white', padding: '20px', boxShadow: '0px 6px 24px 0px rgba(0, 0, 0, 0.25)' }} border={'1px solid #BBBBBB'} borderRadius={'10px'}>
                 {/* Red Team */}
-                <Grid order={playerData.teamId === 100 ? 2 : 1} xs={12} sm={6}>
+                <Grid item order={playerData.teamId === 100 ? 2 : 1} xs={12} sm={6}>
                   <Typography style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>Red Team</Typography>
 
                   <div style={{ display: 'flex' }}>
@@ -873,7 +873,7 @@ function GameDetails() {
                   </Grid>
                 </Grid>
                 {/* Blue Team */}
-                <Grid order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
+                <Grid item order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
                   <Typography className='matchDetailsTeamNameText' style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>Blue Team</Typography>
                   <div style={{ display: 'flex' }}>
                     <Typography fontWeight={'bold'} fontSize={'18px'} marginRight={'50px'} color={'#568CFF'}>{gameData.info.teams[0].objectives.champion.kills} kills</Typography>
@@ -937,7 +937,7 @@ function GameDetails() {
                 <Box className='BansBox'>
                   <Typography className='hideDesktop' style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px' }}>Bans</Typography>
                   {/* Blue team */}
-                  <Grid className='BansTeamContainer' order={{ xs: playerData.teamId === 100 ? 1 : 3 }} style={{ display: 'flex', justifyContent: playerData.teamId === 100 ? 'flex-end' : 'flex-start' }} xs={12} sm={6}>
+                  <Grid item className='BansTeamContainer' order={{ xs: playerData.teamId === 100 ? 1 : 3 }} style={{ display: 'flex', justifyContent: playerData.teamId === 100 ? 'flex-end' : 'flex-start' }} xs={12} sm={6}>
                     {playerData.teamId === 100 &&
                       <div className='hideMobile' style={{ alignSelf: 'center', marginRight: '25px' }}>
                         <Typography style={{ fontWeight: 'bold', fontSize: '20px' }}>Bans</Typography>
@@ -946,15 +946,16 @@ function GameDetails() {
                     {gameData.info.teams[0].bans.map((item, index) => {
                       if (item.championId === -1) {
                         return (
-                          <img 
-                          className='BannedChampImg'
-                          style={{
-                            borderRadius: '100%',
-                            marginRight: '1.5px',
-                            marginLeft: '1.5px',
-                            border: '3px #568CFF solid',
-                            filter: 'brightness(1.2) saturate(0.6) hue-rotate(180deg)'
-                          }}
+                          <img
+                            key={`ban_${index}_1`}
+                            className='BannedChampImg'
+                            style={{
+                              borderRadius: '100%',
+                              marginRight: '1.5px',
+                              marginLeft: '1.5px',
+                              border: '3px #568CFF solid',
+                              filter: 'brightness(1.2) saturate(0.6) hue-rotate(180deg)'
+                            }}
                             src={`/images/novalue.webp`}>
                           </img>
                         )
@@ -963,6 +964,7 @@ function GameDetails() {
                         return (
                           item.championId !== -1 &&
                           <Tooltip disableInteractive arrow placement='top'
+                            key={`ban_${index}_1`}
                             title={<>{Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).name} banned by blue</>}>
                             <div style={{ border: '3px #568CFF solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
                               <img
@@ -983,7 +985,7 @@ function GameDetails() {
                     <Box marginBottom={'3px'} marginLeft={'20px'} marginRight={'20px'} width={'10px'} height={'10px'} borderRadius={'100%'} backgroundColor={'#C3C3C3'}></Box>
                   </Grid>
                   {/* Red team */}
-                  <Grid className='BansTeamContainer' order={{ xs: playerData.teamId === 200 ? 1 : 3 }} style={{ display: 'flex', justifyContent: playerData.teamId === 200 ? 'flex-end' : 'flex-start' }} xs={12} sm={6}>
+                  <Grid item className='BansTeamContainer' order={{ xs: playerData.teamId === 200 ? 1 : 3 }} style={{ display: 'flex', justifyContent: playerData.teamId === 200 ? 'flex-end' : 'flex-start' }} xs={12} sm={6}>
                     {playerData.teamId === 200 &&
                       <div className='hideMobile' style={{ alignSelf: 'center', marginRight: '25px' }}>
                         <Typography style={{ fontWeight: 'bold', fontSize: '20px' }}>Bans</Typography>
@@ -993,6 +995,7 @@ function GameDetails() {
                       if (item.championId === -1) {
                         return (
                           <img
+                            key={`ban_${index}_2`}
                             className='BannedChampImg'
                             style={{
                               borderRadius: '100%',
@@ -1008,6 +1011,7 @@ function GameDetails() {
                         return (
                           item.championId !== -1 &&
                           <Tooltip disableInteractive arrow placement='top'
+                            key={`ban_${index}_2`}
                             title={<>{Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).name} banned by red</>}>
                             <div style={{ border: '3px #FF3F3F solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
                               <img
@@ -1056,7 +1060,7 @@ function GameDetails() {
               <CircularProgress />
             </Box>
           ) : (
-            <Grid className='LaningGridContainer' xs={12} container >
+            <Grid className='LaningGridContainer' container >
               <Grid className='LaningGridSubContainer'>
                 <div style={{ marginLeft: '15px', marginBottom: '20px', }}>
                   <Typography fontSize={20} fontWeight={600}>Laning Phase Results</Typography>
@@ -1098,10 +1102,10 @@ function GameDetails() {
                 </div>
                 <div className='GraphSectionDivContainer'>
                   {/* Red Team */}
-                  <Grid style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2} xs={12} sm={6}>
+                  <Grid item style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2} xs={12} sm={6}>
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                       {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
-                        <div className='matchDetailsObjectiveContainer'>
+                        <div key={`red_dealt_${index}`} className='matchDetailsObjectiveContainer'>
                           <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageDealtToChampions / 1000)}k</Typography>
                           <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
                             <Box className='graphDamageBar' height={`${(item.totalDamageDealtToChampions / highestDamageDealt) * 200}px`} backgroundColor={redColors[index]}></Box>
@@ -1116,10 +1120,10 @@ function GameDetails() {
                     </div>
                   </Grid>
                   {/* Blue Team */}
-                  <Grid style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
+                  <Grid item style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                       {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
-                        <div className='matchDetailsObjectiveContainer'>
+                        <div key={`blue_dealt_${index}`} className='matchDetailsObjectiveContainer'>
                           <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageDealtToChampions / 1000)}k</Typography>
                           <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
                             <Box className='graphDamageBar' height={`${(item.totalDamageDealtToChampions / highestDamageDealt) * 200}px`} backgroundColor={blueColors[index]}></Box>
@@ -1151,7 +1155,7 @@ function GameDetails() {
                   <Grid style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2}>
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                       {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
-                        <div className='matchDetailsObjectiveContainer'>
+                        <div key={`red_taken_${index}`} className='matchDetailsObjectiveContainer'>
                           <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageTaken / 1000)}k</Typography>
                           <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
                             <Box className='graphDamageBar' height={`${(item.totalDamageTaken / highestDamageTaken) * 200}px`} backgroundColor={redColors[index]}></Box>
@@ -1169,7 +1173,7 @@ function GameDetails() {
                   <Grid style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2}>
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                       {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
-                        <div className='matchDetailsObjectiveContainer'>
+                        <div key={`blue_taken_${index}`} className='matchDetailsObjectiveContainer'>
                           <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageTaken / 1000)}k</Typography>
                           <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
                             <Box className='graphDamageBar' height={`${(item.totalDamageTaken / highestDamageTaken) * 200}px`} backgroundColor={blueColors[index]}></Box>

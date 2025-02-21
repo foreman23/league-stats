@@ -1333,7 +1333,7 @@ const Battles = (props) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', margin: '0' }}>
             <Grid container>
-                <Grid xs={12} sm={6}>
+                <Grid item xs={12} sm={6}>
                     <div style={{ position: 'relative', width: '140px' }}>
                         <Typography fontSize={20} fontWeight={600}>Battles</Typography>
                         <Typography style={{ position: 'absolute', top: '0px', right: '0px', left: 'auto' }}><span style={{ backgroundColor: 'purple', color: 'white', padding: '10px', borderRadius: '20px', fontSize: '14px', fontWeight: 'bold', filter: 'drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.25))' }}>BETA*</span></Typography>
@@ -1341,7 +1341,7 @@ const Battles = (props) => {
                     <Typography style={{ fontSize: '14px', marginTop: '12px', marginBottom: '7px', color: 'rgb(133, 133, 133)' }}>*Descriptions provided below may not be 100% accurate</Typography>
                     <Typography style={{ fontSize: '20px', color: 'rgb(75, 75, 75)' }} marginBottom={'20px'}>Fights that occurred during the match</Typography>
                 </Grid>
-                <Grid className='BattlesCollapseBtnContainer' xs={12} sm={6}>
+                <Grid item className='BattlesCollapseBtnContainer' xs={12} sm={6}>
                     {/* <Typography style={{ marginTop: '4px' }} fontSize={16} fontWeight={600}>Fights Won:</Typography>
                     <Typography marginBottom={'20px'}><span style={{ color: '#3374FF', marginRight: '10px', fontWeight: 'bold' }}>{`Blue: ${blueTotalFightsWon} `}</span><span style={{ color: '#FF3F3F', fontWeight: 'bold' }}>{`Red: ${redTotalFightsWon}`}</span></Typography> */}
                 </Grid>

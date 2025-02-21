@@ -35,7 +35,7 @@ const Builds = (props) => {
                 <div className='BuildsChampPicsContainer'>
                     <Grid order={{ xs: playerData.teamId === 100 ? 1 : 3 }} style={{}}>
                         {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
-                            <div className='pointer' onClick={() => handleBuildClick(item)} style={{ border: '4px solid #568CFF', borderRadius: '5px', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', margin: '5px', transform: item.championId === currBuildChamp.championId ? 'scale(115%)' : 'scale(100%)' }}>
+                            <div key={`champ_${index}_1`} className='pointer' onClick={() => handleBuildClick(item)} style={{ border: '4px solid #568CFF', borderRadius: '5px', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', margin: '5px', transform: item.championId === currBuildChamp.championId ? 'scale(115%)' : 'scale(100%)' }}>
                                 <Typography style={{
                                     fontSize: '12px',
                                     position: 'absolute',
@@ -65,7 +65,7 @@ const Builds = (props) => {
                     </Grid>
                     <Grid order={{ xs: playerData.teamId === 200 ? 1 : 3 }}>
                         {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
-                            <div className='pointer' onClick={() => handleBuildClick(item)} style={{ border: '4px solid #FF3F3F', borderRadius: '5px', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', margin: '5px', transform: item.championId === currBuildChamp.championId ? 'scale(115%)' : 'scale(100%)' }}>
+                            <div key={`champ_${index}_2`} className='pointer' onClick={() => handleBuildClick(item)} style={{ border: '4px solid #FF3F3F', borderRadius: '5px', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', margin: '5px', transform: item.championId === currBuildChamp.championId ? 'scale(115%)' : 'scale(100%)' }}>
                                 <Typography style={{
                                     fontSize: '12px',
                                     position: 'absolute',
@@ -159,12 +159,12 @@ const Builds = (props) => {
                     <Typography fontSize={'20px'} color={'#4B4B4B'} marginTop={'10px'}>Item Build</Typography>
                     <div style={{ display: 'flex', justifyContent: 'center', padding: '10px', paddingLeft: '3px', paddingTop: '10px', paddingBottom: '10px', borderRadius: '10px', marginTop: '0px', flexWrap: 'wrap' }}>
                         {buildData.itemTimeline[currBuildChamp.participantId - 1].itemHistory.map((itemGroup, itemGroupIndex) => (
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div key={`itemgroup_${itemGroupIndex}`} style={{ display: 'flex', alignItems: 'center' }}>
 
                                 <div style={{ display: 'flex', filter: 'drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.25))', boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px', margin: '15px', marginRight: '0px', marginLeft: '0px', backgroundColor: '#E6E6E6', padding: '10px', paddingBottom: '5px', borderRadius: '5px', flexDirection: 'column' }}>
                                     <div style={{ display: 'flex' }}>
                                         {itemGroup.map((item, itemIndex) => (
-                                            <Tooltip placement='top' arrow title={<><u>{items.data[item.itemId]?.name}</u><br></br>{items.data[item.itemId]?.plaintext || items.data[item.itemId]?.tags[0]}</>}>
+                                            <Tooltip key={`item_${itemIndex}`} placement='top' arrow title={<><u>{items.data[item.itemId]?.name}</u><br></br>{items.data[item.itemId]?.plaintext || items.data[item.itemId]?.tags[0]}</>}>
                                                 <img key={itemIndex} className='BuildSectionItemImg' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${item.itemId}.png`}></img>
                                             </Tooltip>
                                         ))}

@@ -295,27 +295,27 @@ const DisplayGame = (props) => {
                 </Grid>
 
                 {/* Main Container */}
-                <Grid style={{ display: 'flex', marginTop: '8px' }}>
+                <Grid container style={{ display: 'flex', marginTop: '8px', paddingBottom: '25px' }}>
                     {/* Summoner profile for game */}
-                    <Grid className='displayGamePlayerProfileContainer' order={{ xs: 1 }} xs={5} sm={5} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
+                    <Grid item className='displayGamePlayerProfileContainer' order={{ xs: 1 }} xs={5} sm={5} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
                         <Grid display={'flex'} flexDirection={'column'} alignSelf={'center'} marginRight={'10%'}>
                             <Typography className='displayGameRiotName'>{participant.riotIdGameName}</Typography>
                             <Typography className='displayGameSubheader' style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '3px', color: '#7E7E7E' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).name}</Typography>
                             <Typography className='displayGameSubheader' style={{ fontSize: '14px', color: '#7E7E7E' }}>{`${participant.kills}/${participant.deaths}/${participant.assists} (${participant.totalMinionsKilled + participant.neutralMinionsKilled} CS)`}</Typography>
                             <Grid style={{ marginTop: '10px' }}>
                                 {participants.filter(player => player.teamId === participant.teamId && player.summonerId !== participant.summonerId).map((player, index) => (
-                                    <Tooltip arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
-                                        <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                                    <Tooltip key={`player_${index}_team1`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
+                                        <span href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                             <img className='displayGameTeamChamps' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
                                             <Box className='displayGameTeamChampsBox' style={{ backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54' }}></Box>
-                                        </a>
+                                        </span>
                                     </Tooltip>
                                 ))}
                             </Grid>
                         </Grid>
                         <Grid display={'flex'} flexDirection={'column'} position={'relative'}>
                             <Tooltip arrow placement='top' title={`${participant.riotIdGameName} #${participant.riotIdTagline}`}>
-                                <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${participant.riotIdGameName}/${participant.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                                <span href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${participant.riotIdGameName}/${participant.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                     <Typography className='displayGameChampLevel' style={{
                                         fontSize: '14px',
                                         position: 'absolute',
@@ -339,7 +339,7 @@ const DisplayGame = (props) => {
                                     <img className='displayGameMainChampImg' style={{ border: participant.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid' }} alt='champion icon'
                                         src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).id}.png`}>
                                     </img>
-                                </a>
+                                </span>
                             </Tooltip>
                             <Grid className='displayGameSummonerSpells'>
                                 <Tooltip
@@ -360,25 +360,25 @@ const DisplayGame = (props) => {
                         </Grid>
                     </Grid>
                     {/* OP Score Bars */}
-                    <Grid order={{ xs: 2 }} className='displayGameGoldBarContainer' xs={2} sm={2}>
+                    <Grid item order={{ xs: 2 }} xs={2} sm={2} className='displayGameGoldBarContainer'>
                         <div style={{ display: 'flex' }}>
                             <div style={{ marginRight: '-50px' }}>
                                 <Tooltip className='displayGameGoldBar' title={`Overall: ${playerScore.score.toFixed(1)}`}>
-                                    <LinearProgress className='displayGameOpScoreBar' variant='determinate' value={(playerScore.score * 10).toFixed(2)} sx={{ backgroundColor: participant.teamId === 100 ? '#BED3FF' : '#FFC3CC', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#568CFF' : '#FF3A54' } }}></LinearProgress>
+                                    <LinearProgress className='displayGameOpScoreBar' variant='determinate' value={parseInt((playerScore.score * 10).toFixed(2))} sx={{ backgroundColor: participant.teamId === 100 ? '#BED3FF' : '#FFC3CC', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#568CFF' : '#FF3A54' } }}></LinearProgress>
                                 </Tooltip>
                             </div>
                             <div style={{ marginLeft: '0px' }}>
                                 <Tooltip className='displayGameGoldBar' title={`Overall: ${oppScore.score.toFixed(1)}`}>
-                                    <LinearProgress className='displayGameOpScoreBar' variant='determinate' value={(oppScore.score * 10).toFixed(2)} sx={{ backgroundColor: participant.teamId === 100 ? '#FFC3CC' : '#BED3FF', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#FF3A54' : '#568CFF' } }}></LinearProgress>
+                                    <LinearProgress className='displayGameOpScoreBar' variant='determinate' value={parseInt((oppScore.score * 10).toFixed(2))} sx={{ backgroundColor: participant.teamId === 100 ? '#FFC3CC' : '#BED3FF', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#FF3A54' : '#568CFF' } }}></LinearProgress>
                                 </Tooltip>
                             </div>
                         </div>
                     </Grid>
                     {/* Opposing summoner profile */}
-                    <Grid className='displayGameOpposingProfileContainer' order={{ xs: 3 }} xs={5} sm={5} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
+                    <Grid item className='displayGameOpposingProfileContainer' order={{ xs: 3 }} xs={5} sm={5} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
                         <Grid display={'flex'} flexDirection={'column'} position={'relative'}>
                             <Tooltip arrow placement='top' title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
-                                <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                                <span href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                     <Typography className='displayGameChampLevel' style={{
                                         fontSize: '14px',
                                         position: 'absolute',
@@ -402,7 +402,7 @@ const DisplayGame = (props) => {
                                     <img className='displayGameMainChampImg' style={{ border: participant.teamId === 100 ? '3px #FF3A54 solid' : '3px #568CFF solid' }} alt='champion icon'
                                         src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`}>
                                     </img>
-                                </a>
+                                </span>
                             </Tooltip>
                             <Grid className='displayGameSummonerSpells'>
                                 <Tooltip
@@ -427,11 +427,11 @@ const DisplayGame = (props) => {
                             <Typography className='displayGameSubheader' style={{ color: '#7E7E7E' }}>{`${opposingLaner.kills}/${opposingLaner.deaths}/${opposingLaner.assists} (${opposingLaner.totalMinionsKilled + opposingLaner.neutralMinionsKilled} CS)`}</Typography>
                             <Grid style={{ marginTop: '10px' }}>
                                 {participants.filter(player => player.teamId !== participant.teamId && player.summonerId !== opposingLaner.summonerId).map((player, index) => (
-                                    <Tooltip arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
-                                        <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                                    <Tooltip key={`player_${index}_team2`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
+                                        <span href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                             <img className='displayGameTeamChamps' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
                                             <Box className='displayGameTeamChampsBox' style={{ backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54' }}></Box>
-                                        </a>
+                                        </span>
                                     </Tooltip>
                                 ))}
                             </Grid>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Grid, Tooltip } from '@mui/material'
+import { Typography, Grid } from '@mui/material'
 import { LineChart } from '@mui/x-charts'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
@@ -94,7 +94,7 @@ const TeamGoldDifGraph = (props) => {
                     }
                 </div>
             }
-            <Grid style={{ display: 'flex', flexDirection: props.hideTitle ? 'row' : 'column' }} xs={12}>
+            <Grid item style={{ display: 'flex', flexDirection: props.hideTitle ? 'row' : 'column' }} xs={12}>
                 {props.hideTitle ? (
                     <div></div>
                 ) : (

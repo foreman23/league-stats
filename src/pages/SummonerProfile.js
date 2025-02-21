@@ -631,6 +631,7 @@ const SummonerProfile = () => {
   const [isLoadingRank, setIsLoadingRank] = useState(true);
   useEffect(() => {
     if (summonerData !== null && matchesLoaded === true && matchData !== null && summonerData !== undefined && matchData !== undefined) {
+      setFavorited(false)
 
       // Select highest rank to display on profile
       if (summonerData.rankedData.length > 0) {

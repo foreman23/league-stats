@@ -4,8 +4,6 @@ import { Typography, Box, Grid, Tooltip, Divider } from '@mui/material';
 const Standout = (props) => {
     const { gameData, champsJSON, dataDragonVersion } = props;
 
-    console.log(gameData)
-
     const [activeIndex, setActiveIndex] = useState(0);
 
     // Find standout performances
@@ -39,10 +37,7 @@ const Standout = (props) => {
     ];
 
     const activePlayer = performances[activeIndex];
-    console.log(performances)
     const { name: championName } = getChampionData(activePlayer.player?.championId);
-
-    // console.log(activePlayer)
 
     // Set description string
     let descStr = '';
@@ -60,19 +55,16 @@ const Standout = (props) => {
             case 'INT':
                 descStr += `struggled throughout the match, ending ${activePlayer.player.kills}/${activePlayer.player.deaths}/${activePlayer.player.assists}. `;
                 // Excessive deaths
-                console.log(Math.ceil(gameData.info.gameDuration / 60) * 0.3)
                 if (activePlayer.player.deaths > Math.ceil(gameData.info.gameDuration / 60) * 0.3) {
                     descStr += `Their frequent deaths made it difficult for their team to recover momentum. `;
                 }
                 // Low gold
                 const goldThresholdInt = Math.ceil(((gameData.info.gameDuration / 60) * 500) * 0.7); // 500 gold per minute
-                console.log('gold threshold (int)', goldThresholdInt)
                 if ((activePlayer.player.goldEarned < goldThresholdInt) && activePlayer.player.teamPosition !== "UTILITY") {
                     descStr += `They only earned ${activePlayer.player.goldEarned.toLocaleString()} gold, significantly below the expected amount. `;
                 }
                 // Low damage
                 const damageThresholdInt = Math.ceil(((gameData.info.gameDuration / 60) * 900) * 0.5); // Average 900 damage per minute 
-                console.log('dmg threshold (int)', damageThresholdInt)
                 if ((activePlayer.player.totalDamageDealtToChampions < damageThresholdInt) && activePlayer.player.teamPosition !== "UTILITY") {
                     descStr += `Their contribution to damage was minimal, dealing just ${activePlayer.player.totalDamageDealtToChampions.toLocaleString()} damage. `;
                 }
@@ -81,21 +73,18 @@ const Standout = (props) => {
                 // Add additional performance highlights
                 const goldEarned = activePlayer.player.goldEarned;
                 const goldThreshold = Math.ceil((gameData.info.gameDuration / 60) * 500); // 500 gold per minute
-                console.log(goldThreshold)
                 if (goldEarned > goldThreshold) {
                     descStr += `They amassed an impressive ${goldEarned.toLocaleString()} gold. `;
                 }
 
                 const totalDamage = activePlayer.player.totalDamageDealtToChampions;
                 const damageThreshold = Math.ceil((gameData.info.gameDuration / 60) * 900); // Average 900 damage per minute
-                console.log(damageThreshold)
                 if (totalDamage > damageThreshold) {
                     descStr += `With ${totalDamage.toLocaleString()} damage dealt, they were pivotal in helping the ${activePlayer.player.teamId === 100 ? 'blue' : 'red'} team dominate teamfights. `;
                 }
 
                 const kills = activePlayer.player.kills;
                 const killThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.5); // 0.5 kills per minute
-                console.log(killThreshold)
                 if (kills > killThreshold) {
                     descStr += `Their ${kills} kills ${activePlayer.player.win ? 'helped to secure a decisive victory' : 'kept their team in contention'} for the ${activePlayer.player.teamId === 100 ? 'blue' : 'red'} team. `;
                 }
@@ -152,7 +141,7 @@ const Standout = (props) => {
             className='GameDetailsBox StandoutBox'
             alignItems={'center'}
         >
-            <Grid xs={12} sm={6} className='StandoutGridHalf1'>
+            <Grid item xs={12} sm={6} className='StandoutGridHalf1'>
                 <div className='StandoutImagesContainer'>
                     <div className='StandoutHeaderContainer'>
                         <Typography style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '6px' }}>Standout Performances</Typography>
@@ -213,7 +202,7 @@ const Standout = (props) => {
                     </div>
                 </div>
             </Grid>
-            <Grid xs={12} sm={6} style={{ display: 'flex' }}>
+            <Grid item xs={12} sm={6} style={{ display: 'flex' }}>
                 <div className='StandoutTextContainer'>
                     <Typography className='hideMobile hideTablet' style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px' }}>{activePlayer.title}</Typography>
                     <p style={{ color: '#4B4B4B', fontSize: '16px', maxWidth: '425px' }}>
