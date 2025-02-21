@@ -31,6 +31,7 @@ import getBuildInfo from '../functions/GetBuildInfo';
 import Standout from '../components/Standout';
 import DetailsTable from '../components/DetailsTable';
 import Builds from '../components/Builds';
+import ScrollTopButton from '../components/ScrollTopButton';
 
 function GameDetails() {
 
@@ -823,7 +824,7 @@ function GameDetails() {
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.horde.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[1].objectives.horde.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 6) * gameData.info.teams[1].objectives.horde.kills}px`} backgroundColor={'#FF3F3F'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Grubs</Typography>
                     </Grid>
 
@@ -838,7 +839,7 @@ function GameDetails() {
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.dragon.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 4) * gameData.info.teams[1].objectives.dragon.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[1].objectives.dragon.kills}px`} backgroundColor={'#FF3F3F'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Dragons</Typography>
                     </Grid>
 
@@ -859,13 +860,13 @@ function GameDetails() {
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.tower.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 10) * gameData.info.teams[1].objectives.tower.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 11) * gameData.info.teams[1].objectives.tower.kills}px`} backgroundColor={'#FF3F3F'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Towers</Typography>
                     </Grid>
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.inhibitor.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 3) * gameData.info.teams[1].objectives.inhibitor.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[1].objectives.inhibitor.kills}px`} backgroundColor={'#FF3F3F'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Inhibs.</Typography>
                     </Grid>
 
@@ -882,7 +883,7 @@ function GameDetails() {
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.horde.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[0].objectives.horde.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 6) * gameData.info.teams[0].objectives.horde.kills}px`} backgroundColor={'#568CFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Grubs</Typography>
                     </Grid>
 
@@ -897,7 +898,7 @@ function GameDetails() {
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.dragon.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 4) * gameData.info.teams[0].objectives.dragon.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[0].objectives.dragon.kills}px`} backgroundColor={'#568CFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Dragons</Typography>
                     </Grid>
 
@@ -912,18 +913,18 @@ function GameDetails() {
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.baron.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 1.5) * gameData.info.teams[0].objectives.baron.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 2) * gameData.info.teams[0].objectives.baron.kills}px`} backgroundColor={'#568CFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Barons</Typography>
                     </Grid>
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.tower.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 10) * gameData.info.teams[0].objectives.tower.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 11) * gameData.info.teams[0].objectives.tower.kills}px`} backgroundColor={'#568CFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Towers</Typography>
                     </Grid>
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.inhibitor.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 3) * gameData.info.teams[0].objectives.inhibitor.kills}px`} backgroundColor={'#568CFF'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[0].objectives.inhibitor.kills}px`} backgroundColor={'#568CFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Inhibs.</Typography>
                     </Grid>
                   </Grid>
@@ -1243,6 +1244,8 @@ function GameDetails() {
             </Builds>
           )}
         </div>
+
+        <ScrollTopButton></ScrollTopButton>
 
       </div>
     )

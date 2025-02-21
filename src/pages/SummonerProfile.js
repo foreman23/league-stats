@@ -949,7 +949,7 @@ const SummonerProfile = () => {
                       disableInteractive
                       title={<>
                         <div>
-                          <span style={{ textDecoration: 'underline', fontWeight: 'bold' }}>{summonerData.rankedData[rankIndex].queueType}<br></br></span>
+                          <span style={{ textDecoration: 'underline', fontWeight: 'bold' }}>{summonerData.rankedData[rankIndex].queueType === 'RANKED_SOLO_5x5' ? 'Ranked Solo' : 'Ranked Flex'}<br></br></span>
                           {(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex].rank} - {summonerData.rankedData[rankIndex].leaguePoints} lp
                         </div>
                       </>}

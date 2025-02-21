@@ -18,6 +18,7 @@ import getBuildInfo from '../functions/GetBuildInfo';
 import ForwardIcon from '@mui/icons-material/Forward';
 import DetailsTable from '../components/DetailsTable';
 import Builds from '../components/Builds';
+import ScrollTopButton from '../components/ScrollTopButton';
 
 const AramDetails = () => {
 
@@ -856,6 +857,8 @@ const AramDetails = () => {
                     </Builds>
                 )}
             </div>
+
+            <ScrollTopButton></ScrollTopButton>
 
         </div>
     )

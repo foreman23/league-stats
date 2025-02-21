@@ -358,7 +358,9 @@ function SummonerSearch() {
 
           <Grid xs={12} display={'flex'} margin={'auto'}>
             <div className='searchMainImageContainer'>
-              <img className='searchMainImage' alt='site logo' src='/images/sorakaLogo.webp'></img>
+              <a href='/'>
+                <img className='searchMainImage' alt='site logo' src='/images/sorakaLogo.webp'></img>
+              </a>
               <Typography style={{
                 textAlign: 'center', margin: 'auto', fontSize: '32px', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
               }}>RiftReport.gg</Typography>

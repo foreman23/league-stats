@@ -474,11 +474,11 @@ function Navbar(props) {
                 </span>
 
                 {/* Theme selector */}
-                <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
-                    <FormGroup onClick={() => changeTheme()}>
-                        <FormControlLabel control={<Switch />} label={theme === 'light' ? <DarkModeIcon style={{ marginTop: '3px' }}></DarkModeIcon> : <LightModeIcon style={{ marginTop: '3px' }}></LightModeIcon>} />
+                {/* <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
+                    <FormGroup>
+                        <FormControlLabel control={<Switch onClick={() => changeTheme()} />} label={theme === 'light' ? <DarkModeIcon style={{ marginTop: '3px' }}></DarkModeIcon> : <LightModeIcon style={{ marginTop: '3px' }}></LightModeIcon>} />
                     </FormGroup>
-                </div>
+                </div> */}
 
             </Toolbar>
         </AppBar>

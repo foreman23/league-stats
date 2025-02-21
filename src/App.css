@@ -1240,6 +1240,43 @@ li {
     overflow-y: scroll;
 }
 
+.scrollTop {
+    background-color: #c9c9c9;
+    border-radius: 100%;
+    position: fixed;
+    left: auto;
+    top: auto;
+    bottom: 30px;
+    right: 22%;
+    color: #ffffff;
+    cursor: pointer;
+    opacity: 75%;
+}
+
+.scrollTopBtn {
+    font-size: 42px !important;
+}
+
+.fadein {
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+.fadeout {
+    opacity: 1;
+    animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0 }
+    100% { opacity: 0.75 }
+}
+
+@keyframes fadeOut {
+    0% { opacity: 0.75 }
+    100% { opacity: 0 }
+}
+
 @media only screen and (max-width: 1360px) {
     .displayGameRiotName {
         font-size: 14px !important;
@@ -1252,6 +1289,18 @@ li {
 
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
+
+    .scrollTop {
+        background-color: #b4b4b4;
+        left: auto;
+        top: auto;
+        bottom: 15px;
+        right: 5%;
+    }
+    
+    .scrollTopBtn {
+        font-size: 48px !important;
+    }
 
     .dataDragonVersionContainer {
         margin-bottom: 50px !important;
@@ -1869,6 +1918,18 @@ li {
 /* Small tablets */
 @media only screen and (min-width: 768px) and (max-width: 820px) {
 
+    .scrollTop {
+        background-color: #b4b4b4;
+        left: auto;
+        top: auto;
+        bottom: 30px;
+        right: 8%;
+    }
+    
+    .scrollTopBtn {
+        font-size: 48px !important;
+    }
+
     .matchDetailsObjectiveBar {
         width: 32px;
     }
@@ -2027,6 +2088,18 @@ li {
 
 /* Tablets */
 @media only screen and (min-width: 821px) and (max-width: 1200px) {
+
+    .scrollTop {
+        background-color: #b4b4b4;
+        left: auto;
+        top: auto;
+        bottom: 50px;
+        right: 8%;
+    }
+    
+    .scrollTopBtn {
+        font-size: 76px !important;
+    }
 
     .displayGamesMainContainer {
         width: 65% !important;
@@ -2287,6 +2360,11 @@ li {
 }
 
 @media only screen and (min-width: 1201px) and (max-width: 1560px) {
+
+    .scrollTop {
+        right: 14%;
+    }
+
     .StandoutContainer {
         width: 90% !important;
         justify-content: center !important;
@@ -2347,6 +2425,10 @@ li {
 
 /* Very large screens (4k) */
 @media only screen and (min-width: 3250px) {
+
+    .scrollTop {
+        right: 33%;
+    }
 
     .privacyPolicy {
         width: 30%;
@@ -2410,6 +2492,11 @@ li {
 }
 
 @media only screen and (min-width: 2600px) and (max-width: 3250px) {
+
+    .scrollTop {
+        right: 30%;
+    }
+
     .displayGamesMainContainer {
         width: 26% !important;
     }
@@ -2424,6 +2511,10 @@ li {
 }
 
 @media only screen and (min-width: 2175px) and (max-width: 2599px) {
+
+    .scrollTop {
+        right: 26%;
+    }
 
     .privacyPolicy {
         width: 35%;

@@ -18,6 +18,7 @@ import getBuildInfo from '../functions/GetBuildInfo';
 import ForwardIcon from '@mui/icons-material/Forward';
 import Builds from '../components/Builds';
 import DetailsTable from '../components/DetailsTable';
+import ScrollTopButton from '../components/ScrollTopButton';
 
 const GenericDetails = () => {
 
@@ -917,6 +918,8 @@ const GenericDetails = () => {
                     </Builds>
                 )}
             </div>
+
+            <ScrollTopButton></ScrollTopButton>
 
         </div>
     )
