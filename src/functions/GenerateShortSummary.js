@@ -3,8 +3,6 @@ import { Tooltip } from '@mui/material';
 const generateShortSummary = async (gameData, playerData, timelineData, stats15, dataDragonVersion, champsJSON) => {
     let lanes = stats15.laneResults;
 
-    console.log(lanes)
-
     let roles = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM'];
 
     // Calculate win/loss strings

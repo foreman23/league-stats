@@ -173,7 +173,6 @@ const determineWinnersBot = (statsAt15Arr) => {
         bubbleCount: bubbleCount,
         bubbleColor: bubbleColor
     }
-    console.log(laneResultsObj)
     return laneResultsObj
 }
 
@@ -181,7 +180,6 @@ const determineWinnersBot = (statsAt15Arr) => {
 const determineWinners = (statsAt15Arr) => {
     const roles = ['TOP', 'JUNGLE', 'MIDDLE']
     const laneResults = {};
-    // console.log(statsAt15Arr)
 
     // Calculate bot lane
     let botLaneResultsObj = determineWinnersBot(statsAt15Arr);
@@ -280,18 +278,15 @@ const determineWinners = (statsAt15Arr) => {
             bubbleColor: bubbleColor
         }
         laneResults[roles[i]] = laneResultsObj;
-        console.log(laneResults)
     }
     laneResults["BOTTOM"] = botLaneResultsObj;
     return laneResults;
 }
 
 const getStatsAt15 = async (matchRegion, matchId, gameData, timelineData) => {
-    console.log(matchRegion, matchId, gameData, timelineData)
     const kdaAndallLaningKills = findKillsAt15(timelineData);
     const kda = kdaAndallLaningKills[0];
     const allLaningKills = kdaAndallLaningKills[1];
-    console.log(kdaAndallLaningKills)
     const statsAt15Arr = pair15Data(timelineData, kda, gameData)
     const laneResults = determineWinners(statsAt15Arr);
     const payloadObj = {

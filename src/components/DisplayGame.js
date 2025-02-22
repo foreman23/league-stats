@@ -17,7 +17,6 @@ const DisplayGame = (props) => {
 
     const [champsJSON, setChampsJSON] = useState(null);
 
-    console.log(props.gameData)
 
     // Find participant
     const participants = props.gameData.info.participants;
@@ -28,7 +27,6 @@ const DisplayGame = (props) => {
 
     // Find summoner spells
     const summonerSpellsObj = Object.values(summonerSpells.data);
-    console.log(participants)
     const summonerSpell1 = summonerSpellsObj.find(spell => spell.key === participant.summoner1Id.toString());
     const summonerSpell2 = summonerSpellsObj.find(spell => spell.key === participant.summoner2Id.toString());
 
@@ -115,10 +113,8 @@ const DisplayGame = (props) => {
     const findQueueTitle = async () => {
 
         let queue = await findQueueInfo();
-        console.log(props.gameData.info)
 
         let queueTitle = queue?.description || null;
-        console.log(queueTitle)
         if (queueTitle === '5v5 Ranked Solo games') {
             setQueueTitle('Ranked Solo');
         }
@@ -168,7 +164,6 @@ const DisplayGame = (props) => {
             const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
             const data = await response.json();
             setChampsJSON(data);
-            console.log(data)
         } catch (error) {
             console.error('Error fetching champion JSON data:', error);
         }

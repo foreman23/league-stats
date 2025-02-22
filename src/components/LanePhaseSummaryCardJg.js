@@ -56,26 +56,24 @@ const LanePhaseSummaryCardJg = (props) => {
         <div id='laningJgAnchor'>
             <Grid
                 className={'LanePhaseSummaryCardActive'}
-                container
                 style={{ marginBottom: '20px', marginTop: '250px' }}
             >
-                <Grid className='LaningPhaseGridHeader' item xs={12} sm={12}>
-                    <Grid className='LaneOutcomeTitle' item xs={12} sm={6}>
+                <div className='LaningPhaseGridHeader'>
+                    <div className='LaneOutcomeTitle'>
                         {statsAt15.laneResults.JUNGLE.resTag === 'draw' ? (
                             <Typography fontWeight={'bold'}>{`Jungle was a draw`}</Typography>
                         ) : (
                             <Typography fontWeight={'bold'}>{`${statsAt15.laneResults.JUNGLE.teamWonLane === 100 ? 'Blue' : 'Red'} ${statsAt15.laneResults.JUNGLE.resTag} jungle`}</Typography>
                         )}
-                    </Grid>
-                    <Grid item className='LaneBubbleContainer' xs={12} sm={6}>
+                    </div>
+                    <div className='LaneBubbleContainer' xs={12} sm={6}>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.JUNGLE.bubbleCount > 0 ? statsAt15.laneResults.JUNGLE.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.JUNGLE.bubbleCount > 1 ? statsAt15.laneResults.JUNGLE.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.JUNGLE.bubbleCount > 2 ? statsAt15.laneResults.JUNGLE.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.JUNGLE.bubbleCount > 3 ? statsAt15.laneResults.JUNGLE.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.JUNGLE.bubbleCount > 4 ? statsAt15.laneResults.JUNGLE.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
-                    </Grid>
-                    <Grid item xs={12} sm={6} style={{ flexDirection: 'row', display: 'inline-flex' }}>
-
+                    </div>
+                    <div className='LaneButtonsContainer' style={{ display: 'flex' }}>
                         <Button
                             className={lastButtonPressedJg === 'laneSumJg1' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'}
                             onClick={() => handleLaneCard('jg', 'laneSumJg1')}
@@ -106,8 +104,8 @@ const LanePhaseSummaryCardJg = (props) => {
                             CS Graph
                         </Button>
 
-                    </Grid>
-                </Grid>
+                    </div>
+                </div>
             </Grid>
 
             <Grid className={lastButtonPressedJg === 'laneSumJg1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>

@@ -168,14 +168,11 @@ function GameDetails() {
       setHighestDamageTaken(highestDamageTaken)
       setPlayersWithScore(playersWithScores)
 
-      console.log(timelineData)
       const fetch15Stats = async () => {
         if (timelineData && champsJSON) {
           const graphData = await generateGraphData(gameData, timelineData);
           const stats15 = await getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData);
           const buildData = await getBuildInfo(gameData, timelineData, champsJSON, dataDragonVersion);
-          console.log(stats15)
-          console.log(buildData)
           setGraphData(graphData);
           const shortSummaryRes = await generateShortSummary(gameData, playerData, timelineData, stats15, dataDragonVersion, champsJSON)
           setShortSummary(shortSummaryRes)
@@ -255,7 +252,6 @@ function GameDetails() {
       const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
       const data = await response.json();
       setChampsJSON(data);
-      console.log(data)
     } catch (error) {
       console.error('Error fetching champion JSON data:', error);
     }
@@ -291,7 +287,6 @@ function GameDetails() {
   const getDataDragonVersion = async () => {
     axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
       .then(function (response) {
-        // console.log(response.data[0])
         const currentVersion = response.data[0];
         setDataDragonVersion(currentVersion);
       })
@@ -303,7 +298,6 @@ function GameDetails() {
   const fetchGameData = async () => {
     let riotApiCallCount = 0;
     let region = matchId.split('_')[0].toLowerCase()
-    console.log(region)
     const docRef = doc(firestore, `${region}-matches`, matchId)
     console.log('Reading from firestore (checking match exists)')
     const docSnap = await getDoc(docRef);
@@ -504,8 +498,6 @@ function GameDetails() {
     if (gameData && alternateRegion) {
       const getMatchTimeline = async (alternateRegion, matchId) => {
         console.log('CALLING RIOT API');
-        console.log(gameData)
-        console.log(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`)
         const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
         const timelineData = timelineResponse.data;
         setTimelineData(timelineData);

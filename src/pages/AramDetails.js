@@ -701,10 +701,10 @@ const AramDetails = () => {
                             </div>
                             <div className='GraphSectionDivContainer'>
                                 {/* Red Team */}
-                                <Grid style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2} xs={12} sm={6}>
+                                <Grid item style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2} xs={12} sm={6}>
                                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                                         {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
-                                            <div className='matchDetailsObjectiveContainer'>
+                                            <div key={`dealt_red_${index}`} className='matchDetailsObjectiveContainer'>
                                                 <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageDealtToChampions / 1000)}k</Typography>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
                                                     <Box className='graphDamageBar' height={`${(item.totalDamageDealtToChampions / highestDamageDealt) * 200}px`} backgroundColor={redColors[index]}></Box>
@@ -719,10 +719,10 @@ const AramDetails = () => {
                                     </div>
                                 </Grid>
                                 {/* Blue Team */}
-                                <Grid style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
+                                <Grid item style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
                                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                                         {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
-                                            <div className='matchDetailsObjectiveContainer'>
+                                            <div key={`dealt_blue_${index}`} className='matchDetailsObjectiveContainer'>
                                                 <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageDealtToChampions / 1000)}k</Typography>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
                                                     <Box className='graphDamageBar' height={`${(item.totalDamageDealtToChampions / highestDamageDealt) * 200}px`} backgroundColor={blueColors[index]}></Box>
@@ -754,7 +754,7 @@ const AramDetails = () => {
                                 <Grid style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2}>
                                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                                         {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
-                                            <div className='matchDetailsObjectiveContainer'>
+                                            <div key={`taken_red_${index}`} className='matchDetailsObjectiveContainer'>
                                                 <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageTaken / 1000)}k</Typography>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
                                                     <Box className='graphDamageBar' height={`${(item.totalDamageTaken / highestDamageTaken) * 200}px`} backgroundColor={redColors[index]}></Box>
@@ -772,7 +772,7 @@ const AramDetails = () => {
                                 <Grid style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2}>
                                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                                         {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
-                                            <div className='matchDetailsObjectiveContainer'>
+                                            <div key={`taken_blue_${index}`} className='matchDetailsObjectiveContainer'>
                                                 <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageTaken / 1000)}k</Typography>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
                                                     <Box className='graphDamageBar' height={`${(item.totalDamageTaken / highestDamageTaken) * 200}px`} backgroundColor={blueColors[index]}></Box>

@@ -63,24 +63,24 @@ const LanePhaseSummaryCardBot = (props) => {
 
     return (
         <div id='laningBotAnchor'>
-            <Grid className={'LanePhaseSummaryCardActive'} container>
-                <Grid className='LaningPhaseGridHeader' item xs={12} sm={12}>
-                    <Grid className='LaneOutcomeTitle' item xs={12} sm={6}>
+            <Grid className={'LanePhaseSummaryCardActive'}>
+                <div className='LaningPhaseGridHeader'>
+                    <div className='LaneOutcomeTitle'>
                         {statsAt15.laneResults.BOTTOM.resTag === 'draw' ? (
                             <Typography fontWeight={'bold'}>{`Bottom was a draw`}</Typography>
                         ) : (
                             <Typography fontWeight={'bold'}>{`${statsAt15.laneResults.BOTTOM.teamWonLane === 100 ? 'Blue' : 'Red'} ${statsAt15.laneResults.BOTTOM.resTag} bottom lane`}</Typography>
                         )}
-                    </Grid>
+                    </div>
 
-                    <Grid item className='LaneBubbleContainer' xs={12} sm={6}>
+                    <div className='LaneBubbleContainer'>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 0 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 1 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 2 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 3 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
                         <Box className='LanePhaseSummaryBubble' style={{ flex: '1', backgroundColor: statsAt15.laneResults.BOTTOM.bubbleCount > 4 ? statsAt15.laneResults.BOTTOM.bubbleColor : '#d1d1d1', height: '40px', width: `40px`, borderRadius: '100%' }}></Box>
-                    </Grid>
-                    <Grid item xs={12} sm={6} style={{ flexDirection: 'row', display: 'inline-flex' }}>
+                    </div>
+                    <div className='LaneButtonsContainer' style={{ flexDirection: 'row', display: 'flex' }}>
                         <Button
                             className={lastButtonPressedBot === 'laneSumBot1' ? 'LanePhaseSummaryBtnClicked' : 'LanePhaseSummaryBtn'}
                             onClick={() => handleLaneCard('bot', 'laneSumBot1')}
@@ -111,8 +111,8 @@ const LanePhaseSummaryCardBot = (props) => {
                             CS Graph
                         </Button>
 
-                    </Grid>
-                </Grid>
+                    </div>
+                </div>
             </Grid>
 
             <Grid className={lastButtonPressedBot === 'laneSumBot1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
