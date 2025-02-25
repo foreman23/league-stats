@@ -69,12 +69,14 @@ const DetailsTable = (props) => {
                                                         justifyContent: 'center'
                                                     }}>{player.champLevel}
                                                     </Typography>
-                                                    <img style={{
-                                                        width: '38px',
-                                                        borderRadius: '100%',
-                                                        marginRight: '3px',
-                                                        border: player.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid'
-                                                    }}
+                                                    <img
+                                                        alt='Champion'
+                                                        style={{
+                                                            width: '38px',
+                                                            borderRadius: '100%',
+                                                            marginRight: '3px',
+                                                            border: player.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid'
+                                                        }}
                                                         src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}>
                                                     </img>
                                                 </div>
@@ -86,7 +88,7 @@ const DetailsTable = (props) => {
                                                     placement='top'
                                                     arrow
                                                     slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                                                    <img alt='Spell 1' style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                                                 </Tooltip>
                                                 <Tooltip
                                                     title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
@@ -94,7 +96,7 @@ const DetailsTable = (props) => {
                                                     placement='top'
                                                     arrow
                                                     slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                                                    <img alt='Spell 2' style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
                                                 </Tooltip>
                                             </div>
                                             <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
@@ -105,7 +107,7 @@ const DetailsTable = (props) => {
                                                     placement='top'
                                                     arrow
                                                     slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
+                                                    <img alt='Perk' style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                                                 </Tooltip>
                                             </div>
                                             <Tooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
@@ -363,7 +365,9 @@ const DetailsTable = (props) => {
                                                         justifyContent: 'center'
                                                     }}>{player.champLevel}
                                                     </Typography>
-                                                    <img style={{
+                                                    <img 
+                                                    alt='Champion'
+                                                    style={{
                                                         width: '38px',
                                                         borderRadius: '100%',
                                                         marginRight: '3px',
@@ -380,7 +384,7 @@ const DetailsTable = (props) => {
                                                     placement='top'
                                                     arrow
                                                     slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                                                    <img alt='Spell 1' style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
                                                 </Tooltip>
                                                 <Tooltip
                                                     title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
@@ -388,7 +392,7 @@ const DetailsTable = (props) => {
                                                     placement='top'
                                                     arrow
                                                     slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                                                    <img alt='Spell 2' style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
                                                 </Tooltip>
                                             </div>
                                             <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
@@ -399,7 +403,7 @@ const DetailsTable = (props) => {
                                                     placement='top'
                                                     arrow
                                                     slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
+                                                    <img alt='Perk' style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                                                 </Tooltip>
                                             </div>
                                             <Tooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>

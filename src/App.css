@@ -43,6 +43,7 @@ body,
     color: #4B4B4B;
     font-size: 16px;
     width: 400px;
+    line-height: 1.4;
 }
 
 .LanePhaseSummaryDetailsActive p {
@@ -1012,7 +1013,7 @@ body,
     display: flex;
     flex-direction: column;
     text-align: flex-start;
-    justify-content: start;
+    justify-content: flex-start;
     padding: 0px;
     border-radius: 10px;
 }
@@ -1064,7 +1065,7 @@ body,
     display: flex;
     flex-direction: column;
     text-align: flex-start;
-    justify-content: start;
+    justify-content: flex-start;
     padding: 0px;
     margin-top: 20px;
     border-radius: 10px;

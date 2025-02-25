@@ -1,23 +1,18 @@
-import { Button, Typography, Box, Grid, Paper, Container, TableBody, Divider, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress, CircularProgress, Tooltip, styled } from '@mui/material';
+import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
 import React from 'react'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 // import queues from '../jsonData/queues.json'
 import summonerSpells from '../jsonData/summonerSpells.json';
 import runes from '../jsonData/runes.json';
-import Footer from '../components/Footer';
 import getStatsAt15 from '../functions/LaneAnalysis';
 import axios from 'axios';
-import determineFeatsFails from '../functions/GenerateFeats';
 import LanePhaseSummaryCardTop from '../components/LanePhaseSummaryCardTop';
 import LanePhaseSummaryCardJg from '../components/LanePhaseSummaryCardJg';
 import LanePhaseSummaryCardMid from '../components/LanePhaseSummaryCardMid';
 import LanePhaseSummaryCardBot from '../components/LanePhaseSummaryCardBot';
-import Graphs from '../components/Graphs';
 import Battles from '../components/Battles';
-import DisplayFeats from '../components/DisplayFeats';
 import TeamGoldDifGraph from '../components/TeamGoldDifGraph';
 import generateGraphData from '../functions/GenerateGraphData';
 import calculateOpScores from '../functions/CalculateOpScores';
@@ -35,7 +30,6 @@ import ScrollTopButton from '../components/ScrollTopButton';
 
 function GameDetails() {
 
-  const [isLaning, setIsLaning] = useState(true);
   const [queues, setQueues] = useState(null);
   const [queueTitle, setQueueTitle] = useState(null);
 
@@ -47,24 +41,17 @@ function GameDetails() {
   const [dataDragonVersion, setDataDragonVersion] = useState(null);
   const [playerData, setPlayerData] = useState(null);
   const [opposingLaner, setOpposingLaner] = useState(null);
-  const [participantGold, setParticipantGold] = useState(null);
-  const [opposingGold, setOpposingGold] = useState(null);
   const [gameStartDate, setGameStartDate] = useState(null);
   const [gameDuration, setGameDuration] = useState(null);
   const [items, setItems] = useState(null);
 
   const [champsJSON, setChampsJSON] = useState(null);
 
-  // Card states (lane summaries)
-  const [jgSummaryCardStatus, setJgSummaryCardStatus] = useState(true);
-  const [midSummaryCardStatus, setMidSummaryCardStatus] = useState(true);
-  const [botSummaryCardStatus, setBotSummaryCardStatus] = useState(true);
+  // Init navigate
+  const navigate = useNavigate();
 
   // Timeline data
   const [timelineData, setTimelineData] = useState(null);
-
-  // Find gold difference between opposing laner
-  // const goldDifference = participantGold - opposingGold;
 
   // Create summoner spells object
   const summonerSpellsObj = Object.values(summonerSpells.data);
@@ -132,35 +119,32 @@ function GameDetails() {
   const [buildData, setBuildData] = useState(null);
   const [totalTeamGoldBlue, setTotalTeamGoldBlue] = useState(null);
   const [totalTeamGoldRed, setTotalTeamGoldRed] = useState(null);
-  const [totalDamageBothTeams, setTotalDamageBothTeams] = useState(null);
   useEffect(() => {
 
     if (gameData && alternateRegion && timelineData && playerData) {
 
       let blueGoldSum = 0;
       let redGoldSum = 0;
-      let blueDmgSum = 0;
-      let redDmgSum = 0;
+      // let blueDmgSum = 0;
+      // let redDmgSum = 0;
       let bluePlayers = gameData.info.participants.filter(players => players.teamId === 100)
       for (let i = 0; i < bluePlayers.length; i++) {
         let curr = bluePlayers[i]
         blueGoldSum += curr.goldEarned
-        blueDmgSum += curr.totalDamageDealtToChampions
+        // blueDmgSum += curr.totalDamageDealtToChampions
       }
 
       let redPlayers = gameData.info.participants.filter(players => players.teamId === 200)
       for (let i = 0; i < redPlayers.length; i++) {
         let curr = redPlayers[i]
         redGoldSum += curr.goldEarned
-        redDmgSum += curr.totalDamageDealtToChampions
+        // redDmgSum += curr.totalDamageDealtToChampions
       }
 
 
 
       setTotalTeamGoldBlue(blueGoldSum);
       setTotalTeamGoldRed(redGoldSum);
-      setTotalDamageBothTeams(blueDmgSum + redDmgSum);
-
 
       document.title = `${playerData.riotIdGameName}#${playerData.riotIdTagline} - ${new Date(gameData.info.gameCreation).toLocaleDateString()} @${new Date(gameData.info.gameCreation).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase().replace(/\s/g, '')}`
       const { highestDamageDealt, highestDamageTaken, playersWithScores } = calculateOpScores(gameData, playerData);
@@ -184,20 +168,19 @@ function GameDetails() {
       fetch15Stats();
     }
 
-  }, [gameData, alternateRegion, timelineData, playerData, champsJSON]);
+  }, [gameData, alternateRegion, timelineData, playerData, champsJSON, dataDragonVersion]);
 
-  const findQueueInfo = async () => {
+  const findQueueInfo = useCallback(async () => {
     const queue = queues.find(queue => queue.queueId === gameData.info.queueId);
     return queue;
-  }
+  }, [queues, gameData])
 
   // Search JSON for relevant Queue data
-  const findQueueTitle = async () => {
+  const findQueueTitle = useCallback(async () => {
 
     let queue = await findQueueInfo();
 
     let queueTitle = queue?.description;
-    // let isLaning = true; // set to false for non summoners rift modes
     if (queueTitle === '5v5 Ranked Solo games') {
       setQueueTitle('Ranked Solo');
     }
@@ -211,18 +194,14 @@ function GameDetails() {
     else if (queueTitle === '5v5 ARAM games') {
       // queueTitle = 'ARAM';
       setQueueTitle('ARAM')
-      setIsLaning(false);
-      // isLaning = false;
     }
     else if (queueTitle === 'Arena') {
       setQueueTitle('Arena')
-      setIsLaning(false);
-      // isLaning = false;
     }
     else {
       setQueueTitle('Game')
     }
-  }
+  }, [findQueueInfo])
 
   // Get queue JSON data from riot
   const getQueueJSON = async () => {
@@ -236,7 +215,7 @@ function GameDetails() {
   }
 
   // Get item JSON data from riot
-  const getItemsJSON = async () => {
+  const getItemsJSON = useCallback(async () => {
     try {
       const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/item.json`);
       const data = await response.json();
@@ -244,10 +223,10 @@ function GameDetails() {
     } catch (error) {
       console.error('Error fetching item JSON data:', error);
     }
-  }
+  }, [setItems, dataDragonVersion])
 
   // Get champion JSON data from riot
-  const getChampsJSON = async () => {
+  const getChampsJSON = useCallback(async () => {
     try {
       const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
       const data = await response.json();
@@ -255,7 +234,7 @@ function GameDetails() {
     } catch (error) {
       console.error('Error fetching champion JSON data:', error);
     }
-  }
+  }, [setChampsJSON, dataDragonVersion])
 
   const findAltRegion = (selectedRegion) => {
     // set alternate routing value
@@ -295,8 +274,7 @@ function GameDetails() {
       })
   }
 
-  const fetchGameData = async () => {
-    let riotApiCallCount = 0;
+  const fetchGameData = useCallback(async () => {
     let region = matchId.split('_')[0].toLowerCase()
     const docRef = doc(firestore, `${region}-matches`, matchId)
     console.log('Reading from firestore (checking match exists)')
@@ -312,16 +290,18 @@ function GameDetails() {
     else {
       navigate('/*')
     }
-  }
+  }, [matchId, navigate])
 
   // On initial page load
   useEffect(() => {
     let payload = JSON.parse(localStorage.getItem('gameData'));
     // Match ID mistmatch on follow external link
     if (payload === null || payload.gameData.metadata.matchId !== matchId) {
+      console.log('payload mismatch')
       fetchGameData()
     }
     else if (payload !== null) {
+      console.log('payload MATCH')
       // Special edge case for special Oceania
       const seaServer = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2']
       if (seaServer.includes(payload.gameData.metadata.matchId.split('_')[0].toLowerCase())) {
@@ -332,7 +312,7 @@ function GameDetails() {
       setGameData(payload.gameData);
       setDataDragonVersion(payload.dataDragonVersion);
     }
-  }, [])
+  }, [fetchGameData, matchId])
 
   // Get JSON after dataDragonVersion populates
   useEffect(() => {
@@ -341,7 +321,7 @@ function GameDetails() {
       getItemsJSON();
       getChampsJSON();
     }
-  }, [dataDragonVersion])
+  }, [dataDragonVersion, getChampsJSON, getItemsJSON])
 
   // Set player data and game duration
   useEffect(() => {
@@ -362,7 +342,7 @@ function GameDetails() {
       }
       setGameDuration(gameDuration)
     }
-  }, [gameData])
+  }, [gameData, summonerName])
 
   // Set data that depends on player data
   useEffect(() => {
@@ -370,15 +350,7 @@ function GameDetails() {
       // Find opposing laner
       setOpposingLaner(gameData.info.participants.find(laner => laner.teamPosition === playerData.teamPosition && laner.summonerId !== playerData.summonerId))
     }
-  }, [playerData])
-
-  // Set gold data
-  useEffect(() => {
-    if (playerData && opposingLaner) {
-      setParticipantGold(playerData.goldEarned);
-      setOpposingGold(opposingLaner.goldEarned)
-    }
-  }, [playerData, opposingLaner])
+  }, [playerData, gameData])
 
   useEffect(() => {
     if (queues && gameData) {
@@ -386,7 +358,7 @@ function GameDetails() {
       findQueueTitle();
     }
 
-  }, [queues, gameData])
+  }, [queues, gameData, findQueueTitle])
 
   useEffect(() => {
     if (graphData) {
@@ -492,7 +464,7 @@ function GameDetails() {
 
       setMatchSummaryDesc(<>{teamLeadingSentence} {lastSentence}</>)
     }
-  }, [graphData])
+  }, [graphData, playerData])
 
   useEffect(() => {
     if (gameData && alternateRegion) {
@@ -507,9 +479,6 @@ function GameDetails() {
     }
 
   }, [gameData, alternateRegion]);
-
-  // Init navigate
-  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
   // Render page once data is loaded
@@ -635,7 +604,7 @@ function GameDetails() {
                       </Grid>
                     </a>
                   )}
-                  <img style={{ width: '30px', marginTop: '10px', opacity: '65%' }} src='/images/swords.svg'></img>
+                  <img alt='' style={{ width: '30px', marginTop: '10px', opacity: '65%' }} src='/images/swords.svg'></img>
                   {/* Player Win */}
                   {playerData.win ? (
                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
@@ -736,9 +705,9 @@ function GameDetails() {
                 </Grid>
                 <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={7}>
                   <Typography style={{ paddingTop: '10px', lineHeight: '1.4' }} fontSize={23} fontWeight={600} maxWidth={'460px'}>
-                    <a style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <span style={{ textDecoration: 'none', color: 'inherit' }}>
                       {playerData.riotIdGameName}
-                    </a>
+                    </span>
                     <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                   </Typography>
                   <Typography style={{ paddingTop: '10px', paddingBottom: '10px', fontWeight: 'bold', color: '#7E7E7E', marginBottom: '5px' }} fontSize={14}>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
@@ -939,6 +908,7 @@ function GameDetails() {
                       if (item.championId === -1) {
                         return (
                           <img
+                          alt='Banned Champion'
                             key={`ban_${index}_1`}
                             className='BannedChampImg'
                             style={{
@@ -960,6 +930,7 @@ function GameDetails() {
                             title={<>{Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).name} banned by blue</>}>
                             <div style={{ border: '3px #568CFF solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
                               <img
+                              alt='Banned Champion'
                                 className='BannedChampImg'
                                 style={{
                                   borderRadius: '100%',
@@ -987,6 +958,7 @@ function GameDetails() {
                       if (item.championId === -1) {
                         return (
                           <img
+                          alt ='Banned Champion'
                             key={`ban_${index}_2`}
                             className='BannedChampImg'
                             style={{
@@ -1007,6 +979,7 @@ function GameDetails() {
                             title={<>{Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).name} banned by red</>}>
                             <div style={{ border: '3px #FF3F3F solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
                               <img
+                              alt='Banned Champion'
                                 className='BannedChampImg'
                                 style={{
                                   borderRadius: '100%',
@@ -1104,7 +1077,7 @@ function GameDetails() {
                           </Tooltip>
                           <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                             <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                              <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                              <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                             </a>
                           </Tooltip>
                         </div>
@@ -1122,7 +1095,7 @@ function GameDetails() {
                           </Tooltip>
                           <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                             <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                              <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                              <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                             </a>
                           </Tooltip>
                         </div>
@@ -1154,7 +1127,7 @@ function GameDetails() {
                           </Tooltip>
                           <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                             <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                              <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                              <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                             </a>
                           </Tooltip>
                         </div>
@@ -1172,7 +1145,7 @@ function GameDetails() {
                           </Tooltip>
                           <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                             <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                              <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                              <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                             </a>
                           </Tooltip>
                         </div>

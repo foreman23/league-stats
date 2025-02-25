@@ -1,16 +1,12 @@
 import '../App.css';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, TextField, Box, ButtonGroup, Typography, ListItem, List, Divider, Autocomplete, Select, MenuItem, LinearProgress, Tooltip } from '@mui/material';
+import { Button, TextField, Box, Typography, ListItem, List, Divider, Autocomplete, Select, MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import Navbar from '../components/Navbar';
-import ClearIcon from '@mui/icons-material/Clear';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CloseIcon from '@mui/icons-material/Close';
-import { sum } from 'firebase/firestore';
 import DisplayGame from '../components/DisplayGame';
-import { ClassNames } from '@emotion/react';
 
 function SummonerSearch() {
 
@@ -20,22 +16,13 @@ function SummonerSearch() {
   const [dataDragonVersion, setDataDragonVersion] = useState(null);
   const [recentArr, setRecentArr] = useState(null);
   const [favorites, setFavorites] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [champsJSON, setChampsJSON] = useState(null);
-  const [queues, setQueues] = useState(null);
-  const [queueTitle, setQueueTitle] = useState(null);
-  const [timeSinceMatch, setTimeSinceMatch] = useState(null);
-  const [rankedTierMatch, setRankedTierMatch] = useState(null);
-
-  const [recentOpen, setRecentOpen] = useState(false);
-
-  const initialFavHeight = 115
 
   // Init navigate
   const navigate = useNavigate();
 
   // Set the current ddragon version
-  const getDataDragonVersion = async () => {
+  const getDataDragonVersion = useCallback(async () => {
     axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
       .then(function (response) {
         const currentVersion = response.data[0];
@@ -45,13 +32,7 @@ function SummonerSearch() {
       .catch(function (response) {
         console.log('Error: Error fetching datadragon version')
       })
-  }
-
-  const updateSummonerNameState = async (event) => {
-    if (event.target.value !== 0) {
-      setSummonerName(event.target.value.toLowerCase());
-    }
-  }
+  }, [])
 
   const [dropdownDefaultValue, setDropdownDefaultValue] = useState('');
   const handleRegionChange = async (event) => {
@@ -238,77 +219,6 @@ function SummonerSearch() {
     }
   }
 
-  // Get queue JSON data from riot
-  const getQueueJSON = async (featuredMatch) => {
-    try {
-      const response = await fetch('https://static.developer.riotgames.com/docs/lol/queues.json');
-      const data = await response.json();
-      findQueueTitle(data, featuredMatch)
-    } catch (error) {
-      console.error('Error fetching queue data:', error);
-    }
-  }
-
-  // Search JSON for relevant Queue data
-  const findQueueTitle = async (queues, featuredMatch) => {
-
-    let queue = await findQueueInfo(queues, featuredMatch);
-
-    // Set queue title
-    let tempQueueTitle = queue?.description;
-    if (tempQueueTitle === undefined) {
-      setQueueTitle('Swiftplay')
-    }
-    if (tempQueueTitle === '5v5 Ranked Solo games') {
-      setQueueTitle('Ranked Solo');
-    }
-    if (tempQueueTitle === '5v5 Ranked Flex games') {
-      setQueueTitle('Ranked Flex');
-    }
-    if (tempQueueTitle === '5v5 Draft Pick games') {
-      setQueueTitle('Normal');
-    }
-    else if (tempQueueTitle === "Summoner's Rift Clash games") {
-      setQueueTitle('SR Clash')
-    }
-    else if (tempQueueTitle === '5v5 ARAM games') {
-      setQueueTitle('ARAM')
-    }
-    else if (tempQueueTitle === 'ARAM Clash games') {
-      setQueueTitle('ARAM Clash')
-    }
-    else if (tempQueueTitle === 'Arena') {
-      setQueueTitle('Arena')
-    }
-
-    // Set time since match was played
-    const timeMatchStarted = new Date(featuredMatch.featuredGameData.matchData.info.gameEndTimestamp);
-    const now = new Date();
-    const timeDifferenceInSeconds = Math.floor((now - timeMatchStarted) / 1000);
-
-    if (timeDifferenceInSeconds < 60) {
-      // Less than a minute
-      setTimeSinceMatch(`${timeDifferenceInSeconds} seconds ago`);
-    } else if (timeDifferenceInSeconds < 3600) {
-      // Less than an hour
-      const minutes = Math.floor(timeDifferenceInSeconds / 60);
-      setTimeSinceMatch(`${minutes} minute${minutes !== 1 ? 's' : ''} ago`);
-    } else if (timeDifferenceInSeconds < 86400) {
-      // Less than a day
-      const hours = Math.floor(timeDifferenceInSeconds / 3600);
-      setTimeSinceMatch(`${hours} hour${hours !== 1 ? 's' : ''} ago`);
-    } else {
-      // More than a day
-      const days = Math.floor(timeDifferenceInSeconds / 86400);
-      setTimeSinceMatch(`${days} day${days !== 1 ? 's' : ''} ago`);
-    }
-  }
-
-  const findQueueInfo = async (queues, featuredMatch) => {
-    const queue = queues.find(queue => queue.queueId === featuredMatch.featuredGameData.matchData.info.queueId);
-    return queue;
-  }
-
   // Retrieve previous tab pref from local storage
   const getPrevTab = () => {
     let prevTab = localStorage.getItem('prevTab')
@@ -334,7 +244,6 @@ function SummonerSearch() {
     const featuredResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/featuredgame`);
     const featuredGame = featuredResponse.data;
     setFeaturedData(featuredGame);
-    getQueueJSON(featuredGame);
   }
 
   // Get data dragon version on initial load
@@ -345,7 +254,7 @@ function SummonerSearch() {
     getPrevRegion();
     getPrevTab();
     getFeaturedGame();
-  }, [])
+  }, [getDataDragonVersion])
 
   return (
     <div className='summonerSearchBody'>
@@ -492,12 +401,6 @@ function SummonerSearch() {
                     onMouseDown={(e) => {
                       if (e.button === 0 || e.button === 1) {
                         localStorage.setItem("gameData", JSON.stringify(gameDataPayload));
-                        setTimeout(() => {
-                          setRecentOpen(true);
-                          setTimeout(() => {
-                            setRecentOpen(false);
-                          }, 200);
-                        }, 200);
                       }
                     }}
                     href={gameModeHref}
@@ -542,7 +445,7 @@ function SummonerSearch() {
                         <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(favorites[index])} style={{ display: 'flex', marginRight: 'auto', marginLeft: '0px', marginTop: '10px', fontSize: '18px', position: 'absolute', zIndex: 1 }}></FavoriteIcon>
                         <a className='recentSearchItem' href={`/profile/${favorites[index].selectedRegion}/${favorites[index].summonerName}/${favorites[index].riotId}`}>
                           <ListItem style={{ justifyContent: 'center' }} key={index}>
-                            <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${favorites[index].icon}.png`}></img>
+                            <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${favorites[index].icon}.png`}></img>
                             <div style={{ marginLeft: '60px', textAlign: 'center' }}>
                               <div>
                                 <b style={{ fontSize: '14px' }}>{favorites[index].summonerName}</b>
@@ -568,7 +471,7 @@ function SummonerSearch() {
                       <Grid key={index} xs={12} sm={4}>
                         <div className='recentSearchItem'>
                           <ListItem style={{ justifyContent: 'center' }}>
-                            <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`/images/novalue.webp`}></img>
+                            <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`/images/novalue.webp`}></img>
                             <div style={{ marginLeft: '60px', textAlign: 'center' }}>
                               <div>
                                 <b style={{ fontSize: '14px' }}>Summoner</b>
@@ -607,7 +510,7 @@ function SummonerSearch() {
                         <CloseIcon className='deleteRecentButton' onClick={() => handleRemoveRecent(recentArr[index])} style={{ display: 'flex', marginRight: 'auto', marginLeft: '0px', marginTop: '10px', fontSize: '14px', position: 'absolute', zIndex: 1 }}></CloseIcon>
                         <a className='recentSearchItem' href={`/profile/${recentArr[index].selectedRegion}/${recentArr[index].summonerName}/${recentArr[index].riotId}`}>
                           <ListItem style={{ justifyContent: 'center' }} key={index}>
-                            <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${recentArr[index].icon}.png`}></img>
+                            <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${recentArr[index].icon}.png`}></img>
                             <div style={{ marginLeft: '60px', textAlign: 'center' }}>
                               <div>
                                 <b style={{ fontSize: '14px' }}>{recentArr[index].summonerName}</b>
@@ -633,7 +536,7 @@ function SummonerSearch() {
                       <Grid key={`recent_${index}`} xs={12} sm={4}>
                         <div className='recentSearchItem'>
                           <ListItem style={{ justifyContent: 'center' }}>
-                            <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`/images/novalue.webp`}></img>
+                            <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`/images/novalue.webp`}></img>
                             <div style={{ marginLeft: '60px', textAlign: 'center' }}>
                               <div>
                                 <b style={{ fontSize: '14px' }}>Summoner</b>

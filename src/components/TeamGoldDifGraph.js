@@ -8,11 +8,11 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 
 const TeamGoldDifGraph = (props) => {
-    let width = 1000;
+    // let width = 1000;
     let height = 300;
-    if (props.width) {
-        width = props.width;
-    }
+    // if (props.width) {
+    //     width = props.width;
+    // }
     if (props.height) {
         height = props.height;
     }

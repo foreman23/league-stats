@@ -1,5 +1,5 @@
 import React from 'react'
-import { Divider, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
 const SummonerNotFound = () => {
@@ -9,7 +9,7 @@ const SummonerNotFound = () => {
 
   return (
     <div className='NotFoundContainer'>
-      <img className='NotFoundImage' src='/images/Sad_Kitten_Emote.webp'></img>
+      <img alt='Summoner not found' className='NotFoundImage' src='/images/Sad_Kitten_Emote.webp'></img>
       <Typography className='NotFoundHeader'>{<><span style={{ color: 'black', fontWeight: 'bold' }}>{summonerName} #{riotId}</span> not found in region: <b>{selectedRegion}</b></>}</Typography>
       <div className='NotFoundSubContainer'>
         <Typography className='NotFoundSubheader'>Possible reasons:</Typography>

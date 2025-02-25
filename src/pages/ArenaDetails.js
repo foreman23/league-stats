@@ -1,16 +1,13 @@
 import React from 'react'
-import { Button, Typography, Box, Grid, ButtonGroup, Container, ListItem, List, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { Button, Typography, Grid, Tooltip } from '@mui/material';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar';
 import { useParams, useLocation } from 'react-router-dom';
 // import queues from '../jsonData/queues.json'
-import Footer from '../components/Footer';
 import OverviewTable from '../components/OverviewTable';
 
 const ArenaDetails = () => {
 
-    const [isLaning, setIsLaning] = useState(true);
     const [queues, setQueues] = useState(null);
     const [queueTitle, setQueueTitle] = useState(null);
 
@@ -19,9 +16,9 @@ const ArenaDetails = () => {
 
     // Get props
     const location = useLocation();
-    const { gameId, summonerName, riotId } = useParams();
+    const { summonerName } = useParams();
     const { gameData } = location.state;
-    const { alternateRegion } = location.state;
+    // const { alternateRegion } = location.state;
     const { dataDragonVersion } = location.state;
 
     // Find player data
@@ -70,20 +67,19 @@ const ArenaDetails = () => {
         placementSuffix = "th";
     }
 
-    const findQueueInfo = async () => {
+    const findQueueInfo = useCallback(async () => {
         const queue = queues.find(queue => queue.queueId === gameData.info.queueId);
         return queue;
-    }
+    }, [queues, gameData])
 
     // Search JSON for relevant Queue data
-    const findQueueTitle = async () => {
+    const findQueueTitle = useCallback(async () => {
 
         let queue = await findQueueInfo();
         console.log(gameData.info)
 
         let queueTitle = queue.description;
         console.log(queueTitle)
-        // let isLaning = true; // set to false for non summoners rift modes
         if (queueTitle === '5v5 Ranked Solo games') {
             setQueueTitle('Ranked Solo');
         }
@@ -97,15 +93,11 @@ const ArenaDetails = () => {
         else if (queueTitle === '5v5 ARAM games') {
             // queueTitle = 'ARAM';
             setQueueTitle('ARAM')
-            setIsLaning(false);
-            // isLaning = false;
         }
         else if (queueTitle === 'Arena') {
             setQueueTitle('Arena')
-            setIsLaning(false);
-            // isLaning = false;
         }
-    }
+    }, [findQueueInfo, gameData])
 
     const getQueueJSON = async () => {
         try {
@@ -130,7 +122,7 @@ const ArenaDetails = () => {
             findQueueTitle();
         }
 
-    }, [queues])
+    }, [queues, findQueueTitle])
 
     return (
         <div>
@@ -143,35 +135,35 @@ const ArenaDetails = () => {
                         <Grid style={{ textAlign: 'center', display: 'flex', alignItems: 'center' }} justifyContent={'center'} item xs={5}>
                             {playerData.win ? (
                                 <div style={{ position: 'relative', display: 'inline-block' }}>
-                                    <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${playerData.championName}.png`} alt=''></img>
+                                    <img alt='Champion 1' style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${playerData.championName}.png`}></img>
                                 </div>
                             ) : (
                                 <div style={{ position: 'relative', display: 'inline-block' }}>
-                                    <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${playerData.championName}.png`} alt=''></img>
+                                    <img alt='Champion 1' style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${playerData.championName}.png`}></img>
                                 </div>
                             )}
-                            <img style={{ width: '55px' }} src='/images/deal.png'></img>
+                            <img alt='' style={{ width: '55px' }} src='/images/deal.png'></img>
                             {playerData.win ? (
                                 <div style={{ position: 'relative', display: 'inline-block' }}>
-                                    <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${teammateData.championName}.png`} alt=''></img>
+                                    <img alt='Champion 2' style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${teammateData.championName}.png`}></img>
                                 </div>
                             ) : (
                                 <div style={{ position: 'relative', display: 'inline-block' }}>
-                                    <img style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${teammateData.championName}.png`} alt=''></img>
+                                    <img alt='Champion 2' style={{ margin: '20px', width: '110px', borderTopLeftRadius: '3px', borderTopRightRadius: '3px', marginBottom: '0px', filter: 'grayscale(80%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${teammateData.championName}.png`} ></img>
                                 </div>
                             )}
                         </Grid>
                         <Grid justifyContent={'center'} item xs={7}>
                             <Typography style={{ paddingTop: '10px' }} fontSize={26} fontWeight={600}>
                                 <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
-                                    <a className='clickableName' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`)}>
+                                    <span className='clickableName' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`)}>
                                         {` ${playerData.riotIdGameName} (${playerData.championName})`}
-                                    </a>
+                                    </span>
                                 </Tooltip>
                                 <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} title={`${teammateData.riotIdGameName} #${teammateData.riotIdTagline}`}>
-                                    <a className='clickableName' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${teammateData.riotIdGameName}/${teammateData.riotIdTagline.toLowerCase()}`)}>
+                                    <span className='clickableName' onClick={() => navigate(`/profile/${gameData.info.platformId.toLowerCase()}/${teammateData.riotIdGameName}/${teammateData.riotIdTagline.toLowerCase()}`)}>
                                         {` and ${teammateData.riotIdGameName} (${teammateData.championName})`}
-                                    </a>
+                                    </span>
                                 </Tooltip>
                                 {` placed`}
                                 <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}> {playerData.placement}{placementSuffix}</span> in an arena match lasting {gameDuration}.

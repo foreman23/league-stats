@@ -1,8 +1,7 @@
-import { Typography, Grid, Table, TableContainer, Paper, TableHead, TableBody, TableCell, TableRow, Tooltip, Button, Box, List, ListItem } from '@mui/material'
-import React, { useState } from 'react'
+import { Typography, Grid, Tooltip, Box } from '@mui/material'
+import React from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import TeamGoldDifGraph from './TeamGoldDifGraph';
 
 const Battles = (props) => {
@@ -16,41 +15,28 @@ const Battles = (props) => {
 
     // Isolate teamfights from timeline
     const frames = timelineData.info.frames;
+
     let teamfights = [];
     let lastKillTime = null;
     let currBattle = [];
-
     let blueKills = 0;
     let redKills = 0;
-
     let blueDragonKills = 0;
     let blueBaronKills = 0;
     let blueHordeKills = 0;
     let blueHeraldKills = 0;
-
     let redDragonKills = 0;
     let redBaronKills = 0;
     let redHordeKills = 0;
     let redHeraldKills = 0;
-
     let blueTowerKills = 0;
     let blueInhibKills = 0;
     let redTowerKills = 0;
     let redInhibKills = 0;
-
     let blueFirstBlood = 0;
     let redFirstBlood = 0;
-
-    let blueTotalTowersKilled = 0;
-    let blueTotalDragons = 0;
-    let blueTotalBarons = 0;
-    let redTotalTowersKilled = 0;
-    let redTotalDragons = 0;
-    let redTotalBarons = 0;
-
-    let blueTotalFightsWon = 0;
-    let redTotalFightsWon = 0;
-
+    // let blueTotalFightsWon = 0;
+    // let redTotalFightsWon = 0;
 
     for (const index in frames) {
         const frame = frames[index]
@@ -89,9 +75,9 @@ const Battles = (props) => {
                     }
 
                     // Determine Details
-                    let detailsStr = '';
                     let detailsArr = [];
-                    currBattle.forEach((kill) => {
+                    for (let i = 0; i < currBattle.length; i++) {
+                        let kill = currBattle[i]
                         if (kill.type === 'CHAMPION_KILL') {
                             const victim = participants.find(victim => victim.participantId === kill.victimId)
                             const killer = participants.find(killer => killer.participantId === kill.killerId)
@@ -123,29 +109,22 @@ const Battles = (props) => {
                             }
                         }
                         else if (kill.type === 'BUILDING_KILL') {
-                            let buildingName = null;
                             const killer = participants.find(killer => killer.participantId === kill.killerId)
                             let towerType = null;
                             if (kill.buildingType === 'TOWER_BUILDING') {
                                 if (kill.teamId === 100) {
-                                    buildingName = 'blue tower'
                                     redTowerKills += 1;
-                                    redTotalTowersKilled += 1;
                                 }
                                 if (kill.teamId === 200) {
-                                    buildingName = 'red tower'
                                     blueTowerKills += 1;
-                                    blueTotalTowersKilled += 1;
                                 }
                                 towerType = kill.towerType;
                             }
                             if (kill.buildingType === 'INHIBITOR_BUILDING') {
                                 if (kill.teamId === 100) {
-                                    buildingName = 'blue inhibitor'
                                     redInhibKills += 1;
                                 }
                                 if (kill.teamId === 200) {
-                                    buildingName = 'red inhibitor'
                                     blueInhibKills += 1;
                                 }
                             }
@@ -162,7 +141,6 @@ const Battles = (props) => {
                                 killer: killer
                             }
                             detailsArr.push(eventObj)
-                            // detailsStr += `${buildingName} destroyed. `;
                         }
                         else {
                             const killer = participants.find(killer => killer.participantId === kill.killerId)
@@ -170,11 +148,9 @@ const Battles = (props) => {
                                 if (kill.monsterType === 'DRAGON') {
                                     if (kill.killerTeamId === 100) {
                                         blueDragonKills += 1;
-                                        blueTotalDragons += 1;
                                     }
                                     else {
                                         redDragonKills += 1;
-                                        redTotalDragons += 1;
                                     }
                                 }
                                 let eventObj = {
@@ -193,11 +169,9 @@ const Battles = (props) => {
                                 if (monsterName === 'BARON_NASHOR') {
                                     if (kill.killerTeamId === 100) {
                                         blueBaronKills += 1;
-                                        blueTotalBarons += 1;
                                     }
                                     else {
                                         redBaronKills += 1;
-                                        redTotalBarons += 1;
                                     }
                                 }
                                 if (monsterName === 'HORDE') {
@@ -229,18 +203,17 @@ const Battles = (props) => {
                                 // detailsStr += `${kill.monsterType} killed by ${kill.killerTeamId === 100 ? 'blue team' : 'red team'}. `;
                             }
                         }
-
-                    })
+                    }
 
                     // Determine Outcome
                     let outcome = null;
                     if (blueKills > redKills) {
                         outcome = `Blue wins ${blueKills} - ${redKills}`;
-                        blueTotalFightsWon += 1;
+                        // blueTotalFightsWon += 1;
                     }
                     else if (redKills > blueKills) {
                         outcome = `Red wins ${redKills} - ${blueKills}`;
-                        redTotalFightsWon += 1;
+                        // redTotalFightsWon += 1;
                     }
                     else {
                         outcome = `Even trade ${blueKills} - ${redKills}`;
@@ -391,7 +364,7 @@ const Battles = (props) => {
                     if ((blueKills + redKills) <= 2) {
                         battlePrefix = 'Skirmish in'
                     }
-                    if ((blueKills >= 5 && redKills <= 1) || redKills >= 5 && blueKills <= 1) {
+                    if ((blueKills >= 5 && redKills <= 1) || (redKills >= 5 && blueKills <= 1)) {
                         battlePrefix = 'Slaughter in'
                     }
 
@@ -441,8 +414,8 @@ const Battles = (props) => {
                     // First blood
                     let fbFlag = '';
                     if (battleName.includes('Blue draws first blood') || battleName.includes('Red draws first blood')) {
+                        let fbIndex = 0
                         if (battleName[0] === 'B') {
-                            let fbIndex = 0;
                             for (let i = 0; i < detailsArr.length; i++) {
                                 if (detailsArr[i].eventType !== 'CHAMPION_KILL') {
                                     fbIndex++;
@@ -454,7 +427,6 @@ const Battles = (props) => {
                             battleDesc = `Blue team drew first blood when ${detailsArr[fbIndex]?.killer?.championName || 'a minion'} (${detailsArr[fbIndex]?.killer?.riotIdGameName || 'minion'}) killed ${detailsArr[fbIndex]?.victim?.championName} (${detailsArr[fbIndex]?.victim?.riotIdGameName}) in${battleLocation}.`
                             fbFlag = 'blue';
                         } else if (battleName[0] === 'R') {
-                            let fbIndex = 0;
                             for (let i = 0; i < detailsArr.length; i++) {
                                 if (detailsArr[i].eventType !== 'CHAMPION_KILL') {
                                     fbIndex++;
@@ -715,7 +687,6 @@ const Battles = (props) => {
             timespan = `${minutes1}:${seconds1.toString().padStart(2, '0')} to ${minutes2}:${seconds2.toString().padStart(2, '0')}`;
         }
 
-        let detailsStr = '';
         let detailsArr = [];
         currBattle.forEach((kill) => {
             if (kill.type === 'CHAMPION_KILL') {
@@ -749,29 +720,22 @@ const Battles = (props) => {
                 }
             }
             else if (kill.type === 'BUILDING_KILL') {
-                let buildingName = null;
                 const killer = participants.find(killer => killer.participantId === kill.killerId)
                 let towerType = null;
                 if (kill.buildingType === 'TOWER_BUILDING') {
                     if (kill.teamId === 100) {
-                        buildingName = 'blue tower'
                         redTowerKills += 1;
-                        redTotalTowersKilled += 1;
                     }
                     if (kill.teamId === 200) {
-                        buildingName = 'red tower'
                         blueTowerKills += 1;
-                        blueTotalTowersKilled += 1;
                     }
                     towerType = kill.towerType;
                 }
                 if (kill.buildingType === 'INHIBITOR_BUILDING') {
                     if (kill.teamId === 100) {
-                        buildingName = 'blue inhibitor'
                         redInhibKills += 1;
                     }
                     if (kill.teamId === 200) {
-                        buildingName = 'red inhibitor'
                         blueInhibKills += 1;
                     }
                 }
@@ -788,7 +752,6 @@ const Battles = (props) => {
                     killer: killer
                 }
                 detailsArr.push(eventObj)
-                // detailsStr += `${buildingName} destroyed. `;
             }
             else {
                 const killer = participants.find(killer => killer.participantId === kill.killerId)
@@ -796,11 +759,9 @@ const Battles = (props) => {
                     if (kill.monsterType === 'DRAGON') {
                         if (kill.killerTeamId === 100) {
                             blueDragonKills += 1;
-                            blueTotalDragons += 1;
                         }
                         else {
                             redDragonKills += 1;
-                            redTotalDragons += 1;
                         }
                     }
                     let eventObj = {
@@ -819,11 +780,9 @@ const Battles = (props) => {
                     if (monsterName === 'BARON_NASHOR') {
                         if (kill.killerTeamId === 100) {
                             blueBaronKills += 1;
-                            blueTotalBarons += 1;
                         }
                         else {
                             redBaronKills += 1;
-                            redTotalBarons += 1;
                         }
                     }
                     if (monsterName === 'HORDE') {
@@ -862,10 +821,10 @@ const Battles = (props) => {
         let outcome = null;
         if (blueKills > redKills) {
             outcome = `Blue wins ${blueKills} - ${redKills}`;
-            blueTotalFightsWon += 1;
+            // blueTotalFightsWon += 1;
         } else if (redKills > blueKills) {
             outcome = `Red wins ${redKills} - ${blueKills}`;
-            redTotalFightsWon += 1;
+            // redTotalFightsWon += 1;
         } else {
             outcome = `Even trade ${blueKills} - ${redKills}`;
         }
@@ -1015,7 +974,7 @@ const Battles = (props) => {
         if ((blueKills + redKills) <= 2) {
             battlePrefix = 'Skirmish in'
         }
-        if ((blueKills >= 5 && redKills <= 1) || redKills >= 5 && blueKills <= 1) {
+        if ((blueKills >= 5 && redKills <= 1) || (redKills >= 5 && blueKills <= 1)) {
             battlePrefix = 'Slaughter in'
         }
 
@@ -1065,8 +1024,8 @@ const Battles = (props) => {
         // First blood
         let fbFlag = '';
         if (battleName === 'Blue draws first blood' || battleName === 'Red draws first blood') {
+            let fbIndex = 0;
             if (battleName[0] === 'B') {
-                let fbIndex = 0;
                 for (let i = 0; i < detailsArr.length; i++) {
                     if (detailsArr[i].eventType !== 'CHAMPION_KILL') {
                         fbIndex++;
@@ -1078,7 +1037,6 @@ const Battles = (props) => {
                 battleDesc = `Blue team drew first blood when ${detailsArr[fbIndex]?.killer?.championName || 'a minion'} (${detailsArr[fbIndex]?.killer?.riotIdGameName || 'minion'}) killed ${detailsArr[fbIndex]?.victim?.championName} (${detailsArr[fbIndex]?.victim?.riotIdGameName}) in${battleLocation}.`
                 fbFlag = 'blue';
             } else if (battleName[0] === 'R') {
-                let fbIndex = 0;
                 for (let i = 0; i < detailsArr.length; i++) {
                     if (detailsArr[i].eventType !== 'CHAMPION_KILL') {
                         fbIndex++;
@@ -1404,7 +1362,7 @@ const Battles = (props) => {
                                                             </Tooltip>
                                                         ) : (
                                                             <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.teamId === 200 ? 'Blue Minion' : 'Red Minion'}</>}>
-                                                                <a>
+                                                                <span>
                                                                     <img
                                                                         style={{
                                                                             filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
@@ -1417,10 +1375,10 @@ const Battles = (props) => {
                                                                         src={`/images/monsterIcons/${details.victim.teamId === 200 ? 'blue' : 'red'}Minion.webp`}
                                                                         alt="Minion"
                                                                     />
-                                                                </a>
+                                                                </span>
                                                             </Tooltip>
                                                         )}
-                                                        <img style={{ width: '20px', opacity: '65%' }} src='/images/swords.svg'></img>
+                                                        <img alt='' style={{ width: '20px', opacity: '65%' }} src='/images/swords.svg'></img>
                                                         <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.victim?.riotIdGameName} ({details.victim?.championName})</>}>
                                                             <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${details.victim?.riotIdGameName}/${details.victim?.riotIdTagline.toLowerCase()}`}>
                                                                 <img
@@ -1474,7 +1432,7 @@ const Battles = (props) => {
                                                             </Tooltip>
                                                         ) : (
                                                             <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.teamId === 200 ? 'Blue Minion' : 'Red Minion'}</>}>
-                                                                <a>
+                                                                <span>
                                                                     <img
                                                                         style={{
                                                                             filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
@@ -1487,12 +1445,12 @@ const Battles = (props) => {
                                                                         src={`/images/monsterIcons/${details.teamId === 200 ? 'blue' : 'red'}Minion.webp`}
                                                                         alt="Minion"
                                                                     />
-                                                                </a>
+                                                                </span>
                                                             </Tooltip>
                                                         )}
                                                         <img style={{ width: '20px', opacity: '45%' }} src='/images/hammer.svg' alt="Swords" />
                                                         <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.teamId === 100 ? 'Blue ' : 'Red '} {details.buildingType === 'TOWER_BUILDING' ? 'Tower' : 'Inhibitor'}</>}>
-                                                            <a>
+                                                            <span>
                                                                 <img
                                                                     style={{
                                                                         filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
@@ -1503,7 +1461,7 @@ const Battles = (props) => {
                                                                         }_square.webp`}
                                                                     alt={details.buildingType === 'TOWER_BUILDING' ? 'Tower' : 'Inhibitor'}
                                                                 />
-                                                            </a>
+                                                            </span>
                                                         </Tooltip>
                                                         {details.killer?.riotIdGameName ? (
                                                             <Typography style={{ fontSize: '14px', marginLeft: '10px' }}>
@@ -1541,7 +1499,7 @@ const Battles = (props) => {
                                                             </Tooltip>
                                                         ) : (
                                                             <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{'A Minion'}</>}>
-                                                                <a>
+                                                                <span>
                                                                     <img
                                                                         style={{
                                                                             filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
@@ -1552,12 +1510,12 @@ const Battles = (props) => {
                                                                         src={`/images/monsterIcons/neutralMinion.webp`}
                                                                         alt="Minion"
                                                                     />
-                                                                </a>
+                                                                </span>
                                                             </Tooltip>
                                                         )}
                                                         <img style={{ width: '20px', opacity: '65%', transform: 'rotate(25deg)' }} src='/images/bow.svg' alt="Swords" />
                                                         <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</>}>
-                                                            <a>
+                                                            <span>
                                                                 <img
                                                                     style={{
                                                                         filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
@@ -1568,7 +1526,7 @@ const Battles = (props) => {
                                                                     src={`/images/monsterIcons/${details.monsterType}.webp`}
                                                                     alt={details.monsterType}
                                                                 />
-                                                            </a>
+                                                            </span>
                                                         </Tooltip>
                                                         {details.killer?.riotIdGameName ? (
                                                             <Typography style={{ fontSize: '14px', marginLeft: '10px' }}>

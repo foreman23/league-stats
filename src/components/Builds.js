@@ -56,7 +56,7 @@ const Builds = (props) => {
                                     zIndex: 1
                                 }}>{item.champLevel}
                                 </Typography>
-                                <img className='BuildsChampPic' style={{ filter: item.championId !== currBuildChamp.championId ? 'grayscale(100%)' : 'grayscale(0%)', borderRadius: '0%' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                <img alt='Champion' className='BuildsChampPic' style={{ filter: item.championId !== currBuildChamp.championId ? 'grayscale(100%)' : 'grayscale(0%)', borderRadius: '0%' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                             </div>
                         ))}
                     </Grid>
@@ -86,7 +86,7 @@ const Builds = (props) => {
                                     zIndex: 1
                                 }}>{item.champLevel}
                                 </Typography>
-                                <img className='BuildsChampPic' style={{ filter: item.championId !== currBuildChamp.championId ? 'grayscale(100%)' : 'grayscale(0%)', borderRadius: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                <img alt='Champion' className='BuildsChampPic' style={{ filter: item.championId !== currBuildChamp.championId ? 'grayscale(100%)' : 'grayscale(0%)', borderRadius: '0px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                             </div>
                         ))}
                     </Grid>
@@ -165,7 +165,7 @@ const Builds = (props) => {
                                     <div style={{ display: 'flex' }}>
                                         {itemGroup.map((item, itemIndex) => (
                                             <Tooltip key={`item_${itemIndex}`} placement='top' arrow title={<><u>{items.data[item.itemId]?.name}</u><br></br>{items.data[item.itemId]?.plaintext || items.data[item.itemId]?.tags[0]}</>}>
-                                                <img key={itemIndex} className='BuildSectionItemImg' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${item.itemId}.png`}></img>
+                                                <img alt='Item' key={itemIndex} className='BuildSectionItemImg' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${item.itemId}.png`}></img>
                                             </Tooltip>
                                         ))}
                                     </div>

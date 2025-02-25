@@ -1,6 +1,5 @@
-import { Tooltip } from '@mui/material';
 
-const generateShortSummary = async (gameData, playerData, timelineData, stats15, dataDragonVersion, champsJSON) => {
+const generateShortSummary = async (gameData, playerData, stats15, champsJSON) => {
     let lanes = stats15.laneResults;
 
     let roles = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM'];

@@ -1,9 +1,8 @@
 import React from 'react'
-import { Button, Typography, Box, Grid, Divider, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import runes from '../jsonData/runes.json';
 import summonerSpells from '../jsonData/summonerSpells.json';
 import Battles from '../components/Battles';
@@ -15,7 +14,6 @@ import TeamGoldDifGraph from '../components/TeamGoldDifGraph';
 import Standout from '../components/Standout';
 import DamagePie from '../components/DamagePie';
 import getBuildInfo from '../functions/GetBuildInfo';
-import ForwardIcon from '@mui/icons-material/Forward';
 import Builds from '../components/Builds';
 import DetailsTable from '../components/DetailsTable';
 import ScrollTopButton from '../components/ScrollTopButton';
@@ -26,7 +24,6 @@ const GenericDetails = () => {
     const navigate = useNavigate();
 
     // Init state
-    const location = useLocation();
     const { matchId, summonerName } = useParams();
     const [gameData, setGameData] = useState(null);
     const [alternateRegion, setAlternateRegion] = useState(null);
@@ -61,14 +58,14 @@ const GenericDetails = () => {
         '#A53131' // Darkest
     ]
 
-    const findQueueInfo = async () => {
+    const findQueueInfo = useCallback(async () => {
         const queue = queues.find(queue => queue.queueId === gameData.info.queueId);
         console.log(queue)
         return queue;
-    }
+    }, [gameData, queues])
 
     // Search JSON for relevant Queue data
-    const findQueueTitle = async () => {
+    const findQueueTitle = useCallback(async () => {
 
         let queue = await findQueueInfo();
 
@@ -94,7 +91,7 @@ const GenericDetails = () => {
         else if (queueTitle === 'Arena') {
             setQueueTitle('Arena')
         }
-    }
+    }, [findQueueInfo])
 
     // Get queue JSON data from riot
     const getQueueJSON = async () => {
@@ -153,7 +150,7 @@ const GenericDetails = () => {
         }
     };
 
-    const calculateOpScores = () => {
+    const calculateOpScores = useCallback(() => {
         const players = gameData.info.participants;
 
         // Calculate total kills for each team
@@ -259,10 +256,10 @@ const GenericDetails = () => {
         setHighestDamageDealt(highestDamageDealt)
         setHighestDamageTaken(highestDamageTaken)
         setPlayersWithScore(updatedGameData.info.participants)
-    };
+    }, [gameData]);
 
     // Get item JSON data from riot
-    const getItemsJSON = async () => {
+    const getItemsJSON = useCallback(async () => {
         try {
             console.log(dataDragonVersion)
             const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/item.json`);
@@ -271,10 +268,10 @@ const GenericDetails = () => {
         } catch (error) {
             console.error('Error fetching item JSON data:', error);
         }
-    }
+    }, [setItems, dataDragonVersion])
 
     // Get champion JSON data from riot
-    const getChampsJSON = async () => {
+    const getChampsJSON = useCallback(async () => {
         try {
             const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
             const data = await response.json();
@@ -283,7 +280,7 @@ const GenericDetails = () => {
         } catch (error) {
             console.error('Error fetching champion JSON data:', error);
         }
-    }
+    }, [setChampsJSON, dataDragonVersion])
 
     const findAltRegion = (selectedRegion) => {
         // set alternate routing value
@@ -324,8 +321,7 @@ const GenericDetails = () => {
             })
     }
 
-    const fetchGameData = async () => {
-        let riotApiCallCount = 0;
+    const fetchGameData = useCallback(async () => {
         let region = matchId.split('_')[0].toLowerCase()
         console.log(region)
         const docRef = doc(firestore, `${region}-matches`, matchId)
@@ -342,7 +338,7 @@ const GenericDetails = () => {
         else {
             navigate('/*')
         }
-    }
+    }, [matchId, navigate])
 
     // On initial page load
     useEffect(() => {
@@ -362,7 +358,7 @@ const GenericDetails = () => {
             setGameData(payload.gameData);
             setDataDragonVersion(payload.dataDragonVersion);
         }
-    }, [])
+    }, [fetchGameData, matchId])
 
     // Get JSON after dataDragonVersion populates
     useEffect(() => {
@@ -371,7 +367,7 @@ const GenericDetails = () => {
             getItemsJSON();
             getChampsJSON();
         }
-    }, [dataDragonVersion])
+    }, [dataDragonVersion, getChampsJSON, getItemsJSON])
 
     useEffect(() => {
         const fetch15Stats = async () => {
@@ -387,7 +383,7 @@ const GenericDetails = () => {
 
         fetch15Stats()
 
-    }, [gameData, alternateRegion, timelineData, playerData]);
+    }, [gameData, alternateRegion, timelineData, playerData, calculateOpScores, champsJSON, dataDragonVersion]);
 
     // Get match timeline
     useEffect(() => {
@@ -410,7 +406,7 @@ const GenericDetails = () => {
             findQueueTitle();
         }
 
-    }, [queues, gameData])
+    }, [queues, gameData, findQueueTitle])
 
     // Set player data and game duration
     useEffect(() => {
@@ -433,7 +429,7 @@ const GenericDetails = () => {
             }
             setGameDuration(gameDuration)
         }
-    }, [gameData])
+    }, [gameData, summonerName])
 
     useEffect(() => {
         if (graphData) {
@@ -539,7 +535,7 @@ const GenericDetails = () => {
 
             setMatchSummaryDesc(<>{teamLeadingSentence} {lastSentence}</>)
         }
-    }, [graphData])
+    }, [graphData, playerData])
 
     const [isLoading, setIsLoading] = useState(true);
     // Render page once data is loaded
@@ -665,21 +661,21 @@ const GenericDetails = () => {
                                         </Grid>
                                     </a>
                                 )}
-                                <img style={{ width: '30px', marginTop: '10px', opacity: '65%' }} src='/images/swords.svg'></img>
+                                <img alt='' style={{ width: '30px', marginTop: '10px', opacity: '65%' }} src='/images/swords.svg'></img>
 
                                 {/* Manatee image for URF */}
                                 {queueTitle === 'ARURF' ? (
-                                    <img style={{ marginLeft: '15px', border: '4px solid black', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='gameDetailsSummaryMainChampImg' src='/images/The_Thinking_Manatee_profileicon.webp'></img>
+                                    <img alt='Urf Manatee' style={{ marginLeft: '15px', border: '4px solid black', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='gameDetailsSummaryMainChampImg' src='/images/The_Thinking_Manatee_profileicon.webp'></img>
                                 ) : (
-                                    <img style={{ marginLeft: '15px', border: playerData.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='gameDetailsSummaryMainChampImg' src='/images/novalue.webp'></img>
+                                    <img alt='Unknown Champion' style={{ marginLeft: '15px', border: playerData.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='gameDetailsSummaryMainChampImg' src='/images/novalue.webp'></img>
                                 )}
 
                             </Grid>
                             <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={7}>
                                 <Typography style={{ paddingTop: '10px', lineHeight: '1.4' }} fontSize={23} fontWeight={600} maxWidth={'460px'}>
-                                    <a style={{ textDecoration: 'none', color: 'inherit' }}>
+                                    <span style={{ textDecoration: 'none', color: 'inherit' }}>
                                         {playerData.riotIdGameName}
-                                    </a>
+                                    </span>
                                     <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                                 </Typography>
                                 <Typography style={{ paddingTop: '10px', paddingBottom: '10px', fontWeight: 'bold', color: '#7E7E7E', marginBottom: '5px' }} fontSize={14}>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
@@ -782,7 +778,7 @@ const GenericDetails = () => {
                                                 </Tooltip>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                                                        <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                                        <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                                                     </a>
                                                 </Tooltip>
                                             </div>
@@ -800,7 +796,7 @@ const GenericDetails = () => {
                                                 </Tooltip>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                                                        <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                                        <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                                                     </a>
                                                 </Tooltip>
                                             </div>
@@ -832,7 +828,7 @@ const GenericDetails = () => {
                                                 </Tooltip>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                                                        <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                                        <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                                                     </a>
                                                 </Tooltip>
                                             </div>
@@ -850,7 +846,7 @@ const GenericDetails = () => {
                                                 </Tooltip>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                                                        <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                                        <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                                                     </a>
                                                 </Tooltip>
                                             </div>

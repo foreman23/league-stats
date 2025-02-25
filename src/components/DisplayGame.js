@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Typography, Grid, Divider, LinearProgress, Box, Tooltip } from '@mui/material'
 // import queues from '../jsonData/queues.json'
 import summonerSpells from '../jsonData/summonerSpells.json'
@@ -8,12 +8,10 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const DisplayGame = (props) => {
 
-    const [isLaning, setIsLaning] = useState(true);
     const [queues, setQueues] = useState(null);
     const [queueTitle, setQueueTitle] = useState(null);
 
     const [timeSinceMatch, setTimeSinceMatch] = useState(null);
-    const [matchType, setMatchType] = useState(null);
 
     const [champsJSON, setChampsJSON] = useState(null);
 
@@ -58,42 +56,39 @@ const DisplayGame = (props) => {
         opposingSummonerSpell2 = summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString());
     }
 
-    // Find highest gold earned
-    const highestGold = props.gameData.info.participants.reduce((max, player) => Math.max(max, player.goldEarned), 0);
-
     // Find gold difference between opposing laner
-    const participantGold = participant.goldEarned;
-    let opposingGold = null
-    let goldDifference = null
-    if (opposingLaner) {
-        opposingGold = opposingLaner.goldEarned;
-        goldDifference = participantGold - opposingGold;
-    }
+    // const participantGold = participant.goldEarned;
+    // let opposingGold = null
+    // let goldDifference = null
+    // if (opposingLaner) {
+    //     opposingGold = opposingLaner.goldEarned;
+    //     goldDifference = participantGold - opposingGold;
+    // }
 
     // Generate gold difference descriptor
-    let differenceDesc = null;
+    // let differenceDesc = null;
 
-    if (goldDifference > 4000) {
-        differenceDesc = "Obliterated"
-    }
-    else if (goldDifference > 3000) {
-        differenceDesc = "Dominated"
-    }
-    else if (goldDifference > 0) {
-        differenceDesc = "Won against"
-    }
-    else if (goldDifference == 0) {
-        differenceDesc = "Tied"
-    }
-    else if (goldDifference < -4000) {
-        differenceDesc = "Obliterated by"
-    }
-    else if (goldDifference < -3000) {
-        differenceDesc = "Dominated by"
-    }
-    else if (goldDifference < 0) {
-        differenceDesc = "Lost to"
-    }
+    // if (goldDifference > 4000) {
+    //     differenceDesc = "Obliterated"
+    // }
+    // else if (goldDifference > 3000) {
+    //     differenceDesc = "Dominated"
+    // }
+    // else if (goldDifference > 0) {
+    //     differenceDesc = "Won against"
+    // }
+    // else if (goldDifference === 0) {
+    //     differenceDesc = "Tied"
+    // }
+    // else if (goldDifference < -4000) {
+    //     differenceDesc = "Obliterated by"
+    // }
+    // else if (goldDifference < -3000) {
+    //     differenceDesc = "Dominated by"
+    // }
+    // else if (goldDifference < 0) {
+    //     differenceDesc = "Lost to"
+    // }
 
     // Set lane titles
     let participantLane = participant.teamPosition.toLowerCase()
@@ -104,13 +99,13 @@ const DisplayGame = (props) => {
         participantLane = 'mid'
     }
 
-    const findQueueInfo = async () => {
+    const findQueueInfo = useCallback(async () => {
         const queue = queues.find(queue => queue.queueId === props.gameData.info.queueId);
         return queue;
-    }
+    }, [props, queues])
 
     // Search JSON for relevant Queue data
-    const findQueueTitle = async () => {
+    const findQueueTitle = useCallback(async () => {
 
         let queue = await findQueueInfo();
 
@@ -129,24 +124,21 @@ const DisplayGame = (props) => {
         }
         else if (queueTitle === '5v5 ARAM games') {
             setQueueTitle('ARAM')
-            setIsLaning(false);
         }
         else if (queueTitle === 'ARAM Clash games') {
             setQueueTitle('ARAM Clash')
-            setIsLaning(false);
         }
         else if (queueTitle === 'ARURF games') {
             setQueueTitle('ARURF')
         }
         else if (queueTitle === 'Arena') {
             setQueueTitle('Arena')
-            setIsLaning(false);
         }
         // CHANGE THIS ONCE RIOT UPDATES THEIR QUEUES JSON
         else if (queueTitle === null) {
             setQueueTitle('Swiftplay')
         }
-    }
+    }, [findQueueInfo])
 
     const getQueueJSON = async () => {
         try {
@@ -159,7 +151,7 @@ const DisplayGame = (props) => {
     }
 
     // Get champion JSON data from riot
-    const getChampsJSON = async () => {
+    const getChampsJSON = useCallback(async () => {
         try {
             const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
             const data = await response.json();
@@ -167,9 +159,8 @@ const DisplayGame = (props) => {
         } catch (error) {
             console.error('Error fetching champion JSON data:', error);
         }
-    }
+    }, [dataDragonVersion])
 
-    const [matchText, setMatchText] = useState(null);
     const [playersWithOpScores, setPlayersWithOpScores] = useState(null);
     const [playerScore, setPlayerScore] = useState(null);
     const [oppScore, setOppScore] = useState(null);
@@ -178,14 +169,13 @@ const DisplayGame = (props) => {
         getQueueJSON();
         getChampsJSON();
         if (props.gameData.info.gameMode !== 'ARAM' && props.gameData.info.gameDuration > 180) {
-            const { matchSummaryText, highestDamageDealt, playersWithScores } = calculateOpScores(props.gameData, participant)
-            setMatchText(matchSummaryText)
+            const { playersWithScores } = calculateOpScores(props.gameData, participant)
             setPlayersWithOpScores(playersWithScores)
             setPlayerScore(playersWithScores.find(participant => participant.puuid === props.puuid))
             setOppScore(playersWithScores.find(laner => laner.teamPosition === participant.teamPosition && laner.summonerId !== participant.summonerId))
         }
         else if (props.gameData.info.gameMode === 'ARAM' || props.gameData.info.gameDuration < 180) {
-            const { highestDamageDealt, playersWithScores } = calculateOpScoresAram(props.gameData, participant)
+            const { playersWithScores } = calculateOpScoresAram(props.gameData, participant)
             setPlayersWithOpScores(playersWithScores)
             setPlayerScore(playersWithScores.find(participant => participant.puuid === props.puuid))
             const opposingPlayers = props.gameData.info.participants.filter(players => players.teamId !== participant.teamId)
@@ -197,11 +187,11 @@ const DisplayGame = (props) => {
                     break
                 }
             }
-            opposingLaner = opposingPlayers[playerIndex]
-            setOppScore(opposingLaner)
+            // opposingLaner = opposingPlayers[playerIndex]
+            setOppScore(opposingPlayers[playerIndex])
         }
 
-    }, [])
+    }, [getChampsJSON, participant, props])
 
 
     // Set loading to false when data is loaded
@@ -242,7 +232,7 @@ const DisplayGame = (props) => {
             }
         }
 
-    }, [queues])
+    }, [queues, findQueueTitle, props])
 
     if (isLoading) {
         return (
@@ -301,7 +291,7 @@ const DisplayGame = (props) => {
                                 {participants.filter(player => player.teamId === participant.teamId && player.summonerId !== participant.summonerId).map((player, index) => (
                                     <Tooltip key={`player_${index}_team1`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
                                         <span href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                                            <img className='displayGameTeamChamps' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
+                                            <img alt='Champion' className='displayGameTeamChamps' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
                                             <Box className='displayGameTeamChampsBox' style={{ backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54' }}></Box>
                                         </span>
                                     </Tooltip>
@@ -424,7 +414,7 @@ const DisplayGame = (props) => {
                                 {participants.filter(player => player.teamId !== participant.teamId && player.summonerId !== opposingLaner.summonerId).map((player, index) => (
                                     <Tooltip key={`player_${index}_team2`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
                                         <span href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                                            <img className='displayGameTeamChamps' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
+                                            <img alt='Champion' className='displayGameTeamChamps' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
                                             <Box className='displayGameTeamChampsBox' style={{ backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54' }}></Box>
                                         </span>
                                     </Tooltip>

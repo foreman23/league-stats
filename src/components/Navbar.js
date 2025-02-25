@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Typography, Toolbar, AppBar, TextField, IconButton, Select, MenuItem, Autocomplete, Switch, FormControlLabel, FormGroup, Drawer, ListItem, List, Menu, styled } from '@mui/material';
+import { Typography, Toolbar, AppBar, TextField, IconButton, Select, MenuItem, Autocomplete, Drawer, ListItem, List, Menu } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
+// import LightModeIcon from '@mui/icons-material/LightMode';
+// import DarkModeIcon from '@mui/icons-material/DarkMode';
 import MenuIcon from '@mui/icons-material/Menu';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ListIcon from '@mui/icons-material/List';
 
 function Navbar(props) {
 
@@ -22,9 +21,8 @@ function Navbar(props) {
     const [favorites, setFavorites] = useState(null);
 
     const [recentArr, setRecentArr] = useState(null);
-    const [recentSearches, setRecentSearches] = useState(null);
 
-    const [theme, setTheme] = useState('light');
+    // const [theme, setTheme] = useState('light');
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -35,10 +33,10 @@ function Navbar(props) {
         setAnchorEl(null);
     };
 
-    const updateSummonerNameState = async (event) => {
-        const inputValue = event.target.value;
-        setSummonerName(inputValue.toLowerCase());
-    }
+    // const updateSummonerNameState = async (event) => {
+    //     const inputValue = event.target.value;
+    //     setSummonerName(inputValue.toLowerCase());
+    // }
 
     const [openDrawer, setOpenDrawer] = useState(false);
     // Toggle menu drawer for mobile
@@ -61,7 +59,6 @@ function Navbar(props) {
         if (recentSearchStr !== null) {
             let recentSearchArr = JSON.parse(recentSearchStr)
             recentSearchArr.reverse()
-            setRecentSearches(recentSearchArr)
 
             let arr = []
             for (let i = 0; i < recentSearchArr.length; i++) {
@@ -193,13 +190,13 @@ function Navbar(props) {
         setDropdownDefaultValue(value);
     }
 
-    const changeTheme = () => {
-        if (theme === 'light') {
-            setTheme('dark')
-        } else if (theme === 'dark') {
-            setTheme('light')
-        }
-    }
+    // const changeTheme = () => {
+    //     if (theme === 'light') {
+    //         setTheme('dark')
+    //     } else if (theme === 'dark') {
+    //         setTheme('light')
+    //     }
+    // }
 
     // Remove summoner from favorites
     const handleRemoveFavorite = (summonerObj) => {
@@ -243,7 +240,7 @@ function Navbar(props) {
                     <Typography className='navBarHeaderText' variant="h6" fontWeight={'bold'} marginRight='5px' component="div" sx={{ flexGrow: 1 }}>
                         RiftReport.gg
                     </Typography>
-                    <img style={{ width: '40px' }} src='/images/sorakaLogo.webp'></img>
+                    <img alt='Logo' style={{ width: '40px' }} src='/images/sorakaLogo.webp'></img>
                 </a>
 
                 {/* Mobile Navbar */}
@@ -253,7 +250,7 @@ function Navbar(props) {
                         <List>
                             <ListItem>
                                 <a href='/' onClick={() => toggleDrawer(false)} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-                                    <img style={{ width: '40px', marginRight: '5px' }} src='/images/sorakaLogo.webp'></img>
+                                    <img alt='Logo' style={{ width: '40px', marginRight: '5px' }} src='/images/sorakaLogo.webp'></img>
                                     <Typography>RiftReport.gg</Typography>
                                 </a>
                             </ListItem>
@@ -343,7 +340,7 @@ function Navbar(props) {
                                         {favorites.map((item, index) => (
                                             <ListItem style={{ alignItems: 'center' }} key={index}>
                                                 <a onClick={() => toggleDrawer(false)} href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: '25px' }}>
-                                                    <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '52px', marginRight: '10px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
+                                                    <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '52px', marginRight: '10px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
                                                     <span style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.summonerName} #{item.riotId}</span>
                                                 </a>
                                                 <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>
@@ -455,7 +452,7 @@ function Navbar(props) {
                                 {favorites.map((item, index) => (
                                     <ListItem style={{ alignItems: 'center' }} key={index}>
                                         <a onClick={() => toggleDrawer(false)} href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: '25px' }}>
-                                            <img style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '52px', marginRight: '10px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
+                                            <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '52px', marginRight: '10px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
                                             <span style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.summonerName} #{item.riotId}</span>
                                         </a>
                                         <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>

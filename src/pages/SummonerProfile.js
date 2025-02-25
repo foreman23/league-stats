@@ -5,9 +5,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Unstable_Grid2';
-import Navbar from '../components/Navbar';
 import { firestore } from '../FirebaseConfig';
-import { collection, updateDoc, doc, getDoc, setDoc, sum } from "firebase/firestore";
+import { collection, updateDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import SyncIcon from '@mui/icons-material/Sync';
 import DisplayGame from '../components/DisplayGame';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -33,8 +32,6 @@ const SummonerProfile = () => {
 
   const [dataDragonVersion, setDataDragonVersion] = useState(null);
   const [playerData, setPlayerData] = useState(null);
-
-  const [recentOpen, setRecentOpen] = useState(false);
 
   const [favorited, setFavorited] = useState(false);
 
@@ -101,7 +98,7 @@ const SummonerProfile = () => {
   }
 
   // Set the current ddragon version
-  const getDataDragonVersion = async () => {
+  const getDataDragonVersion = useCallback(async () => {
     axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
       .then(function (response) {
         const currentVersion = response.data[0];
@@ -109,9 +106,9 @@ const SummonerProfile = () => {
         getChampsJSON(currentVersion);
       })
       .catch(function (response) {
-        console.log('Error: Error fetching datadragon version')
+        // console.log('Error: Error fetching datadragon version')
       })
-  }
+  }, [])
 
   const [loadingMatches, setLoadingMatches] = useState(false);
 
@@ -124,7 +121,7 @@ const SummonerProfile = () => {
 
     setLoadingMatches(true)
 
-    if (historyData.status === 400) {
+    if (data.status === 400) {
       navigate(`/nosummoner/${summonerName}/${riotId}`);
     }
 
@@ -153,7 +150,6 @@ const SummonerProfile = () => {
 
           // break loop if game too old
           if (new Date(matchResponse.data.info.gameStartTimestamp + 7776000000) < new Date()) {
-            console.log(matchResponse.data.info.gameMode)
             // if first game too old, rest must be
             if (i === 0) {
               break;
@@ -164,6 +160,7 @@ const SummonerProfile = () => {
           }
 
           let matchData = null
+
           if (matchResponse.status === 200) {
             matchData = matchResponse.data;
           }
@@ -190,7 +187,7 @@ const SummonerProfile = () => {
       setMatchesLoaded(true);
       setLoadingMatches(false);
     }
-  }, [matchRegion, selectedRegion])
+  }, [matchRegion, selectedRegion, riotId, summonerName, navigate])
 
   // Load additional matches for the player
   const handleLoadMore = async () => {
@@ -218,7 +215,6 @@ const SummonerProfile = () => {
 
           // break loop if game too old
           if (new Date(matchResponse.data.info.gameStartTimestamp + 7776000000) < new Date()) {
-            console.log(new Date(matchResponse.data.info.gameStartTimestamp + 7776000000), new Date())
             // if first game too old, rest must be
             if (i === 0) {
               break;
@@ -299,19 +295,13 @@ const SummonerProfile = () => {
 
 
         // If summoner does not exist anywhere
-        if (puuidData.status === 404 || puuidData.status === 400) {
-          console.log(`summoner does not exist :(`)
+        if (puuidResponse.status === 400) {
           navigate(`/nosummoner/${summonerName}/${riotId}`)
         }
 
         const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
         riotApiCallCount += 1
         const summonerResData = summonerResponse.data;
-
-        // If summoner not found return 404
-        if (summonerResData.status === 404 || puuidData.status === 400) {
-          console.log(`summoner not found in region ${selectedRegion} :(`)
-        }
 
         const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerResData.id}`);
         riotApiCallCount += 1
@@ -356,7 +346,7 @@ const SummonerProfile = () => {
         setTimeLastUpdated('Just now');
         setDisableUpdateButton(true);
       } catch (error) {
-        console.error(error);
+        navigate(`/nosummoner/${summonerName}/${riotId}`)
       }
     }
     return;
@@ -415,7 +405,7 @@ const SummonerProfile = () => {
       setIsLoadingRank(false);
     }
     catch (error) {
-      console.error(error)
+      navigate(`/nosummoner/${summonerName}/${riotId}`)
     }
     return;
   }
@@ -492,7 +482,7 @@ const SummonerProfile = () => {
   // Get data dragon version on initial load
   useEffect(() => {
     getDataDragonVersion();
-  }, [dataDragonVersion])
+  }, [dataDragonVersion, getDataDragonVersion])
 
   // Get summoner data on page load
   useEffect(() => {
@@ -566,7 +556,7 @@ const SummonerProfile = () => {
             highestTierValue = tierValues[summonerData.rankedData[i].rank]
           }
           // If rank same (eg. silver and silver) pick higher tier
-          else if (rankedValues[summonerData.rankedData[i].tier] == highestRank) {
+          else if (rankedValues[summonerData.rankedData[i].tier] === highestRank) {
             if (tierValues[summonerData.rankedData[i].rank] > highestTierValue) {
               highestTierValue = summonerData.rankedData[i].rank
               highestRankIndex = i
@@ -622,7 +612,7 @@ const SummonerProfile = () => {
       const data = await response.json();
       setChampsJSON(data);
     } catch (error) {
-      console.error('Error fetching champion JSON data:', error);
+      // console.error('Error fetching champion JSON data');
     }
   }
 
@@ -664,7 +654,7 @@ const SummonerProfile = () => {
               highestTierValue = tierValues[summonerData.rankedData[i].rank]
             }
             // If rank same (eg. silver and silver) pick higher tier
-            else if (rankedValues[summonerData.rankedData[i].tier] == highestRank) {
+            else if (rankedValues[summonerData.rankedData[i].tier] === highestRank) {
               if (tierValues[summonerData.rankedData[i].rank] > highestTierValue) {
                 highestTierValue = summonerData.rankedData[i].rank
                 highestRankIndex = i
@@ -693,7 +683,7 @@ const SummonerProfile = () => {
         setPlayerData(dummyPlayerData)
       }
     }
-  }, [summonerData, matchData, matchesLoaded])
+  }, [summonerData, matchData, matchesLoaded, riotId, summonerName])
 
   useEffect(() => {
     if (playerData !== undefined && playerData !== null) {
@@ -734,7 +724,7 @@ const SummonerProfile = () => {
               highestTierValue = tierValues[summonerData.rankedData[i].rank]
             }
             // If rank same (eg. silver and silver) pick higher tier
-            else if (rankedValues[summonerData.rankedData[i].tier] == highestRank) {
+            else if (rankedValues[summonerData.rankedData[i].tier] === highestRank) {
               if (tierValues[summonerData.rankedData[i].rank] > highestTierValue) {
                 highestTierValue = summonerData.rankedData[i].rank
                 highestRankIndex = i
@@ -814,7 +804,7 @@ const SummonerProfile = () => {
         }
       }
     }
-  }, [playerData]);
+  }, [playerData, riotId, selectedRegion, summonerData]);
 
 
   useEffect(() => {
@@ -823,7 +813,7 @@ const SummonerProfile = () => {
       setIsLoading(false);
     }
 
-  }, [playerData])
+  }, [playerData, matchData, matchesLoaded])
 
   useEffect(() => {
     if (matchesLoaded === true) {
@@ -955,7 +945,7 @@ const SummonerProfile = () => {
                         </div>
                       </>}
                     >
-                      <img style={{
+                      <img alt='Rank Badge' style={{
                         backgroundColor: '#E3E3E3',
                         borderRadius: '100%',
                         border: '4px white solid',
@@ -1217,27 +1207,33 @@ const SummonerProfile = () => {
                   "dataDragonVersion": dataDragonVersion
                 };
 
-                if (recentOpen === false) return (
-                  <a style={{ textDecoration: 'inherit', color: 'inherit' }} onMouseDown={(e) => {
-                    if (e.button === 0 || e.button === 1) {
+                return (
+                  <a
+                    style={{ textDecoration: 'inherit', color: 'inherit' }}
+                    onMouseDown={(e) => {
+                      // Set localStorage for all mouse buttons immediately
                       localStorage.setItem('gameData', JSON.stringify(gameDataPayload));
-                      setTimeout(() => {
-                        setRecentOpen(true);
-                        setTimeout(() => {
-                          setRecentOpen(false);
-                        }, 200)
-                      }, 200);
-                    }
-                  }}
-                    className="DisplayGameContainer" href={gameModeHref} key={index}>
-                    <DisplayGame gameData={gameData} dataDragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
+                    }}
+                    onClick={(e) => {
+                      // Handle left-click only
+                      if (e.button === 0) {
+                        e.preventDefault();
+                        window.location.href = gameModeHref;
+                      }
+                      // Middle-click (button 1) and right-click (button 2) will use native <a> behavior
+                    }}
+                    className="DisplayGameContainer"
+                    href={gameModeHref}
+                    key={index}
+                  >
+                    <DisplayGame
+                      gameData={gameData}
+                      dataDragonVersion={dataDragonVersion}
+                      puuid={summonerData.summonerData.puuid}
+                    />
                   </a>
                 );
-                if (recentOpen === true) return (
-                  <a className="DisplayGameContainer" key={index}>
-                    <DisplayGame gameData={gameData} dataDragonVersion={dataDragonVersion} puuid={summonerData.summonerData.puuid} />
-                  </a>
-                );
+
               })
             ) : (
               <div style={{ textAlign: 'center' }}>

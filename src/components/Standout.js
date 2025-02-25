@@ -69,72 +69,75 @@ const Standout = (props) => {
                     descStr += `Their contribution to damage was minimal, dealing just ${activePlayer.player.totalDamageDealtToChampions.toLocaleString()} damage. `;
                 }
                 break;
-
-                // Add additional performance highlights
-                const goldEarned = activePlayer.player.goldEarned;
-                const goldThreshold = Math.ceil((gameData.info.gameDuration / 60) * 500); // 500 gold per minute
-                if (goldEarned > goldThreshold) {
-                    descStr += `They amassed an impressive ${goldEarned.toLocaleString()} gold. `;
-                }
-
-                const totalDamage = activePlayer.player.totalDamageDealtToChampions;
-                const damageThreshold = Math.ceil((gameData.info.gameDuration / 60) * 900); // Average 900 damage per minute
-                if (totalDamage > damageThreshold) {
-                    descStr += `With ${totalDamage.toLocaleString()} damage dealt, they were pivotal in helping the ${activePlayer.player.teamId === 100 ? 'blue' : 'red'} team dominate teamfights. `;
-                }
-
-                const kills = activePlayer.player.kills;
-                const killThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.5); // 0.5 kills per minute
-                if (kills > killThreshold) {
-                    descStr += `Their ${kills} kills ${activePlayer.player.win ? 'helped to secure a decisive victory' : 'kept their team in contention'} for the ${activePlayer.player.teamId === 100 ? 'blue' : 'red'} team. `;
-                }
-
-                // Add jungle objectives to the description
-                const dragonsTaken = activePlayer.player.challenges.dragonTakedowns || 0;
-                const baronsTaken = activePlayer.player.challenges.baronTakedowns || 0;
-
-                // Dynamic thresholds based on game duration
-                const dragonThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.1);
-                const baronThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.05);
-
-                if (dragonsTaken > dragonThreshold) {
-                    descStr += `They dominated the jungle by securing ${dragonsTaken} dragons, giving their team a strong advantage. `;
-                }
-
-                if (baronsTaken > baronThreshold) {
-                    descStr += `Their impact was felt in the late game, where they secured ${baronsTaken} Baron Nashor buffs, shifting momentum in their team's favor. `;
-                }
-
-                // Include summary for high-impact jungle objectives
-                const totalObjectives = dragonsTaken + baronsTaken;
-                if (totalObjectives > (dragonThreshold + baronThreshold)) {
-                    descStr += `Overall, they contributed significantly by taking ${totalObjectives} major jungle objectives, leading their team to success. `;
-                }
-
-                const kda = ((kills + activePlayer.player.assists) / activePlayer.player.deaths).toFixed(1);
-                if (kda > 5) {
-                    descStr += `They maintained an impressive KDA of ${kda}, showcasing their effectiveness. `;
-                }
-
-                // Add tower and inhibitor takedowns to the description
-                const towersTaken = activePlayer.player.challenges.turretTakedowns || 0;
-
-                // Dynamic thresholds based on game duration
-                const towerThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.2);
-
-                if (towersTaken > towerThreshold) {
-                    descStr += `They pushed objectives relentlessly, taking down ${towersTaken} towers to secure map control. `;
-                }
-
-                // Include summary for high-impact structural objectives
-                if (towersTaken > towerThreshold) {
-                    descStr += `Overall, they contributed significantly by taking ${towersTaken} towers, paving the way for their team's victory. `;
-                }
-
-                // Final description string
-                descStr = descStr.trim();
+            default:
+                descStr += `played the game, finishing with ${activePlayer.player.kills}/${activePlayer.player.deaths}/${activePlayer.player.assists}. `;
+                break;
         }
     }
+
+    // Add additional performance highlights
+    const goldEarned = activePlayer.player.goldEarned;
+    const goldThreshold = Math.ceil((gameData.info.gameDuration / 60) * 500); // 500 gold per minute
+    if (goldEarned > goldThreshold) {
+        descStr += `They amassed an impressive ${goldEarned.toLocaleString()} gold. `;
+    }
+
+    const totalDamage = activePlayer.player.totalDamageDealtToChampions;
+    const damageThreshold = Math.ceil((gameData.info.gameDuration / 60) * 900); // Average 900 damage per minute
+    if (totalDamage > damageThreshold) {
+        descStr += `With ${totalDamage.toLocaleString()} damage dealt, they were pivotal in helping the ${activePlayer.player.teamId === 100 ? 'blue' : 'red'} team dominate teamfights. `;
+    }
+
+    const kills = activePlayer.player.kills;
+    const killThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.5); // 0.5 kills per minute
+    if (kills > killThreshold) {
+        descStr += `Their ${kills} kills ${activePlayer.player.win ? 'helped to secure a decisive victory' : 'kept their team in contention'} for the ${activePlayer.player.teamId === 100 ? 'blue' : 'red'} team. `;
+    }
+
+    // Add jungle objectives to the description
+    const dragonsTaken = activePlayer.player.challenges.dragonTakedowns || 0;
+    const baronsTaken = activePlayer.player.challenges.baronTakedowns || 0;
+
+    // Dynamic thresholds based on game duration
+    const dragonThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.1);
+    const baronThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.05);
+
+    if (dragonsTaken > dragonThreshold) {
+        descStr += `They dominated the jungle by securing ${dragonsTaken} dragons, giving their team a strong advantage. `;
+    }
+
+    if (baronsTaken > baronThreshold) {
+        descStr += `Their impact was felt in the late game, where they secured ${baronsTaken} Baron Nashor buffs, shifting momentum in their team's favor. `;
+    }
+
+    // Include summary for high-impact jungle objectives
+    const totalObjectives = dragonsTaken + baronsTaken;
+    if (totalObjectives > (dragonThreshold + baronThreshold)) {
+        descStr += `Overall, they contributed significantly by taking ${totalObjectives} major jungle objectives, leading their team to success. `;
+    }
+
+    const kda = ((kills + activePlayer.player.assists) / activePlayer.player.deaths).toFixed(1);
+    if (kda > 5) {
+        descStr += `They maintained an impressive KDA of ${kda}, showcasing their effectiveness. `;
+    }
+
+    // Add tower and inhibitor takedowns to the description
+    const towersTaken = activePlayer.player.challenges.turretTakedowns || 0;
+
+    // Dynamic thresholds based on game duration
+    const towerThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.2);
+
+    if (towersTaken > towerThreshold) {
+        descStr += `They pushed objectives relentlessly, taking down ${towersTaken} towers to secure map control. `;
+    }
+
+    // Include summary for high-impact structural objectives
+    if (towersTaken > towerThreshold) {
+        descStr += `Overall, they contributed significantly by taking ${towersTaken} towers, paving the way for their team's victory. `;
+    }
+
+    // Final description string
+    descStr = descStr.trim();
 
     if (performances[0].player !== null) return (
         <Box

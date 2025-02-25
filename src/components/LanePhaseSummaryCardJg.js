@@ -12,7 +12,7 @@ const LanePhaseSummaryCardJg = (props) => {
 
     }
 
-    const { statsAt15, jgSummaryCardStatus, gameData, timelineData, dataDragonVersion, champsJSON, gameDuration } = props;
+    const { statsAt15, gameData, timelineData, champsJSON } = props;
 
     const participants = gameData.info.participants;
 
@@ -123,16 +123,16 @@ const LanePhaseSummaryCardJg = (props) => {
                 <Grid item style={{ display: 'inline-flex', justifyContent: 'center' }} xs={12} sm={6}>
                     <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName} #${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline}`}>
                         <div style={{ position: 'relative', display: 'inline-block' }}>
-                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdTagline.toLowerCase()}`}><img style={{ border: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img></a>
+                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img></a>
                         </div>
                     </Tooltip>
-                    <img className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
+                    <img alt='' className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
                     <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName} #${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline}`}>
                         <div style={{ position: 'relative', display: 'inline-block' }}>
-                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdTagline.toLowerCase()}`}><img style={{ border: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img></a>
+                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img></a>
                         </div>
                     </Tooltip>
-                    <img className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
+                    <img alt='Lane' className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
                 </Grid>
             </Grid>
 
@@ -147,10 +147,10 @@ const LanePhaseSummaryCardJg = (props) => {
                                 return (
                                     <Typography key={`kill_${index}`}>{Math.round(kill.timestamp / 60000)}m - <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.killerId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.killerId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>
                                         {participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}</a>
-                                        <img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
+                                        <img alt='Champion' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
                                             src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.killerId).championId)).id}.png`}>
                                         </img> killed <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.victimId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.victimId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}</a>
-                                        <img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
+                                        <img alt='Champion' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
                                             src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.victimId).championId)).id}.png`}>
                                         </img>
                                     </Typography>
@@ -158,39 +158,40 @@ const LanePhaseSummaryCardJg = (props) => {
                             }
                             if (kill.victimId === 0) {
                                 return (
-                                    <Typography key={`kill_${index}`}>{Math.round(kill.timestamp / 60000)}m - <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.killerId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.killerId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
+                                    <Typography key={`kill_${index}`}>{Math.round(kill.timestamp / 60000)}m - <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.killerId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.killerId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}</a><img alt='Killer' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
                                         src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.killerId).championId)).id}.png`}></img> killed <span style={{ color: '#6A00AB', fontWeight: 'bold' }}>{kill.monsterType.toLowerCase()}</span></Typography>
                                 )
                             }
                             if (kill.killerId === 0) {
                                 return (
-                                    <Typography key={`kill_${index}`}>{Math.round(kill.timestamp / 60000)}m - <span style={{ fontWeight: 'bold', color: 'green' }}>Environment</span> killed <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.victimId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.victimId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
+                                    <Typography key={`kill_${index}`}>{Math.round(kill.timestamp / 60000)}m - <span style={{ fontWeight: 'bold', color: 'green' }}>Environment</span> killed <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.victimId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.victimId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}</a><img alt='Victim' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
                                         src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.victimId).championId)).id}.png`}></img></Typography>
                                 )
                             }
+                            return null;
                         })}
                     </div>
                 </Grid>
                 <Grid item style={{ display: 'inline-flex', justifyContent: 'center' }} xs={12} sm={6}>
                     <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName} #${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdTagline}`}>
                         <div style={{ position: 'relative', display: 'inline-block' }}>
-                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdTagline.toLowerCase()}`}><img style={{ border: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img></a>
+                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img></a>
                         </div>
                     </Tooltip>
-                    <img className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
+                    <img alt='' className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
                     <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName} #${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdTagline}`}>
                         <div style={{ position: 'relative', display: 'inline-block' }}>
-                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdTagline.toLowerCase()}`}><img style={{ border: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img></a>
+                            <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img></a>
                         </div>
                     </Tooltip>
-                    <img className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
+                    <img alt='Lane' className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/Jungle.png'></img>
                 </Grid>
             </Grid>
 
             <Grid className={lastButtonPressedJg === 'laneSumJg3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
                 <Grid item xs={12}>
                     <p style={{ marginBottom: '15px' }}>
-                        Graph of CS killed each minute by <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img> ({statsAt15.laneResults.JUNGLE.laneWinner.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName}</a><img style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img> ({statsAt15.laneResults.JUNGLE.laneLoser.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneLoser.cs} CS) during laning phase.
+                        Graph of CS killed each minute by <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.JUNGLE.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneWinner?.riotIdGameName}</a><img alt='Champion' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img> ({statsAt15.laneResults.JUNGLE.laneWinner.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName}/${statsAt15.laneResults.JUNGLE.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.JUNGLE.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.JUNGLE.laneLoser?.riotIdGameName}</a><img alt='Champion' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img> ({statsAt15.laneResults.JUNGLE.laneLoser.kdaAlt}, {statsAt15.laneResults.JUNGLE.laneLoser.cs} CS) during laning phase.
                     </p>
                     <div style={{ height: '300px', width: '100%' }}>
                         <LineChart

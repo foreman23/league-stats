@@ -1,9 +1,8 @@
 import React from 'react'
-import { Button, Typography, Box, Grid, Divider, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import runes from '../jsonData/runes.json';
 import summonerSpells from '../jsonData/summonerSpells.json';
 import Battles from '../components/Battles';
@@ -15,7 +14,6 @@ import TeamGoldDifGraph from '../components/TeamGoldDifGraph';
 import Standout from '../components/Standout';
 import DamagePie from '../components/DamagePie';
 import getBuildInfo from '../functions/GetBuildInfo';
-import ForwardIcon from '@mui/icons-material/Forward';
 import DetailsTable from '../components/DetailsTable';
 import Builds from '../components/Builds';
 import ScrollTopButton from '../components/ScrollTopButton';
@@ -26,7 +24,6 @@ const AramDetails = () => {
     const navigate = useNavigate();
 
     // Init state
-    const location = useLocation();
     const { matchId, summonerName } = useParams();
     const [gameData, setGameData] = useState(null);
     const [alternateRegion, setAlternateRegion] = useState(null);
@@ -103,7 +100,7 @@ const AramDetails = () => {
         }
     };
 
-    const calculateOpScores = () => {
+    const calculateOpScores = useCallback(() => {
         const players = gameData.info.participants;
 
         // Calculate total kills for each team
@@ -205,10 +202,10 @@ const AramDetails = () => {
         setHighestDamageDealt(highestDamageDealt)
         setHighestDamageTaken(highestDamageTaken)
         setPlayersWithScore(updatedGameData.info.participants)
-    };
+    }, [gameData]);
 
     // Get item JSON data from riot
-    const getItemsJSON = async () => {
+    const getItemsJSON = useCallback(async () => {
         try {
             const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/item.json`);
             const data = await response.json();
@@ -216,10 +213,10 @@ const AramDetails = () => {
         } catch (error) {
             console.error('Error fetching item JSON data:', error);
         }
-    }
+    }, [setItems, dataDragonVersion])
 
     // Get champion JSON data from riot
-    const getChampsJSON = async () => {
+    const getChampsJSON = useCallback(async () => {
         try {
             const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
             const data = await response.json();
@@ -227,7 +224,7 @@ const AramDetails = () => {
         } catch (error) {
             console.error('Error fetching champion JSON data:', error);
         }
-    }
+    }, [setChampsJSON, dataDragonVersion])
 
     const findAltRegion = (selectedRegion) => {
         // set alternate routing value
@@ -267,8 +264,7 @@ const AramDetails = () => {
             })
     }
 
-    const fetchGameData = async () => {
-        let riotApiCallCount = 0;
+    const fetchGameData = useCallback(async () => {
         let region = matchId.split('_')[0].toLowerCase()
         const docRef = doc(firestore, `${region}-matches`, matchId)
         console.log('Reading from firestore (checking match exists)')
@@ -284,7 +280,7 @@ const AramDetails = () => {
         else {
             navigate('/*')
         }
-    }
+    }, [matchId, navigate])
 
     // On initial page load
     useEffect(() => {
@@ -304,7 +300,7 @@ const AramDetails = () => {
             setGameData(payload.gameData);
             setDataDragonVersion(payload.dataDragonVersion);
         }
-    }, [])
+    }, [fetchGameData, matchId])
 
     // Get JSON after dataDragonVersion populates
     useEffect(() => {
@@ -312,7 +308,7 @@ const AramDetails = () => {
             getItemsJSON();
             getChampsJSON();
         }
-    }, [dataDragonVersion])
+    }, [dataDragonVersion, getChampsJSON, getItemsJSON])
 
     useEffect(() => {
         const fetch15Stats = async () => {
@@ -328,7 +324,7 @@ const AramDetails = () => {
 
         fetch15Stats()
 
-    }, [gameData, alternateRegion, timelineData, playerData]);
+    }, [gameData, alternateRegion, timelineData, playerData, champsJSON, dataDragonVersion, calculateOpScores]);
 
     // Get match timeline
     useEffect(() => {
@@ -365,7 +361,7 @@ const AramDetails = () => {
             }
             setGameDuration(gameDuration)
         }
-    }, [gameData])
+    }, [gameData, summonerName])
 
     useEffect(() => {
         if (graphData) {
@@ -471,7 +467,7 @@ const AramDetails = () => {
 
             setMatchSummaryDesc(<>{teamLeadingSentence} {lastSentence}</>)
         }
-    }, [graphData])
+    }, [graphData, playerData])
 
     const [isLoading, setIsLoading] = useState(true);
     // Render page once data is loaded
@@ -596,17 +592,17 @@ const AramDetails = () => {
                                         </Grid>
                                     </a>
                                 )}
-                                <img style={{ width: '30px', marginTop: '10px', opacity: '65%' }} src='/images/swords.svg'></img>
+                                <img alt='' style={{ width: '30px', marginTop: '10px', opacity: '65%' }} src='/images/swords.svg'></img>
 
-                                <img style={{ marginLeft: '15px', border: '4px solid black', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='gameDetailsSummaryMainChampImg' src='/images/Howling_Abyss_Minimap.webp'></img>
+                                <img alt='Aram Map' style={{ marginLeft: '15px', border: '4px solid black', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='gameDetailsSummaryMainChampImg' src='/images/Howling_Abyss_Minimap.webp'></img>
 
 
                             </Grid>
                             <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={7}>
                                 <Typography style={{ paddingTop: '10px', lineHeight: '1.4' }} fontSize={23} fontWeight={600} maxWidth={'460px'}>
-                                        <a style={{ textDecoration: 'none', color: 'inherit' }}>
+                                        <span style={{ textDecoration: 'none', color: 'inherit' }}>
                                             {playerData.riotIdGameName}
-                                        </a>
+                                        </span>
                                     <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                                 </Typography>
                                 <Typography style={{ paddingTop: '10px', paddingBottom: '10px', fontWeight: 'bold', color: '#7E7E7E', marginBottom: '5px' }} fontSize={14}>ARAM played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
@@ -711,7 +707,7 @@ const AramDetails = () => {
                                                 </Tooltip>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                                                        <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                                        <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                                                     </a>
                                                 </Tooltip>
                                             </div>
@@ -729,7 +725,7 @@ const AramDetails = () => {
                                                 </Tooltip>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                                                        <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                                        <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                                                     </a>
                                                 </Tooltip>
                                             </div>
@@ -761,7 +757,7 @@ const AramDetails = () => {
                                                 </Tooltip>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                                                        <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                                        <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                                                     </a>
                                                 </Tooltip>
                                             </div>
@@ -779,7 +775,7 @@ const AramDetails = () => {
                                                 </Tooltip>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                                                        <img className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                                        <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
                                                     </a>
                                                 </Tooltip>
                                             </div>
