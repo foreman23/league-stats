@@ -9,11 +9,11 @@ function Footer() {
         <div style={{ display: 'flex', justifyContent: 'center', margin: 'auto' }}>
           <div>
             <ul className='footerList'>
-              <a href='/privacy'><li><Typography>Privacy Policy</Typography></li></a>
-              <a href='/terms'><li><Typography>Terms & Conditions</Typography></li></a>
-              <a href='/cookies'><li><Typography>Cookie Usage</Typography></li></a>
-              <a href='/about'><li><Typography>About</Typography></li></a>
-              <a href='/contact'><li><Typography>Contact</Typography></li></a>
+              <li><a href='/privacy'><Typography>Privacy Policy</Typography></a></li>
+              <li><a href='/terms'><Typography>Terms & Conditions</Typography></a></li>
+              <li><a href='/cookies'><Typography>Cookie Usage</Typography></a></li>
+              <li><a href='/about'><Typography>About</Typography></a></li>
+              <li><a href='/contact'><Typography>Contact</Typography></a></li>
             </ul>
           </div>
         </div>

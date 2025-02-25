@@ -907,10 +907,10 @@ const SummonerProfile = () => {
                     )}
                     <ListItem style={{ fontWeight: '500', color: '#404040' }}>{regionStr}</ListItem>
                     {summonerData.rankedData &&
-                      <span>
-                        <ListItem style={{ fontWeight: '500', color: '#404040' }}>{(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex].rank}</ListItem>
-                        <ListItem style={{ fontWeight: '500', color: '#404040' }}>{summonerData.rankedData[rankIndex].wins}W {summonerData.rankedData[rankIndex].losses}L {((summonerData.rankedData[rankIndex].wins / (summonerData.rankedData[rankIndex].wins + summonerData.rankedData[rankIndex].losses)) * 100).toFixed(0)}%</ListItem>
-                      </span>
+                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex].rank}</ListItem>
+                    }
+                    {summonerData.rankedData &&
+                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{summonerData.rankedData[rankIndex].wins}W {summonerData.rankedData[rankIndex].losses}L {((summonerData.rankedData[rankIndex].wins / (summonerData.rankedData[rankIndex].wins + summonerData.rankedData[rankIndex].losses)) * 100).toFixed(0)}%</ListItem>
                     }
                   </List>
                 </Grid>

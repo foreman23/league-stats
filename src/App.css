@@ -24,6 +24,7 @@ body,
 .recentSearchItem {
     text-decoration: none;
     color: #333333;
+    margin: auto;
 }
 
 .GameDetailsCatBtn {
@@ -283,6 +284,26 @@ body,
 .favoriteButtonActive {
     cursor: pointer;
     color: #fc578e;
+}
+
+.removeFavoriteBtn {
+    display: flex !important; 
+    margin-right: auto !important;
+    margin-left: 0px !important;
+    margin-top: 10px !important;
+    font-size: 18px !important;
+    position: absolute !important;
+    z-index: 1 !important;
+}
+
+.removeRecentBtn {
+    display: flex !important;
+    margin-right: auto !important;
+    margin-left: 0px !important;
+    margin-top: 10px !important;
+    font-size: 14px !important;
+    position: absolute !important;
+    z-index: 1 !important;
 }
 
 .deleteRecentButton {
@@ -1312,6 +1333,22 @@ li {
 
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
+
+    .removeFavoriteBtn {
+        margin-left: 20px !important;
+    }
+    
+    .removeRecentBtn {
+        margin-left: 20px !important;
+    }
+
+    .recentSearchItem li {
+        margin-left: 20px;
+    }
+
+    .recentSearchItem li img {
+        margin-left: 50px;
+    }
 
     .LaningPhaseGridHeader {
         display: flex;

@@ -289,7 +289,7 @@ function Navbar(props) {
                                                 />
                                             )}
                                         />
-                                        <IconButton style={{ marginTop: '2px' }} onClick={handleSearchSubmit} color="inherit">
+                                        <IconButton aria-label='Search' style={{ marginTop: '2px' }} onClick={handleSearchSubmit} color="inherit">
                                             <SearchIcon></SearchIcon>
                                         </IconButton>
                                     </span>
@@ -314,22 +314,22 @@ function Navbar(props) {
                                             }
                                         }}
                                     >
-                                        <MenuItem value={10}>NA</MenuItem>
-                                        <MenuItem value={20}>EUW</MenuItem>
-                                        <MenuItem value={30}>BR</MenuItem>
-                                        <MenuItem value={40}>EUNE</MenuItem>
-                                        <MenuItem value={50}>LAN</MenuItem>
-                                        <MenuItem value={60}>LAS</MenuItem>
-                                        <MenuItem value={70}>OCE</MenuItem>
-                                        <MenuItem value={80}>RU</MenuItem>
-                                        <MenuItem value={90}>TR</MenuItem>
-                                        <MenuItem value={100}>JP</MenuItem>
-                                        <MenuItem value={110}>KR</MenuItem>
-                                        <MenuItem value={120}>PH</MenuItem>
-                                        <MenuItem value={130}>SG</MenuItem>
-                                        <MenuItem value={140}>TW</MenuItem>
-                                        <MenuItem value={150}>TH</MenuItem>
-                                        <MenuItem value={160}>VN</MenuItem>
+                                        <MenuItem value={10} aria-label="North America">NA</MenuItem>
+                                        <MenuItem value={20} aria-label="Europe West">EUW</MenuItem>
+                                        <MenuItem value={30} aria-label="Brazil">BR</MenuItem>
+                                        <MenuItem value={40} aria-label="Europe Nordic & East">EUNE</MenuItem>
+                                        <MenuItem value={50} aria-label="Latin America North">LAN</MenuItem>
+                                        <MenuItem value={60} aria-label="Latin America South">LAS</MenuItem>
+                                        <MenuItem value={70} aria-label="Oceania">OCE</MenuItem>
+                                        <MenuItem value={80} aria-label="Russia">RU</MenuItem>
+                                        <MenuItem value={90} aria-label="Turkey">TR</MenuItem>
+                                        <MenuItem value={100} aria-label="Japan">JP</MenuItem>
+                                        <MenuItem value={110} aria-label="Korea">KR</MenuItem>
+                                        <MenuItem value={120} aria-label="Philippines">PH</MenuItem>
+                                        <MenuItem value={130} aria-label="Singapore">SG</MenuItem>
+                                        <MenuItem value={140} aria-label="Taiwan">TW</MenuItem>
+                                        <MenuItem value={150} aria-label="Thailand">TH</MenuItem>
+                                        <MenuItem value={160} aria-label="Vietnam">VN</MenuItem>
                                     </Select>
                                 </div>
                             </ListItem>
@@ -343,7 +343,7 @@ function Navbar(props) {
                                                     <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '52px', marginRight: '10px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
                                                     <span style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.summonerName} #{item.riotId}</span>
                                                 </a>
-                                                <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>
+                                                <FavoriteIcon aria-label='Remove a favorite' className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>
                                             </ListItem>
                                         ))}
                                     </List>
@@ -374,22 +374,22 @@ function Navbar(props) {
                             }
                         }}
                     >
-                        <MenuItem value={10}>NA</MenuItem>
-                        <MenuItem value={20}>EUW</MenuItem>
-                        <MenuItem value={30}>BR</MenuItem>
-                        <MenuItem value={40}>EUNE</MenuItem>
-                        <MenuItem value={50}>LAN</MenuItem>
-                        <MenuItem value={60}>LAS</MenuItem>
-                        <MenuItem value={70}>OCE</MenuItem>
-                        <MenuItem value={80}>RU</MenuItem>
-                        <MenuItem value={90}>TR</MenuItem>
-                        <MenuItem value={100}>JP</MenuItem>
-                        <MenuItem value={110}>KR</MenuItem>
-                        <MenuItem value={120}>PH</MenuItem>
-                        <MenuItem value={130}>SG</MenuItem>
-                        <MenuItem value={140}>TW</MenuItem>
-                        <MenuItem value={150}>TH</MenuItem>
-                        <MenuItem value={160}>VN</MenuItem>
+                        <MenuItem value={10} aria-label="North America">NA</MenuItem>
+                        <MenuItem value={20} aria-label="Europe West">EUW</MenuItem>
+                        <MenuItem value={30} aria-label="Brazil">BR</MenuItem>
+                        <MenuItem value={40} aria-label="Europe Nordic & East">EUNE</MenuItem>
+                        <MenuItem value={50} aria-label="Latin America North">LAN</MenuItem>
+                        <MenuItem value={60} aria-label="Latin America South">LAS</MenuItem>
+                        <MenuItem value={70} aria-label="Oceania">OCE</MenuItem>
+                        <MenuItem value={80} aria-label="Russia">RU</MenuItem>
+                        <MenuItem value={90} aria-label="Turkey">TR</MenuItem>
+                        <MenuItem value={100} aria-label="Japan">JP</MenuItem>
+                        <MenuItem value={110} aria-label="Korea">KR</MenuItem>
+                        <MenuItem value={120} aria-label="Philippines">PH</MenuItem>
+                        <MenuItem value={130} aria-label="Singapore">SG</MenuItem>
+                        <MenuItem value={140} aria-label="Taiwan">TW</MenuItem>
+                        <MenuItem value={150} aria-label="Thailand">TH</MenuItem>
+                        <MenuItem value={160} aria-label="Vietnam">VN</MenuItem>
                     </Select>
 
                     <Autocomplete
@@ -425,10 +425,11 @@ function Navbar(props) {
                             />
                         )}
                     />
-                    <IconButton style={{ marginTop: '2px' }} onClick={handleSearchSubmit} color="inherit">
+                    <IconButton aria-label='Search' style={{ marginTop: '2px' }} onClick={handleSearchSubmit} color="inherit">
                         <SearchIcon></SearchIcon>
                     </IconButton>
                     <IconButton
+                        aria-label='Open favorites menu'
                         aria-controls={open ? 'basic-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
@@ -446,7 +447,7 @@ function Navbar(props) {
                             'aria-labelledby': 'basic-button',
                         }}
                     >
-                        <Typography style={{ marginLeft: '20px', fontWeight: 'bold' }}>Favorites</Typography>
+                        <Typography style={{ marginLeft: '20px', fontWeight: 'bold', minWidth: '100px' }}>Favorites</Typography>
                         {favorites !== null &&
                             <List>
                                 {favorites.map((item, index) => (
@@ -455,7 +456,7 @@ function Navbar(props) {
                                             <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '52px', marginRight: '10px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
                                             <span style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.summonerName} #{item.riotId}</span>
                                         </a>
-                                        <FavoriteIcon className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>
+                                        <FavoriteIcon aria-label='Remove a favorite' className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>
                                     </ListItem>
                                 ))}
                             </List>
