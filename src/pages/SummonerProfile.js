@@ -568,6 +568,7 @@ const SummonerProfile = () => {
     }
 
     const summonerObj = {
+      puuid: playerData.puuid,
       selectedRegion: selectedRegion,
       summonerName: playerData.riotIdGameName,
       riotId: playerData.riotIdTagline,
@@ -736,6 +737,7 @@ const SummonerProfile = () => {
       }
 
       const summonerObj = {
+        puuid: playerData.puuid,
         selectedRegion: selectedRegion,
         summonerName: playerData.riotIdGameName,
         riotId: playerData.riotIdTagline,
@@ -751,14 +753,16 @@ const SummonerProfile = () => {
         if (favsArr.some(obj =>
           obj.selectedRegion === summonerObj.selectedRegion &&
           obj.summonerName === summonerObj.summonerName &&
-          obj.riotId === summonerObj.riotId
+          obj.riotId === summonerObj.riotId &&
+          obj.puuid === summonerObj.puuid
         )) {
           // Update favorite summoner info
           favsArr = favsArr.map(obj => {
             if (
               obj.selectedRegion === summonerObj.selectedRegion &&
               obj.summonerName === summonerObj.summonerName &&
-              obj.riotId === summonerObj.riotId
+              obj.riotId === summonerObj.riotId &&
+              obj.puuid === summonerObj.puuid
             ) {
               return {
                 ...obj,
@@ -786,7 +790,8 @@ const SummonerProfile = () => {
         if (parsedArr.length < 9 && !parsedArr.some(obj =>
           obj.selectedRegion === summonerObj.selectedRegion &&
           obj.summonerName === summonerObj.summonerName &&
-          obj.riotId === summonerObj.riotId
+          obj.riotId === summonerObj.riotId &&
+          obj.puuid === summonerObj.puuid
         )) {
           parsedArr.push(summonerObj)
           localStorage.setItem('recentSearches', JSON.stringify(parsedArr))
@@ -796,7 +801,8 @@ const SummonerProfile = () => {
         if (parsedArr.length >= 9 && !parsedArr.some(obj =>
           obj.selectedRegion === summonerObj.selectedRegion &&
           obj.summonerName === summonerObj.summonerName &&
-          obj.riotId === summonerObj.riotId
+          obj.riotId === summonerObj.riotId &&
+          obj.puuid === summonerObj.puuid
         )) {
           parsedArr.shift()
           parsedArr.push(summonerObj)

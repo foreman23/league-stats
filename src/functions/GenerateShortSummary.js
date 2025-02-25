@@ -1,5 +1,4 @@
-
-const generateShortSummary = async (gameData, playerData, stats15, champsJSON) => {
+const generateShortSummary = async (gameData, playerData, timelineData, stats15, dataDragonVersion, champsJSON) => {
     let lanes = stats15.laneResults;
 
     let roles = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM'];
