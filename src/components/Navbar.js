@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Typography, Toolbar, AppBar, TextField, IconButton, Select, MenuItem, Autocomplete, Drawer, ListItem, List, Menu } from '@mui/material';
+import { Typography, Toolbar, AppBar, TextField, IconButton, Select, MenuItem, Autocomplete, ListItem, List, Menu } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 // import LightModeIcon from '@mui/icons-material/LightMode';
 // import DarkModeIcon from '@mui/icons-material/DarkMode';
-import MenuIcon from '@mui/icons-material/Menu';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 function Navbar(props) {
@@ -26,23 +25,27 @@ function Navbar(props) {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
+    const handleClickFavorites = (event) => {
         setAnchorEl(event.currentTarget);
     };
-    const handleClose = () => {
+    const handleCloseFavorites = () => {
         setAnchorEl(null);
     };
 
-    // const updateSummonerNameState = async (event) => {
-    //     const inputValue = event.target.value;
-    //     setSummonerName(inputValue.toLowerCase());
-    // }
-
-    const [openDrawer, setOpenDrawer] = useState(false);
-    // Toggle menu drawer for mobile
-    const toggleDrawer = (newOpen) => () => {
-        setOpenDrawer(newOpen);
+    const [anchorSearch, setAnchorSearch] = useState(null);
+    const openSearch = Boolean(anchorSearch);
+    const handleClickSearch = (event) => {
+        setAnchorSearch(event.currentTarget);
     };
+    const handleCloseSearch = () => {
+        setAnchorSearch(null);
+    };
+
+    // const [openDrawer, setOpenDrawer] = useState(false);
+    // Toggle menu drawer for mobile
+    // const toggleDrawer = (newOpen) => () => {
+    //     setOpenDrawer(newOpen);
+    // };
 
     // Retrieve favorite summoners from local storage
     const getFavorites = () => {
@@ -74,6 +77,9 @@ function Navbar(props) {
     }
 
     const handleSearchSubmit = async () => {
+
+        // setOpenDrawer(false);
+        setAnchorSearch(null)
 
         if (summonerName) {
             // Extract riot tag from summoner name
@@ -114,8 +120,6 @@ function Navbar(props) {
             }
 
             const newPath = `/profile/${selectedRegion}/${summonerNamePayload}/${riotTagPayload}`;
-
-            setOpenDrawer(false);
 
             if (location.pathname.startsWith('/profile')) {
                 navigate('/loading', { replace: true });
@@ -218,7 +222,8 @@ function Navbar(props) {
         if (newValue && typeof newValue === 'object') {
             const newPath = `/profile/${newValue.selectedRegion}/${newValue.summonerName}/${newValue.riotId}`
 
-            setOpenDrawer(false);
+            setAnchorSearch(null)
+            // setOpenDrawer(false);
 
             navigate(newPath)
 
@@ -244,8 +249,13 @@ function Navbar(props) {
                 </a>
 
                 {/* Mobile Navbar */}
-                <div className='hideDesktop'>
-                    <MenuIcon onClick={toggleDrawer(true)} style={{ fontSize: '32px', marginLeft: '10px' }} className='hideDesktop'></MenuIcon>
+                <div style={{ display: 'flex', alignItems: 'center' }} className='hideDesktop'>
+                    <a href='/' style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                        <img alt='Logo' style={{ width: '40px', marginRight: '10px' }} src='/images/sorakaLogo.webp'></img>
+                        <Typography style={{ fontWeight: 'bold', marginTop: '3px', marginRight: '8px' }}>RR.GG</Typography>
+                        {/* <HomeIcon style={{ fontSize: '32px', color: 'white' }} className='hideDesktop'></HomeIcon> */}
+                    </a>
+                    {/* <MenuIcon onClick={toggleDrawer(true)} style={{ fontSize: '32px', marginLeft: '10px' }} className='hideDesktop'></MenuIcon>
                     <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
                         <List>
                             <ListItem>
@@ -253,85 +263,6 @@ function Navbar(props) {
                                     <img alt='Logo' style={{ width: '40px', marginRight: '5px' }} src='/images/sorakaLogo.webp'></img>
                                     <Typography>RiftReport.gg</Typography>
                                 </a>
-                            </ListItem>
-                            <ListItem>
-                                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                    <span className='navBarSearchBarMobile'>
-                                        <Autocomplete
-                                            options={recentArr || []}
-                                            getOptionLabel={(option) =>
-                                                typeof option === 'string' ? option : `${option.summonerName} #${option.riotId}`
-                                            }
-                                            value={summonerName || ''}
-                                            onInputChange={(event, newInputValue) => {
-                                                setSummonerName(newInputValue)
-                                            }}
-                                            onChange={(event, newValue) => {
-                                                if (typeof newValue === 'string') {
-                                                    setSummonerName(newValue);
-                                                } else if (newValue && typeof newValue === 'object') {
-                                                    setSummonerName(newValue.summonerName + ' #' + newValue.riotId)
-                                                    handleAutoCompleteSelect(newValue)
-                                                }
-                                            }}
-                                            fullWidth
-                                            freeSolo
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    style={{ backgroundColor: 'white', borderRadius: '5px' }}
-                                                    {...params}
-                                                    onKeyDown={(event) => {
-                                                        if (event.key === 'Enter') {
-                                                            handleSearchSubmit();
-                                                        }
-                                                    }}
-                                                    placeholder="Search by Riot ID (e.g., Teemo#NA1)"
-                                                />
-                                            )}
-                                        />
-                                        <IconButton aria-label='Search' style={{ marginTop: '2px' }} onClick={handleSearchSubmit} color="inherit">
-                                            <SearchIcon></SearchIcon>
-                                        </IconButton>
-                                    </span>
-                                    <Select
-                                        sx={{
-                                            backgroundColor: '#519EDD',
-                                            color: 'white',
-                                            fontSize: '14px',
-                                            fontWeight: 'bold',
-                                            width: '140px',
-                                            height: 'auto',
-                                            border: 'none',
-                                            filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                                        }}
-                                        value={dropdownDefaultValue}
-                                        onChange={(event) => handleRegionChange(event)}
-                                        MenuProps={{
-                                            PaperProps: {
-                                                style: {
-                                                    maxHeight: '50vh'
-                                                }
-                                            }
-                                        }}
-                                    >
-                                        <MenuItem value={10} aria-label="North America">NA</MenuItem>
-                                        <MenuItem value={20} aria-label="Europe West">EUW</MenuItem>
-                                        <MenuItem value={30} aria-label="Brazil">BR</MenuItem>
-                                        <MenuItem value={40} aria-label="Europe Nordic & East">EUNE</MenuItem>
-                                        <MenuItem value={50} aria-label="Latin America North">LAN</MenuItem>
-                                        <MenuItem value={60} aria-label="Latin America South">LAS</MenuItem>
-                                        <MenuItem value={70} aria-label="Oceania">OCE</MenuItem>
-                                        <MenuItem value={80} aria-label="Russia">RU</MenuItem>
-                                        <MenuItem value={90} aria-label="Turkey">TR</MenuItem>
-                                        <MenuItem value={100} aria-label="Japan">JP</MenuItem>
-                                        <MenuItem value={110} aria-label="Korea">KR</MenuItem>
-                                        <MenuItem value={120} aria-label="Philippines">PH</MenuItem>
-                                        <MenuItem value={130} aria-label="Singapore">SG</MenuItem>
-                                        <MenuItem value={140} aria-label="Taiwan">TW</MenuItem>
-                                        <MenuItem value={150} aria-label="Thailand">TH</MenuItem>
-                                        <MenuItem value={160} aria-label="Vietnam">VN</MenuItem>
-                                    </Select>
-                                </div>
                             </ListItem>
                             <ListItem style={{ display: 'block' }}>
                                 <Typography>Favorites</Typography>
@@ -350,7 +281,118 @@ function Navbar(props) {
                                 }
                             </ListItem>
                         </List>
-                    </Drawer>
+                    </Drawer> */}
+                    <div style={{ position: 'absolute', right: '25px', left: 'auto', top: '5px', alignItems: 'center' }}>
+                        <IconButton
+                            style={{ marginRight: '15px' }}
+                            aria-label='Open favorites menu'
+                            aria-controls={open ? 'basic-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? 'true' : undefined}
+                            onClick={handleClickFavorites}
+                        >
+                            <FavoriteIcon style={{ color: 'white' }}></FavoriteIcon>
+                        </IconButton>
+                        <IconButton
+                            aria-label='Open search bar'
+                            aria-controls={openSearch ? 'basic-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={openSearch ? 'true' : undefined}
+                            onClick={handleClickSearch}>
+                            <SearchIcon style={{ fontSize: '32px', color: 'white' }} className='hideDesktop'></SearchIcon>
+                        </IconButton>
+                    </div>
+
+                    <Menu
+                        style={{ maxHeight: '70vh', padding: '0px' }}
+                        id="search-menu"
+                        anchorEl={anchorSearch}
+                        open={openSearch}
+                        onClose={handleCloseSearch}
+                        MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                        }}
+                    >
+                        <div style={{ display: 'flex', minWidth: '90vw', height: 'auto' }}>
+                            <Select
+                                sx={{
+                                    backgroundColor: '#519EDD',
+                                    color: 'white',
+                                    fontSize: '14px',
+                                    fontWeight: 'bold',
+                                    height: 'auto',
+                                    border: 'none',
+                                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                                }}
+                                value={dropdownDefaultValue}
+                                onChange={(event) => handleRegionChange(event)}
+                                MenuProps={{
+                                    PaperProps: {
+                                        style: {
+                                            maxHeight: '50vh'
+                                        }
+                                    }
+                                }}
+                            >
+                                <MenuItem value={10} aria-label="North America">NA</MenuItem>
+                                <MenuItem value={20} aria-label="Europe West">EUW</MenuItem>
+                                <MenuItem value={30} aria-label="Brazil">BR</MenuItem>
+                                <MenuItem value={40} aria-label="Europe Nordic & East">EUNE</MenuItem>
+                                <MenuItem value={50} aria-label="Latin America North">LAN</MenuItem>
+                                <MenuItem value={60} aria-label="Latin America South">LAS</MenuItem>
+                                <MenuItem value={70} aria-label="Oceania">OCE</MenuItem>
+                                <MenuItem value={80} aria-label="Russia">RU</MenuItem>
+                                <MenuItem value={90} aria-label="Turkey">TR</MenuItem>
+                                <MenuItem value={100} aria-label="Japan">JP</MenuItem>
+                                <MenuItem value={110} aria-label="Korea">KR</MenuItem>
+                                <MenuItem value={120} aria-label="Philippines">PH</MenuItem>
+                                <MenuItem value={130} aria-label="Singapore">SG</MenuItem>
+                                <MenuItem value={140} aria-label="Taiwan">TW</MenuItem>
+                                <MenuItem value={150} aria-label="Thailand">TH</MenuItem>
+                                <MenuItem value={160} aria-label="Vietnam">VN</MenuItem>
+                            </Select>
+                            <Autocomplete
+                                options={recentArr || []}
+                                getOptionLabel={(option) =>
+                                    typeof option === 'string' ? option : `${option.summonerName} #${option.riotId}`
+                                }
+                                value={summonerName || ''}
+                                onInputChange={(event, newInputValue) => {
+                                    setSummonerName(newInputValue)
+                                }}
+                                onChange={(event, newValue) => {
+                                    if (typeof newValue === 'string') {
+                                        setSummonerName(newValue);
+                                    } else if (newValue && typeof newValue === 'object') {
+                                        setSummonerName(newValue.summonerName + ' #' + newValue.riotId)
+                                        handleAutoCompleteSelect(newValue)
+                                    }
+                                }}
+                                fullWidth
+                                freeSolo
+                                renderInput={(params) => (
+                                    <TextField
+                                        style={{ backgroundColor: 'white', borderRadius: '5px' }}
+                                        {...params}
+                                        onKeyDown={(event) => {
+                                            if (event.key === 'Enter') {
+                                                event.preventDefault();
+                                                handleSearchSubmit();
+                                            }
+                                        }}
+                                        placeholder="Search by Riot ID (e.g., Teemo#NA1)"
+                                    />
+                                )}
+                            />
+                            <IconButton
+                                aria-label="Search"
+                                onClick={handleSearchSubmit}
+                                color="inherit"
+                            >
+                                <SearchIcon />
+                            </IconButton>
+                        </div>
+                    </Menu>
                 </div>
 
                 <span className='navBarSearchBar'>
@@ -433,7 +475,7 @@ function Navbar(props) {
                         aria-controls={open ? 'basic-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
+                        onClick={handleClickFavorites}
                     >
                         <FavoriteIcon style={{ color: 'white' }}></FavoriteIcon>
                     </IconButton>
@@ -442,7 +484,7 @@ function Navbar(props) {
                         id="basic-menu"
                         anchorEl={anchorEl}
                         open={open}
-                        onClose={handleClose}
+                        onClose={handleCloseFavorites}
                         MenuListProps={{
                             'aria-labelledby': 'basic-button',
                         }}
@@ -452,7 +494,7 @@ function Navbar(props) {
                             <List>
                                 {favorites.map((item, index) => (
                                     <ListItem style={{ alignItems: 'center' }} key={index}>
-                                        <a onClick={() => toggleDrawer(false)} href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: '25px' }}>
+                                        <a href={`/profile/${item.selectedRegion}/${item.summonerName}/${item.riotId}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: '25px' }}>
                                             <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '52px', marginRight: '10px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
                                             <span style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.summonerName} #{item.riotId}</span>
                                         </a>
@@ -461,9 +503,6 @@ function Navbar(props) {
                                 ))}
                             </List>
                         }
-                        {/* <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>My account</MenuItem>
-                        <MenuItem onClick={handleClose}>Logout</MenuItem> */}
                     </Menu>
                 </span>
 
