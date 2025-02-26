@@ -95,7 +95,7 @@ const ArenaDetails = () => {
         else if (queueTitle === 'Arena') {
             setQueueTitle('Arena')
         }
-    }, [findQueueInfo, gameData])
+    }, [findQueueInfo])
 
     const getQueueJSON = async () => {
         try {
