@@ -13,7 +13,6 @@ const Test = () => {
 
     useEffect(() => {
         if (storage) {
-            console.log(storage)
             setIsLoading(false)
         }
     }, [storage])

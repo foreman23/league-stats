@@ -13,7 +13,7 @@ const Terms = () => {
       <p>You agree to use <strong>RiftReport.gg</strong> for lawful purposes only and in a way that does not infringe the rights of others or restrict their use of the website.</p>
 
       <h2>3. Data Collection and Privacy</h2>
-      <p>We collect and use information in accordance with our <a href="/privacy">Privacy Policy</a>. By using our website, you consent to our data practices.</p>
+      <p>We collect and use information in accordance with our <a href="/privacy"><b>Privacy Policy</b></a>. By using our website, you consent to our data practices.</p>
 
       <h2>4. Third-Party Services</h2>
       <p>We use Riot Games' API to provide match history and summoner data. This data is publicly available and subject to Riot Games' policies. We are not affiliated with or endorsed by Riot Games.</p>
@@ -28,7 +28,7 @@ const Terms = () => {
       <p>These Terms and Conditions are governed by the laws of the United States. Any disputes shall be resolved in a competent court within the applicable jurisdiction.</p>
 
       <h2>8. Contact Information</h2>
-      <p>If you have any questions about these Terms and Conditions, please contact us at: <strong>[Insert Contact Email]</strong></p>
+      <p>If you have any questions about these Terms and Conditions, please contact us at: <a href='mailto:riftreportgg@gmail.com'><b>riftreportgg@gmail.com</b></a></p>
     </div>
   )
 }

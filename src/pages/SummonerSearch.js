@@ -30,7 +30,7 @@ function SummonerSearch() {
         getChampsJSON(currentVersion);
       })
       .catch(function (response) {
-        console.log('Error: Error fetching datadragon version')
+        console.error('Error: Error fetching datadragon version')
       })
   }, [])
 
@@ -215,7 +215,7 @@ function SummonerSearch() {
       const data = await response.json();
       setChampsJSON(data);
     } catch (error) {
-      console.error('Error fetching champion JSON data:', error);
+      console.error('Error fetching champion JSON data');
     }
   }
 

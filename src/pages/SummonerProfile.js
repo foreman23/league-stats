@@ -137,7 +137,6 @@ const SummonerProfile = () => {
         console.log('Reading from firestore (checking match exists)')
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          console.log('match already exists')
           if (!docSnap.data().matchData.status) {
             newMatchDataArray.push(docSnap.data().matchData);
           }
@@ -203,7 +202,6 @@ const SummonerProfile = () => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          console.log('match already exists')
           newMatchDataArray.push(docSnap.data().matchData);
         }
 
@@ -270,7 +268,6 @@ const SummonerProfile = () => {
 
     // Load summoner profile from firestore
     if (docSnap.exists()) {
-      console.log('user exists in firestore');
       setSummonerData(docSnap.data());
       updateUserMatchInfo(docSnap.data());
       setTimeSinceUpdated(docSnap.data().lastUpdated.seconds);
@@ -401,7 +398,6 @@ const SummonerProfile = () => {
       updateUserMatchInfo(data);
       setTimeLastUpdated('Just now');
       setDisableUpdateButton(true);
-      console.log('updated user info firestore')
       setIsLoadingRank(false);
     }
     catch (error) {
@@ -613,7 +609,6 @@ const SummonerProfile = () => {
       const data = await response.json();
       setChampsJSON(data);
     } catch (error) {
-      // console.error('Error fetching champion JSON data');
     }
   }
 
@@ -899,9 +894,7 @@ const SummonerProfile = () => {
                 <Grid>
                   <List style={{ lineHeight: '22px' }}>
                     {playerData ? (
-                      <Tooltip placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${playerData.riotIdGameName} #${riotId}`}>
-                        <ListItem className='summonerProfileRiotName'>{playerData.riotIdGameName} #{riotId}</ListItem>
-                      </Tooltip>
+                      <ListItem className='summonerProfileRiotName'>{playerData.riotIdGameName} #{riotId}</ListItem>
                     ) : (
                       <ListItem style={{ fontWeight: 'bolder' }}><Box><LinearProgress></LinearProgress></Box></ListItem>
                     )}

@@ -8,7 +8,6 @@ const OverviewTable = (props) => {
     const navigate = useNavigate();
 
     const { dataDragonVersion, gameData, summonerName, placementIndex, gameMode } = props;
-    console.log(dataDragonVersion)
 
     // Find highest damage dealt
     let highestDamageDealt = 0;

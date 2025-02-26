@@ -57,12 +57,9 @@ const Fails = [
 ]
 
 const determineFeatsFails = (gameData, playerTeamId, timelineData) => {
-    console.log(gameData)
-    console.log(timelineData)
     const blueTeam = gameData.info.teams[0];
     const redTeam = gameData.info.teams[1];
     const participants = gameData.info.participants;
-    console.log(participants)
 
     // Determine player's team
     let friendlyTeam = null;
@@ -80,7 +77,6 @@ const determineFeatsFails = (gameData, playerTeamId, timelineData) => {
             teammateIds.push(participants[i].participantId)
         }
     }
-    console.log(teammateIds)
 
     // Towers stats
     let towersKilled = 0;
@@ -104,7 +100,6 @@ const determineFeatsFails = (gameData, playerTeamId, timelineData) => {
         let blueTeamCurrentGold = 0;
         let redTeamCurrentGold = 0;
 
-        console.log(frame)
         for (let j = 0; j < frames[i].events.length; j++) {
             let event = frames[i].events[j];
             // console.log(i, event)
@@ -136,12 +131,12 @@ const determineFeatsFails = (gameData, playerTeamId, timelineData) => {
             }
         }
     }
-    console.log(`Team destroyed ${towersKilled} towers`)
-    console.log(`Team destroyed ${towersKilledAt20} towers at 20`)
-    console.log(`Team destroyed ${outerTowersKilledAt20} outer towers at 20`)
-    console.log(`Team lost ${towersLost} towers`)
-    console.log(`Team lost ${towersLostAt20} towers at 20`)
-    console.log(`Team placed ${wardsPlaced} wards`)
+    // console.log(`Team destroyed ${towersKilled} towers`)
+    // console.log(`Team destroyed ${towersKilledAt20} towers at 20`)
+    // console.log(`Team destroyed ${outerTowersKilledAt20} outer towers at 20`)
+    // console.log(`Team lost ${towersLost} towers`)
+    // console.log(`Team lost ${towersLostAt20} towers at 20`)
+    // console.log(`Team placed ${wardsPlaced} wards`)
 
 }
 

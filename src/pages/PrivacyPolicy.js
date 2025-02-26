@@ -39,7 +39,7 @@ const PrivacyPolicy = () => {
         <li>Requesting access to the data we collect.</li>
         <li>Requesting the deletion of your personal data.</li>
       </ul>
-      <p>If you wish to exercise these rights, please contact us at <strong>[Insert Contact Email]</strong>.</p>
+      <p>If you wish to exercise these rights, please contact us at <a href='mailto:riftreportgg@gmail.com'><b>riftreportgg@gmail.com</b></a>.</p>
 
       <h2>8. Data Security</h2>
       <p>We use reasonable technical and organizational measures to protect your data. However, no system is completely secure, and we cannot guarantee the absolute security of your information.</p>
@@ -51,7 +51,7 @@ const PrivacyPolicy = () => {
       <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated effective date.</p>
 
       <h2>11. Contact Us</h2>
-      <p>If you have any questions or concerns about this Privacy Policy, please contact us at: <strong>[Insert Contact Email]</strong></p>
+      <p>If you have any questions or concerns about this Privacy Policy, please contact us at: <a href='mailto:riftreportgg@gmail.com'><b>riftreportgg@gmail.com</b></a></p>
 
     </div>
   )

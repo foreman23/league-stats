@@ -4,7 +4,6 @@ import { Grid, Typography } from '@mui/material';
 import TeamGoldDifGraph from './TeamGoldDifGraph';
 
 const Graphs = (props) => {
-    console.log(props)
     const graphData = props.graphData;
 
     return (

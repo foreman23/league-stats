@@ -60,7 +60,6 @@ const GenericDetails = () => {
 
     const findQueueInfo = useCallback(async () => {
         const queue = queues.find(queue => queue.queueId === gameData.info.queueId);
-        console.log(queue)
         return queue;
     }, [gameData, queues])
 
@@ -68,8 +67,6 @@ const GenericDetails = () => {
     const findQueueTitle = useCallback(async () => {
 
         let queue = await findQueueInfo();
-
-        console.log(queue)
 
         let queueTitle = queue?.description;
         // let isLaning = true; // set to false for non summoners rift modes
@@ -100,7 +97,7 @@ const GenericDetails = () => {
             const data = await response.json();
             setQueues(data);
         } catch (error) {
-            console.error('Error fetching queue JSON data:', error);
+            console.error('Error fetching queue JSON data');
         }
     }
 
@@ -141,11 +138,9 @@ const GenericDetails = () => {
                 // console.log(keystone.icon)
                 return `https://ddragon.canisback.com/img/${keystone.icon}`;
             } else {
-                console.error(`Keystone with ID ${keystoneId} not found in style ${styleId}`);
                 return '';
             }
         } else {
-            console.error(`Style with ID ${styleId} not found`);
             return '';
         }
     };
@@ -208,8 +203,6 @@ const GenericDetails = () => {
             return { ...player, score: score + (index * 0.001) }; // Adjust for uniqueness
         });
 
-        console.log(normalizedPlayers)
-
         const minScore = Math.min(...normalizedPlayers.map(p => p.score));
         const maxScore = Math.max(...normalizedPlayers.map(p => p.score));
 
@@ -217,8 +210,6 @@ const GenericDetails = () => {
             ...player,
             opScore: ((player.score - minScore) / (maxScore - minScore)) * 10
         }));
-
-        console.log(playersWithOpScores)
 
         // Sort players by score
         let sortedPlayers = playersWithOpScores.sort((a, b) => b.opScore - a.opScore);
@@ -261,12 +252,11 @@ const GenericDetails = () => {
     // Get item JSON data from riot
     const getItemsJSON = useCallback(async () => {
         try {
-            console.log(dataDragonVersion)
             const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/item.json`);
             const data = await response.json();
             setItems(data);
         } catch (error) {
-            console.error('Error fetching item JSON data:', error);
+            console.error('Error fetching item JSON data',);
         }
     }, [setItems, dataDragonVersion])
 
@@ -276,9 +266,8 @@ const GenericDetails = () => {
             const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
             const data = await response.json();
             setChampsJSON(data);
-            console.log(data)
         } catch (error) {
-            console.error('Error fetching champion JSON data:', error);
+            console.error('Error fetching champion JSON data');
         }
     }, [setChampsJSON, dataDragonVersion])
 
@@ -323,7 +312,6 @@ const GenericDetails = () => {
 
     const fetchGameData = useCallback(async () => {
         let region = matchId.split('_')[0].toLowerCase()
-        console.log(region)
         const docRef = doc(firestore, `${region}-matches`, matchId)
         console.log('Reading from firestore (checking match exists)')
         const docSnap = await getDoc(docRef);
@@ -540,7 +528,6 @@ const GenericDetails = () => {
     const [isLoading, setIsLoading] = useState(true);
     // Render page once data is loaded
     useEffect(() => {
-        console.log(playersWithScores)
         if (playersWithScores.length > 0) {
             setIsLoading(false);
         }

@@ -34,7 +34,7 @@ const Cookies = () => {
       <p>We may update this Cookie Policy from time to time. Changes will be posted on this page with an updated effective date.</p>
 
       <h2>7. Contact Us</h2>
-      <p>If you have any questions about this Cookie Policy, please contact us at: <strong>[Insert Contact Email]</strong></p>
+      <p>If you have any questions about this Cookie Policy, please contact us at: <a href='mailto:riftreportgg@gmail.com'><b>riftreportgg@gmail.com</b></a></p>
     </div>
   )
 }

@@ -87,11 +87,9 @@ function GameDetails() {
       if (keystone) {
         return `https://ddragon.canisback.com/img/${keystone.icon}`;
       } else {
-        console.error(`Keystone with ID ${keystoneId} not found in style ${styleId}`);
         return '';
       }
     } else {
-      console.error(`Style with ID ${styleId} not found`);
       return '';
     }
   };
@@ -210,7 +208,7 @@ function GameDetails() {
       const data = await response.json();
       setQueues(data);
     } catch (error) {
-      console.error('Error fetching queue JSON data:', error);
+      console.error('Error fetching queue JSON data');
     }
   }
 
@@ -221,7 +219,7 @@ function GameDetails() {
       const data = await response.json();
       setItems(data);
     } catch (error) {
-      console.error('Error fetching item JSON data:', error);
+      console.error('Error fetching item JSON data',);
     }
   }, [setItems, dataDragonVersion])
 
@@ -232,7 +230,7 @@ function GameDetails() {
       const data = await response.json();
       setChampsJSON(data);
     } catch (error) {
-      console.error('Error fetching champion JSON data:', error);
+      console.error('Error fetching champion JSON data');
     }
   }, [setChampsJSON, dataDragonVersion])
 
@@ -297,11 +295,9 @@ function GameDetails() {
     let payload = JSON.parse(localStorage.getItem('gameData'));
     // Match ID mistmatch on follow external link
     if (payload === null || payload.gameData.metadata.matchId !== matchId) {
-      console.log('payload mismatch')
       fetchGameData()
     }
     else if (payload !== null) {
-      console.log('payload MATCH')
       // Special edge case for special Oceania
       const seaServer = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2']
       if (seaServer.includes(payload.gameData.metadata.matchId.split('_')[0].toLowerCase())) {

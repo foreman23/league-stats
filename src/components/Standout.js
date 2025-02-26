@@ -120,20 +120,20 @@ const Standout = (props) => {
             descStr += `They maintained an impressive KDA of ${kda}, showcasing their effectiveness. `;
         }
 
-        // Add tower and inhibitor takedowns to the description
-        const towersTaken = activePlayer.player?.challenges?.turretTakedowns || 0;
+        // // Add tower and inhibitor takedowns to the description
+        // const towersTaken = activePlayer.player?.challenges?.turretTakedowns || 0;
 
-        // Dynamic thresholds based on game duration
-        const towerThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.2);
+        // // Dynamic thresholds based on game duration
+        // const towerThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.2);
 
-        if (towersTaken > towerThreshold) {
-            descStr += `They pushed objectives relentlessly, taking down ${towersTaken} towers to secure map control. `;
-        }
+        // if (towersTaken > towerThreshold) {
+        //     descStr += `They pushed objectives relentlessly, taking down ${towersTaken} towers to secure map control. `;
+        // }
 
-        // Include summary for high-impact structural objectives
-        if (towersTaken > towerThreshold) {
-            descStr += `Overall, they contributed significantly by taking ${towersTaken} towers, paving the way for their team's victory. `;
-        }
+        // // Include summary for high-impact structural objectives
+        // if (towersTaken > towerThreshold) {
+        //     descStr += `Overall, they contributed significantly by taking ${towersTaken} towers, paving the way for their team's victory. `;
+        // }
 
         // Final description string
         descStr = descStr.trim();
@@ -160,7 +160,18 @@ const Standout = (props) => {
                                     key={title}
                                     className='pointer'
                                     onClick={() => handleClickPortrait(index)}
-                                    style={{ display: 'flex', flexDirection: 'column', marginRight: index === 2 ? '0px' : '35px' }}
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        marginRight: index === 2 ? '0px' : '15px',
+                                        backgroundColor: activeIndex === index ? 'rgba(217, 217, 217, 0.8)' : 'white',
+                                        padding: '5px',
+                                        paddingLeft: '10px',
+                                        paddingRight: '10px',
+                                        paddingTop: '15px',
+                                        paddingBottom: '15px',
+                                        borderRadius: '5px'
+                                    }}
                                 >
                                     <Tooltip
                                         placement='top'
@@ -183,7 +194,7 @@ const Standout = (props) => {
                                             style={{
                                                 display: 'inline-flex',
                                                 borderRadius: '100%',
-                                                transform: activeIndex === index ? 'scale(105%)' : 'scale(100%)',
+                                                transform: activeIndex === index ? 'scale(102%)' : 'scale(100%)',
                                                 border: `4px solid ${teamColor}`,
                                             }}
                                         >

@@ -147,7 +147,7 @@ const DisplayGame = (props) => {
             const data = await response.json();
             setQueues(data);
         } catch (error) {
-            console.error('Error fetching queue data:', error);
+            console.error('Error fetching queue data');
         }
     }, [])
 
@@ -158,7 +158,7 @@ const DisplayGame = (props) => {
             const data = await response.json();
             setChampsJSON(data);
         } catch (error) {
-            console.error('Error fetching champion JSON data:', error);
+            console.error('Error fetching champion JSON data',);
         }
     }, [dataDragonVersion])
 
@@ -296,7 +296,7 @@ const DisplayGame = (props) => {
                             <Grid style={{ marginTop: '10px' }}>
                                 {participants.filter(player => player.teamId === participant.teamId && player.summonerId !== participant.summonerId).map((player, index) => (
                                     <Tooltip key={`player_${index}_team1`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
-                                        <span href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                                        <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                             <img alt='Champion' className='displayGameTeamChamps' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
                                             <Box className='displayGameTeamChampsBox' style={{ backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54' }}></Box>
                                         </span>
@@ -306,7 +306,7 @@ const DisplayGame = (props) => {
                         </Grid>
                         <Grid display={'flex'} flexDirection={'column'} position={'relative'}>
                             <Tooltip arrow placement='top' title={`${participant.riotIdGameName} #${participant.riotIdTagline}`}>
-                                <span href={`/profile/${gameData.info.platformId.toLowerCase()}/${participant.riotIdGameName}/${participant.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                                <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${participant.riotIdGameName}/${participant.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                     <Typography className='displayGameChampLevel' style={{
                                         fontSize: '14px',
                                         position: 'absolute',
@@ -332,7 +332,7 @@ const DisplayGame = (props) => {
                                     </img>
                                 </span>
                             </Tooltip>
-                            <Grid className='displayGameSummonerSpells'>
+                            <Grid className='displayGameSummonerSpells defaultCursor'>
                                 <Tooltip
                                     title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === participant.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === participant.summoner1Id.toString()).description}</span></>}
                                     disableInteractive
@@ -369,7 +369,7 @@ const DisplayGame = (props) => {
                     <Grid item className='displayGameOpposingProfileContainer' order={{ xs: 3 }} xs={5} sm={5} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
                         <Grid display={'flex'} flexDirection={'column'} position={'relative'}>
                             <Tooltip arrow placement='top' title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
-                                <span href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                                <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                     <Typography className='displayGameChampLevel' style={{
                                         fontSize: '14px',
                                         position: 'absolute',
@@ -395,7 +395,7 @@ const DisplayGame = (props) => {
                                     </img>
                                 </span>
                             </Tooltip>
-                            <Grid className='displayGameSummonerSpells'>
+                            <Grid className='displayGameSummonerSpells defaultCursor'>
                                 <Tooltip
                                     title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).description}</span></>}
                                     disableInteractive
@@ -419,7 +419,7 @@ const DisplayGame = (props) => {
                             <Grid style={{ marginTop: '10px' }}>
                                 {participants.filter(player => player.teamId !== participant.teamId && player.summonerId !== opposingLaner.summonerId).map((player, index) => (
                                     <Tooltip key={`player_${index}_team2`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
-                                        <span href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
+                                        <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                             <img alt='Champion' className='displayGameTeamChamps' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
                                             <Box className='displayGameTeamChampsBox' style={{ backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54' }}></Box>
                                         </span>

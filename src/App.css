@@ -21,6 +21,10 @@ body,
     cursor: pointer;
 }
 
+.defaultCursor {
+    cursor: default;
+}
+
 .recentSearchItem {
     text-decoration: none;
     color: #333333;
@@ -937,13 +941,6 @@ body,
     text-align: start !important;
 }
 
-.StandoutTextContainer {
-    flex-direction: column;
-    margin-left: 0px;
-    margin-top: 10px;
-    line-height: 1.6;
-}
-
 .StandoutImagesContainer {
     display: flex;
     flex-direction: column;
@@ -968,7 +965,18 @@ body,
 }
 
 .StandoutBox {
-    min-height: 175px;
+    min-height: 220px;
+    max-height: 220px;
+    position: relative;
+}
+
+.StandoutTextContainer {
+    flex-direction: column;
+    margin-left: 0px;
+    margin-top: 10px;
+    line-height: 1.6;
+    max-height: 220px;
+    overflow-y: auto;
 }
 
 .BansBox {
@@ -1333,6 +1341,16 @@ li {
 
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
+
+    .StandoutBox {
+        min-height: 220px;
+        max-height: unset;
+    }
+    
+    .StandoutTextContainer {
+        max-height: 220px;
+        overflow-y: auto;
+    }
 
     .removeFavoriteBtn {
         margin-left: 20px !important;

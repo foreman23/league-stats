@@ -76,10 +76,8 @@ const ArenaDetails = () => {
     const findQueueTitle = useCallback(async () => {
 
         let queue = await findQueueInfo();
-        console.log(gameData.info)
 
         let queueTitle = queue.description;
-        console.log(queueTitle)
         if (queueTitle === '5v5 Ranked Solo games') {
             setQueueTitle('Ranked Solo');
         }
@@ -102,7 +100,6 @@ const ArenaDetails = () => {
     const getQueueJSON = async () => {
         try {
             const response = await fetch('https://static.developer.riotgames.com/docs/lol/queues.json');
-            console.log(response)
             const data = await response.json();
             setQueues(data);
         } catch (error) {
