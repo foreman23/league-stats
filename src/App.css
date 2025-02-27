@@ -1380,6 +1380,10 @@ li {
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
 
+    .searchMainImageContainer {
+        margin-top: 30px !important;
+    }
+
     .GameDetailsMainSummaryHeader {
         font-size: 1.2rem !important;
     }
@@ -1878,7 +1882,7 @@ li {
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
-        max-width: 85px !important;
+        max-width: 75px !important;
     }
 
     .featuredGameMainHeader {

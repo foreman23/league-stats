@@ -322,6 +322,9 @@ function Navbar(props) {
                                     fontWeight: 'bold',
                                     height: 'auto',
                                     border: 'none',
+                                    borderTopRightRadius: '0%',
+                                    borderBottomRightRadius: '0%',
+                                    borderRadius: '0%',
                                     filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
                                 }}
                                 value={dropdownDefaultValue}
@@ -352,6 +355,12 @@ function Navbar(props) {
                                 <MenuItem value={160} aria-label="Vietnam">VN</MenuItem>
                             </Select>
                             <Autocomplete
+                                sx={{
+                                    backgroundColor: 'white',
+                                    '& .MuiOutlinedInput-root': {
+                                        borderRadius: 0, // Ensures no border rounding
+                                    },
+                                }}
                                 options={recentArr || []}
                                 getOptionLabel={(option) =>
                                     typeof option === 'string' ? option : `${option.summonerName} #${option.riotId}`
@@ -372,7 +381,7 @@ function Navbar(props) {
                                 freeSolo
                                 renderInput={(params) => (
                                     <TextField
-                                        style={{ backgroundColor: 'white', borderRadius: '5px' }}
+                                        style={{ backgroundColor: 'white' }}
                                         {...params}
                                         onKeyDown={(event) => {
                                             if (event.key === 'Enter') {
@@ -435,6 +444,12 @@ function Navbar(props) {
                     </Select>
 
                     <Autocomplete
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                borderRadius: 0, // Ensures no border rounding,
+                                height: '54px'
+                            },
+                        }}
                         options={recentArr || []}
                         getOptionLabel={(option) =>
                             typeof option === 'string' ? option : `${option.summonerName} #${option.riotId}`

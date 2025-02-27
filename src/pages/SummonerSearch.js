@@ -287,7 +287,9 @@ function SummonerSearch() {
                 width: '80px',
                 height: 'auto',
                 border: 'none',
-                filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+                borderTopRightRadius: '0px',
+                borderBottomRightRadius: '0px'
               }}
               value={dropdownDefaultValue}
               onChange={(event) => handleRegionChange(event)}
@@ -317,6 +319,14 @@ function SummonerSearch() {
               <MenuItem value={160}>VN</MenuItem>
             </Select>
             <Autocomplete
+              sx={{
+                backgroundColor: 'white',
+                '& .MuiOutlinedInput-root': {
+                  borderTopLeftRadius: '0px',
+                  borderBottomLeftRadius: '0px',
+                  borderRadius: '0px'
+                },
+              }}
               options={recentArr || []}
               getOptionLabel={(option) =>
                 typeof option === 'string' ? option : `${option.summonerName} #${option.riotId}`
@@ -433,7 +443,7 @@ function SummonerSearch() {
                 <Divider color={currentTab === 'recent' ? 'black' : '#999999'} style={{ width: '100%', margin: 'auto', marginTop: '10px', marginBottom: '10px' }}></Divider>
               </span>
             </Grid>
-            
+
             {currentTab === 'favorites' ? (
               <List className='favoriteRecentList'>
                 {((favorites?.length <= 0) || (favorites === null)) &&
