@@ -304,7 +304,12 @@ function Navbar(props) {
                     </div>
 
                     <Menu
-                        style={{ maxHeight: '70vh', padding: '0px' }}
+                        style={{ maxHeight: '70vh', padding: '0px', marginTop: '5px' }}
+                        PaperProps={{
+                            style: {
+                                borderRadius: '0px'
+                            }
+                        }}
                         id="search-menu"
                         anchorEl={anchorSearch}
                         open={openSearch}
@@ -316,7 +321,7 @@ function Navbar(props) {
                         <div style={{ display: 'flex', minWidth: '90vw', height: 'auto' }}>
                             <Select
                                 sx={{
-                                    backgroundColor: '#519EDD',
+                                    backgroundColor: '#595959',
                                     color: 'white',
                                     fontSize: '0.875rem',
                                     fontWeight: 'bold',
@@ -394,6 +399,7 @@ function Navbar(props) {
                                 )}
                             />
                             <IconButton
+                            style={{ backgroundColor: '#f2f2f2', borderRadius: '0px' }}
                                 aria-label="Search"
                                 onClick={handleSearchSubmit}
                                 color="inherit"

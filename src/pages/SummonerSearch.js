@@ -7,6 +7,8 @@ import Grid from '@mui/material/Unstable_Grid2';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CloseIcon from '@mui/icons-material/Close';
 import DisplayGame from '../components/DisplayGame';
+import SearchIcon from '@mui/icons-material/Search';
+
 
 function SummonerSearch() {
 
@@ -269,9 +271,14 @@ function SummonerSearch() {
                 <a href='/'>
                   <img className='searchMainImage' alt='site logo' src='/images/sorakaLogo.webp'></img>
                 </a>
-                <Typography style={{
+                <Typography className='hideMobile' style={{
                   textAlign: 'center', margin: 'auto', fontSize: '2rem', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
-                }}>RiftReport.gg</Typography>
+                }}>RiftReport.gg
+                </Typography>
+                <Typography className='hideDesktop' style={{
+                  textAlign: 'center', margin: 'auto', fontSize: '2rem', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
+                }}>RR.gg
+                </Typography>
               </div>
             </Grid>
 
@@ -345,11 +352,10 @@ function SummonerSearch() {
                 }
               }}
               fullWidth
-              style={{ width: '495px' }}
               freeSolo
               renderInput={(params) => (
                 <TextField
-                  style={{ backgroundColor: 'white', borderTopRightRadius: '5px', borderBottomRightRadius: '5px', borderTopLeftRadius: '5px', borderBottomLeftRadius: '5px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}
+                  style={{ backgroundColor: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}
                   {...params}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter') {
@@ -360,7 +366,7 @@ function SummonerSearch() {
                 />
               )}
             />
-            <Button onClick={handleSearchSubmit} className='summonerSearchButton' variant='contained'>Search</Button>
+            <Button onClick={handleSearchSubmit} className='summonerSearchButton' variant='contained'><SearchIcon></SearchIcon></Button>
           </Grid>
 
           <div className="searchFeaturedContainer">
