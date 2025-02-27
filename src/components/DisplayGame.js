@@ -21,7 +21,7 @@ const DisplayGame = (props) => {
     const participant = useMemo(() => {
         return gameData.info.participants.find(participant => participant.puuid === puuid)
     }, [gameData, puuid])
-    
+
     const participants = gameData.info.participants;
 
     // Find summoner spells
@@ -289,11 +289,17 @@ const DisplayGame = (props) => {
                 <Grid container style={{ display: 'flex', marginTop: '8px', paddingBottom: '25px' }}>
                     {/* Summoner profile for game */}
                     <Grid item className='displayGamePlayerProfileContainer' order={{ xs: 1 }} xs={5} sm={5} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
-                        <Grid display={'flex'} flexDirection={'column'} alignSelf={'center'} marginRight={'10%'}>
+                        <Grid className='displayGamePlayerTextContainer'>
                             <Typography className='displayGameRiotName'>{participant.riotIdGameName}</Typography>
-                            <Typography className='displayGameSubheader' style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '3px', color: '#7E7E7E' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).name}</Typography>
-                            <Typography className='displayGameSubheader' style={{ fontSize: '14px', color: '#7E7E7E' }}>{`${participant.kills}/${participant.deaths}/${participant.assists} (${participant.totalMinionsKilled + participant.neutralMinionsKilled} CS)`}</Typography>
-                            <Grid style={{ marginTop: '10px' }}>
+
+                            {/* Desktop */}
+                            <Typography className='displayGameSubheader hideMobile' style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '3px', color: '#7E7E7E' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).name}</Typography>
+                            <Typography className='displayGameSubheader hideMobile' style={{ color: '#7E7E7E' }}>{`${participant.kills}/${participant.deaths}/${participant.assists} (${participant.totalMinionsKilled + participant.neutralMinionsKilled} CS)`}</Typography>
+
+                            {/* Mobile */}
+                            <Typography className='displayGameSubheader hideDesktop' style={{ color: '#7E7E7E' }}>{`${participant.kills}/${participant.deaths}/${participant.assists}`}</Typography>
+                            <Typography className='displayGameSubheader hideDesktop' style={{ color: '#7E7E7E' }}>{`(${participant.totalMinionsKilled + participant.neutralMinionsKilled} CS)`}</Typography>
+                            <Grid className='teamChampsContainer teamChampsContainerM1'>
                                 {participants.filter(player => player.teamId === participant.teamId && player.summonerId !== participant.summonerId).map((player, index) => (
                                     <Tooltip key={`player_${index}_team1`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
                                         <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
@@ -412,11 +418,18 @@ const DisplayGame = (props) => {
                                 </Tooltip>
                             </Grid>
                         </Grid>
-                        <Grid display={'flex'} flexDirection={'column'} alignSelf={'center'} marginLeft={'10%'}>
+                        <Grid className='displayGameOpposingTextContainer'>
                             <Typography className='displayGameRiotName'>{opposingLaner.riotIdGameName}</Typography>
-                            <Typography className='displayGameSubheader' style={{ fontWeight: 'bold', marginBottom: '3px', color: '#7E7E7E' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).name}</Typography>
-                            <Typography className='displayGameSubheader' style={{ color: '#7E7E7E' }}>{`${opposingLaner.kills}/${opposingLaner.deaths}/${opposingLaner.assists} (${opposingLaner.totalMinionsKilled + opposingLaner.neutralMinionsKilled} CS)`}</Typography>
-                            <Grid style={{ marginTop: '10px' }}>
+
+                            {/* Desktop */}
+                            <Typography className='displayGameSubheader hideMobile' style={{ fontWeight: 'bold', marginBottom: '3px', color: '#7E7E7E' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).name}</Typography>
+                            <Typography className='displayGameSubheader hideMobile' style={{ color: '#7E7E7E' }}>{`${opposingLaner.kills}/${opposingLaner.deaths}/${opposingLaner.assists} (${opposingLaner.totalMinionsKilled + opposingLaner.neutralMinionsKilled} CS)`}</Typography>
+
+                            {/* Mobile */}
+                            <Typography className='displayGameSubheader hideDesktop' style={{ color: '#7E7E7E' }}>{`${opposingLaner.kills}/${opposingLaner.deaths}/${opposingLaner.assists}`}</Typography>
+                            <Typography className='displayGameSubheader hideDesktop' style={{ color: '#7E7E7E' }}>{`(${opposingLaner.totalMinionsKilled + opposingLaner.neutralMinionsKilled} CS)`}</Typography>
+
+                            <Grid className='teamChampsContainer teamChampsContainerM2'>
                                 {participants.filter(player => player.teamId !== participant.teamId && player.summonerId !== opposingLaner.summonerId).map((player, index) => (
                                     <Tooltip key={`player_${index}_team2`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
                                         <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>

@@ -1339,8 +1339,66 @@ li {
     }
 }
 
+.teamChampsContainer {
+    margin-top: 10px;
+}
+
+.displayGamePlayerTextContainer {
+    display: flex !important;
+    flex-direction: column !important;
+    align-self: center !important; 
+    margin-right: 10% !important;
+}
+
+.displayGameOpposingTextContainer {
+    display: flex !important;
+    flex-direction: column !important;
+    align-self: center !important; 
+    margin-left: 10% !important;
+}
+
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
+
+    .displayGamePlayerTextContainer {
+        margin-right: 7% !important;
+    }
+    
+    .displayGameOpposingTextContainer { 
+        margin-left: 7% !important;
+    }
+
+    .teamChampsContainerM1 {
+        margin-top: 0px;
+        position: absolute;
+        width: 50%;
+        left: 0px;
+        right: auto;
+        top: auto;
+        bottom: 10px;
+        overflow: hidden;
+    }
+
+    .teamChampsContainerM2 {
+        margin-top: 0px;
+        position: absolute;
+        width: 50%;
+        left: auto;
+        right: 0px;
+        top: auto;
+        bottom: 10px;
+        overflow: hidden;
+    }
+
+    .displayGameTeamChamps {
+        width: 22px;
+        margin-right: 2px !important;
+    }
+
+    .displayGameTeamChampsBox {
+        width: 16px;
+        display: none;
+    }
 
     .StandoutBox {
         min-height: 220px;
@@ -1756,16 +1814,7 @@ li {
 
     .displayGameSubheader {
         font-weight: bold !important;
-        font-size: 9px !important;
-    }
-
-    .displayGameTeamChamps {
-        width: 16px;
-        margin-right: 0px !important;
-    }
-
-    .displayGameTeamChampsBox {
-        width: 16px;
+        font-size: 12px !important;
     }
 
     .displayGameChampLevel {
@@ -1776,12 +1825,12 @@ li {
     }
 
     .displayGameSummonerSpells img {
-        width: 20px !important;
+        width: 18px !important;
     }
 
     .displayGameSummonerSpells {
         position: absolute;
-        top: 45px;
+        top: 65px;
         bottom: 0px;
         left: 50%;
         transform: translateX(-50%);
@@ -1972,7 +2021,15 @@ li {
     }
 
     .displayGamePlayerProfileContainer {
-        padding-left: 10px;
+        padding-left: 8px;
+        padding-right: 10px;
+        padding-bottom: 12px;
+    }
+
+    .displayGameOpposingProfileContainer  {
+        padding-left: 8px;
+        padding-right: 10px;
+        padding-bottom: 12px;
     }
 
     .displayGameMainContainer {
@@ -1982,11 +2039,11 @@ li {
         flex-direction: column !important;
         padding: 10px;
         padding-top: 14px;
-        padding-bottom: 10px;
+        padding-bottom: 15px;
         border-radius: 10px;
         position: relative;
         padding-top: 15px;
-        margin-bottom: 5px !important;
+        margin-bottom: 10px !important;
         width: 95vw !important;
         margin: auto;
     }
@@ -2357,7 +2414,7 @@ li {
         border-radius: 5px !important;
     }
 
-    .displayGameRiotName {
+    /* .displayGameRiotName {
         font-size: 12px !important;
         font-weight: bold !important;
         margin-bottom: 3px !important;
@@ -2367,18 +2424,29 @@ li {
         max-width: 75px !important;
     }
 
+            */
+
     .displayGameTeamChamps {
-        width: 14px !important;
-        margin-right: 0px !important;
+        width: 18px !important;
+        margin-right: 2px !important;
     }
 
-    .displayGameTeamChampsBox {
-        width: 14px !important;
-    }
 
     .displayGameMainChampImg {
         margin-top: 10px;
         width: 42px;
+    } 
+
+    .displayGameMatchInfo p {
+        font-size: 12px !important;
+    }
+
+    .displayGameDurationHeader p {
+        font-size: 11px !important;
+    }
+
+    .displayGameTimeHeader {
+        font-size: 11px !important;
     }
 
     .displayGameSubheader {

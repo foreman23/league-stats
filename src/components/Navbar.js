@@ -291,7 +291,7 @@ function Navbar(props) {
                             aria-expanded={open ? 'true' : undefined}
                             onClick={handleClickFavorites}
                         >
-                            <FavoriteIcon style={{ color: 'white' }}></FavoriteIcon>
+                            <FavoriteIcon style={{ color: 'white', fontSize: '28px' }}></FavoriteIcon>
                         </IconButton>
                         <IconButton
                             aria-label='Open search bar'
