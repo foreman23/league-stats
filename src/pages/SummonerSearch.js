@@ -263,19 +263,20 @@ function SummonerSearch() {
 
         <Grid style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }} container>
 
-          {/* <div className='summonerSearchContainer'> */}
+          <div className='firstSection'>
+            <Grid xs={12} display={'flex'} margin={'auto'}>
+              <div className='searchMainImageContainer'>
+                <a href='/'>
+                  <img className='searchMainImage' alt='site logo' src='/images/sorakaLogo.webp'></img>
+                </a>
+                <Typography style={{
+                  textAlign: 'center', margin: 'auto', fontSize: '2rem', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
+                }}>RiftReport.gg</Typography>
+              </div>
+            </Grid>
 
+          </div>
 
-          <Grid xs={12} display={'flex'} margin={'auto'}>
-            <div className='searchMainImageContainer'>
-              <a href='/'>
-                <img className='searchMainImage' alt='site logo' src='/images/sorakaLogo.webp'></img>
-              </a>
-              <Typography style={{
-                textAlign: 'center', margin: 'auto', fontSize: '2rem', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
-              }}>RiftReport.gg</Typography>
-            </div>
-          </Grid>
 
           <Grid className='searchSearchContainer' xs={12}>
             <Select
