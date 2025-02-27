@@ -291,7 +291,7 @@ function Navbar(props) {
                             aria-expanded={open ? 'true' : undefined}
                             onClick={handleClickFavorites}
                         >
-                            <FavoriteIcon style={{ color: 'white', fontSize: '28px' }}></FavoriteIcon>
+                            <FavoriteIcon style={{ color: 'white', fontSize: '1.75rem' }}></FavoriteIcon>
                         </IconButton>
                         <IconButton
                             aria-label='Open search bar'
@@ -299,7 +299,7 @@ function Navbar(props) {
                             aria-haspopup="true"
                             aria-expanded={openSearch ? 'true' : undefined}
                             onClick={handleClickSearch}>
-                            <SearchIcon style={{ fontSize: '32px', color: 'white' }} className='hideDesktop'></SearchIcon>
+                            <SearchIcon style={{ fontSize: '2rem', color: 'white' }} className='hideDesktop'></SearchIcon>
                         </IconButton>
                     </div>
 
@@ -318,7 +318,7 @@ function Navbar(props) {
                                 sx={{
                                     backgroundColor: '#519EDD',
                                     color: 'white',
-                                    fontSize: '14px',
+                                    fontSize: '0.875rem',
                                     fontWeight: 'bold',
                                     height: 'auto',
                                     border: 'none',
@@ -400,7 +400,7 @@ function Navbar(props) {
                         sx={{
                             backgroundColor: '#4d4d4d',
                             color: '#d9d9d9',
-                            fontSize: '14px',
+                            fontSize: '0.875rem',
                             fontWeight: 'bold',
                             width: '100px',
                             borderTopRightRadius: '0px',
@@ -498,7 +498,7 @@ function Navbar(props) {
                                             <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '52px', marginRight: '10px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${item.icon}.png`}></img>
                                             <span style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.summonerName} #{item.riotId}</span>
                                         </a>
-                                        <FavoriteIcon aria-label='Remove a favorite' className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '18px' }}></FavoriteIcon>
+                                        <FavoriteIcon aria-label='Remove a favorite' className='favoriteButtonActive' onClick={() => handleRemoveFavorite(item)} style={{ display: 'flex', marginRight: '10px', marginLeft: 'auto', fontSize: '1.125rem' }}></FavoriteIcon>
                                     </ListItem>
                                 ))}
                             </List>

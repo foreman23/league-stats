@@ -258,8 +258,8 @@ const DisplayGame = (props) => {
                     {gameData.info.gameDuration > 180 ? (
                         <div className='displayGameMatchInfo'>
                             <span style={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography style={{ fontWeight: 'bold', fontSize: '20px', color: '#7E7E7E', marginRight: '12px' }} >{queueTitle}</Typography>
-                                <Typography style={{ fontSize: '16px', color: '#7A7A7A' }}>{participant.win === true ? '(Victory)' : '(Defeat)'}</Typography>
+                                <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem', color: '#7E7E7E', marginRight: '12px' }} >{queueTitle}</Typography>
+                                <Typography style={{ fontSize: '1rem', color: '#7A7A7A' }}>{participant.win === true ? '(Victory)' : '(Defeat)'}</Typography>
                             </span>
                             <span>
                                 <Divider style={{ width: '150px', color: '#ABABAB', marginTop: '6px' }}></Divider>
@@ -268,8 +268,8 @@ const DisplayGame = (props) => {
                     ) : (
                         <div className='displayGameMatchInfo'>
                             <span style={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography style={{ fontWeight: 'bold', fontSize: '20px', color: '#7E7E7E', marginRight: '12px' }} >{queueTitle}</Typography>
-                                <Typography style={{ fontSize: '16px', color: '#7A7A7A' }}>(Remake)</Typography>
+                                <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem', color: '#7E7E7E', marginRight: '12px' }} >{queueTitle}</Typography>
+                                <Typography style={{ fontSize: '1rem', color: '#7A7A7A' }}>(Remake)</Typography>
                             </span>
                             <span>
                                 <Divider style={{ width: '150px', color: '#ABABAB', marginTop: '6px' }}></Divider>
@@ -279,10 +279,10 @@ const DisplayGame = (props) => {
                     }
                     {/* <Divider style={{ margin: 'auto', marginTop: '3px', marginBottom: '3px' }} color={participant.win === true ? '#BED3FF' : '#FFC4CC'} width={'55%'}></Divider> */}
                     <div className='displayGameDurationHeader'>
-                        <Typography style={{ fontSize: '12px' }}>{Math.floor(gameData.info.gameDuration / 60)}m</Typography>
-                        <AccessTimeIcon style={{ fontSize: '20px', marginLeft: '6px' }}></AccessTimeIcon>
+                        <Typography style={{ fontSize: '0.75rem' }}>{Math.floor(gameData.info.gameDuration / 60)}m</Typography>
+                        <AccessTimeIcon style={{ fontSize: '1.25rem', marginLeft: '6px' }}></AccessTimeIcon>
                     </div>
-                    <Typography className='displayGameTimeHeader' style={{ fontSize: '12px' }}>{timeSinceMatch}</Typography>
+                    <Typography className='displayGameTimeHeader' style={{ fontSize: '0.75rem' }}>{timeSinceMatch}</Typography>
                 </Grid>
 
                 {/* Main Container */}
@@ -293,7 +293,7 @@ const DisplayGame = (props) => {
                             <Typography className='displayGameRiotName'>{participant.riotIdGameName}</Typography>
 
                             {/* Desktop */}
-                            <Typography className='displayGameSubheader hideMobile' style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '3px', color: '#7E7E7E' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).name}</Typography>
+                            <Typography className='displayGameSubheader hideMobile' style={{ fontSize: '0.875rem', fontWeight: 'bold', marginBottom: '3px', color: '#7E7E7E' }}>{Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).name}</Typography>
                             <Typography className='displayGameSubheader hideMobile' style={{ color: '#7E7E7E' }}>{`${participant.kills}/${participant.deaths}/${participant.assists} (${participant.totalMinionsKilled + participant.neutralMinionsKilled} CS)`}</Typography>
 
                             {/* Mobile */}
@@ -314,7 +314,7 @@ const DisplayGame = (props) => {
                             <Tooltip arrow placement='top' title={`${participant.riotIdGameName} #${participant.riotIdTagline}`}>
                                 <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${participant.riotIdGameName}/${participant.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                     <Typography className='displayGameChampLevel' style={{
-                                        fontSize: '14px',
+                                        fontSize: '0.875rem',
                                         position: 'absolute',
                                         backgroundColor: participant.teamId === 200 ? '#FF3A54' : '#568CFF',
                                         color: 'white',
@@ -377,7 +377,7 @@ const DisplayGame = (props) => {
                             <Tooltip arrow placement='top' title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
                                 <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                     <Typography className='displayGameChampLevel' style={{
-                                        fontSize: '14px',
+                                        fontSize: '0.875rem',
                                         position: 'absolute',
                                         backgroundColor: participant.teamId === 100 ? '#FF3A54' : '#568CFF',
                                         color: 'white',

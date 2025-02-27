@@ -147,7 +147,7 @@ const Standout = (props) => {
             <Grid item xs={12} sm={6} className='StandoutGridHalf1'>
                 <div className='StandoutImagesContainer'>
                     <div className='StandoutHeaderContainer'>
-                        <Typography style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '6px' }}>Standout Performances</Typography>
+                        <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '6px' }}>Standout Performances</Typography>
                     </div>
                     <div className='StandoutImagesSubContainer'>
                         {performances.map(({ title, player, activeIndex: index }) => {
@@ -218,8 +218,8 @@ const Standout = (props) => {
             </Grid>
             <Grid item xs={12} sm={6} style={{ display: 'flex' }}>
                 <div className='StandoutTextContainer'>
-                    <Typography className='hideMobile hideTablet' style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px' }}>{activePlayer.title}</Typography>
-                    <p style={{ color: '#4B4B4B', fontSize: '16px', maxWidth: '425px' }}>
+                    <Typography className='hideMobile hideTablet' style={{ fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '10px' }}>{activePlayer.title}</Typography>
+                    <p style={{ color: '#4B4B4B', fontSize: '1rem', maxWidth: '425px' }}>
                         <a style={{ color: activePlayer.player.teamId === 100 ? '#568CFF' : '#FF3F3F', textDecoration: 'underline' }} className='matchSummaryPlayerLink' href={`/profile/${gameData.info.platformId.toLowerCase()}/${activePlayer.player.riotIdGameName}/${activePlayer.player.riotIdTagline.toLowerCase()}`}>'{activePlayer?.player.riotIdGameName || "Unknown Player"}' <span style={{ textDecoration: 'none' }}>({championName})</span></a> {descStr}
                     </p>
                 </div>

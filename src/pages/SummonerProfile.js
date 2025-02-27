@@ -876,14 +876,14 @@ const SummonerProfile = () => {
                   verticalAlign: 'top',
                   top: '10px',
                   right: '6px',
-                  fontSize: '30px',
+                  fontSize: '1.875rem',
                   position: 'absolute'
                 }}>
               </FavoriteIcon>
             </Grid>
             <Grid style={{ margin: 'auto', textAlign: 'center', paddingRight: '30px', marginTop: '12px' }}>
               <Button style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', marginBottom: '10px', width: '130px' }} disabled={disableUpdateButton} onClick={updateUserFirestore} variant='contained' endIcon={<SyncIcon></SyncIcon>}>Update</Button>
-              <Typography style={{ fontSize: '12px', color: '#4E4E4E' }}>Updated: {timeLastUpdated}</Typography>
+              <Typography style={{ fontSize: '0.75rem', color: '#4E4E4E' }}>Updated: {timeLastUpdated}</Typography>
             </Grid>
           </Grid>
 
@@ -962,7 +962,7 @@ const SummonerProfile = () => {
                       backgroundColor: '#949494',
                       color: 'white',
                       fontWeight: 'bold',
-                      fontSize: '14px',
+                      fontSize: '0.875rem',
                       borderRadius: '10px',
                       paddingLeft: '8px',
                       paddingRight: '8px',
@@ -1015,7 +1015,7 @@ const SummonerProfile = () => {
                     </Tooltip>
                     <Typography style={{
                       textAlign: 'center',
-                      fontSize: '12px',
+                      fontSize: '0.75rem',
                       backgroundColor: '#606060',
                       color: 'white',
                       fontWeight: 'bold',
@@ -1058,7 +1058,7 @@ const SummonerProfile = () => {
                     </Tooltip>
                     <Typography style={{
                       textAlign: 'center',
-                      fontSize: '12px',
+                      fontSize: '0.75rem',
                       backgroundColor: '#606060',
                       color: 'white',
                       fontWeight: 'bold',
@@ -1101,7 +1101,7 @@ const SummonerProfile = () => {
                     </Tooltip>
                     <Typography style={{
                       textAlign: 'center',
-                      fontSize: '12px',
+                      fontSize: '0.75rem',
                       backgroundColor: '#606060',
                       color: 'white',
                       fontWeight: 'bold',

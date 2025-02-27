@@ -46,13 +46,13 @@ body,
 
 .gameDetailsMatchSummaryList li {
     color: #4B4B4B;
-    font-size: 16px;
+    font-size: 1rem;
     width: 400px;
     line-height: 1.4;
 }
 
 .LanePhaseSummaryDetailsActive p {
-    font-size: 16px;
+    font-size: 1rem;
     width: 97%;
     line-height: 1.6;
 }
@@ -88,7 +88,7 @@ body,
     margin-top: 5px !important;
     color: #2b2b2b !important;
     font-weight: bold !important;
-    font-size: 18px !important;
+    font-size: 1rem !important;
 }
 
 .standoutDescInactive {
@@ -96,7 +96,7 @@ body,
     margin-top: 5px !important;
     color: #7E7E7E !important;
     font-weight: bold !important;
-    font-size: 18px !important;
+    font-size: 1rem !important;
 }
 
 .summonerNameTable:hover {
@@ -240,7 +240,7 @@ body,
     padding-right: 4px;
     border-radius: 5px;
     margin-right: 5px;
-    font-size: 13px;
+    font-size: .8rem;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
@@ -251,12 +251,12 @@ body,
     padding-right: 4px;
     border-radius: 5px;
     margin-right: 5px;
-    font-size: 13px;
+    font-size: .8rem;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .TableStandingScore {
-    font-size: 13px;
+    font-size: .8rem;
 }
 
 .TableStandingAce {
@@ -293,9 +293,8 @@ body,
 .removeFavoriteBtn {
     display: flex !important; 
     margin-right: auto !important;
-    margin-left: 0px !important;
-    margin-top: 10px !important;
-    font-size: 18px !important;
+    margin-top: 5px !important;
+    font-size: 1rem !important;
     position: absolute !important;
     z-index: 1 !important;
 }
@@ -303,9 +302,8 @@ body,
 .removeRecentBtn {
     display: flex !important;
     margin-right: auto !important;
-    margin-left: 0px !important;
-    margin-top: 10px !important;
-    font-size: 14px !important;
+    margin-top: 5px !important;
+    font-size: 1rem !important;
     position: absolute !important;
     z-index: 1 !important;
 }
@@ -435,7 +433,7 @@ body,
 }
 
 .displayGameRiotName {
-    font-size: 16px !important;
+    font-size: 1rem !important;
     font-weight: bold !important;
     margin-bottom: 3px !important;
     white-space: nowrap !important;
@@ -492,7 +490,7 @@ body,
 
     .GameDetailsCatBtn {
         max-width: 100px;
-        font-size: 12px !important;
+        font-size: .7rem !important;
     }
 
     .GameOverviewTable {
@@ -512,7 +510,7 @@ body,
     height: 40px !important;
     font-weight: bold !important;
     margin: 5px !important;
-    font-size: 28px !important;
+    font-size: 1.75rem !important;
     padding: 0 !important;
     text-align: center !important;
     margin-bottom: 0px !important;
@@ -626,8 +624,8 @@ body,
 }
 
 .footer {
-    width: 50%;
-    font-size: 12px !important;
+    width: 55%;
+    font-size: .75rem !important;
     line-height: 16px;
     text-align: center;
     color: #9AA4AF !important;
@@ -700,14 +698,14 @@ body,
 }
 
 .matchDetailsObjectiveText {
-    font-size: 14px !important;
+    font-size: 0.85rem !important;
     color: #7E7E7E !important;
     font-weight: bold !important;
     text-align: center !important;
 }
 
 .matchDetailsObjectiveValueText {
-    font-size: 18px !important;
+    font-size: 1rem !important;
     color: #4B4B4B !important;
     font-weight: bold !important;
     text-align: center !important;
@@ -737,7 +735,7 @@ body,
 
 .damageDealtGraphHeader {
     font-weight: bold !important;
-    font-size: 26px !important;
+    font-size: 1.6rem !important;
     text-align: start !important;
 }
 
@@ -761,7 +759,7 @@ body,
 
 .displayGameHeader {
     font-weight: bold !important;
-    font-size: 16px !important;
+    font-size: 1rem !important;
     margin-right: 5px !important;
 }
 
@@ -813,7 +811,7 @@ body,
 }
 
 .featuredGamePlayerLevel {
-    font-size: 12px !important;
+    font-size: 0.75rem !important;
     position: absolute !important;
     color: white !important;
     font-weight: bold !important;
@@ -856,7 +854,7 @@ body,
     left: 20px !important;
     right: auto !important;
     color: #999999 !important;
-    font-size: 16px !important;
+    font-size: 1rem !important;
     white-space: nowrap !important;
     font-weight: bold !important;
 }
@@ -868,7 +866,7 @@ body,
     bottom: auto !important;
     right: auto !important;
     color: #7E7E7E !important;
-    font-size: 12px !important;
+    font-size: 0.75rem !important;
     white-space: nowrap !important;
     position: absolute !important;
     font-weight: bold !important;
@@ -881,7 +879,7 @@ body,
     bottom: auto !important;
     right: 20px !important;
     color: #7E7E7E !important;
-    font-size: 12px !important;
+    font-size: 0.75rem !important;
     white-space: nowrap !important;
     position: absolute !important;
     font-weight: bold !important;
@@ -908,11 +906,11 @@ body,
 }
 
 .displayGameSubheader {
-    font-size: 14px !important;
+    font-size: 0.875rem !important;
 }
 
 .displayGameChampLevel {
-    font-size: 16px !important;
+    font-size: 0.875rem !important;
 }
 
 .GameDetailsBox {
@@ -1150,14 +1148,14 @@ body,
 
 .NotFoundHeader {
     color: #4B4B4B !important;
-    font-size: 30px !important;
+    font-size: 1.775rem !important;
     text-align: center;
 }
 
 .NotFoundSubheader {
     margin-top: 30px !important;
     color: #4B4B4B !important;
-    font-size: 24px !important;
+    font-size: 1.5rem !important;
 }
 
 .NotFoundList li {
@@ -1186,7 +1184,7 @@ body,
 .PageNotFoundHeader {
     text-align: center !important;
     margin: auto !important;
-    font-size: 44px !important;
+    font-size: 2.75rem !important;
     color: #4B4B4B !important;
 }
 
@@ -1215,7 +1213,7 @@ body,
 }
 
 .footerList a p {
-    font-size: 14px !important;
+    font-size: 0.875rem !important;
 }
 
 .privacyPolicy {
@@ -1228,7 +1226,7 @@ body,
 
 .privacyPolicy p,
 li {
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 #aboutPage {
@@ -1306,7 +1304,7 @@ li {
 }
 
 .scrollTopBtn {
-    font-size: 42px !important;
+    font-size: 2.625rem !important;
 }
 
 .fadein {
@@ -1330,8 +1328,13 @@ li {
 }
 
 @media only screen and (max-width: 1360px) {
+
+    .displayGameSummonerSpells {
+        bottom: 25px !important;
+    }
+    
     .displayGameRiotName {
-        font-size: 14px !important;
+        font-size: 0.875rem !important;
     }
 
     .displayGameMainChampImg {
@@ -1357,8 +1360,37 @@ li {
     margin-left: 10% !important;
 }
 
+.GameDetailsMainSummaryHeader {
+    padding-top: 10px !important;
+    line-height: 1.4 !important;
+    font-size: 1.375rem !important;
+    font-weight: bold !important;
+    max-width: 460px !important;
+}
+
+.GameDetailsMainSummarySubHeader {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    font-weight: bold !important;
+    color: #7E7E7E !important;
+    margin-bottom: 5px !important;
+    font-size: 0.875rem !important;
+}
+
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
+
+    .GameDetailsMainSummaryHeader {
+        font-size: 1.2rem !important;
+    }
+
+    .GameDetailsMainSummarySubHeader {
+        font-size: 0.75rem !important;
+    }
+
+    .displayGameFeaturedMainContainer {
+        padding-bottom: 16px;
+    }
 
     .displayGamePlayerTextContainer {
         margin-right: 7% !important;
@@ -1372,7 +1404,7 @@ li {
         margin-top: 0px;
         position: absolute;
         width: 50%;
-        left: 0px;
+        left: -10px;
         right: auto;
         top: auto;
         bottom: 10px;
@@ -1384,7 +1416,7 @@ li {
         position: absolute;
         width: 50%;
         left: auto;
-        right: 0px;
+        right: -10px;
         top: auto;
         bottom: 10px;
         overflow: hidden;
@@ -1450,7 +1482,7 @@ li {
     }
     
     .scrollTopBtn {
-        font-size: 48px !important;
+        font-size: 3rem !important;
     }
 
     .dataDragonVersionContainer {
@@ -1493,7 +1525,7 @@ li {
     }
 
     .NotFoundHeader {
-        font-size: 32px !important;
+        font-size: 2rem !important;
     }
 
     .NotFoundContact {
@@ -1509,18 +1541,18 @@ li {
 
     .PageNotFoundHeader {
         width: 90%;
-        font-size: 40px !important;
+        font-size: 2rem !important;
     }
 
     .PageNotFoundDiv {
-        width: 90%;
+        width: 80%;
     }
 
     .NotFoundSubheader {
         margin-left: 22px !important;
         margin-top: 20px !important;
         color: #4B4B4B !important;
-        font-size: 24px !important;
+        font-size: 1.5rem !important;
     }
 
     .NotFoundSubContainer {
@@ -1687,7 +1719,7 @@ li {
     }
 
     .matchDetailsObjectiveText {
-        font-size: 12px !important;
+        font-size: 0.7rem !important;
         color: #7E7E7E !important;
         font-weight: bold !important;
         text-align: center !important;
@@ -1799,7 +1831,7 @@ li {
 
     .gameDetailsMatchSummaryList li {
         color: #4B4B4B;
-        font-size: 16px;
+        font-size: 1rem;
         width: 100%;
     }
 
@@ -1814,12 +1846,12 @@ li {
 
     .displayGameSubheader {
         font-weight: bold !important;
-        font-size: 12px !important;
+        font-size: 0.75rem !important;
     }
 
     .displayGameChampLevel {
         margin-top: 10px !important;
-        font-size: 12px !important;
+        font-size: 0.75rem !important;
         padding-left: 5px !important;
         padding-right: 5px !important;
     }
@@ -1840,7 +1872,7 @@ li {
     }
 
     .displayGameRiotName {
-        font-size: 12px !important;
+        font-size: 0.75rem !important;
         font-weight: bold !important;
         margin-bottom: 3px !important;
         white-space: nowrap !important;
@@ -1870,7 +1902,7 @@ li {
         margin-left: 10px !important;
         margin-right: 25px !important;
         color: #999999 !important;
-        font-size: 16px !important;
+        font-size: 1rem !important;
         white-space: nowrap !important;
         position: relative !important;
         font-weight: bold !important;
@@ -1964,7 +1996,7 @@ li {
 
     .footer {
         width: 100%;
-        font-size: 12px !important;
+        font-size: 0.75rem !important;
         line-height: #9AA4AF;
         text-align: center;
     }
@@ -2002,7 +2034,7 @@ li {
     }
 
     .displayGameMatchInfo p {
-        font-size: 14px !important;
+        font-size: 0.875rem !important;
     }
 
     .summonerProfileMastery {
@@ -2075,12 +2107,17 @@ li {
 /* Small tablets */
 @media only screen and (min-width: 768px) and (max-width: 820px) {
 
+    .displayGameSummonerSpells  {
+        bottom: 25px;
+        top: auto;
+    }
+
     .LaneButtonsContainer {
         max-width: 40vw;
     }
 
     .navBarHeaderText {
-        font-size: 16px !important;
+        font-size: 1rem !important;
     }
 
     .scrollTop {
@@ -2092,7 +2129,7 @@ li {
     }
     
     .scrollTopBtn {
-        font-size: 48px !important;
+        font-size: 3rem !important;
     }
 
     .matchDetailsObjectiveBar {
@@ -2100,7 +2137,7 @@ li {
     }
 
     .matchDetailsObjectiveText {
-        font-size: 11px !important;
+        font-size: 0.65rem !important;
         padding-right: 2px;
         padding-left: 2px;
     }
@@ -2119,7 +2156,7 @@ li {
 
     .gameDetailsMatchSummaryList li {
         color: #4B4B4B;
-        font-size: 16px;
+        font-size: 1rem;
         width: 100%;
     }
 
@@ -2254,6 +2291,11 @@ li {
 /* Tablets */
 @media only screen and (min-width: 821px) and (max-width: 1200px) {
 
+    .displayGameSummonerSpells  {
+        bottom: 20px;
+        top: auto;
+    }
+
     .scrollTop {
         background-color: #b4b4b4;
         left: auto;
@@ -2263,7 +2305,7 @@ li {
     }
     
     .scrollTopBtn {
-        font-size: 76px !important;
+        font-size: 4.75rem !important;
     }
 
     .displayGamesMainContainer {
@@ -2275,7 +2317,7 @@ li {
     }
 
     .matchDetailsObjectiveText {
-        font-size: 11px !important;
+        font-size: 0.65rem !important;
     }
 
     .navBarSearchBar {
@@ -2292,7 +2334,7 @@ li {
 
     .gameDetailsMatchSummaryList li {
         color: #4B4B4B;
-        font-size: 16px;
+        font-size: 1rem;
         width: 100%;
     }
 
@@ -2400,7 +2442,7 @@ li {
     }
 
     .matchDetailsObjectiveText {
-        font-size: 10px !important;
+        font-size: 0.6rem !important;
     }
 
     .BuildsChampPic {
@@ -2438,20 +2480,20 @@ li {
     } 
 
     .displayGameMatchInfo p {
-        font-size: 12px !important;
+        font-size: 0.75 !important;
     }
 
     .displayGameDurationHeader p {
-        font-size: 11px !important;
+        font-size: 0.688rem !important;
     }
 
     .displayGameTimeHeader {
-        font-size: 11px !important;
+        font-size: 0.688rem !important;
     }
 
     .displayGameSubheader {
         font-weight: bold !important;
-        font-size: 8px !important;
+        font-size: 0.5rem !important;
     }
 }
 
@@ -2459,7 +2501,7 @@ li {
 
 @media only screen and (min-width: 1201px) and (max-width: 1854px) {
     .matchDetailsObjectiveText {
-        font-size: 13px !important;
+        font-size: 0.813rem !important;
     }
 }
 
@@ -2469,7 +2511,7 @@ li {
     }
 
     .matchDetailsObjectiveText {
-        font-size: 12px !important;
+        font-size: 0.75rem !important;
     }
 }
 
@@ -2479,7 +2521,7 @@ li {
     }
 
     .matchDetailsObjectiveText {
-        font-size: 11px !important;
+        font-size: 0.688rem !important;
     }
 }
 
@@ -2493,7 +2535,7 @@ li {
     }
 
     .matchDetailsObjectiveText {
-        font-size: 10px !important;
+        font-size: 0.625rem !important;
     }
 }
 

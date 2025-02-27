@@ -272,7 +272,7 @@ function SummonerSearch() {
                 <img className='searchMainImage' alt='site logo' src='/images/sorakaLogo.webp'></img>
               </a>
               <Typography style={{
-                textAlign: 'center', margin: 'auto', fontSize: '32px', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
+                textAlign: 'center', margin: 'auto', fontSize: '2rem', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
               }}>RiftReport.gg</Typography>
             </div>
           </Grid>
@@ -282,7 +282,7 @@ function SummonerSearch() {
               sx={{
                 backgroundColor: '#519EDD',
                 color: 'white',
-                fontSize: '14px',
+                fontSize: '0.875rem',
                 fontWeight: 'bold',
                 width: '80px',
                 height: 'auto',
@@ -449,19 +449,19 @@ function SummonerSearch() {
                             <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${favorites[index].icon}.png`}></img>
                             <div style={{ marginLeft: '60px', textAlign: 'center' }}>
                               <div>
-                                <b style={{ fontSize: '14px' }}>{favorites[index].summonerName}</b>
+                                <b style={{ fontSize: '0.875rem' }}>{favorites[index].summonerName}</b>
                               </div>
                               <div>
-                                <b style={{ fontSize: '14px' }}>#{favorites[index].riotId}</b>
+                                <b style={{ fontSize: '0.875rem' }}>#{favorites[index].riotId}</b>
                               </div>
                               <div>
-                                <span style={{ fontSize: '14px' }}>Level: {favorites[index].level}</span>
+                                <span style={{ fontSize: '0.875rem' }}>Level: {favorites[index].level}</span>
                               </div>
                               <div>
                                 {favorites[index].rank !== null ? (
-                                  <span style={{ fontSize: '14px' }}>{favorites[index].rank.charAt(0) + favorites[index].rank.split(' ')[0].substring(1).toLowerCase() + ' ' + favorites[index].rank.split(' ')[1]}</span>
+                                  <span style={{ fontSize: '0.875rem' }}>{favorites[index].rank.charAt(0) + favorites[index].rank.split(' ')[0].substring(1).toLowerCase() + ' ' + favorites[index].rank.split(' ')[1]}</span>
                                 ) : (
-                                  <span style={{ fontSize: '14px' }}>Unranked</span>
+                                  <span style={{ fontSize: '0.875rem' }}>Unranked</span>
                                 )}
                               </div>
                             </div>
@@ -475,16 +475,16 @@ function SummonerSearch() {
                             <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`/images/novalue.webp`}></img>
                             <div style={{ marginLeft: '60px', textAlign: 'center' }}>
                               <div>
-                                <b style={{ fontSize: '14px' }}>Summoner</b>
+                                <b style={{ fontSize: '0.875rem' }}>Summoner</b>
                               </div>
                               <div>
-                                <b style={{ fontSize: '14px' }}>#RiotID</b>
+                                <b style={{ fontSize: '0.875rem' }}>#RiotID</b>
                               </div>
                               <div>
-                                <span style={{ fontSize: '14px' }}>Level:</span>
+                                <span style={{ fontSize: '0.875rem' }}>Level:</span>
                               </div>
                               <div>
-                                <span style={{ fontSize: '14px' }}>Rank</span>
+                                <span style={{ fontSize: '0.875rem' }}>Rank</span>
                               </div>
                             </div>
                           </ListItem>
@@ -514,19 +514,19 @@ function SummonerSearch() {
                             <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${recentArr[index].icon}.png`}></img>
                             <div style={{ marginLeft: '60px', textAlign: 'center' }}>
                               <div>
-                                <b style={{ fontSize: '14px' }}>{recentArr[index].summonerName}</b>
+                                <b style={{ fontSize: '0.875rem' }}>{recentArr[index].summonerName}</b>
                               </div>
                               <div>
-                                <b style={{ fontSize: '14px' }}>#{recentArr[index].riotId}</b>
+                                <b style={{ fontSize: '0.875rem' }}>#{recentArr[index].riotId}</b>
                               </div>
                               <div>
-                                <span style={{ fontSize: '14px' }}>Level: {recentArr[index].level}</span>
+                                <span style={{ fontSize: '0.875rem' }}>Level: {recentArr[index].level}</span>
                               </div>
                               <div>
                                 {recentArr[index].rank !== null ? (
-                                  <span style={{ fontSize: '14px' }}>{recentArr[index].rank.charAt(0) + recentArr[index].rank.split(' ')[0].substring(1).toLowerCase() + ' ' + recentArr[index].rank.split(' ')[1]}</span>
+                                  <span style={{ fontSize: '0.875rem' }}>{recentArr[index].rank.charAt(0) + recentArr[index].rank.split(' ')[0].substring(1).toLowerCase() + ' ' + recentArr[index].rank.split(' ')[1]}</span>
                                 ) : (
-                                  <span style={{ fontSize: '14px' }}>Unranked</span>
+                                  <span style={{ fontSize: '0.875rem' }}>Unranked</span>
                                 )}
                               </div>
                             </div>
@@ -540,16 +540,16 @@ function SummonerSearch() {
                             <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`/images/novalue.webp`}></img>
                             <div style={{ marginLeft: '60px', textAlign: 'center' }}>
                               <div>
-                                <b style={{ fontSize: '14px' }}>Summoner</b>
+                                <b style={{ fontSize: '0.875rem' }}>Summoner</b>
                               </div>
                               <div>
-                                <b style={{ fontSize: '14px' }}>#RiotID</b>
+                                <b style={{ fontSize: '0.875rem' }}>#RiotID</b>
                               </div>
                               <div>
-                                <span style={{ fontSize: '14px' }}>Level:</span>
+                                <span style={{ fontSize: '0.875rem' }}>Level:</span>
                               </div>
                               <div>
-                                <span style={{ fontSize: '14px' }}>Rank</span>
+                                <span style={{ fontSize: '0.875rem' }}>Rank</span>
                               </div>
                             </div>
                           </ListItem>

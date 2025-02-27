@@ -509,7 +509,7 @@ function GameDetails() {
                       <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
                         <div style={{ border: playerData.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
                           <Typography className='displayGameChampLevel' style={{
-                            fontSize: '14px',
+                            fontSize: '0.875rem',
                             position: 'absolute',
                             backgroundColor: playerData.teamId === 200 ? '#FF3A54' : '#568CFF',
                             color: 'white',
@@ -557,7 +557,7 @@ function GameDetails() {
                       <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
                         <div style={{ border: playerData.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
                           <Typography className='displayGameChampLevel' style={{
-                            fontSize: '14px',
+                            fontSize: '0.875rem',
                             position: 'absolute',
                             backgroundColor: playerData.teamId === 200 ? '#FF3A54' : '#568CFF',
                             color: 'white',
@@ -607,7 +607,7 @@ function GameDetails() {
                       <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
                         <div style={{ border: playerData.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
                           <Typography className='displayGameChampLevel' style={{
-                            fontSize: '14px',
+                            fontSize: '0.875rem',
                             position: 'absolute',
                             backgroundColor: opposingLaner.teamId === 200 ? '#FF3A54' : '#568CFF',
                             color: 'white',
@@ -655,7 +655,7 @@ function GameDetails() {
                       <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
                         <div style={{ border: playerData.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
                           <Typography className='displayGameChampLevel' style={{
-                            fontSize: '14px',
+                            fontSize: '0.875rem',
                             position: 'absolute',
                             backgroundColor: opposingLaner.teamId === 200 ? '#FF3A54' : '#568CFF',
                             color: 'white',
@@ -700,13 +700,13 @@ function GameDetails() {
                   )}
                 </Grid>
                 <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={7}>
-                  <Typography style={{ paddingTop: '10px', lineHeight: '1.4' }} fontSize={23} fontWeight={600} maxWidth={'460px'}>
+                  <Typography className='GameDetailsMainSummaryHeader'>
                     <span style={{ textDecoration: 'none', color: 'inherit' }}>
                       {playerData.riotIdGameName}
                     </span>
                     <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                   </Typography>
-                  <Typography style={{ paddingTop: '10px', paddingBottom: '10px', fontWeight: 'bold', color: '#7E7E7E', marginBottom: '5px' }} fontSize={14}>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
+                  <Typography className='GameDetailsMainSummarySubHeader'>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
                   <div className='GameDetailsCatBtnContainer'>
                     <Button onClick={() => scrollToSection('DetailsAnchor')} className='GameDetailsCatBtn' variant='contained'>Details</Button>
                     <Button onClick={() => scrollToSection('LaningAnchor')} className='GameDetailsCatBtn' variant='contained'>Laning</Button>
@@ -723,7 +723,7 @@ function GameDetails() {
             <Grid className='GameDetailsSubContainer' container >
               <Box className='GameDetailsBox'>
                 <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={12} sm={8} md={7} lg={6}>
-                  <Typography className='MatchSummaryText' marginLeft={'15px'} fontSize={20} fontWeight={'bold'}>Match Summary</Typography>
+                  <Typography className='MatchSummaryText' marginLeft={'15px'} fontSize={'1.25rem'} fontWeight={'bold'}>Match Summary</Typography>
                   <ul className='gameDetailsMatchSummaryList'>
                     <li style={{ marginBottom: '20px' }}>{shortSummary}</li>
                     <li>{matchSummaryDesc}</li>
@@ -764,17 +764,17 @@ function GameDetails() {
             {/* Details */}
             <Grid id='DetailsAnchor' justifyContent={'center'} margin={'auto'} container marginTop={'20px'}>
               <div style={{ display: 'flex', marginLeft: '0', marginRight: 'auto', flexDirection: 'column' }}>
-                <Typography style={{ fontWeight: 'bold', fontSize: '20px', marginRight: '30px' }}>Match Details</Typography>
-                <Typography style={{ fontSize: '20px', marginBottom: '20px', color: '#4B4B4B' }}>Results @ the end of game</Typography>
+                <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem', marginRight: '30px' }}>Match Details</Typography>
+                <Typography style={{ fontSize: '1.25rem', marginBottom: '20px', color: '#4B4B4B' }}>Results @ the end of game</Typography>
               </div>
               <Box className='MatchDetailsGraphBox' minWidth={'100%'} maxWidth={'100%'} style={{ display: 'flex', backgroundColor: 'white', padding: '20px', boxShadow: '0px 6px 24px 0px rgba(0, 0, 0, 0.25)' }} border={'1px solid #BBBBBB'} borderRadius={'10px'}>
                 {/* Red Team */}
                 <Grid item order={playerData.teamId === 100 ? 2 : 1} xs={12} sm={6}>
-                  <Typography style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>Red Team</Typography>
+                  <Typography style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '20px' }}>Red Team</Typography>
 
                   <div style={{ display: 'flex' }}>
-                    <Typography fontWeight={'bold'} fontSize={'18px'} marginRight={'50px'} color={'#FF3F3F'}>{gameData.info.teams[1].objectives.champion.kills} kills</Typography>
-                    <Typography fontWeight={'bold'} fontSize={'18px'} color={'#FF3F3F'}>{totalTeamGoldRed.toLocaleString()}g</Typography>
+                    <Typography fontWeight={'bold'} fontSize={'1.125rem'} marginRight={'50px'} color={'#FF3F3F'}>{gameData.info.teams[1].objectives.champion.kills} kills</Typography>
+                    <Typography fontWeight={'bold'} fontSize={'1.125rem'} color={'#FF3F3F'}>{totalTeamGoldRed.toLocaleString()}g</Typography>
                   </div>
 
                   <Grid container style={{ display: 'flex', alignItems: 'flex-end', height: '180px' }}>
@@ -787,9 +787,9 @@ function GameDetails() {
 
                     <Grid style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
                       {gameData.info.teams[1].objectives.riftHerald.kills >= 1 ? (
-                        <CheckIcon style={{ fontSize: '40px', color: '#17BA6C' }}></CheckIcon>
+                        <CheckIcon style={{ fontSize: '2.5rem', color: '#17BA6C' }}></CheckIcon>
                       ) : (
-                        <CloseIcon style={{ fontSize: '40px', color: '#777777' }}></CloseIcon>
+                        <CloseIcon style={{ fontSize: '2.5rem', color: '#777777' }}></CloseIcon>
                       )}
                       <Typography className='matchDetailsObjectiveText'>Herald</Typography>
                     </Grid>
@@ -802,9 +802,9 @@ function GameDetails() {
 
                     <Grid style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
                       {gameData.info.teams[1].objectives.atakhan.kills >= 1 ? (
-                        <CheckIcon style={{ fontSize: '40px', color: '#17BA6C' }}></CheckIcon>
+                        <CheckIcon style={{ fontSize: '2.5rem', color: '#17BA6C' }}></CheckIcon>
                       ) : (
-                        <CloseIcon style={{ fontSize: '40px', color: '#777777' }}></CloseIcon>
+                        <CloseIcon style={{ fontSize: '2.5rem', color: '#777777' }}></CloseIcon>
                       )}
                       <Typography className='matchDetailsObjectiveText'>Atakhan</Typography>
                     </Grid>
@@ -831,10 +831,10 @@ function GameDetails() {
                 </Grid>
                 {/* Blue Team */}
                 <Grid item order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
-                  <Typography className='matchDetailsTeamNameText' style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>Blue Team</Typography>
+                  <Typography className='matchDetailsTeamNameText' style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '20px' }}>Blue Team</Typography>
                   <div style={{ display: 'flex' }}>
-                    <Typography fontWeight={'bold'} fontSize={'18px'} marginRight={'50px'} color={'#568CFF'}>{gameData.info.teams[0].objectives.champion.kills} kills</Typography>
-                    <Typography fontWeight={'bold'} fontSize={'18px'} color={'#568CFF'}>{totalTeamGoldBlue.toLocaleString()}g</Typography>
+                    <Typography fontWeight={'bold'} fontSize={'1.125rem'} marginRight={'50px'} color={'#568CFF'}>{gameData.info.teams[0].objectives.champion.kills} kills</Typography>
+                    <Typography fontWeight={'bold'} fontSize={'1.125rem'} color={'#568CFF'}>{totalTeamGoldBlue.toLocaleString()}g</Typography>
                   </div>
                   <Grid container style={{ display: 'flex', alignItems: 'flex-end', height: '180px' }}>
 
@@ -846,9 +846,9 @@ function GameDetails() {
 
                     <Grid style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
                       {gameData.info.teams[0].objectives.riftHerald.kills >= 1 ? (
-                        <CheckIcon style={{ fontSize: '40px', color: '#17BA6C' }}></CheckIcon>
+                        <CheckIcon style={{ fontSize: '2.5rem', color: '#17BA6C' }}></CheckIcon>
                       ) : (
-                        <CloseIcon style={{ fontSize: '40px', color: '#777777' }}></CloseIcon>
+                        <CloseIcon style={{ fontSize: '2.5rem', color: '#777777' }}></CloseIcon>
                       )}
                       <Typography className='matchDetailsObjectiveText'>Herald</Typography>
                     </Grid>
@@ -861,9 +861,9 @@ function GameDetails() {
 
                     <Grid style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
                       {gameData.info.teams[0].objectives.atakhan.kills >= 1 ? (
-                        <CheckIcon style={{ fontSize: '40px', color: '#17BA6C' }}></CheckIcon>
+                        <CheckIcon style={{ fontSize: '2.5rem', color: '#17BA6C' }}></CheckIcon>
                       ) : (
-                        <CloseIcon style={{ fontSize: '40px', color: '#777777' }}></CloseIcon>
+                        <CloseIcon style={{ fontSize: '2.5rem', color: '#777777' }}></CloseIcon>
                       )}
                       <Typography className='matchDetailsObjectiveText'>Atakhan</Typography>
                     </Grid>
@@ -892,12 +892,12 @@ function GameDetails() {
             {gameData.info.teams[0].bans.length > 0 && gameData.info.teams[1].bans.length > 0 ? (
               <Grid container className='BansGridContainer'>
                 <Box className='BansBox'>
-                  <Typography className='hideDesktop' style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px' }}>Bans</Typography>
+                  <Typography className='hideDesktop' style={{ fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '10px' }}>Bans</Typography>
                   {/* Blue team */}
                   <Grid item className='BansTeamContainer' order={{ xs: playerData.teamId === 100 ? 1 : 3 }} style={{ display: 'flex', justifyContent: playerData.teamId === 100 ? 'flex-end' : 'flex-start' }} xs={12} sm={6}>
                     {playerData.teamId === 100 &&
                       <div className='hideMobile' style={{ alignSelf: 'center', marginRight: '25px' }}>
-                        <Typography style={{ fontWeight: 'bold', fontSize: '20px' }}>Bans</Typography>
+                        <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Bans</Typography>
                       </div>
                     }
                     {gameData.info.teams[0].bans.map((item, index) => {
@@ -947,7 +947,7 @@ function GameDetails() {
                   <Grid item className='BansTeamContainer' order={{ xs: playerData.teamId === 200 ? 1 : 3 }} style={{ display: 'flex', justifyContent: playerData.teamId === 200 ? 'flex-end' : 'flex-start' }} xs={12} sm={6}>
                     {playerData.teamId === 200 &&
                       <div className='hideMobile' style={{ alignSelf: 'center', marginRight: '25px' }}>
-                        <Typography style={{ fontWeight: 'bold', fontSize: '20px' }}>Bans</Typography>
+                        <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Bans</Typography>
                       </div>
                     }
                     {gameData.info.teams[1].bans.map((item, index) => {
@@ -1024,11 +1024,11 @@ function GameDetails() {
             <Grid className='LaningGridContainer' container >
               <Grid className='LaningGridSubContainer'>
                 <div style={{ marginLeft: '15px', marginBottom: '20px', }}>
-                  <Typography fontSize={20} fontWeight={600}>Laning Phase Results</Typography>
+                  <Typography fontSize={'1.25rem'} fontWeight={600}>Laning Phase Results</Typography>
                   {gameData.info.gameDuration > 900 ? (
-                    <Typography style={{ fontSize: '20px', color: '#4B4B4B' }}>How each lane was performing @ 15 minutes</Typography>
+                    <Typography style={{ fontSize: '1.25rem', color: '#4B4B4B' }}>How each lane was performing @ 15 minutes</Typography>
                   ) : (
-                    <Typography style={{ fontSize: '20px', color: '#4B4B4B' }}>{`How each lane was performing @ ${gameDuration} (game ended early)`}</Typography>
+                    <Typography style={{ fontSize: '1.25rem', color: '#4B4B4B' }}>{`How each lane was performing @ ${gameDuration} (game ended early)`}</Typography>
                   )
                   }
                 </div>
@@ -1046,8 +1046,8 @@ function GameDetails() {
         <div id='GraphsAnchor' style={{ backgroundColor: '#f2f2f2' }}>
           <Grid className='GameDetailsContainer' width={'65%'} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '30px', textAlign: 'flex-start' }}>
             <Box className='GraphSectionHeaderBox'>
-              <Typography style={{ fontWeight: 'bold', fontSize: '20px' }}>Graphs</Typography>
-              <Typography style={{ fontSize: '20px', marginBottom: '20px', color: '#4B4B4B' }}>Match Data Visualized</Typography>
+              <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Graphs</Typography>
+              <Typography style={{ fontSize: '1.25rem', marginBottom: '20px', color: '#4B4B4B' }}>Match Data Visualized</Typography>
             </Box>
           </Grid>
           {statsAt15 && graphData ? (

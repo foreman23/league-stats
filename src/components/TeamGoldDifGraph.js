@@ -76,21 +76,21 @@ const TeamGoldDifGraph = (props) => {
         <div style={{ overflow: 'hidden', position: 'relative', width: '100%' }}>
             {props.arrow &&
                 <div style={{ position: 'absolute', left: 'auto', right: '0px', top: '0px', display: 'flex', alignItems: 'center', backgroundColor: arrowColor === 'black' ? '#E9E9E9' : arrowColor === '#568CFF' ? '#ECF2FF' : '#FFF1F3', padding: '5px', borderRadius: '10px' }}>
-                    <Typography style={{ textAlign: 'center', color: arrowColor, fontSize: '15px' }}>{`${valueChange > 0 ? '+' : ''}${valueChange.toLocaleString()}g`}</Typography>
+                    <Typography style={{ textAlign: 'center', color: arrowColor, fontSize: '0.938rem' }}>{`${valueChange > 0 ? '+' : ''}${valueChange.toLocaleString()}g`}</Typography>
                     {arrowType === 'up' &&
-                        <KeyboardArrowUpIcon style={{ color: arrowColor, fontSize: '30px' }}></KeyboardArrowUpIcon>
+                        <KeyboardArrowUpIcon style={{ color: arrowColor, fontSize: '1.875rem' }}></KeyboardArrowUpIcon>
                     }
                     {arrowType === 'doubleUp' &&
-                        <KeyboardDoubleArrowUpIcon style={{ color: arrowColor, fontSize: '30px' }}></KeyboardDoubleArrowUpIcon>
+                        <KeyboardDoubleArrowUpIcon style={{ color: arrowColor, fontSize: '1.875rem' }}></KeyboardDoubleArrowUpIcon>
                     }
                     {arrowType === 'down' &&
-                        <KeyboardArrowDownIcon style={{ color: arrowColor, fontSize: '30px' }}></KeyboardArrowDownIcon>
+                        <KeyboardArrowDownIcon style={{ color: arrowColor, fontSize: '1.875rem' }}></KeyboardArrowDownIcon>
                     }
                     {arrowType === 'doubleDown' &&
-                        <KeyboardDoubleArrowDownIcon style={{ color: arrowColor, fontSize: '30px' }}></KeyboardDoubleArrowDownIcon>
+                        <KeyboardDoubleArrowDownIcon style={{ color: arrowColor, fontSize: '1.875rem' }}></KeyboardDoubleArrowDownIcon>
                     }
                     {arrowType === 'nochange' &&
-                        <HorizontalRuleIcon style={{ color: arrowColor, fontSize: '30px' }}></HorizontalRuleIcon>
+                        <HorizontalRuleIcon style={{ color: arrowColor, fontSize: '1.875rem' }}></HorizontalRuleIcon>
                     }
                 </div>
             }

@@ -27,8 +27,8 @@ const DetailsTable = (props) => {
                             <TableRow style={{ alignItems: 'center' }}>
                                 <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                        <Typography color={gameData.info.teams[0].win ? '#3374FF' : '#FF3F3F'} fontWeight={'bold'} fontSize={'18px'}>{gameData.info.teams[0].win ? "Victory" : "Defeat"}</Typography>
-                                        <Typography style={{ marginLeft: '10px', fontWeight: '600' }} fontSize={'14px'}>(Blue Team)</Typography>
+                                        <Typography color={gameData.info.teams[0].win ? '#3374FF' : '#FF3F3F'} fontWeight={'bold'} fontSize={'1.125rem'}>{gameData.info.teams[0].win ? "Victory" : "Defeat"}</Typography>
+                                        <Typography style={{ marginLeft: '10px', fontWeight: '600' }} fontSize={'0.875rem'}>(Blue Team)</Typography>
                                     </div>
                                 </TableCell>
                                 {!props.aram && !props.urf &&
@@ -52,7 +52,7 @@ const DetailsTable = (props) => {
                                             <Tooltip title={Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).name} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
                                                 <div style={{ position: 'relative', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                                     <Typography style={{
-                                                        fontSize: '11px',
+                                                        fontSize: '0.688rem',
                                                         position: 'absolute',
                                                         backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54',
                                                         color: 'white',
@@ -112,7 +112,7 @@ const DetailsTable = (props) => {
                                             </div>
                                             <Tooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
                                                 <a style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}>
-                                                    <Typography className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'12px'}>{player.riotIdGameName}</Typography>
+                                                    <Typography className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'0.75rem'}>{player.riotIdGameName}</Typography>
                                                     <span className={
                                                         (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
                                                             'TableStandingMVP' :
@@ -127,25 +127,25 @@ const DetailsTable = (props) => {
                                         </div>
                                     </TableCell>
                                     {!props.aram && !props.urf &&
-                                        <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
+                                        <TableCell align='center'><Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
                                     }
                                     <TableCell align='center'>
-                                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography>
-                                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.kills + player.assists) / player.deaths).toFixed(1)}</Typography>
+                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography>
+                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.kills + player.assists) / player.deaths).toFixed(1)}</Typography>
                                     </TableCell>
                                     <TableCell align='center'>
-                                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
+                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
                                         <Tooltip disableInteractive title={<div>{`AD: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`AP: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
                                             <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#37B7FF' }, width: '50%', height: '10px' }}></LinearProgress>
                                         </Tooltip>
                                     </TableCell>
-                                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
+                                    <TableCell align='center'><Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
                                     <TableCell align='center'>
-                                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography>
-                                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.totalMinionsKilled + player.neutralMinionsKilled) / (gameData.info.gameDuration / 60)).toFixed(1)}/m</Typography>
+                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography>
+                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.totalMinionsKilled + player.neutralMinionsKilled) / (gameData.info.gameDuration / 60)).toFixed(1)}/m</Typography>
                                     </TableCell>
                                     {!props.aram &&
-                                        <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
+                                        <TableCell align='center'><Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
                                     }
                                     <TableCell align='center'>
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -323,8 +323,8 @@ const DetailsTable = (props) => {
                             <TableRow>
                                 <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                        <Typography color={gameData.info.teams[1].win ? '#3374FF' : '#FF3F3F'} fontWeight={'bold'} fontSize={'18px'}>{gameData.info.teams[1].win ? "Victory" : "Defeat"}</Typography>
-                                        <Typography style={{ marginLeft: '10px', fontWeight: '600' }} fontSize={'14px'}>(Red Team)</Typography>
+                                        <Typography color={gameData.info.teams[1].win ? '#3374FF' : '#FF3F3F'} fontWeight={'bold'} fontSize={'1.125rem'}>{gameData.info.teams[1].win ? "Victory" : "Defeat"}</Typography>
+                                        <Typography style={{ marginLeft: '10px', fontWeight: '600' }} fontSize={'0.875rem'}>(Red Team)</Typography>
                                     </div>
                                 </TableCell>
                                 {!props.aram && !props.urf &&
@@ -348,7 +348,7 @@ const DetailsTable = (props) => {
                                             <Tooltip title={Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).name} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
                                                 <div style={{ position: 'relative', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                                     <Typography style={{
-                                                        fontSize: '11px',
+                                                        fontSize: '0.688rem',
                                                         position: 'absolute',
                                                         backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54',
                                                         color: 'white',
@@ -408,7 +408,7 @@ const DetailsTable = (props) => {
                                             </div>
                                             <Tooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
                                                 <a style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}>
-                                                    <Typography className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'12px'}>{player.riotIdGameName}</Typography>
+                                                    <Typography className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'0.75rem'}>{player.riotIdGameName}</Typography>
                                                     <span className={
                                                         (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
                                                             'TableStandingMVP' :
@@ -423,25 +423,25 @@ const DetailsTable = (props) => {
                                         </div>
                                     </TableCell>
                                     {!props.aram && !props.urf &&
-                                        <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
+                                        <TableCell align='center'><Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
                                     }
                                     <TableCell align='center'>
-                                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography>
-                                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.kills + player.assists) / player.deaths).toFixed(1)}</Typography>
+                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography>
+                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.kills + player.assists) / player.deaths).toFixed(1)}</Typography>
                                     </TableCell>
                                     <TableCell align='center'>
-                                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
+                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
                                         <Tooltip disableInteractive title={<div>{`AD: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`AP: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
                                             <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#FF3F3F' }, width: '50%', height: '10px' }}></LinearProgress>
                                         </Tooltip>
                                     </TableCell>
-                                    <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
+                                    <TableCell align='center'><Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
                                     <TableCell align='center'>
-                                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography>
-                                        <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.totalMinionsKilled + player.neutralMinionsKilled) / (gameData.info.gameDuration / 60)).toFixed(1)}/m</Typography>
+                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography>
+                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.totalMinionsKilled + player.neutralMinionsKilled) / (gameData.info.gameDuration / 60)).toFixed(1)}/m</Typography>
                                     </TableCell>
                                     {!props.aram &&
-                                        <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
+                                        <TableCell align='center'><Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
                                     }
                                     <TableCell align='center'>
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>

@@ -557,7 +557,7 @@ const GenericDetails = () => {
                                         <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
                                             <div style={{ border: playerData.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
                                                 <Typography className='displayGameChampLevel' style={{
-                                                    fontSize: '14px',
+                                                    fontSize: '0.875rem',
                                                     position: 'absolute',
                                                     backgroundColor: playerData.teamId === 200 ? '#FF3A54' : '#568CFF',
                                                     color: 'white',
@@ -605,7 +605,7 @@ const GenericDetails = () => {
                                         <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
                                             <div style={{ border: playerData.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
                                                 <Typography className='displayGameChampLevel' style={{
-                                                    fontSize: '14px',
+                                                    fontSize: '0.875rem',
                                                     position: 'absolute',
                                                     backgroundColor: playerData.teamId === 200 ? '#FF3A54' : '#568CFF',
                                                     color: 'white',
@@ -659,13 +659,13 @@ const GenericDetails = () => {
 
                             </Grid>
                             <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={7}>
-                                <Typography style={{ paddingTop: '10px', lineHeight: '1.4' }} fontSize={23} fontWeight={600} maxWidth={'460px'}>
+                                <Typography className='GameDetailsMainSummaryHeader'>
                                     <span style={{ textDecoration: 'none', color: 'inherit' }}>
                                         {playerData.riotIdGameName}
                                     </span>
                                     <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                                 </Typography>
-                                <Typography style={{ paddingTop: '10px', paddingBottom: '10px', fontWeight: 'bold', color: '#7E7E7E', marginBottom: '5px' }} fontSize={14}>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
+                                <Typography className='GameDetailsMainSummarySubHeader'>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
                                 <div className='GameDetailsCatBtnContainer'>
                                     <Button onClick={() => scrollToSection('TableAnchor')} className='GameDetailsCatBtn' variant='contained'>Table</Button>
                                     <Button onClick={() => scrollToSection('GraphsAnchor')} className='GameDetailsCatBtn' variant='contained'>Graphs</Button>
@@ -739,8 +739,8 @@ const GenericDetails = () => {
             <div id='GraphsAnchor' style={{ backgroundColor: '#f2f2f2' }}>
                 <Grid className='GameDetailsContainer' width={'65%'} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '30px', textAlign: 'flex-start' }}>
                     <Box className='GraphSectionHeaderBox'>
-                        <Typography style={{ fontWeight: 'bold', fontSize: '20px' }}>Graphs</Typography>
-                        <Typography style={{ fontSize: '20px', marginBottom: '20px', color: '#4B4B4B' }}>Match Data Visualized</Typography>
+                        <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Graphs</Typography>
+                        <Typography style={{ fontSize: '1.25rem', marginBottom: '20px', color: '#4B4B4B' }}>Match Data Visualized</Typography>
                     </Box>
                 </Grid>
                 {graphData ? (
