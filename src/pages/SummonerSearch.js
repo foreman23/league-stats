@@ -459,12 +459,12 @@ function SummonerSearch() {
                 <Grid style={{ justifyContent: 'center', alignItems: 'center', marginLeft: '5px' }} container>
                   {Array.from({ length: favorites !== null ? (favorites?.length <= 9 ? 9 : favorites?.length) : 9 }, (_, index) => (
                     favorites?.length > index ? (
-                      <Grid key={`favorite_${index}`} xs={12} sm={4}>
+                      <Grid className='recentMainContainer' style={{ position: 'relative' }} key={`favorite_${index}`} xs={12} sm={4}>
                         <FavoriteIcon className='favoriteButtonActive removeFavoriteBtn' onClick={() => handleRemoveFavorite(favorites[index])}></FavoriteIcon>
                         <a className='recentSearchItem' href={`/profile/${favorites[index].selectedRegion}/${favorites[index].summonerName}/${favorites[index].riotId}`}>
                           <ListItem style={{ justifyContent: 'center' }} key={index}>
                             <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${favorites[index].icon}.png`}></img>
-                            <div style={{ marginLeft: '60px', textAlign: 'center' }}>
+                            <div className='recentSearchItemText'>
                               <div>
                                 <b style={{ fontSize: '0.875rem' }}>{favorites[index].summonerName}</b>
                               </div>
@@ -486,11 +486,11 @@ function SummonerSearch() {
                         </a>
                       </Grid>
                     ) : (
-                      <Grid key={index} xs={12} sm={4}>
+                      <Grid className='recentMainContainer' style={{ position: 'relative' }} key={index} xs={12} sm={4}>
                         <div className='recentSearchItem'>
                           <ListItem style={{ justifyContent: 'center' }}>
                             <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`/images/novalue.webp`}></img>
-                            <div style={{ marginLeft: '60px', textAlign: 'center' }}>
+                            <div className='recentSearchItemText'>
                               <div>
                                 <b style={{ fontSize: '0.875rem' }}>Summoner</b>
                               </div>
@@ -524,12 +524,12 @@ function SummonerSearch() {
                 <Grid style={{ justifyContent: 'center', alignItems: 'center', marginLeft: '5px' }} container>
                   {Array.from({ length: recentArr !== null ? (recentArr?.length <= 9 ? 9 : recentArr?.length) : 9 }, (_, index) => (
                     recentArr?.length > index ? (
-                      <Grid key={`recent_${index}`} xs={12} sm={4}>
+                      <Grid className='recentMainContainer' style={{ position: 'relative' }} key={`recent_${index}`} xs={12} sm={4}>
                         <CloseIcon className='deleteRecentButton removeRecentBtn' onClick={() => handleRemoveRecent(recentArr[index])}></CloseIcon>
                         <a className='recentSearchItem' href={`/profile/${recentArr[index].selectedRegion}/${recentArr[index].summonerName}/${recentArr[index].riotId}`}>
                           <ListItem style={{ justifyContent: 'center' }} key={index}>
                             <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${recentArr[index].icon}.png`}></img>
-                            <div style={{ marginLeft: '60px', textAlign: 'center' }}>
+                            <div className='recentSearchItemText'>
                               <div>
                                 <b style={{ fontSize: '0.875rem' }}>{recentArr[index].summonerName}</b>
                               </div>
@@ -551,11 +551,11 @@ function SummonerSearch() {
                         </a>
                       </Grid>
                     ) : (
-                      <Grid key={`recent_${index}`} xs={12} sm={4}>
+                      <Grid className='recentMainContainer' style={{ position: 'relative' }} key={`recent_${index}`} xs={12} sm={4}>
                         <div className='recentSearchItem'>
                           <ListItem style={{ justifyContent: 'center' }}>
                             <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`/images/novalue.webp`}></img>
-                            <div style={{ marginLeft: '60px', textAlign: 'center' }}>
+                            <div className='recentSearchItemText'>
                               <div>
                                 <b style={{ fontSize: '0.875rem' }}>Summoner</b>
                               </div>
