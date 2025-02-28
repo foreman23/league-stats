@@ -755,7 +755,7 @@ const GenericDetails = () => {
                             </div>
                             <div className='GraphSectionDivContainer'>
                                 {/* Red Team */}
-                                <Grid item style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2} xs={12} sm={6}>
+                                <Grid className='GraphSectionDivSubContainer' item order={playerData.teamId === 200 ? 1 : 2} xs={12} sm={6}>
                                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                                         {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
                                             <div key={`dealt_red_${index}`} className='matchDetailsObjectiveContainer'>
@@ -773,7 +773,7 @@ const GenericDetails = () => {
                                     </div>
                                 </Grid>
                                 {/* Blue Team */}
-                                <Grid item style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
+                                <Grid className='GraphSectionDivSubContainer' item order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
                                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                                         {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
                                             <div key={`dealt_blue_${index}`} className='matchDetailsObjectiveContainer'>
@@ -805,7 +805,7 @@ const GenericDetails = () => {
                             </div>
                             <div className='GraphSectionDivContainer'>
                                 {/* Red Team */}
-                                <Grid style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2}>
+                                <Grid className='GraphSectionDivSubContainer' order={playerData.teamId === 200 ? 1 : 2}>
                                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                                         {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
                                             <div key={`taken_red_${index}`} className='matchDetailsObjectiveContainer'>
@@ -823,7 +823,7 @@ const GenericDetails = () => {
                                     </div>
                                 </Grid>
                                 {/* Blue Team */}
-                                <Grid style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2}>
+                                <Grid className='GraphSectionDivSubContainer' order={playerData.teamId === 100 ? 1 : 2}>
                                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                                         {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
                                             <div key={`dealt_red_${index}`} className='matchDetailsObjectiveContainer'>

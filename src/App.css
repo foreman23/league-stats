@@ -968,6 +968,7 @@ body,
     min-height: 220px;
     max-height: 220px;
     position: relative;
+    background-color: white;
 }
 
 .StandoutTextContainer {
@@ -1398,8 +1399,72 @@ li {
     text-align: center;
 }
 
+.BubbleSummaryContainer {
+    display: flex;
+    margin-left: 25%;
+    transform: translateX(-25%);
+}
+
+.BubbleSummarySubContainer1 {
+    flex-direction: column;
+    margin-right: 30px;
+}
+
+.BubbleSummarySubContainer2 {
+    flex-direction: column;
+    margin-right: 50px;
+}
+
+.bubblesContainer {
+    display: flex;
+    align-items: center;
+}
+
+.bubblesContainer img {
+    width: 28px;
+    margin-right: 3px;
+}
+
 /* For normal sized phones */
 @media only screen and (max-width: 600px) {
+
+    .BubbleSummaryContainer {
+        margin: unset;
+        margin-left: 0px;
+        transform: unset;
+        margin: auto;
+        padding: 10px !important;
+    }
+
+    .BubbleSummarySubContainer1 {
+        margin-right: 40px;
+    }
+
+    .BubbleSummarySubContainer2 {
+        margin-right: 0px;
+    }
+
+    .BubbleSummaryContainer {
+        padding: 20px;
+    }
+
+    .GraphSectionGoldAdvantage {
+        width: 100%;
+        margin-left: 10%;
+    }
+
+    .graphChampIcon {
+        width: 44px;
+    }
+
+    .graphDamageBar {
+        width: 44px;
+    }
+
+    .GraphSectionDivSubContainer {
+        width: 90%;
+        margin-top: 25px !important;
+    }
 
     .recentSearchItemText {
         margin-left: 70px;
@@ -1702,6 +1767,7 @@ li {
     }
 
     .GraphSectionDivContainer {
+        width: 80vw;
         flex-direction: column;
         align-items: center;
     }
@@ -1893,6 +1959,7 @@ li {
     .GameDetailsBox {
         padding: 0px;
         padding-bottom: 10px;
+        padding-top: 10px;
     }
 
     .MatchSummaryText {
@@ -2187,6 +2254,18 @@ li {
 
 /* Small tablets */
 @media only screen and (min-width: 768px) and (max-width: 820px) {
+    .BubbleSummarySubContainer1 {
+        margin-right: 0px;
+    }
+
+    .BubbleSummarySubContainer2 {
+        margin-right: 0px;
+    }
+
+    .BubbleSummaryContainer {
+        display: flex;
+        flex-direction: column;
+    }
 
     .favoriteRecentList {
         min-height: 25vh;
@@ -2591,6 +2670,38 @@ li {
 /* Monitors */
 
 @media only screen and (min-width: 1201px) and (max-width: 1854px) {
+    .GameDetailsContainer {
+        width: 75% !important;
+    }
+
+    .LaningGridSubContainer {
+        max-width: 85% !important;
+    }
+
+    .GameOverviewTable1 {
+        max-width: 78% !important;
+    }
+
+    .GameOverviewTable2 {
+        max-width: 78% !important;
+    }
+
+    .BansGridContainer {
+        width: 75% !important;
+    }
+
+    #DetailsAnchor {
+        width: 75% !important;
+    }
+
+    .GameDetailsSubContainer {
+        width: 75% !important;
+    }
+
+    .StandoutContainer {
+        width: 75% !important;
+    }
+
     .matchDetailsObjectiveText {
         font-size: 0.813rem !important;
     }

@@ -27,6 +27,7 @@ import Standout from '../components/Standout';
 import DetailsTable from '../components/DetailsTable';
 import Builds from '../components/Builds';
 import ScrollTopButton from '../components/ScrollTopButton';
+import BubblesSummary from '../components/BubblesSummary';
 
 function GameDetails() {
 
@@ -741,13 +742,31 @@ function GameDetails() {
                     }
                   </ul>
                 </Grid>
-                <Grid className='gameDetailsMatchSummaryGraph hideMobile' style={{ borderRadius: '10px', marginLeft: '30px' }} backgroundColor='white' item xs={12} sm={4} md={5} lg={6}>
+                <Grid className='gameDetailsMatchSummaryGraph hideMobile' style={{ borderRadius: '10px', marginLeft: '30px', marginTop: '20px' }} backgroundColor='white' item xs={12} sm={4} md={5} lg={6}>
+
+                  {/* Lane bubbles here */}
+                  <BubblesSummary statsAt15={statsAt15} gameData={gameData}></BubblesSummary>
+
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Divider width={'75%'} style={{ margin: 'auto', paddingTop: '20px', paddingBottom: '0px' }}></Divider>
+                  </div>
+
                   {graphData ? (
                     <TeamGoldDifGraph width={400} teamId={playerData.teamId} height={250} hideTitle yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
                   ) : (
                     <CircularProgress style={{ justifyContent: 'center', marginTop: '20px' }}></CircularProgress>
                   )}
                 </Grid>
+              </Box>
+            </Grid>
+
+            {/* Mobile Gold Dif Graph */}
+            <Grid style={{ justifyContent: 'center', marginTop: '20px', width: '95%' }} className='hideDesktop' container>
+              <Box style={{ flexDirection: 'column' }} className='GameDetailsBox'>
+                  <BubblesSummary statsAt15={statsAt15} gameData={gameData}></BubblesSummary>
+                  <div style={{ marginLeft: '50px', marginRight: '20px', overflow: 'hidden' }}>
+                  <TeamGoldDifGraph hideTitle teamId={playerData.teamId} height={250} yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
+                  </div>
               </Box>
             </Grid>
 
@@ -904,7 +923,7 @@ function GameDetails() {
                       if (item.championId === -1) {
                         return (
                           <img
-                          alt='Banned Champion'
+                            alt='Banned Champion'
                             key={`ban_${index}_1`}
                             className='BannedChampImg'
                             style={{
@@ -926,7 +945,7 @@ function GameDetails() {
                             title={<>{Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).name} banned by blue</>}>
                             <div style={{ border: '3px #568CFF solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
                               <img
-                              alt='Banned Champion'
+                                alt='Banned Champion'
                                 className='BannedChampImg'
                                 style={{
                                   borderRadius: '100%',
@@ -954,7 +973,7 @@ function GameDetails() {
                       if (item.championId === -1) {
                         return (
                           <img
-                          alt ='Banned Champion'
+                            alt='Banned Champion'
                             key={`ban_${index}_2`}
                             className='BannedChampImg'
                             style={{
@@ -975,7 +994,7 @@ function GameDetails() {
                             title={<>{Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).name} banned by red</>}>
                             <div style={{ border: '3px #FF3F3F solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
                               <img
-                              alt='Banned Champion'
+                                alt='Banned Champion'
                                 className='BannedChampImg'
                                 style={{
                                   borderRadius: '100%',
@@ -1063,7 +1082,7 @@ function GameDetails() {
                 </div>
                 <div className='GraphSectionDivContainer'>
                   {/* Red Team */}
-                  <Grid item style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2} xs={12} sm={6}>
+                  <Grid className='GraphSectionDivSubContainer' item order={playerData.teamId === 200 ? 1 : 2} xs={12} sm={6}>
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                       {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
                         <div key={`red_dealt_${index}`} className='matchDetailsObjectiveContainer'>
@@ -1081,7 +1100,7 @@ function GameDetails() {
                     </div>
                   </Grid>
                   {/* Blue Team */}
-                  <Grid item style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
+                  <Grid className='GraphSectionDivSubContainer' item order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                       {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
                         <div key={`blue_dealt_${index}`} className='matchDetailsObjectiveContainer'>
@@ -1113,7 +1132,7 @@ function GameDetails() {
                 </div>
                 <div className='GraphSectionDivContainer'>
                   {/* Red Team */}
-                  <Grid style={{ marginRight: playerData.teamId === 200 ? '25px' : '0px' }} order={playerData.teamId === 200 ? 1 : 2}>
+                  <Grid className='GraphSectionDivSubContainer' order={playerData.teamId === 200 ? 1 : 2}>
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                       {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
                         <div key={`red_taken_${index}`} className='matchDetailsObjectiveContainer'>
@@ -1131,7 +1150,7 @@ function GameDetails() {
                     </div>
                   </Grid>
                   {/* Blue Team */}
-                  <Grid style={{ marginRight: playerData.teamId === 100 ? '25px' : '0px' }} order={playerData.teamId === 100 ? 1 : 2}>
+                  <Grid className='GraphSectionDivSubContainer' order={playerData.teamId === 100 ? 1 : 2}>
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                       {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
                         <div key={`blue_taken_${index}`} className='matchDetailsObjectiveContainer'>
