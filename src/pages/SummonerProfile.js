@@ -900,10 +900,10 @@ const SummonerProfile = () => {
                     )}
                     <ListItem style={{ fontWeight: '500', color: '#404040' }}>{regionStr}</ListItem>
                     {summonerData.rankedData &&
-                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex].rank}</ListItem>
+                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{(summonerData.rankedData[rankIndex]?.tier)?.charAt(0) + summonerData.rankedData[rankIndex]?.tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex]?.rank}</ListItem>
                     }
                     {summonerData.rankedData &&
-                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{summonerData.rankedData[rankIndex].wins}W {summonerData.rankedData[rankIndex].losses}L {((summonerData.rankedData[rankIndex].wins / (summonerData.rankedData[rankIndex].wins + summonerData.rankedData[rankIndex].losses)) * 100).toFixed(0)}%</ListItem>
+                      <ListItem style={{ fontWeight: '500', color: '#404040' }}>{summonerData.rankedData[rankIndex]?.wins}W {summonerData.rankedData[rankIndex]?.losses}L {((summonerData.rankedData[rankIndex]?.wins / (summonerData.rankedData[rankIndex]?.wins + summonerData.rankedData[rankIndex]?.losses)) * 100)?.toFixed(0)}%</ListItem>
                     }
                   </List>
                 </Grid>
@@ -939,8 +939,8 @@ const SummonerProfile = () => {
                       disableInteractive
                       title={<>
                         <div>
-                          <span style={{ textDecoration: 'underline', fontWeight: 'bold' }}>{summonerData.rankedData[rankIndex].queueType === 'RANKED_SOLO_5x5' ? 'Ranked Solo' : 'Ranked Flex'}<br></br></span>
-                          {(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex].rank} - {summonerData.rankedData[rankIndex].leaguePoints} lp
+                          <span style={{ textDecoration: 'underline', fontWeight: 'bold' }}>{summonerData.rankedData[rankIndex]?.queueType === 'RANKED_SOLO_5x5' ? 'Ranked Solo' : 'Ranked Flex'}<br></br></span>
+                          {(summonerData.rankedData[rankIndex]?.tier)?.charAt(0) + summonerData.rankedData[rankIndex]?.tier.substring(1).toLowerCase()} {summonerData.rankedData[rankIndex]?.rank} - {summonerData.rankedData[rankIndex]?.leaguePoints} lp
                         </div>
                       </>}
                     >
@@ -951,7 +951,7 @@ const SummonerProfile = () => {
                         filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25',
                         maxWidth: '150px',
                       }}
-                        src={`/images/rankIcons/Rank=${(summonerData.rankedData[rankIndex].tier).charAt(0) + summonerData.rankedData[rankIndex].tier.substring(1).toLowerCase()}.webp`}>
+                        src={`/images/rankIcons/Rank=${(summonerData.rankedData[rankIndex]?.tier)?.charAt(0) + summonerData.rankedData[rankIndex]?.tier.substring(1).toLowerCase()}.webp`}>
                       </img>
                     </Tooltip>
                     <Typography style={{
@@ -971,7 +971,7 @@ const SummonerProfile = () => {
                       bottom: '4px',
                       filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.45))'
                     }}>
-                      {summonerData.rankedData[0].leaguePoints} lp
+                      {summonerData.rankedData[0]?.leaguePoints} lp
                     </Typography>
                   </div>
                 ) : isLoadingRank ? (

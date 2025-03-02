@@ -145,7 +145,7 @@ const LanePhaseSummaryCardBot = (props) => {
                             <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.BOTTOM.laneLoser[1]?.riotIdGameName}/${statsAt15.laneResults.BOTTOM.laneLoser[1]?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName2}.png`}></img></a>
                         </div>
                     </Tooltip>
-                    <img alt='Lane' className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', objectFit: 'contain' }} src='/images/laneIcons/Bottom.png'></img>
+                    <img alt='Lane' className='hideMobile hideTablet hideDesktop' style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', objectFit: 'contain' }} src='/images/laneIcons/Bottom.png'></img>
                 </Grid>
             </Grid>
 
@@ -203,7 +203,7 @@ const LanePhaseSummaryCardBot = (props) => {
                             <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.BOTTOM.laneLoser[1]?.riotIdGameName}/${statsAt15.laneResults.BOTTOM.laneLoser[1]?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.BOTTOM.laneLoser[1].teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgBotLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName2}.png`}></img></a>
                         </div>
                     </Tooltip>
-                    <img alt='Lane' className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', objectFit: 'contain' }} src='/images/laneIcons/Bottom.png'></img>
+                    <img alt='Lane' className='hideMobile hideTablet hideDesktop' style={{ margin: '20px', maxWidth: '65px', maxHeight: '65px', objectFit: 'contain' }} src='/images/laneIcons/Bottom.png'></img>
                 </Grid>
             </Grid>
 

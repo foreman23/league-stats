@@ -211,7 +211,7 @@ const AramDetails = () => {
             const data = await response.json();
             setItems(data);
         } catch (error) {
-            console.error('Error fetching item JSON data:', error);
+            console.error('Error fetching item JSON data:');
         }
     }, [setItems, dataDragonVersion])
 
@@ -222,7 +222,7 @@ const AramDetails = () => {
             const data = await response.json();
             setChampsJSON(data);
         } catch (error) {
-            console.error('Error fetching champion JSON data:', error);
+            console.error('Error fetching champion JSON data:');
         }
     }, [setChampsJSON, dataDragonVersion])
 

@@ -389,17 +389,18 @@ function Navbar(props) {
                                         style={{ backgroundColor: 'white' }}
                                         {...params}
                                         onKeyDown={(event) => {
+                                            event.stopPropagation(); // Prevent bubbling
                                             if (event.key === 'Enter') {
                                                 event.preventDefault();
                                                 handleSearchSubmit();
                                             }
                                         }}
-                                        placeholder="Search by Riot ID (e.g., Teemo#NA1)"
+                                        placeholder="Search by Riot ID"
                                     />
                                 )}
                             />
                             <IconButton
-                            style={{ backgroundColor: '#f2f2f2', borderRadius: '0px' }}
+                                style={{ backgroundColor: '#f2f2f2', borderRadius: '0px' }}
                                 aria-label="Search"
                                 onClick={handleSearchSubmit}
                                 color="inherit"

@@ -1082,7 +1082,8 @@ body,
 
 .BattlesHeader2 {
     margin-right: 75px;
-    min-width: 100px;
+    min-width: 140px;
+    max-width: 140px;
 }
 
 .BattlesBodyContainer {
@@ -1295,6 +1296,12 @@ li {
 
 .scrollTop {
     background-color: #c9c9c9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    margin: auto;
     border-radius: 100%;
     position: fixed;
     left: auto;
@@ -1425,8 +1432,12 @@ li {
     margin-right: 3px;
 }
 
+#TeamfightsAnchor {
+    margin-bottom: 30px;
+}
+
 /* For normal sized phones */
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
 
     .BubbleSummaryContainer {
         margin: unset;
@@ -1472,7 +1483,7 @@ li {
     }
 
     .recentMainContainer {
-        margin-left: 10%;
+        margin-left: 5%;
     }
 
     .removeFavoriteBtn {
@@ -1664,7 +1675,7 @@ li {
     }
 
     .NotFoundHeader {
-        font-size: 2rem !important;
+        font-size: 1.5rem !important;
     }
 
     .NotFoundContact {
@@ -1695,10 +1706,8 @@ li {
     }
 
     .NotFoundSubContainer {
-        margin-top: 20px;
-        margin-left: 35px;
-        margin-right: 20px;
-        width: 80%;
+        margin: auto;
+        width: 90%;
     }
 
     .GameDetailsCatBtnMainContainer {
@@ -2252,6 +2261,277 @@ li {
     }
 }
 
+.MatchDetailsObjectiveIcon {
+    font-size: 2.5rem !important;
+}
+
+/* Kindles, etc. */
+@media only screen and (min-width: 600px) and (max-width: 767px) {
+
+    .navBarSearchBar {
+        margin-left: 10%;
+        width: 55%;
+    }
+
+    .BattlesHeader {
+        min-width: unset;
+    }
+
+    .MatchDetailsObjectiveIcon {
+        font-size: 1.5rem !important;
+    }
+
+    .StandoutBox {
+        flex-direction: column;
+        min-height: 325px;
+    }
+
+    .StandoutBox {
+        min-height: 220px;
+        max-height: unset;
+    }
+
+    .hideMobile {
+        display: none;
+    }
+
+    .BubbleSummarySubContainer1 {
+        margin-right: 0px;
+    }
+
+    .BubbleSummarySubContainer2 {
+        margin-right: 0px;
+    }
+
+    .BubbleSummaryContainer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .favoriteRecentList {
+        min-height: 25vh;
+        max-height: 25vh;
+    }
+
+    .displayGameSummonerSpells {
+        bottom: 25px;
+        top: auto;
+    }
+
+    .LaneButtonsContainer {
+        max-width: 40vw;
+    }
+
+    .navBarHeaderText {
+        font-size: 1rem !important;
+    }
+
+    .scrollTop {
+        background-color: #b4b4b4;
+        left: auto;
+        top: auto;
+        bottom: 30px;
+        right: 8%;
+    }
+
+    .scrollTopBtn {
+        font-size: 3rem !important;
+    }
+
+    .matchDetailsObjectiveBar {
+        width: 26px;
+    }
+
+    .matchDetailsObjectiveText {
+        font-size: 0.5rem !important;
+        padding-right: 2px;
+        padding-left: 2px;
+    }
+
+    .BuildsChampPic {
+        width: 42px;
+    }
+
+    .gameDetailsMatchSummaryGraph {
+        align-content: center;
+    }
+
+    .gameDetailsMatchSummaryList li {
+        color: #4B4B4B;
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    .hideSmallTablet {
+        display: none;
+    }
+
+    .LaneOutcomeTitle {
+        margin-right: 20px !important;
+    }
+
+    .lanePhaseChampImgLarge {
+        max-width: 62px;
+        max-height: 62px;
+        margin-top: 20px;
+    }
+
+    .lanePhaseChampImgBotLarge {
+        max-width: 52px;
+        max-height: 52px;
+        margin-top: 25px;
+    }
+
+    .LanePhaseSummaryBubble {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    .BuildsBox {
+        min-width: 90%;
+    }
+
+    .BuildsBox2 {
+        min-width: 90%;
+    }
+
+    .TimelineSubContainer {
+        width: 90%;
+    }
+
+    .GraphSectionHeaderBox {
+        min-width: 90%;
+    }
+
+    .GraphSectionGoldAdvantage {
+        width: 90%;
+    }
+
+    .GraphSectionBox {
+        width: 90%;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border: 0px solid #BBBBBB;
+        border-radius: 10px;
+    }
+
+    .GraphSectionDivContainer {
+        margin-left: 30px;
+    }
+
+    .GameDetailsSubContainer {
+        width: 90% !important;
+    }
+
+    .StandoutContainer {
+        width: 90% !important;
+    }
+
+    #DetailsAnchor {
+        width: 90% !important;
+    }
+
+    .BansGridContainer {
+        width: 90% !important;
+    }
+
+    .GameOverViewContainer {
+        min-width: 95vw !important;
+    }
+
+    .GameOverviewTable1 {
+        max-width: 85% !important;
+        padding: 0px !important;
+    }
+
+    .GameOverviewTable2 {
+        max-width: 85% !important;
+        padding: 0px !important;
+    }
+
+    .LaningGridContainer {
+        width: 95% !important;
+    }
+
+    .LaningGridSubContainer {
+        max-width: 100% !important;
+    }
+
+    .GameDetailsContainer {
+        width: 90% !important;
+    }
+
+    .hideTablet {
+        display: none !important;
+    }
+
+    .GameDetailsMainSummaryHeader {
+        font-size: 1.2rem !important;
+        margin: auto !important;
+    }
+
+    .BansTeamContainer img {
+        width: 42px !important;
+    }
+
+    .matchDetailsObjectiveContainer {
+        padding: 0px;
+    }
+
+    .GameDetailsMainSummarySubHeader {
+        margin: auto !important;
+        width: 75%;
+    }
+
+    .StandoutImagesSubContainer img {
+        width: 54px !important;
+    }
+
+    .gameDetailsSummaryMainChampImg {
+        width: 95px;
+    }
+
+    .GameDetailsHeaderMainContainer {
+        width: 90% !important;
+    }
+
+    .GameDetailsHeader {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 25px !important;
+    }
+
+    .GameDetailsHeaderContainer {
+        flex-direction: column;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .GameDetailsCatBtnContainer {
+        text-align: center !important;
+        margin-top: 20px !important;
+    }
+
+    .GameDetailsCatBtn {
+        margin: auto !important;
+        margin: 5px !important;
+        min-width: 30vw !important;
+        height: 50px !important;
+        text-transform: none !important;
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        font-weight: bold !important;
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    }
+
+}
+
 /* Small tablets */
 @media only screen and (min-width: 768px) and (max-width: 820px) {
     .BubbleSummarySubContainer1 {
@@ -2487,7 +2767,7 @@ li {
     }
 
     .matchDetailsObjectiveText {
-        font-size: 0.65rem !important;
+        font-size: 0.6rem !important;
     }
 
     .navBarSearchBar {
@@ -2589,6 +2869,14 @@ li {
 /* For galaxy fold 5 and other tiny phones */
 @media only screen and (max-width: 380px) {
 
+    .MatchDetailsObjectiveIcon {
+        font-size: 2rem !important;
+    }
+
+    .NotFoundContainer {
+        margin-top: 40px !important;
+    }
+
     .BannedChampImg {
         width: 48px;
     }
@@ -2670,6 +2958,7 @@ li {
 /* Monitors */
 
 @media only screen and (min-width: 1201px) and (max-width: 1854px) {
+
     .GameDetailsContainer {
         width: 75% !important;
     }
@@ -2691,7 +2980,7 @@ li {
     }
 
     #DetailsAnchor {
-        width: 75% !important;
+        width: 75%;
     }
 
     .GameDetailsSubContainer {
@@ -2708,6 +2997,10 @@ li {
 }
 
 @media only screen and (min-width: 1201px) and (max-width: 1736px) {
+    #DetailsAnchor {
+        width: 75%;
+    }
+
     .BuildsChampPic {
         width: 54px !important;
     }
@@ -2748,6 +3041,11 @@ li {
 }
 
 @media only screen and (min-width: 1201px) and (max-width: 1428px) {
+
+    .gameDetailsMatchSummaryList li {
+        width: 350px;
+    }
+
     .BuildsChampPic {
         width: 38px !important;
     }
@@ -2841,6 +3139,7 @@ li {
     .displayGamesMainContainer {
         width: 34% !important;
     }
+
 }
 
 /* Very large screens (4k) */
@@ -2960,5 +3259,11 @@ li {
 
     .LaningGridSubContainer {
         max-width: 65% !important;
+    }
+}
+
+@media only screen and (min-height: 1081px) {
+    .favoriteRecentList {
+        min-height: auto !important;
     }
 }

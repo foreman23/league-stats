@@ -1269,7 +1269,7 @@ const Battles = (props) => {
     }
 
     const handleCollapseFight = (index) => {
-        const fight = document.getElementById(`body_${index}`)
+        const fight = document.getElementById(`battle_${index}`)
         // show fight
         if (fight.classList.contains('hide')) {
             const downIcon = document.getElementById(`down_icon_${index}`)
@@ -1291,15 +1291,15 @@ const Battles = (props) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', margin: '0' }}>
             <Grid container>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={12} md={6}>
                     <div style={{ position: 'relative', width: '140px' }}>
-                        <Typography fontSize={20} fontWeight={600}>Battles</Typography>
-                        <Typography style={{ position: 'absolute', top: '0px', right: '0px', left: 'auto' }}><span style={{ backgroundColor: 'purple', color: 'white', padding: '10px', borderRadius: '20px', fontSize: '14px', fontWeight: 'bold', filter: 'drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.25))' }}>BETA*</span></Typography>
+                        <Typography fontSize={'1.25rem'} fontWeight={600}>Battles</Typography>
+                        <Typography style={{ position: 'absolute', top: '0px', right: '0px', left: 'auto' }}><span style={{ backgroundColor: 'purple', color: 'white', padding: '10px', borderRadius: '20px', fontSize: '0.875rem', fontWeight: 'bold', filter: 'drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.25))' }}>BETA*</span></Typography>
                     </div>
                     <Typography style={{ fontSize: '14px', marginTop: '12px', marginBottom: '7px', color: 'rgb(133, 133, 133)' }}>*Descriptions provided below may not be 100% accurate</Typography>
                     <Typography style={{ fontSize: '20px', color: 'rgb(75, 75, 75)' }} marginBottom={'20px'}>Fights that occurred during the match</Typography>
                 </Grid>
-                <Grid item className='BattlesCollapseBtnContainer' xs={12} sm={6}>
+                <Grid item className='BattlesCollapseBtnContainer' xs={12} sm={12} md={6}>
                     {/* <Typography style={{ marginTop: '4px' }} fontSize={16} fontWeight={600}>Fights Won:</Typography>
                     <Typography marginBottom={'20px'}><span style={{ color: '#3374FF', marginRight: '10px', fontWeight: 'bold' }}>{`Blue: ${blueTotalFightsWon} `}</span><span style={{ color: '#FF3F3F', fontWeight: 'bold' }}>{`Red: ${redTotalFightsWon}`}</span></Typography> */}
                 </Grid>
@@ -1308,22 +1308,22 @@ const Battles = (props) => {
                     <Box key={fightIndex} style={{ width: '100%', border: '0px solid black', boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px' }}>
                         <div onClick={() => handleCollapseFight(fightIndex)} className='BattlesHeaderContainer'>
                             {fight.outcome[0] === 'E' && fight.blueKills === 0 && fight.redKills === 0 ? (
-                                <div className='BattlesHeader'><Typography style={{ color: '#404040', fontWeight: 'bold', fontSize: '20px' }}>No Contest 0 - 0</Typography></div>
+                                <div className='BattlesHeader'><Typography style={{ color: '#404040', fontWeight: 'bold', fontSize: '1rem' }}>No Contest 0 - 0</Typography></div>
                             ) : (
-                                <div className='BattlesHeader'><Typography style={{ color: fight.outcome[0] === 'E' ? '#404040' : fight.outcome[0] === 'B' ? '#3374FF' : '#FF3F3F', fontWeight: 'bold', fontSize: '20px' }}>{fight.outcome}</Typography></div>
+                                <div className='BattlesHeader'><Typography style={{ color: fight.outcome[0] === 'E' ? '#404040' : fight.outcome[0] === 'B' ? '#3374FF' : '#FF3F3F', fontWeight: 'bold', fontSize: '1rem' }}>{fight.outcome}</Typography></div>
                             )
                             }
-                            <div className='BattlesHeader2'><Typography style={{ color: '#4B4B4B', fontWeight: 'bold', fontSize: '16px' }}>{`(${fight.timespan})`}</Typography></div>
+                            <div className='BattlesHeader2'><Typography style={{ color: '#4B4B4B', fontWeight: 'bold', fontSize: '0.875rem' }}>{`(${fight.timespan})`}</Typography></div>
                             {!props.aram &&
-                                <div><Typography style={{ color: '#000000', fontWeight: 'bold', fontSize: '16px' }}>{fight.battleName}</Typography></div>
+                                <div><Typography style={{ color: '#000000', fontWeight: 'bold', fontSize: '0.875rem' }}>{fight.battleName}</Typography></div>
                             }
-                            <ArrowDropDownIcon id={`down_icon_${fightIndex}`} className='hideMobile' style={{ marginRight: '0px', marginLeft: 'auto' }}></ArrowDropDownIcon>
-                            <ArrowRightIcon id={`up_icon_${fightIndex}`} className='hideMobile hide' style={{ marginRight: '0px', marginLeft: 'auto' }}></ArrowRightIcon>
+                            <ArrowDropDownIcon id={`down_icon_${fightIndex}`} className='hideMobile hide' style={{ marginRight: '0px', marginLeft: 'auto' }}></ArrowDropDownIcon>
+                            <ArrowRightIcon id={`up_icon_${fightIndex}`} className='hideMobile' style={{ marginRight: '0px', marginLeft: 'auto' }}></ArrowRightIcon>
                         </div>
-                        <div id={`body_${fightIndex}`} className='BattlesBodyContainer'>
+                        <div id={`battle_${fightIndex}`} className='BattlesBodyContainer hide'>
                             <div className='BattlesBodySubContainer1'>
                                 {!props.aram &&
-                                    <Typography marginTop={'30px'} marginLeft={'20px'} color={'#404040'} fontSize={'14px'}>{fight.battleDesc}</Typography>
+                                    <Typography marginTop={'30px'} marginLeft={'20px'} color={'#404040'} fontSize={'0.875rem'}>{fight.battleDesc}</Typography>
                                 }
                                 <div style={{ marginTop: '20px', marginLeft: '25px', marginBottom: '15px' }}>
                                     <TeamGoldDifGraph arrow max={Math.round((fight.details[fight.details.length - 1].timestamp) / 60000) - 1} width={400} height={180} teamId={props.playerData.teamId} hideTitle yAxisGold={props.graphData.yAxisGold} xAxisGold={props.graphData.xAxisGold}></TeamGoldDifGraph>
@@ -1335,7 +1335,7 @@ const Battles = (props) => {
                                     {fight.details.map((details, detailsIndex) => (
                                         <li key={detailsIndex} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <Typography style={{ fontSize: '14px', marginRight: '10px', width: '40px', minWidth: '40px' }}>
+                                                <Typography style={{ fontSize: '0.875', marginRight: '10px', width: '40px', minWidth: '40px' }}>
                                                     {String(Math.floor(details.timestamp / 60000)).padStart(2, '0')}:
                                                     {String(Math.floor((details.timestamp % 60000) / 1000)).padStart(2, '0')}
                                                 </Typography>
@@ -1398,11 +1398,11 @@ const Battles = (props) => {
                                                             </a>
                                                         </Tooltip>
                                                         {details.killer?.riotIdGameName ? (
-                                                            <Typography style={{ fontSize: '14px', marginLeft: '10px' }}>
+                                                            <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
                                                                 {<><a href={`/profile/${gameData.info.platformId.toLowerCase()}/${details.killer?.riotIdGameName}/${details.killer?.riotIdTagline.toLowerCase()}`} style={{ color: details.killer.teamId === 100 ? '#568CFF' : '#FF3A54', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minion'}</a> killed <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${details.victim?.riotIdGameName}/${details.victim?.riotIdTagline.toLowerCase()}`} style={{ color: details.victim.teamId === 100 ? '#568CFF' : '#FF3A54', fontWeight: 'bold' }}>{details.victim?.riotIdGameName}</a></>}
                                                             </Typography>
                                                         ) : (
-                                                            <Typography style={{ fontSize: '14px', marginLeft: '10px' }}>
+                                                            <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
                                                                 {<><span style={{ color: details.victim.teamId === 200 ? '#568CFF' : '#FF3A54', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minion'}</span> killed <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${details.victim?.riotIdGameName}/${details.victim?.riotIdTagline.toLowerCase()}`} style={{ color: details.victim.teamId === 100 ? '#568CFF' : '#FF3A54', fontWeight: 'bold' }}>{details.victim?.riotIdGameName}</a></>}
                                                             </Typography>
                                                         )}
@@ -1464,11 +1464,11 @@ const Battles = (props) => {
                                                             </span>
                                                         </Tooltip>
                                                         {details.killer?.riotIdGameName ? (
-                                                            <Typography style={{ fontSize: '14px', marginLeft: '10px' }}>
+                                                            <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
                                                                 {<><a href={`/profile/${gameData.info.platformId.toLowerCase()}/${details.killer?.riotIdGameName}/${details.killer?.riotIdTagline.toLowerCase()}`} style={{ color: details.teamId === 200 ? '#568CFF' : '#FF3A54', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minions'}</a> destroyed <span style={{ color: details.teamId === 100 ? '#568CFF' : '#FF3A54', fontWeight: 'bold' }}>{details.buildingType === 'TOWER_BUILDING' ? 'a tower' : 'an inhibitor'}</span></>}
                                                             </Typography>
                                                         ) : (
-                                                            <Typography style={{ fontSize: '14px', marginLeft: '10px' }}>
+                                                            <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
                                                                 {<><span style={{ color: details.teamId === 200 ? '#568CFF' : '#FF3A54', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minions'}</span> destroyed <span style={{ color: details.teamId === 100 ? '#568CFF' : '#FF3A54', fontWeight: 'bold' }}>{details.buildingType === 'TOWER_BUILDING' ? 'a tower' : 'an inhibitor'}</span></>}
                                                             </Typography>
                                                         )}
@@ -1529,11 +1529,11 @@ const Battles = (props) => {
                                                             </span>
                                                         </Tooltip>
                                                         {details.killer?.riotIdGameName ? (
-                                                            <Typography style={{ fontSize: '14px', marginLeft: '10px' }}>
+                                                            <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
                                                                 {<><a href={`/profile/${gameData.info.platformId.toLowerCase()}/${details.killer?.riotIdGameName}/${details.killer?.riotIdTagline?.toLowerCase()}`} style={{ color: details.killer?.teamId === 100 ? '#568CFF' : '#FF3A54', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minion'}</a> killed <span style={{ color: '#EF00D3', fontWeight: 'bold' }}>{details.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</span></>}
                                                             </Typography>
                                                         ) : (
-                                                            <Typography style={{ fontSize: '14px', marginLeft: '10px' }}>
+                                                            <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
                                                                 {<><span style={{ color: 'black', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minion'}</span> killed <span style={{ color: '#EF00D3', fontWeight: 'bold' }}>{details.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</span></>}
                                                             </Typography>
                                                         )}

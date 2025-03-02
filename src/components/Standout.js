@@ -144,7 +144,7 @@ const Standout = (props) => {
             className='GameDetailsBox StandoutBox'
             alignItems={'center'}
         >
-            <Grid item xs={12} sm={6} className='StandoutGridHalf1'>
+            <Grid item xs={12} sm={12} md={6} className='StandoutGridHalf1'>
                 <div className='StandoutImagesContainer'>
                     <div className='StandoutHeaderContainer'>
                         <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '6px' }}>Standout Performances</Typography>
@@ -216,7 +216,7 @@ const Standout = (props) => {
                     </div>
                 </div>
             </Grid>
-            <Grid item xs={12} sm={6} style={{ display: 'flex' }}>
+            <Grid item xs={12} sm={12} md={6} style={{ display: 'flex' }}>
                 <div className='StandoutTextContainer'>
                     <Typography className='hideMobile hideTablet' style={{ fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '10px' }}>{activePlayer.title}</Typography>
                     <p style={{ color: '#4B4B4B', fontSize: '1rem', maxWidth: '425px' }}>

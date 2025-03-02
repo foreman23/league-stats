@@ -249,8 +249,8 @@ const DisplayGame = (props) => {
     else {
         return (
             <Grid className={!featured ? 'displayGameMainContainer' : 'displayGameFeaturedMainContainer'} container style={{
-                backgroundColor: `${(gameData.info.gameDuration > 180) ? participant.win === true ? '#ECF2FF' : '#FFF1F3' : 'rgb(242, 242, 242)'}`,
-                border: `2px ${(gameData.info.gameDuration > 180) ? participant.win === true ? '#DCE7FF' : '#FFE1E6' : 'rgb(224, 224, 224)'} solid`,
+                backgroundColor: `${(gameData.info.gameDuration > 180) ? participant.win === true ? '#E8EEFD' : '#FDEBEC' : 'rgb(242, 242, 242)'}`,
+                border: `2px ${(gameData.info.gameDuration > 180) ? participant.win === true ? '#D6E0FB ' : '#F8D7DB' : 'rgb(224, 224, 224)'} solid`,
             }}>
 
                 {/* Match Information */}

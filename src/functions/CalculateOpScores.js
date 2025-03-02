@@ -111,7 +111,6 @@ const calculateOpScores = (gameData, playerData) => {
     // setMatchSummaryDesc(matchSummaryText);
 
     
-    // // console.log(updatedGameData.info.participants)
     // setHighestDamageDealt(highestDamageDealt)
     // setPlayersWithScore(updatedGameData.info.participants)
 };
