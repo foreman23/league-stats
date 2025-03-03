@@ -32,7 +32,7 @@ const DisplayGame = (props) => {
     // Find opposing laner
     const opposingPlayers = gameData.info.participants.filter(players => players.teamId !== participant.teamId)
     let opposingLaner = null;
-    if (gameData.info.gameMode === "ARAM") {
+    if (gameData.info.gameMode === "ARAM" || gameData.info.gameMode === "URF") {
         const teamPlayers = gameData.info.participants.filter(players => players.teamId === participant.teamId)
         let playerIndex = 0;
         for (let i = 0; i < teamPlayers.length; i++) {
@@ -137,7 +137,7 @@ const DisplayGame = (props) => {
         }
         // CHANGE THIS ONCE RIOT UPDATES THEIR QUEUES JSON
         else if (queueTitle === null) {
-            setQueueTitle('Swiftplay')
+            setQueueTitle('Featured Mode')
         }
     }, [findQueueInfo])
 

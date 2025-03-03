@@ -723,28 +723,53 @@ function GameDetails() {
             {/* Match Summary */}
             <Grid className='GameDetailsSubContainer' container >
               <Box className='GameDetailsBox'>
+
                 <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={12} sm={7} md={7} lg={6}>
-                  <Typography className='MatchSummaryText' marginLeft={'15px'} fontSize={'1.25rem'} fontWeight={'bold'}>Match Summary</Typography>
-                  <ul className='gameDetailsMatchSummaryList'>
-                    <li style={{ marginBottom: '20px' }}>{shortSummary}</li>
-                    <li>{matchSummaryDesc}</li>
-                    {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === false &&
-                      <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s team surrendered the game at {gameDuration}.</li>
-                    }
-                    {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === true &&
-                      <li style={{ marginTop: '20px' }}>The enemy team surrendered the game at {gameDuration}.</li>
-                    }
-                    {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === false &&
-                      <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s nexus was destroyed at {gameDuration}.</li>
-                    }
-                    {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === true &&
-                      <li style={{ marginTop: '20px' }}>The enemy team's nexus was destroyed at {gameDuration}.</li>
-                    }
-                  </ul>
+                  {shortSummary !== null &&
+                    <div>
+                      <Typography className='MatchSummaryText' marginLeft={'15px'} fontSize={'1.25rem'} fontWeight={'bold'}>Match Summary</Typography>
+                      <ul className='gameDetailsMatchSummaryList'>
+                        <li style={{ marginBottom: '20px' }}>{shortSummary}</li>
+                        <li>{matchSummaryDesc}</li>
+                        {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === false &&
+                          <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s team surrendered the game at {gameDuration}.</li>
+                        }
+                        {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === true &&
+                          <li style={{ marginTop: '20px' }}>The enemy team surrendered the game at {gameDuration}.</li>
+                        }
+                        {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === false &&
+                          <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s nexus was destroyed at {gameDuration}.</li>
+                        }
+                        {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === true &&
+                          <li style={{ marginTop: '20px' }}>The enemy team's nexus was destroyed at {gameDuration}.</li>
+                        }
+                      </ul>
+                    </div>
+                  // ) : (
+                  //   // Skeleton Loader Matching Summary Layout
+                  //   <div style={{ marginTop: '0px', marginRight: '12px', marginLeft: '10px' }}>
+                  //     {/* Heading */}
+                  //     <Skeleton animation="wave" variant="text" width={150} height={50} style={{ marginBottom: '10px' }} />
+                  //     <ul className="gameDetailsMatchSummaryList">
+                  //       {/* Simulated bullet points */}
+                  //       <li style={{ marginBottom: '10px' }}>
+                  //         <Skeleton animation="wave" variant="text" width="80%" height={40} />
+                  //         <Skeleton animation="wave" variant="text" width="60%" height={40} />
+                  //       </li>
+                  //       <li style={{ marginBottom: '10px' }}>
+                  //         <Skeleton animation="wave" variant="text" width="90%" height={40} />
+                  //         <Skeleton animation="wave" variant="text" width="50%" height={40} />
+                  //       </li>
+                  //       <li style={{ marginBottom: '10px' }}>
+                  //         <Skeleton animation="wave" variant="text" width="70%" height={40} />
+                  //       </li>
+                  //     </ul>
+                  //   </div>
+                  // )
+                  }
                 </Grid>
                 <Grid className='gameDetailsMatchSummaryGraph hideMobile' style={{ borderRadius: '10px', marginLeft: '30px', marginTop: '20px' }} backgroundColor='white' item xs={12} sm={5} md={5} lg={6}>
 
-                  {/* Lane bubbles here */}
                   <BubblesSummary statsAt15={statsAt15} gameData={gameData}></BubblesSummary>
 
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -763,10 +788,10 @@ function GameDetails() {
             {/* Mobile Gold Dif Graph */}
             <Grid style={{ justifyContent: 'center', marginTop: '20px', width: '95%' }} className='hideDesktop' container>
               <Box style={{ flexDirection: 'column' }} className='GameDetailsBox'>
-                  <BubblesSummary statsAt15={statsAt15} gameData={gameData}></BubblesSummary>
-                  <div style={{ marginLeft: '50px', marginRight: '20px', overflow: 'hidden' }}>
+                <BubblesSummary statsAt15={statsAt15} gameData={gameData}></BubblesSummary>
+                <div style={{ marginLeft: '50px', marginRight: '20px', overflow: 'hidden' }}>
                   <TeamGoldDifGraph hideTitle teamId={playerData.teamId} height={250} yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
-                  </div>
+                </div>
               </Box>
             </Grid>
 
@@ -915,7 +940,7 @@ function GameDetails() {
                   {/* Blue team */}
                   <Grid item className='BansTeamContainer' order={{ xs: playerData.teamId === 100 ? 1 : 3 }} style={{ display: 'flex', justifyContent: playerData.teamId === 100 ? 'flex-end' : 'flex-start' }} xs={12} sm={6}>
                     {playerData.teamId === 100 &&
-                      <div className='hideMobile' style={{ alignSelf: 'center', marginRight: '25px' }}>
+                      <div className='hideMobile hideKindle' style={{ alignSelf: 'center', marginRight: '25px' }}>
                         <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Bans</Typography>
                       </div>
                     }
@@ -959,13 +984,13 @@ function GameDetails() {
                       }
                     })}
                   </Grid>
-                  <Grid className='hideMobile' style={{ alignSelf: 'center' }} order={{ xs: 2 }}>
+                  <Grid className='hideMobile hideKindle' style={{ alignSelf: 'center' }} order={{ xs: 2 }}>
                     <Box marginBottom={'3px'} marginLeft={'20px'} marginRight={'20px'} width={'10px'} height={'10px'} borderRadius={'100%'} backgroundColor={'#C3C3C3'}></Box>
                   </Grid>
                   {/* Red team */}
                   <Grid item className='BansTeamContainer' order={{ xs: playerData.teamId === 200 ? 1 : 3 }} style={{ display: 'flex', justifyContent: playerData.teamId === 200 ? 'flex-end' : 'flex-start' }} xs={12} sm={6}>
                     {playerData.teamId === 200 &&
-                      <div className='hideMobile' style={{ alignSelf: 'center', marginRight: '25px' }}>
+                      <div className='hideMobile hideKindle' style={{ alignSelf: 'center', marginRight: '25px' }}>
                         <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Bans</Typography>
                       </div>
                     }
@@ -1118,7 +1143,7 @@ function GameDetails() {
                     </div>
                   </Grid>
                 </div>
-                <Grid className='hideMobile' order={3}>
+                <Grid className='hideMobile hideKindle' order={3}>
                   <DamagePie type={'given'} participants={gameData.info.participants}></DamagePie>
                 </Grid>
               </Box>
@@ -1168,7 +1193,7 @@ function GameDetails() {
                     </div>
                   </Grid>
                 </div>
-                <Grid className='hideMobile' order={3}>
+                <Grid className='hideMobile hideKindle' order={3}>
                   <DamagePie type={'taken'} participants={gameData.info.participants}></DamagePie>
                 </Grid>
               </Box>

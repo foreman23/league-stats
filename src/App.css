@@ -2268,6 +2268,10 @@ li {
 /* Kindles, etc. */
 @media only screen and (min-width: 600px) and (max-width: 767px) {
 
+    .displayGamesMainContainer {
+        width: 95% !important;
+    }
+
     .navBarSearchBar {
         margin-left: 10%;
         width: 55%;
@@ -2291,7 +2295,7 @@ li {
         max-height: unset;
     }
 
-    .hideMobile {
+    .hideKindle {
         display: none;
     }
 
@@ -3264,6 +3268,6 @@ li {
 
 @media only screen and (min-height: 1081px) {
     .favoriteRecentList {
-        min-height: auto !important;
+        min-height: 30vh !important;
     }
 }

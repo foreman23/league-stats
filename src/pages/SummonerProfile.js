@@ -985,173 +985,90 @@ const SummonerProfile = () => {
                 }
               </Grid>
             </Grid>
-            {summonerData.masteryData.length > 0 ? (
-              <Grid className='summonerProfileMastery' xs={12}>
-                {summonerData.masteryData.length >= 1 &&
-                  <Grid marginRight={'20px'} flex={'column'}>
-                    <Tooltip disableInteractive
-                      placement='top'
-                      arrow
-                      slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                      title={<>
-                        <div style={{ textDecoration: 'underline' }}>
-                          {
-                            Object.values(champsJSON.data).find(
-                              champ => champ.key === String(summonerData.masteryData[0].championId)
-                            ).name
-                          }
-                        </div>
-                        <div>Level: {summonerData.masteryData[0].championLevel}</div>
-                        <div>Mastery: {summonerData.masteryData[0].championPoints.toLocaleString()}</div>
-                      </>}>
-                      <img style={{
-                        borderRadius: '100%',
-                        border: '3px solid white',
-                        width: '65px',
-                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                      }}
-                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(summonerData.masteryData[0].championId)).id}.png`} alt=''>
-                      </img>
-                    </Tooltip>
-                    <Typography style={{
-                      textAlign: 'center',
-                      fontSize: '0.75rem',
-                      backgroundColor: '#606060',
-                      color: 'white',
-                      fontWeight: 'bold',
-                      borderRadius: '5px',
-                      width: '50%',
-                      paddingLeft: '3px',
-                      paddingRight: '3px',
-                      margin: 'auto',
-                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                    }}>
-                      {summonerData.masteryData[0].championLevel}
-                    </Typography>
-                  </Grid>
-                }
-                {summonerData.masteryData.length >= 2 &&
-                  <Grid marginRight={'20px'} flex={'column'}>
-                    <Tooltip disableInteractive
-                      placement='top'
-                      arrow
-                      slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                      title={<>
-                        <div style={{ textDecoration: 'underline' }}>
-                          {
-                            Object.values(champsJSON.data).find(
-                              champ => champ.key === String(summonerData.masteryData[1].championId)
-                            ).name
-                          }
-                        </div>
-                        <div>Level: {summonerData.masteryData[1].championLevel}</div>
-                        <div>Mastery: {summonerData.masteryData[1].championPoints.toLocaleString()}</div>
-                      </>}>
-                      <img style={{
-                        borderRadius: '100%',
-                        border: '3px solid white',
-                        width: '65px',
-                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                      }}
-                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(summonerData.masteryData[1].championId)).id}.png`} alt=''>
-                      </img>
-                    </Tooltip>
-                    <Typography style={{
-                      textAlign: 'center',
-                      fontSize: '0.75rem',
-                      backgroundColor: '#606060',
-                      color: 'white',
-                      fontWeight: 'bold',
-                      borderRadius: '5px',
-                      width: '50%',
-                      paddingLeft: '3px',
-                      paddingRight: '3px',
-                      margin: 'auto',
-                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                    }}>
-                      {summonerData.masteryData[1].championLevel}
-                    </Typography>
-                  </Grid>
-                }
-                {summonerData.masteryData.length >= 3 &&
-                  <Grid marginRight={'0px'} flex={'column'}>
-                    <Tooltip disableInteractive
-                      placement='top'
-                      arrow
-                      slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                      title={<>
-                        <div style={{ textDecoration: 'underline' }}>
-                          {
-                            Object.values(champsJSON.data).find(
-                              champ => champ.key === String(summonerData.masteryData[2].championId)
-                            ).name
-                          }
-                        </div>
-                        <div>Level: {summonerData.masteryData[2].championLevel}</div>
-                        <div>Mastery: {summonerData.masteryData[2].championPoints.toLocaleString()}</div>
-                      </>}>
-                      <img style={{
-                        borderRadius: '100%',
-                        border: '3px solid white',
-                        width: '65px',
-                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                      }}
-                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(summonerData.masteryData[2].championId)).id}.png`} alt=''>
-                      </img>
-                    </Tooltip>
-                    <Typography style={{
-                      textAlign: 'center',
-                      fontSize: '0.75rem',
-                      backgroundColor: '#606060',
-                      color: 'white',
-                      fontWeight: 'bold',
-                      borderRadius: '5px',
-                      width: '50%',
-                      paddingLeft: '3px',
-                      paddingRight: '3px',
-                      margin: 'auto',
-                      filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                    }}>
-                      {summonerData.masteryData[2].championLevel}
-                    </Typography>
-                  </Grid>
-                }
-              </Grid>
-            ) : (
-              // If no mastery at all
-              <Grid className='summonerProfileMastery '>
-                <Grid flex={'column'}>
-                  <img style={{
-                    marginRight: '20px',
-                    borderRadius: '100%',
-                    border: '3px solid white',
-                    width: '65px',
-                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                  }}
-                    src={`/images/novalue.webp`} alt=''>
-                  </img>
-                  <img style={{
-                    marginRight: '20px',
-                    borderRadius: '100%',
-                    border: '3px solid white',
-                    width: '65px',
-                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                  }}
-                    src={`/images/novalue.webp`} alt=''>
-                  </img>
-                  <img style={{
-                    marginRight: '0px',
-                    borderRadius: '100%',
-                    border: '3px solid white',
-                    width: '65px',
-                    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
-                  }}
-                    src={`/images/novalue.webp`} alt=''>
-                  </img>
+            <Grid className="summonerProfileMastery" xs={12}>
+              {isLoadingRank ? (
+                // Skeleton loaders while mastery data is loading
+                <Grid display="flex">
+                  {[...Array(3)].map((_, index) => (
+                    <Grid key={index} marginRight={index < 2 ? '20px' : '0'} flex="column">
+                      <Skeleton variant="circular" width={65} height={65} />
+                      <Skeleton variant="text" width={35} height={25} style={{ margin: 'auto', marginTop: '5px' }} />
+                    </Grid>
+                  ))}
                 </Grid>
-              </Grid>
-            )
-            }
+              ) : summonerData.masteryData.length > 0 ? (
+                // Display mastery images once data is loaded
+                <Grid display="flex">
+                  {summonerData.masteryData.slice(0, 3).map((mastery, index) => {
+                    const champion = Object.values(champsJSON.data).find(champ => champ.key === String(mastery.championId));
+
+                    return (
+                      <Grid key={index} marginRight={index < 2 ? '20px' : '0'} flex="column">
+                        <Tooltip
+                          disableInteractive
+                          placement="top"
+                          arrow
+                          slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
+                          title={
+                            <>
+                              <div style={{ textDecoration: 'underline' }}>{champion?.name}</div>
+                              <div>Level: {mastery.championLevel}</div>
+                              <div>Mastery: {mastery.championPoints.toLocaleString()}</div>
+                            </>
+                          }
+                        >
+                          <img
+                            style={{
+                              borderRadius: '100%',
+                              border: '3px solid white',
+                              width: '65px',
+                              filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                            }}
+                            src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${champion?.id}.png`}
+                            alt=""
+                          />
+                        </Tooltip>
+                        <Typography
+                          style={{
+                            textAlign: 'center',
+                            fontSize: '0.75rem',
+                            backgroundColor: '#606060',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            borderRadius: '5px',
+                            width: '50%',
+                            paddingLeft: '3px',
+                            paddingRight: '3px',
+                            margin: 'auto',
+                            filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                          }}
+                        >
+                          {mastery.championLevel}
+                        </Typography>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              ) : (
+                // Default placeholders when no mastery data exists
+                <Grid display="flex">
+                  {[...Array(3)].map((_, index) => (
+                    <img
+                      key={index}
+                      style={{
+                        marginRight: index < 2 ? '20px' : '0',
+                        borderRadius: '100%',
+                        border: '3px solid white',
+                        width: '65px',
+                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
+                      }}
+                      src={`/images/novalue.webp`}
+                      alt=""
+                    />
+                  ))}
+                </Grid>
+              )}
+            </Grid>
           </Grid>
         </Grid>
 
@@ -1169,8 +1086,8 @@ const SummonerProfile = () => {
         >
           {
             loadingMatches ? (
-              <div style={{ textAlign: 'center', marginTop: '50px' }}>
-                <CircularProgress />
+              <div style={{ textAlign: 'center', marginTop: '50px', margin: 'auto' }}>
+                <CircularProgress style={{ marginTop: '30px' }} />
               </div>
             ) : matchData === null || matchData.length === 0 || matchData === -1 ? (
               // Display NO MATCHES FOUND

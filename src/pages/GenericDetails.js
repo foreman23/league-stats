@@ -88,7 +88,10 @@ const GenericDetails = () => {
         else if (queueTitle === 'Arena') {
             setQueueTitle('Arena')
         }
-    }, [findQueueInfo])
+        else if (gameData.info.gameMode === 'URF') {
+            setQueueTitle('URF')
+        }
+    }, [findQueueInfo, gameData])
 
     // Get queue JSON data from riot
     const getQueueJSON = async () => {
@@ -651,7 +654,7 @@ const GenericDetails = () => {
                                 <img alt='' style={{ width: '30px', marginTop: '10px', opacity: '65%' }} src='/images/swords.svg'></img>
 
                                 {/* Manatee image for URF */}
-                                {queueTitle === 'ARURF' ? (
+                                {queueTitle === 'ARURF' || queueTitle === 'URF' ? (
                                     <img alt='Urf Manatee' style={{ marginLeft: '15px', border: '4px solid black', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='gameDetailsSummaryMainChampImg' src='/images/The_Thinking_Manatee_profileicon.webp'></img>
                                 ) : (
                                     <img alt='Unknown Champion' style={{ marginLeft: '15px', border: playerData.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='gameDetailsSummaryMainChampImg' src='/images/novalue.webp'></img>
@@ -665,7 +668,12 @@ const GenericDetails = () => {
                                     </span>
                                     <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                                 </Typography>
-                                <Typography className='GameDetailsMainSummarySubHeader'>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
+                                {queueTitle !== null ? (
+                                    <Typography className='GameDetailsMainSummarySubHeader'>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
+                                ) : (
+                                    <Typography className='GameDetailsMainSummarySubHeader'>Game played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
+                                )
+                                }
                                 <div className='GameDetailsCatBtnContainer'>
                                     <Button onClick={() => scrollToSection('TableAnchor')} className='GameDetailsCatBtn' variant='contained'>Table</Button>
                                     <Button onClick={() => scrollToSection('GraphsAnchor')} className='GameDetailsCatBtn' variant='contained'>Graphs</Button>
@@ -718,20 +726,39 @@ const GenericDetails = () => {
             {/* Table */}
             <div id='TableAnchor' style={{ backgroundColor: '#f2f2f2' }}>
                 <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '20px' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                    <DetailsTable
-                        gameData={gameData}
-                        playerData={playerData}
-                        champsJSON={champsJSON}
-                        dataDragonVersion={dataDragonVersion}
-                        summonerSpellsObj={summonerSpellsObj}
-                        summonerName={summonerName}
-                        playersWithScores={playersWithScores}
-                        getKeystoneIconUrl={getKeystoneIconUrl}
-                        runesObj={runesObj}
-                        highestDamageDealt={highestDamageDealt}
-                        items={items}
-                    >
-                    </DetailsTable>
+                    {gameData.info.gameMode === 'URF' ? (
+                        <DetailsTable
+                            urf
+                            gameData={gameData}
+                            playerData={playerData}
+                            champsJSON={champsJSON}
+                            dataDragonVersion={dataDragonVersion}
+                            summonerSpellsObj={summonerSpellsObj}
+                            summonerName={summonerName}
+                            playersWithScores={playersWithScores}
+                            getKeystoneIconUrl={getKeystoneIconUrl}
+                            runesObj={runesObj}
+                            highestDamageDealt={highestDamageDealt}
+                            items={items}
+                        >
+                        </DetailsTable>
+                    ) : (
+                        <DetailsTable
+                            gameData={gameData}
+                            playerData={playerData}
+                            champsJSON={champsJSON}
+                            dataDragonVersion={dataDragonVersion}
+                            summonerSpellsObj={summonerSpellsObj}
+                            summonerName={summonerName}
+                            playersWithScores={playersWithScores}
+                            getKeystoneIconUrl={getKeystoneIconUrl}
+                            runesObj={runesObj}
+                            highestDamageDealt={highestDamageDealt}
+                            items={items}
+                        >
+                        </DetailsTable>
+                    )}
+
                 </Grid>
             </div>
 
