@@ -147,7 +147,7 @@ const DisplayGame = (props) => {
             const data = await response.json();
             setQueues(data);
         } catch (error) {
-            console.error('Error fetching queue data');
+            // console.error('Error fetching queue data');
         }
     }, [])
 
@@ -158,7 +158,7 @@ const DisplayGame = (props) => {
             const data = await response.json();
             setChampsJSON(data);
         } catch (error) {
-            console.error('Error fetching champion JSON data',);
+            // console.error('Error fetching champion JSON data',);
         }
     }, [dataDragonVersion])
 

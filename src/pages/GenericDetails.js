@@ -100,7 +100,7 @@ const GenericDetails = () => {
             const data = await response.json();
             setQueues(data);
         } catch (error) {
-            console.error('Error fetching queue JSON data');
+            // console.error('Error fetching queue JSON data');
         }
     }
 
@@ -259,7 +259,7 @@ const GenericDetails = () => {
             const data = await response.json();
             setItems(data);
         } catch (error) {
-            console.error('Error fetching item JSON data',);
+            // console.error('Error fetching item JSON data',);
         }
     }, [setItems, dataDragonVersion])
 
@@ -270,7 +270,7 @@ const GenericDetails = () => {
             const data = await response.json();
             setChampsJSON(data);
         } catch (error) {
-            console.error('Error fetching champion JSON data');
+            // console.error('Error fetching champion JSON data');
         }
     }, [setChampsJSON, dataDragonVersion])
 
@@ -309,14 +309,14 @@ const GenericDetails = () => {
                 setDataDragonVersion(currentVersion);
             })
             .catch(function (response) {
-                console.log('Error: Error fetching datadragon version')
+                // console.log('Error: Error fetching datadragon version')
             })
     }
 
     const fetchGameData = useCallback(async () => {
         let region = matchId.split('_')[0].toLowerCase()
         const docRef = doc(firestore, `${region}-matches`, matchId)
-        console.log('Reading from firestore (checking match exists)')
+        // console.log('Reading from firestore (checking match exists)')
         const docSnap = await getDoc(docRef);
         // If match exists
         if (docSnap.exists()) {
@@ -380,7 +380,7 @@ const GenericDetails = () => {
     useEffect(() => {
         if (gameData && alternateRegion) {
             const getMatchTimeline = async (alternateRegion, matchId) => {
-                console.log('CALLING RIOT API');
+                // console.log('CALLING RIOT API');
                 const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
                 const timelineData = timelineResponse.data;
                 setTimelineData(timelineData);
@@ -553,7 +553,7 @@ const GenericDetails = () => {
                     {/* Match Header */}
                     <Grid className='GameDetailsHeaderMainContainer' container>
                         <Box className='GameDetailsHeaderContainer'>
-                            <Grid className='GameDetailsHeader' item xs={12} sm={5}>
+                            <Grid className='GameDetailsHeader' item xs={12} sm={12} md={5}>
                                 {/* Player Win */}
                                 {playerData.win ? (
                                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
@@ -661,7 +661,7 @@ const GenericDetails = () => {
                                 )}
 
                             </Grid>
-                            <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={7}>
+                            <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={12} md={7}>
                                 <Typography className='GameDetailsMainSummaryHeader'>
                                     <span style={{ textDecoration: 'none', color: 'inherit' }}>
                                         {playerData.riotIdGameName}
@@ -689,22 +689,26 @@ const GenericDetails = () => {
                     <Grid className='GameDetailsSubContainer' container >
                         <Box className='GameDetailsBox'>
                             <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={12} sm={8} md={7} lg={6}>
-                                <Typography className='MatchSummaryText' marginLeft={'15px'} fontSize={20} fontWeight={'bold'}>Match Summary</Typography>
-                                <ul className='gameDetailsMatchSummaryList'>
-                                    <li>{matchSummaryDesc}</li>
-                                    {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === false &&
-                                        <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s team surrendered the game at {gameDuration}.</li>
-                                    }
-                                    {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === true &&
-                                        <li style={{ marginTop: '20px' }}>The enemy team surrendered the game at {gameDuration}.</li>
-                                    }
-                                    {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === false &&
-                                        <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s nexus was destroyed at {gameDuration}.</li>
-                                    }
-                                    {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === true &&
-                                        <li style={{ marginTop: '20px' }}>The enemy team's nexus was destroyed at {gameDuration}.</li>
-                                    }
-                                </ul>
+                                {matchSummaryDesc !== null &&
+                                    <div>
+                                        <Typography className='MatchSummaryText' marginLeft={'15px'} fontSize={20} fontWeight={'bold'}>Match Summary</Typography>
+                                        <ul className='gameDetailsMatchSummaryList'>
+                                            <li>{matchSummaryDesc}</li>
+                                            {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === false &&
+                                                <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s team surrendered the game at {gameDuration}.</li>
+                                            }
+                                            {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === true &&
+                                                <li style={{ marginTop: '20px' }}>The enemy team surrendered the game at {gameDuration}.</li>
+                                            }
+                                            {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === false &&
+                                                <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s nexus was destroyed at {gameDuration}.</li>
+                                            }
+                                            {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === true &&
+                                                <li style={{ marginTop: '20px' }}>The enemy team's nexus was destroyed at {gameDuration}.</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
                             </Grid>
                             <Grid className='gameDetailsMatchSummaryGraph hideMobile' style={{ borderRadius: '10px', marginLeft: '30px' }} backgroundColor='white' item xs={12} sm={4} md={5} lg={6}>
                                 {graphData ? (
@@ -818,7 +822,7 @@ const GenericDetails = () => {
                                     </div>
                                 </Grid>
                             </div>
-                            <Grid className='hideMobile' order={3}>
+                            <Grid className='hideMobile hideKindle' order={3}>
                                 <DamagePie type={'given'} participants={gameData.info.participants}></DamagePie>
                             </Grid>
                         </Box>
@@ -868,7 +872,7 @@ const GenericDetails = () => {
                                     </div>
                                 </Grid>
                             </div>
-                            <Grid className='hideMobile' order={3}>
+                            <Grid className='hideMobile hideKindle' order={3}>
                                 <DamagePie type={'taken'} participants={gameData.info.participants}></DamagePie>
                             </Grid>
                         </Box>

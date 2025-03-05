@@ -242,16 +242,16 @@ function Navbar(props) {
             <Toolbar>
                 {/* Desktop Navbar */}
                 <a href='/' className='hideMobile' style={{ textDecoration: 'none', color: 'white', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                    <Typography className='navBarHeaderText' variant="h6" fontWeight={'bold'} marginRight='5px' component="div" sx={{ flexGrow: 1 }}>
-                        RiftReport.gg
+                    <Typography className='navBarHeaderText' variant="h6" marginRight='10px' component="div" sx={{ flexGrow: 1 }}>
+                        riftreport.gg
                     </Typography>
-                    <img alt='Logo' style={{ width: '40px' }} src='/images/sorakaLogo.webp'></img>
+                    <img alt='Logo' style={{ width: '40px' }} src='/images/spiritMage.webp'></img>
                 </a>
 
                 {/* Mobile Navbar */}
                 <div style={{ display: 'flex', alignItems: 'center' }} className='hideDesktop'>
                     <a href='/' style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-                        <img alt='Logo' style={{ width: '40px', marginRight: '10px' }} src='/images/sorakaLogo.webp'></img>
+                        <img alt='Logo' style={{ width: '40px', marginRight: '10px' }} src='/images/spiritMage.webp'></img>
                         <Typography style={{ fontWeight: 'bold', marginTop: '3px', marginRight: '8px' }}>RR.GG</Typography>
                         {/* <HomeIcon style={{ fontSize: '32px', color: 'white' }} className='hideDesktop'></HomeIcon> */}
                     </a>
@@ -260,7 +260,7 @@ function Navbar(props) {
                         <List>
                             <ListItem>
                                 <a href='/' onClick={() => toggleDrawer(false)} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-                                    <img alt='Logo' style={{ width: '40px', marginRight: '5px' }} src='/images/sorakaLogo.webp'></img>
+                                    <img alt='Logo' style={{ width: '40px', marginRight: '5px' }} src='/images/spiritMage.webp'></img>
                                     <Typography>RiftReport.gg</Typography>
                                 </a>
                             </ListItem>

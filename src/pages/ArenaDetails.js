@@ -103,7 +103,7 @@ const ArenaDetails = () => {
             const data = await response.json();
             setQueues(data);
         } catch (error) {
-            console.error('Error fetching queue data:');
+            // console.error('Error fetching queue data:');
         }
     }
 

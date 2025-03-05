@@ -117,7 +117,7 @@ const SummonerProfile = () => {
     let historyData = data.historyData
     setHistoryState(historyData)
     let newMatchDataArray = [];
-    let riotApiCallCount = 0;
+    // let riotApiCallCount = 0;
 
     setLoadingMatches(true)
 
@@ -134,7 +134,7 @@ const SummonerProfile = () => {
       for (let i = 0; i < 5; i++) {
         // check if match already exists
         const docRef = doc(firestore, `${selectedRegion}-matches`, historyData[i]);
-        console.log('Reading from firestore (checking match exists)')
+        // console.log('Reading from firestore (checking match exists)')
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           if (!docSnap.data().matchData.status) {
@@ -145,7 +145,7 @@ const SummonerProfile = () => {
           let dateRetrieved = new Date()
           // get match information
           const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyData[i]}`);
-          riotApiCallCount += 1;
+          // riotApiCallCount += 1;
 
           // break loop if game too old
           if (new Date(matchResponse.data.info.gameStartTimestamp + 7776000000) < new Date()) {
@@ -166,7 +166,7 @@ const SummonerProfile = () => {
           const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyData[i]);
 
           if (matchResponse.status === 200 && (new Date((matchData.info.gameStartTimestamp) + 7776000000)) > new Date()) {
-            console.log('WRITING TO FIRESTORE (match)')
+            // console.log('WRITING TO FIRESTORE (match)')
             await setDoc(newDocRef, {
               dateRetrieved: dateRetrieved,
               matchData: matchData,
@@ -180,7 +180,7 @@ const SummonerProfile = () => {
           }
         }
       }
-      console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
+      // console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
       setHistoryIndex(newMatchDataArray.length)
       setMatchData(newMatchDataArray);
       setMatchesLoaded(true);
@@ -192,13 +192,13 @@ const SummonerProfile = () => {
   const handleLoadMore = async () => {
     setLoadingMore(true)
     let newMatchDataArray = [...matchData];
-    let riotApiCallCount = 0;
+    // let riotApiCallCount = 0;
 
     if (!allLoaded) {
       for (let i = historyIndex; i < historyIndex + 5; i++) {
         // check if match already exists
         const docRef = doc(firestore, `${selectedRegion}-matches`, historyState[i]);
-        console.log('Reading from firestore (checking match exists)')
+        // console.log('Reading from firestore (checking match exists)')
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -209,7 +209,7 @@ const SummonerProfile = () => {
           let dateRetrieved = new Date()
           // get match information
           const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyState[i]}`);
-          riotApiCallCount += 1;
+          // riotApiCallCount += 1;
 
           // break loop if game too old
           if (new Date(matchResponse.data.info.gameStartTimestamp + 7776000000) < new Date()) {
@@ -230,7 +230,7 @@ const SummonerProfile = () => {
           const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyState[i]);
 
           if (matchResponse.status === 200 && (new Date((matchData.info.gameStartTimestamp) + 7776000000)) > new Date()) {
-            console.log('WRITING TO FIRESTORE (match)')
+            // console.log('WRITING TO FIRESTORE (match)')
             await setDoc(newDocRef, {
               dateRetrieved: dateRetrieved,
               matchData: matchData,
@@ -246,7 +246,7 @@ const SummonerProfile = () => {
       }
     }
 
-    console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
+    // console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
     setHistoryIndex(newMatchDataArray.length)
     setMatchData(newMatchDataArray);
     setLoadingMore(false)
@@ -260,7 +260,7 @@ const SummonerProfile = () => {
 
     // Check if user exists in firestore
     const docRef = doc(firestore, `${selectedRegion}-users`, `${summonerName}-${riotId}`);
-    console.log('Reading from firestore (checking user)')
+    // console.log('Reading from firestore (checking user)')
     const docSnap = await getDoc(docRef);
 
     // Reset load more button
@@ -285,9 +285,9 @@ const SummonerProfile = () => {
     // Create new summoner profile on firestore
     else {
       try {
-        let riotApiCallCount = 0
+        // let riotApiCallCount = 0
         const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
-        riotApiCallCount += 1
+        // riotApiCallCount += 1
         const puuidData = puuidResponse.data;
 
 
@@ -297,22 +297,22 @@ const SummonerProfile = () => {
         }
 
         const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
-        riotApiCallCount += 1
+        // riotApiCallCount += 1
         const summonerResData = summonerResponse.data;
 
         const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerResData.id}`);
-        riotApiCallCount += 1
+        // riotApiCallCount += 1
         const rankedData = rankedResponse.data;
 
         const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`);
-        riotApiCallCount += 1
+        // riotApiCallCount += 1
         const historyData = historyResponse.data;
 
         const masteryResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
-        riotApiCallCount += 1
+        // riotApiCallCount += 1
         const masteryData = masteryResponse.data;
 
-        console.log(`CALLED RIOT API: ${riotApiCallCount} times`)
+        // console.log(`CALLED RIOT API: ${riotApiCallCount} times`)
 
         // if match history is empty set matchesLoaded to true
         if (historyData.length < 1) {
@@ -329,7 +329,7 @@ const SummonerProfile = () => {
           masteryData: masteryData
         }
         if (puuidData.status !== 400 && puuidData.status !== 404) {
-          console.log('WRITING TO FIRESTORE')
+          // console.log('WRITING TO FIRESTORE')
           await setDoc(newDocRef, {
             lastUpdated: lastUpdated,
             summonerData: summonerResData,
@@ -354,29 +354,29 @@ const SummonerProfile = () => {
     try {
       setIsLoadingRank(true);
       setRankIndex(null);
-      let riotApiCallCount = 0
+      // let riotApiCallCount = 0
 
       const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
-      riotApiCallCount += 1
+      // riotApiCallCount += 1
       const puuidData = puuidResponse.data;
 
       const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
-      riotApiCallCount += 1
+      // riotApiCallCount += 1
       const summonerData = summonerResponse.data;
 
       const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`);
-      riotApiCallCount += 1
+      // riotApiCallCount += 1
       const rankedData = rankedResponse.data;
 
       const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${summonerData.puuid}`);
-      riotApiCallCount += 1
+      // riotApiCallCount += 1
       const historyData = historyResponse.data;
 
       const masteryResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
-      riotApiCallCount += 1
+      // riotApiCallCount += 1
       const masteryData = masteryResponse.data;
 
-      console.log(`CALLED RIOT API: ${riotApiCallCount} times`)
+      // console.log(`CALLED RIOT API: ${riotApiCallCount} times`)
 
       let lastUpdated = new Date()
       const docRef = doc(firestore, `${selectedRegion}-users`, `${summonerName}-${riotId}`);

@@ -134,6 +134,10 @@ body,
 
 .LanePhaseSummaryBubble {
     margin-left: 3px;
+    min-height: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
 }
 
 .LanePhaseSummaryBtn {
@@ -766,12 +770,47 @@ body,
 .searchMainImageContainer {
     display: flex;
     margin: auto;
-    margin-left: auto;
-    margin-right: 40%;
+    min-height: 200px;
 }
 
+#RiftReportTitle {
+    text-align: center !important;
+    margin: auto !important;
+    font-weight: bold !important;
+    margin-bottom: 0px !important; 
+    font-size: 2.875rem !important;
+    color: white !important;
+    font-family: "League Spartan", sans-serif !important;
+    letter-spacing: -3px !important;
+    font-optical-sizing: auto !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+}
+
+#RiftReportSubTitle {
+    text-align: center !important;
+    margin: auto !important;
+    margin-top: -3px !important;
+    font-size: .775rem !important;
+    color: white !important;
+    font-family: "Quicksand", sans-serif !important;
+    font-optical-sizing: auto !important;
+    font-weight: 600 !important; 
+    letter-spacing: 3px !important;
+    font-style: normal !important;
+}
+
+.RiftReportChamp {
+    max-width: 31px;
+    max-height: 31px;
+    border-radius: 100%;
+    margin-right: 5px;
+}
+
+
+
 .searchMainImage {
-    width: 174px;
+    width: 124px;
     margin: 20px;
 }
 
@@ -795,7 +834,7 @@ body,
     border-top-left-radius: 0px !important;
     border-bottom-left-radius: 0px !important;
     height: auto !important;
-    background-color: #519EDD !important;
+    background: linear-gradient(135deg, #3A5A9B, #5678B9);
     color: white !important;
     /* filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)) !important; */
 }
@@ -1018,7 +1057,6 @@ body,
     flex-direction: row;
     display: inline-flex;
     margin-right: 50px;
-    width: 24%;
 }
 
 .LaneButtonsContainer {
@@ -1436,6 +1474,25 @@ li {
     margin-bottom: 30px;
 }
 
+.navBarHeaderText {
+    font-family: "League Spartan", sans-serif !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -1.25px !important;
+}
+
+.matchDetailsTeamNameText {
+    font-size: 1.25rem !important;
+    font-weight: bold !important;
+    margin-bottom: 20px !important;
+    margin-left: 5% !important;
+}
+
+.matchDetailsTeamDetails {
+    display: flex;
+    margin-left: 5% !important;
+}
+
 /* For normal sized phones */
 @media only screen and (max-width: 599px) {
 
@@ -1528,6 +1585,7 @@ li {
 
     .searchMainImageContainer {
         margin-top: 30px !important;
+        min-height: unset;
     }
 
     .GameDetailsMainSummaryHeader {
@@ -2268,6 +2326,18 @@ li {
 /* Kindles, etc. */
 @media only screen and (min-width: 600px) and (max-width: 767px) {
 
+    .searchSearchContainer {
+        width: 90vw;
+    }
+
+    .searchFeaturedContainer {
+        width: 95vw;
+    }
+
+    .searchFavoritesContainer {
+        width: 93vw;
+    }
+
     .displayGamesMainContainer {
         width: 95% !important;
     }
@@ -2296,7 +2366,7 @@ li {
     }
 
     .hideKindle {
-        display: none;
+        display: none !important;
     }
 
     .BubbleSummarySubContainer1 {
@@ -2387,8 +2457,10 @@ li {
     }
 
     .LanePhaseSummaryBubble {
-        width: 30px !important;
-        height: 30px !important;
+        min-width: 30px !important;
+        min-height: 30px !important;
+        max-width: 30px !important;
+        max-height: 30px !important;
     }
 
     .BuildsBox {
@@ -2630,8 +2702,10 @@ li {
     }
 
     .LanePhaseSummaryBubble {
-        width: 30px !important;
-        height: 30px !important;
+        max-width: 30px !important;
+        min-width: 30px !important;
+        min-height: 30px !important;
+        max-height: 30px !important;
     }
 
     .BuildsBox {
@@ -2739,6 +2813,13 @@ li {
 
 /* Tablets */
 @media only screen and (min-width: 821px) and (max-width: 1200px) {
+
+    .LanePhaseSummaryBubble {
+        min-width: 30px !important;
+        min-height: 30px !important;
+        max-width: 30px !important;
+        max-height: 30px !important;
+    }
 
     .favoriteRecentList {
         min-height: 23vh;
@@ -3015,6 +3096,19 @@ li {
 }
 
 @media only screen and (min-width: 1201px) and (max-width: 1624px) {
+    .matchDetailsTeamNameText {
+        font-size: 1.25rem !important;
+        font-weight: bold !important;
+        margin-bottom: 20px !important;
+        margin-left: 15% !important;
+    }
+    
+    .matchDetailsTeamDetails {
+        display: flex;
+        margin-left: 15% !important;
+    }
+    
+
     .BuildsChampPic {
         width: 48px !important;
     }
@@ -3266,8 +3360,9 @@ li {
     }
 }
 
-@media only screen and (min-height: 1081px) {
+/* Tall monitors */
+@media only screen and (min-height: 1367px) {
     .favoriteRecentList {
-        min-height: 30vh !important;
+        min-height: 15vh !important;
     }
 }

@@ -209,7 +209,7 @@ function GameDetails() {
       const data = await response.json();
       setQueues(data);
     } catch (error) {
-      console.error('Error fetching queue JSON data');
+      // console.error('Error fetching queue JSON data');
     }
   }
 
@@ -220,7 +220,7 @@ function GameDetails() {
       const data = await response.json();
       setItems(data);
     } catch (error) {
-      console.error('Error fetching item JSON data',);
+      // console.error('Error fetching item JSON data',);
     }
   }, [setItems, dataDragonVersion])
 
@@ -231,7 +231,7 @@ function GameDetails() {
       const data = await response.json();
       setChampsJSON(data);
     } catch (error) {
-      console.error('Error fetching champion JSON data');
+      // console.error('Error fetching champion JSON data');
     }
   }, [setChampsJSON, dataDragonVersion])
 
@@ -269,14 +269,14 @@ function GameDetails() {
         setDataDragonVersion(currentVersion);
       })
       .catch(function (response) {
-        console.log('Error: Error fetching datadragon version')
+        // console.log('Error: Error fetching datadragon version')
       })
   }
 
   const fetchGameData = useCallback(async () => {
     let region = matchId.split('_')[0].toLowerCase()
     const docRef = doc(firestore, `${region}-matches`, matchId)
-    console.log('Reading from firestore (checking match exists)')
+    // console.log('Reading from firestore (checking match exists)')
     const docSnap = await getDoc(docRef);
     // If match exists
     if (docSnap.exists()) {
@@ -466,7 +466,7 @@ function GameDetails() {
   useEffect(() => {
     if (gameData && alternateRegion) {
       const getMatchTimeline = async (alternateRegion, matchId) => {
-        console.log('CALLING RIOT API');
+        // console.log('CALLING RIOT API');
         const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
         const timelineData = timelineResponse.data;
         setTimelineData(timelineData);
@@ -814,14 +814,14 @@ function GameDetails() {
               <Box className='MatchDetailsGraphBox' minWidth={'100%'} maxWidth={'100%'} style={{ display: 'flex', backgroundColor: 'white', padding: '20px', boxShadow: '0px 6px 24px 0px rgba(0, 0, 0, 0.25)' }} border={'1px solid #BBBBBB'} borderRadius={'10px'}>
                 {/* Red Team */}
                 <Grid item order={playerData.teamId === 100 ? 2 : 1} xs={12} sm={6}>
-                  <Typography style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '20px' }}>Red Team</Typography>
+                  <Typography className='matchDetailsTeamNameText'>Red Team</Typography>
 
-                  <div style={{ display: 'flex' }}>
+                  <div className='matchDetailsTeamDetails'>
                     <Typography fontWeight={'bold'} fontSize={'1.125rem'} marginRight={'50px'} color={'#FF3F3F'}>{gameData.info.teams[1].objectives.champion.kills} kills</Typography>
                     <Typography fontWeight={'bold'} fontSize={'1.125rem'} color={'#FF3F3F'}>{totalTeamGoldRed.toLocaleString()}g</Typography>
                   </div>
 
-                  <Grid container style={{ display: 'flex', alignItems: 'flex-end', height: '180px' }}>
+                  <Grid container style={{ display: 'flex', alignItems: 'flex-end', height: '180px', justifyContent: 'center' }}>
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.horde.kills}</Typography>
@@ -875,12 +875,12 @@ function GameDetails() {
                 </Grid>
                 {/* Blue Team */}
                 <Grid item order={playerData.teamId === 100 ? 1 : 2} xs={12} sm={6}>
-                  <Typography className='matchDetailsTeamNameText' style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '20px' }}>Blue Team</Typography>
-                  <div style={{ display: 'flex' }}>
+                  <Typography className='matchDetailsTeamNameText'>Blue Team</Typography>
+                  <div className='matchDetailsTeamDetails'>
                     <Typography fontWeight={'bold'} fontSize={'1.125rem'} marginRight={'50px'} color={'#568CFF'}>{gameData.info.teams[0].objectives.champion.kills} kills</Typography>
                     <Typography fontWeight={'bold'} fontSize={'1.125rem'} color={'#568CFF'}>{totalTeamGoldBlue.toLocaleString()}g</Typography>
                   </div>
-                  <Grid container style={{ display: 'flex', alignItems: 'flex-end', height: '180px' }}>
+                  <Grid container style={{ display: 'flex', alignItems: 'flex-end', height: '180px', justifyContent: 'center' }}>
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[0].objectives.horde.kills}</Typography>
@@ -1108,7 +1108,7 @@ function GameDetails() {
                 <div className='GraphSectionDivContainer'>
                   {/* Red Team */}
                   <Grid className='GraphSectionDivSubContainer' item order={playerData.teamId === 200 ? 1 : 2} xs={12} sm={6}>
-                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end'}}>
                       {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
                         <div key={`red_dealt_${index}`} className='matchDetailsObjectiveContainer'>
                           <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageDealtToChampions / 1000)}k</Typography>

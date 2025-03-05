@@ -32,7 +32,7 @@ function SummonerSearch() {
         getChampsJSON(currentVersion);
       })
       .catch(function (response) {
-        console.error('Error: Error fetching datadragon version')
+        // console.error('Error: Error fetching datadragon version')
       })
   }, [])
 
@@ -217,7 +217,7 @@ function SummonerSearch() {
       const data = await response.json();
       setChampsJSON(data);
     } catch (error) {
-      console.error('Error fetching champion JSON data');
+      // console.error('Error fetching champion JSON data');
     }
   }
 
@@ -268,13 +268,38 @@ function SummonerSearch() {
           <div className='firstSection'>
             <Grid xs={12} display={'flex'} margin={'auto'}>
               <div className='searchMainImageContainer'>
-                <a href='/'>
-                  <img className='searchMainImage' alt='site logo' src='/images/sorakaLogo.webp'></img>
-                </a>
-                <Typography className='hideMobile' style={{
-                  textAlign: 'center', margin: 'auto', fontSize: '2rem', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
-                }}>RiftReport.gg
-                </Typography>
+
+                <div style={{ alignItems: 'center', display: 'flex' }}>
+                  <a href='/'>
+                    <img className='searchMainImage' alt='site logo' src='/images/spiritMage.webp'></img>
+                  </a>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '20px' }}>
+                  <Typography id='RiftReportTitle' className='hideMobile' >riftreport.gg
+                  </Typography>
+                  <Typography id='RiftReportSubTitle' className='hideMobile'>LoL Match Analysis</Typography>
+                </div>
+
+                <div className='hideMobile hideKindle' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: '55px', marginRight: '15px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img alt='Champion' style={{ border: '3px solid #FF3F3F' }} className='RiftReportChamp' src={`/images/Shadow_Isles_Poro_profileicon.webp`}></img>
+                    <Box height={'16px'} width={'16px'} style={{ backgroundColor: '#FF3F3F', borderRadius: '100%', marginRight: '3px' }}></Box>
+                    <Box height={'16px'} width={'16px'} style={{ backgroundColor: '#FF3F3F', borderRadius: '100%', marginRight: '3px' }}></Box>
+                    <Box height={'16px'} width={'16px'} style={{ backgroundColor: '#FF3F3F', borderRadius: '100%', marginRight: '3px' }}></Box>
+                    <Box height={'16px'} width={'16px'} style={{ backgroundColor: '#FF3F3F', borderRadius: '100%', marginRight: '3px' }}></Box>
+                    <Box height={'16px'} width={'16px'} style={{ backgroundColor: '#d1d1d1', borderRadius: '100%', marginRight: '3px' }}></Box>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', marginTop: '6px' }}>
+                    <img alt='Champion' style={{ border: '3px solid #3173FF' }} className='RiftReportChamp' src={`/images/Bedge_Poro_profileicon.webp`}></img>
+                    <Box height={'16px'} width={'16px'} style={{ backgroundColor: '#3173FF', borderRadius: '100%', marginRight: '3px' }}></Box>
+                    <Box height={'16px'} width={'16px'} style={{ backgroundColor: '#3173FF', borderRadius: '100%', marginRight: '3px' }}></Box>
+                    <Box height={'16px'} width={'16px'} style={{ backgroundColor: '#d1d1d1', borderRadius: '100%', marginRight: '3px' }}></Box>
+                    <Box height={'16px'} width={'16px'} style={{ backgroundColor: '#d1d1d1', borderRadius: '100%', marginRight: '3px' }}></Box>
+                    <Box height={'16px'} width={'16px'} style={{ backgroundColor: '#d1d1d1', borderRadius: '100%', marginRight: '3px' }}></Box>
+                  </div>
+                </div>
+
                 <Typography className='hideDesktop' style={{
                   textAlign: 'center', margin: 'auto', fontSize: '2rem', fontWeight: 'bold', color: 'white', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75))'
                 }}>RR.gg
@@ -288,7 +313,7 @@ function SummonerSearch() {
           <Grid className='searchSearchContainer' xs={12}>
             <Select
               sx={{
-                backgroundColor: '#519EDD',
+                background: 'linear-gradient(135deg, #3A5A9B, #5678B9)',
                 color: 'white',
                 fontSize: '0.875rem',
                 fontWeight: 'bold',
