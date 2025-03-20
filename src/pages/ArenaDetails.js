@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Typography, Grid, Tooltip, LinearProgress, Box } from '@mui/material';
+import { Typography, Grid, Tooltip, LinearProgress, Box } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -12,7 +12,6 @@ const ArenaDetails = () => {
     const [queues, setQueues] = useState(null);
     const [queueTitle, setQueueTitle] = useState(null);
     const [gameData, setGameData] = useState(null);
-    const [alternateRegion, setAlternateRegion] = useState(null);
     const [dataDragonVersion, setDataDragonVersion] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [champsJSON, setChampsJSON] = useState(null);
@@ -62,22 +61,22 @@ const ArenaDetails = () => {
     }, [setChampsJSON, dataDragonVersion])
 
     // Determine alternate region based on matchId
-    const findAltRegion = useCallback((selectedRegion) => {
-        const americasServers = ['na1', 'br1', 'la1', 'la2'];
-        const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
-        const europeServers = ['eun1', 'euw1', 'tr1', 'ru'];
+    // const findAltRegion = useCallback((selectedRegion) => {
+    //     const americasServers = ['na1', 'br1', 'la1', 'la2'];
+    //     const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
+    //     const europeServers = ['eun1', 'euw1', 'tr1', 'ru'];
 
-        let alternateRegion = null;
-        if (americasServers.includes(selectedRegion)) {
-            alternateRegion = 'americas';
-        } else if (asiaServers.includes(selectedRegion)) {
-            const seaServers = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
-            alternateRegion = seaServers.includes(selectedRegion) ? 'sea' : 'asia';
-        } else if (europeServers.includes(selectedRegion)) {
-            alternateRegion = 'europe';
-        }
-        return alternateRegion;
-    }, []);
+    //     let alternateRegion = null;
+    //     if (americasServers.includes(selectedRegion)) {
+    //         alternateRegion = 'americas';
+    //     } else if (asiaServers.includes(selectedRegion)) {
+    //         const seaServers = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
+    //         alternateRegion = seaServers.includes(selectedRegion) ? 'sea' : 'asia';
+    //     } else if (europeServers.includes(selectedRegion)) {
+    //         alternateRegion = 'europe';
+    //     }
+    //     return alternateRegion;
+    // }, []);
 
     // Fetch game data from local storage or Firestore
     const fetchGameData = useCallback(async () => {
@@ -88,7 +87,6 @@ const ArenaDetails = () => {
             if (parsedData.gameData.metadata.matchId === matchId) {
                 setGameData(parsedData.gameData);
                 setDataDragonVersion(parsedData.dataDragonVersion);
-                setAlternateRegion(parsedData.alternateRegion);
                 setIsLoading(false);
                 return;
             }
@@ -100,8 +98,6 @@ const ArenaDetails = () => {
         try {
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-                const altRegion = findAltRegion(region);
-                setAlternateRegion(altRegion);
                 setGameData(docSnap.data().matchData);
                 if (!dataDragonVersion) await getDataDragonVersion();
                 setIsLoading(false);
@@ -112,7 +108,7 @@ const ArenaDetails = () => {
             console.error('Error fetching game data from Firestore:', error);
             navigate('/*');
         }
-    }, [matchId, navigate, findAltRegion, getDataDragonVersion, dataDragonVersion]);
+    }, [matchId, navigate, getDataDragonVersion, dataDragonVersion]);
 
     // Fetch queue JSON
     const getQueueJSON = async () => {
@@ -148,12 +144,12 @@ const ArenaDetails = () => {
     }, [findQueueInfo]);
 
     // Handle section button click
-    const scrollToSection = (id) => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    };
+    // const scrollToSection = (id) => {
+    //     const element = document.getElementById(id);
+    //     if (element) {
+    //         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    //     }
+    // };
 
 
     // Initial data fetching
@@ -162,7 +158,7 @@ const ArenaDetails = () => {
         getQueueJSON();
         getItemsJSON();
         getChampsJSON();
-    }, [fetchGameData]);
+    }, [fetchGameData, getChampsJSON, getItemsJSON]);
 
     // Set queue title when queues or gameData changes
     useEffect(() => {

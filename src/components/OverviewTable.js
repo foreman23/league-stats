@@ -1,11 +1,7 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Typography, Grid, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress, Tooltip } from '@mui/material';
 
 const OverviewTable = (props) => {
-
-    // Init navigate
-    const navigate = useNavigate();
 
     const { dataDragonVersion, gameData, summonerName, placementIndex, gameMode, champsJSON, summonerSpellsObj, playerData, items } = props;
 
