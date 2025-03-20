@@ -362,7 +362,7 @@ const GenericDetails = () => {
 
     useEffect(() => {
         const fetch15Stats = async () => {
-            if (gameData && alternateRegion && timelineData && playerData) {
+            if (gameData && alternateRegion && timelineData && playerData && champsJSON && dataDragonVersion) {
                 document.title = `${playerData.riotIdGameName}#${playerData.riotIdTagline} - ${new Date(gameData.info.gameCreation).toLocaleDateString()} @${new Date(gameData.info.gameCreation).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase().replace(/\s/g, '')}`
                 calculateOpScores();
                 const buildData = await getBuildInfo(gameData, timelineData, champsJSON, dataDragonVersion);
@@ -663,9 +663,11 @@ const GenericDetails = () => {
                             </Grid>
                             <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={12} md={7}>
                                 <Typography className='GameDetailsMainSummaryHeader'>
-                                    <span style={{ textDecoration: 'none', color: 'inherit' }}>
-                                        {playerData.riotIdGameName}
-                                    </span>
+                                    <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                                        <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ color: 'inherit' }}>
+                                            {playerData.riotIdGameName}
+                                        </a>
+                                    </Tooltip>
                                     <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                                 </Typography>
                                 {queueTitle !== null ? (

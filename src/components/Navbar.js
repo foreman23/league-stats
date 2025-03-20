@@ -243,7 +243,7 @@ function Navbar(props) {
                 {/* Desktop Navbar */}
                 <a href='/' className='hideMobile' style={{ textDecoration: 'none', color: 'white', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
                     <Typography className='navBarHeaderText' variant="h6" marginRight='10px' component="div" sx={{ flexGrow: 1 }}>
-                        riftreport.gg
+                        RR.GG
                     </Typography>
                     <img alt='Logo' style={{ width: '40px' }} src='/images/spiritMage.webp'></img>
                 </a>

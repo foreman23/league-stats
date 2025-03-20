@@ -1,5 +1,5 @@
 import React from 'react'
-import { BarChart, LineChart } from '@mui/x-charts'
+import { BarChart } from '@mui/x-charts'
 import { Grid, Typography } from '@mui/material';
 import TeamGoldDifGraph from './TeamGoldDifGraph';
 

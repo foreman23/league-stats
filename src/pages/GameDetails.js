@@ -702,9 +702,12 @@ function GameDetails() {
                 </Grid>
                 <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={12} md={7}>
                   <Typography className='GameDetailsMainSummaryHeader'>
-                    <span style={{ textDecoration: 'none', color: 'inherit' }}>
-                      {playerData.riotIdGameName}
-                    </span>
+                    <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                      <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ color: 'inherit' }}>
+                        {playerData.riotIdGameName}
+                      </a>
+                    </Tooltip>
+
                     <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                   </Typography>
                   <Typography className='GameDetailsMainSummarySubHeader'>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
@@ -745,27 +748,27 @@ function GameDetails() {
                         }
                       </ul>
                     </div>
-                  // ) : (
-                  //   // Skeleton Loader Matching Summary Layout
-                  //   <div style={{ marginTop: '0px', marginRight: '12px', marginLeft: '10px' }}>
-                  //     {/* Heading */}
-                  //     <Skeleton animation="wave" variant="text" width={150} height={50} style={{ marginBottom: '10px' }} />
-                  //     <ul className="gameDetailsMatchSummaryList">
-                  //       {/* Simulated bullet points */}
-                  //       <li style={{ marginBottom: '10px' }}>
-                  //         <Skeleton animation="wave" variant="text" width="80%" height={40} />
-                  //         <Skeleton animation="wave" variant="text" width="60%" height={40} />
-                  //       </li>
-                  //       <li style={{ marginBottom: '10px' }}>
-                  //         <Skeleton animation="wave" variant="text" width="90%" height={40} />
-                  //         <Skeleton animation="wave" variant="text" width="50%" height={40} />
-                  //       </li>
-                  //       <li style={{ marginBottom: '10px' }}>
-                  //         <Skeleton animation="wave" variant="text" width="70%" height={40} />
-                  //       </li>
-                  //     </ul>
-                  //   </div>
-                  // )
+                    // ) : (
+                    //   // Skeleton Loader Matching Summary Layout
+                    //   <div style={{ marginTop: '0px', marginRight: '12px', marginLeft: '10px' }}>
+                    //     {/* Heading */}
+                    //     <Skeleton animation="wave" variant="text" width={150} height={50} style={{ marginBottom: '10px' }} />
+                    //     <ul className="gameDetailsMatchSummaryList">
+                    //       {/* Simulated bullet points */}
+                    //       <li style={{ marginBottom: '10px' }}>
+                    //         <Skeleton animation="wave" variant="text" width="80%" height={40} />
+                    //         <Skeleton animation="wave" variant="text" width="60%" height={40} />
+                    //       </li>
+                    //       <li style={{ marginBottom: '10px' }}>
+                    //         <Skeleton animation="wave" variant="text" width="90%" height={40} />
+                    //         <Skeleton animation="wave" variant="text" width="50%" height={40} />
+                    //       </li>
+                    //       <li style={{ marginBottom: '10px' }}>
+                    //         <Skeleton animation="wave" variant="text" width="70%" height={40} />
+                    //       </li>
+                    //     </ul>
+                    //   </div>
+                    // )
                   }
                 </Grid>
                 <Grid className='gameDetailsMatchSummaryGraph hideMobile' style={{ borderRadius: '10px', marginLeft: '30px', marginTop: '20px' }} backgroundColor='white' item xs={12} sm={5} md={5} lg={6}>
@@ -845,7 +848,7 @@ function GameDetails() {
                     </Grid>
 
                     <Grid style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
-                      {gameData.info.teams[1].objectives.atakhan.kills >= 1 ? (
+                      {gameData.info.teams[1].objectives?.atakhan?.kills >= 1 ? (
                         <CheckIcon className='MatchDetailsObjectiveIcon' style={{ color: '#17BA6C' }}></CheckIcon>
                       ) : (
                         <CloseIcon className='MatchDetailsObjectiveIcon' style={{ color: '#777777' }}></CloseIcon>
@@ -904,7 +907,7 @@ function GameDetails() {
                     </Grid>
 
                     <Grid style={{ textAlign: 'center' }} className='matchDetailsObjectiveContainer'>
-                      {gameData.info.teams[0].objectives.atakhan.kills >= 1 ? (
+                      {gameData.info.teams[0].objectives?.atakhan?.kills >= 1 ? (
                         <CheckIcon className='MatchDetailsObjectiveIcon' style={{ color: '#17BA6C' }}></CheckIcon>
                       ) : (
                         <CloseIcon className='MatchDetailsObjectiveIcon' style={{ color: '#777777' }}></CloseIcon>
@@ -1108,7 +1111,7 @@ function GameDetails() {
                 <div className='GraphSectionDivContainer'>
                   {/* Red Team */}
                   <Grid className='GraphSectionDivSubContainer' item order={playerData.teamId === 200 ? 1 : 2} xs={12} sm={6}>
-                    <div style={{ display: 'flex', alignItems: 'flex-end'}}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                       {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
                         <div key={`red_dealt_${index}`} className='matchDetailsObjectiveContainer'>
                           <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageDealtToChampions / 1000)}k</Typography>

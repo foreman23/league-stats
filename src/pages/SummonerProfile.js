@@ -1111,7 +1111,7 @@ const SummonerProfile = () => {
                   gameModeHref = `/altmatch/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`
                 }
                 else if (gameData.info.gameMode === "CHERRY") {
-                  gameModeHref = "/Test";
+                  gameModeHref = `/arena/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
                 } else {
                   gameModeHref = "/Test";
                 }

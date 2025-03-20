@@ -107,6 +107,10 @@ body,
     width: 70% !important;
 }
 
+.GameDetailsContainerArena {
+    width: 60% !important;
+}
+
 .MatchSummaryGrid {
     padding-left: 0%;
     padding-right: 0%;
@@ -417,6 +421,17 @@ body,
     position: absolute;
     top: auto;
     bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.displayGameSummonerSpellsCherry {
+    position: absolute;
+    top: auto;
+    bottom: 0px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -777,7 +792,7 @@ body,
     text-align: center !important;
     margin: auto !important;
     font-weight: bold !important;
-    margin-bottom: 0px !important; 
+    margin-bottom: 0px !important;
     font-size: 2.875rem !important;
     color: white !important;
     font-family: "League Spartan", sans-serif !important;
@@ -795,7 +810,7 @@ body,
     color: white !important;
     font-family: "Quicksand", sans-serif !important;
     font-optical-sizing: auto !important;
-    font-weight: 600 !important; 
+    font-weight: 600 !important;
     letter-spacing: 3px !important;
     font-style: normal !important;
 }
@@ -1493,6 +1508,54 @@ li {
     margin-left: 5% !important;
 }
 
+
+/* For Laning phase grid */
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
+    max-width: 300px;
+    background-color: #f5f5f5;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+}
+
+.item {
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.plates {
+    grid-column: span 2;
+}
+
+.stats {
+    text-align: left;
+}
+
+.creep,
+.gold {
+    text-align: right;
+}
+
+/* End */
+
+.cherryChampContainer {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 5px;
+}
+
+.cherryChampItem {
+    text-align: center;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
 /* For normal sized phones */
 @media only screen and (max-width: 599px) {
 
@@ -2010,6 +2073,10 @@ li {
     }
 
     .GameDetailsContainer {
+        width: 100% !important;
+    }
+
+    .GameDetailsContainerArena {
         width: 100% !important;
     }
 
@@ -2539,6 +2606,10 @@ li {
         width: 90% !important;
     }
 
+    .GameDetailsContainerArena {
+        width: 100% !important;
+    }
+
     .hideTablet {
         display: none !important;
     }
@@ -2780,6 +2851,10 @@ li {
         width: 90% !important;
     }
 
+    .GameDetailsContainerArena {
+        width: 100% !important;
+    }
+
     .hideTablet {
         display: none !important;
     }
@@ -2945,6 +3020,10 @@ li {
         width: 90% !important;
     }
 
+    .GameDetailsContainerArena {
+        width: 100% !important;
+    }
+
     .hideTablet {
         display: none !important;
     }
@@ -3048,6 +3127,10 @@ li {
         width: 75% !important;
     }
 
+    .GameDetailsContainerArena {
+        width: 90% !important;
+    }
+
     .LaningGridSubContainer {
         max-width: 85% !important;
     }
@@ -3102,12 +3185,12 @@ li {
         margin-bottom: 20px !important;
         margin-left: 15% !important;
     }
-    
+
     .matchDetailsTeamDetails {
         display: flex;
         margin-left: 15% !important;
     }
-    
+
 
     .BuildsChampPic {
         width: 48px !important;
@@ -3259,6 +3342,10 @@ li {
         width: 40% !important;
     }
 
+    .GameDetailsContainerArena {
+        width: 40% !important;
+    }
+
     .BuildsBox {
         margin: auto;
     }
@@ -3319,6 +3406,10 @@ li {
     }
 
     .GameDetailsContainer {
+        width: 50% !important;
+    }
+
+    .GameDetailsContainerArena {
         width: 50% !important;
     }
 
