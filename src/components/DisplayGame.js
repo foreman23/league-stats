@@ -45,7 +45,7 @@ const DisplayGame = (props) => {
         }
         opposingLaner = opposingPlayers[playerIndex]
     }
-    if (gameData.info.gameMode === "CHERRY") {
+    else if (gameData.info.gameMode === "CHERRY") {
         if (participant) {
             if (participant.placement === 1) placementSuffix = 'st';
             else if (participant.placement === 2) placementSuffix = 'nd';
@@ -158,6 +158,9 @@ const DisplayGame = (props) => {
         }
         else if (queueTitle === 'ARURF games') {
             setQueueTitle('ARURF')
+        }
+        else if (queueTitle === 'URF games') {
+            setQueueTitle('URF')
         }
         else if (queueTitle === 'Arena') {
             setQueueTitle('Arena')

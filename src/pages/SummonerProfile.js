@@ -767,7 +767,7 @@ const SummonerProfile = () => {
             return obj;
           })
           setFavorited(true);
-          localStorage.setItem('favorites', JSON.stringify(favsArr))
+          // localStorage.setItem('favorites', JSON.stringify(favsArr))
           // Create favorites array if not exist
         }
       }

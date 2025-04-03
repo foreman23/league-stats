@@ -110,67 +110,37 @@ const LanePhaseSummaryCardTop = (props) => {
 
       <Grid className={lastButtonPressedTop === 'laneSumTop1' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'}>
         <Grid item xs={12} sm={6}>
-
+          {statsAt15.laneResults.TOP.resTag !== 'draw' ? (
+            <p>
+              <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) in the top lane earned {statsAt15.laneResults.TOP.goldDifference} more gold than <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, {advantageStr}.
+            </p>
+          ) : (
+            <p>
+              <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} </a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) in the top lane only earned a small gold lead of {statsAt15.laneResults.TOP.goldDifference} over <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser?.riotIdGameName} </a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS), so we consider top lane to be a draw.
+            </p>
+          )}
+        </Grid>
+        <Grid item style={{ display: 'inline-flex', justifyContent: 'center' }} xs={12} sm={6}>
           <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} #${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline}`}>
             <div style={{ display: 'inline-block' }}>
               <a alt='Champion' href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img></a>
             </div>
           </Tooltip>
-
-          <div class="grid-container">
-            <div class="item plates">3 Plates</div>
-            <div class="item stats">
-              <div>⚔️ 4 kills</div>
-              <div>💀 2 deaths</div>
-              <div>👐 0 assists</div>
+          <img alt='' className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
+          <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName} #${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline}`}>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <a alt='Champion' href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img></a>
             </div>
-            <div class="item creep">
-              <b>CREEP</b>
-            </div>
-            <div class="item gold">
-              <b>GOLD</b>
-            </div>
-          </div>
-
-
-        </Grid>
-
-        <Grid item style={{ display: 'inline-flex', justifyContent: 'center' }} xs={12} sm={6}>
-          <div>
-
-            <div style={{ display: 'flex' }}>
-              <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} #${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline}`}>
-                <div style={{ display: 'inline-block' }}>
-                  <a alt='Champion' href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img></a>
-                </div>
-              </Tooltip>
-              <img alt='' className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
-              <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName} #${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline}`}>
-                <div style={{ position: 'relative', display: 'inline-block' }}>
-                  <a alt='Champion' href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img></a>
-                </div>
-              </Tooltip>
-              <img alt='Lane' className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/TopLane.png'></img>
-            </div>
-
-            <div>
-              {statsAt15.laneResults.TOP.resTag !== 'draw' ? (
-                <p>
-                  <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) in the top lane earned {statsAt15.laneResults.TOP.goldDifference} more gold than <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, {advantageStr}.
-                </p>
-              ) : (
-                <p>
-                  <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} </a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) in the top lane only earned a small gold lead of {statsAt15.laneResults.TOP.goldDifference} over <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser?.riotIdGameName} </a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS), so we consider top lane to be a draw.
-                </p>
-              )}
-            </div>
-
-          </div>
+          </Tooltip>
+          <img alt='Lane' className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/TopLane.png'></img>
         </Grid>
       </Grid>
 
       <Grid className={lastButtonPressedTop === 'laneSumTop2' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
         <Grid item xs={12} sm={6}>
+          <p style={{ marginBottom: '15px' }}>
+            Results of the deaths and objectives involving <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) during laning phase.
+          </p>
           <div style={{ marginBottom: '10px' }}>
             {topLaneKillTimeline.map((kill, index) => {
               if (kill.victimId !== 0 && kill.killerId !== 0) {
@@ -198,30 +168,23 @@ const LanePhaseSummaryCardTop = (props) => {
             })}
           </div>
         </Grid>
-        <Grid item style={{ display: 'inline-flex', flexDirection: 'column', justifyContent: 'center' }} xs={12} sm={6}>
-          <div style={{ display: 'flex' }}>
-            <div style={{ position: 'relative', display: 'inline-block' }}>
-              <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} #${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline}`}>
-                <div style={{ position: 'relative', display: 'inline-flex' }}>
-                  <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img></a>
-                </div>
-              </Tooltip>
-            </div>
-            <img alt='' className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
-            <div style={{ position: 'relative', display: 'inline-block' }}>
-              <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName} #${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline}`}>
-                <div style={{ borderRadius: '50%', display: 'inline-flex' }}>
-                  <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img></a>
-                </div>
-              </Tooltip>
-            </div>
-            <img alt='Lane' className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/TopLane.png'></img>
+        <Grid item style={{ display: 'inline-flex', justifyContent: 'center' }} xs={12} sm={6}>
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} #${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline}`}>
+              <div style={{ position: 'relative', display: 'inline-flex' }}>
+                <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${winnerChampName}.png`}></img></a>
+              </div>
+            </Tooltip>
           </div>
-
-
-          <p style={{ marginBottom: '15px' }}>
-            Results of the deaths and objectives involving <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) during laning phase.
-          </p>
+          <img alt='' className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName} #${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline}`}>
+              <div style={{ borderRadius: '50%', display: 'inline-flex' }}>
+                <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={`https://ddragon.leagueoflegends.com/cdn/${props.dataDragonVersion}/img/champion/${loserChampName}.png`}></img></a>
+              </div>
+            </Tooltip>
+          </div>
+          <img alt='Lane' className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/TopLane.png'></img>
         </Grid>
       </Grid>
 
