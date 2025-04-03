@@ -40,7 +40,6 @@ function App() {
 
   useEffect(() => {
     getDataDragonVersion()
-    console.log(process.env.NODE_ENV) // log whether production or development
   }, [])
 
   return (
