@@ -464,69 +464,225 @@ function SummonerSearch() {
             <iframe src='https://www.leagueoflegends.com/en-us/news/game-updates/patch-2025-s1-3-notes/'></iframe>
           </div> */}
 
-          <div className='searchFavoritesContainer' style={{ height: `auto` }}>
-            <Grid container style={{ display: 'flex', margin: 'auto', justifyContent: 'center' }}>
-              <span onClick={() => handleChangeTab('favorites')} style={{ marginRight: '50px' }}>
-                <Typography style={{ textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', color: currentTab === 'favorites' ? 'black' : '#999999' }}>Favorites</Typography>
-                <Divider color={currentTab === 'favorites' ? 'black' : '#999999'} style={{ width: '100%', margin: 'auto', marginTop: '10px', marginBottom: '10px' }}></Divider>
+          <div className='searchFavoritesContainer' style={{ 
+            height: 'auto',
+            backgroundColor: '#ffffff',
+            borderRadius: '16px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+            padding: '24px',
+            marginTop: '24px',
+            marginBottom: '24px',
+            maxWidth: '1200px',
+            margin: '24px auto'
+          }}>
+            <Grid container style={{ display: 'flex', margin: 'auto', justifyContent: 'center', marginBottom: '24px' }}>
+              <span 
+                onClick={() => handleChangeTab('favorites')} 
+                style={{ 
+                  marginRight: '24px',
+                  padding: '8px 24px',
+                  borderRadius: '8px',
+                  backgroundColor: currentTab === 'favorites' ? '#f0f2f5' : 'transparent',
+                  transition: 'all 0.2s ease',
+                  cursor: 'pointer'
+                }}
+              >
+                <Typography style={{ 
+                  textAlign: 'center', 
+                  fontWeight: currentTab === 'favorites' ? '600' : '500', 
+                  fontSize: '16px',
+                  color: currentTab === 'favorites' ? '#1a1a1a' : '#666666',
+                  transition: 'color 0.2s ease'
+                }}>Favorites</Typography>
               </span>
-              <span onClick={() => handleChangeTab('recent')} style={{ marginLeft: '50px' }}>
-                <Typography style={{ textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', color: currentTab === 'recent' ? 'black' : '#999999' }}>Recent</Typography>
-                <Divider color={currentTab === 'recent' ? 'black' : '#999999'} style={{ width: '100%', margin: 'auto', marginTop: '10px', marginBottom: '10px' }}></Divider>
+              <span 
+                onClick={() => handleChangeTab('recent')} 
+                style={{ 
+                  marginLeft: '24px',
+                  padding: '8px 24px',
+                  borderRadius: '8px',
+                  backgroundColor: currentTab === 'recent' ? '#f0f2f5' : 'transparent',
+                  transition: 'all 0.2s ease',
+                  cursor: 'pointer'
+                }}
+              >
+                <Typography style={{ 
+                  textAlign: 'center', 
+                  fontWeight: currentTab === 'recent' ? '600' : '500', 
+                  fontSize: '16px',
+                  color: currentTab === 'recent' ? '#1a1a1a' : '#666666',
+                  transition: 'color 0.2s ease'
+                }}>Recent</Typography>
               </span>
             </Grid>
 
             {currentTab === 'favorites' ? (
-              <List className='favoriteRecentList'>
+              <List style={{ padding: 0 }}>
                 {((favorites?.length <= 0) || (favorites === null)) &&
-                  <Typography style={{ marginLeft: '15px', marginBottom: '10px' }}>Favorites will appear here...</Typography>
+                  <Typography style={{ 
+                    textAlign: 'center', 
+                    color: '#999999', 
+                    fontSize: '14px',
+                    marginTop: '32px',
+                    marginBottom: '32px' 
+                  }}>Favorites will appear here...</Typography>
                 }
                 <Grid style={{ justifyContent: 'center', alignItems: 'center', marginLeft: '5px' }} container>
                   {Array.from({ length: favorites !== null ? (favorites?.length <= 9 ? 9 : favorites?.length) : 9 }, (_, index) => (
                     favorites?.length > index ? (
-                      <Grid className='recentMainContainer' style={{ position: 'relative' }} key={`favorite_${index}`} xs={12} sm={4}>
-                        <FavoriteIcon className='favoriteButtonActive removeFavoriteBtn' onClick={() => handleRemoveFavorite(favorites[index])}></FavoriteIcon>
-                        <a className='recentSearchItem' href={`/profile/${favorites[index].selectedRegion}/${favorites[index].summonerName}/${favorites[index].riotId}`}>
-                          <ListItem style={{ justifyContent: 'center' }} key={index}>
-                            <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${favorites[index].icon}.png`}></img>
-                            <div className='recentSearchItemText'>
-                              <div>
-                                <b style={{ fontSize: '0.875rem' }}>{favorites[index].summonerName}</b>
+                      <Grid style={{ 
+                        position: 'relative',
+                        padding: '8px'
+                      }} key={`favorite_${index}`} xs={12} sm={6} md={4}>
+                        <div style={{
+                          backgroundColor: '#f8f9fa',
+                          borderRadius: '12px',
+                          padding: '16px',
+                          transition: 'all 0.2s ease',
+                          cursor: 'pointer',
+                          border: '1px solid transparent',
+                          position: 'relative',
+                          overflow: 'hidden'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = '#ffffff';
+                          e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.1)';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.borderColor = '#e0e0e0';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = '#f8f9fa';
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.borderColor = 'transparent';
+                        }}>
+                          <FavoriteIcon 
+                            style={{
+                              position: 'absolute',
+                              top: '12px',
+                              right: '12px',
+                              fontSize: '20px',
+                              color: '#ff4757',
+                              cursor: 'pointer',
+                              transition: 'transform 0.2s ease',
+                              zIndex: 2
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.2)'}
+                            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleRemoveFavorite(favorites[index]);
+                            }}
+                          />
+                          <a 
+                            className='recentSearchItem' 
+                            href={`/profile/${favorites[index].selectedRegion}/${favorites[index].summonerName}/${favorites[index].riotId}`}
+                            style={{ textDecoration: 'none' }}
+                          >
+                            <ListItem style={{ 
+                              padding: 0,
+                              display: 'flex',
+                              alignItems: 'center'
+                            }} key={index}>
+                              <img 
+                                alt='Summoner Icon' 
+                                style={{ 
+                                  borderRadius: '50%', 
+                                  width: '56px',
+                                  height: '56px',
+                                  marginRight: '16px',
+                                  flexShrink: 0
+                                }} 
+                                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${favorites[index].icon}.png`}
+                              />
+                              <div style={{
+                                flex: 1,
+                                minWidth: 0
+                              }}>
+                                <div style={{ marginBottom: '4px' }}>
+                                  <span style={{ 
+                                    fontSize: '16px', 
+                                    fontWeight: '600',
+                                    color: '#1a1a1a',
+                                    display: 'block',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap'
+                                  }}>{favorites[index].summonerName}</span>
+                                  <span style={{ 
+                                    fontSize: '14px',
+                                    color: '#666666',
+                                    fontWeight: '400'
+                                  }}>#{favorites[index].riotId}</span>
+                                </div>
+                                <div style={{ 
+                                  display: 'flex', 
+                                  alignItems: 'center',
+                                  gap: '12px',
+                                  fontSize: '13px',
+                                  color: '#999999'
+                                }}>
+                                  <span>Level {favorites[index].level}</span>
+                                  <span style={{
+                                    color: favorites[index].rank ? '#3A5A9B' : '#999999',
+                                    fontWeight: favorites[index].rank ? '500' : '400'
+                                  }}>
+                                    {favorites[index].rank !== null ? 
+                                      favorites[index].rank.charAt(0) + favorites[index].rank.split(' ')[0].substring(1).toLowerCase() + ' ' + favorites[index].rank.split(' ')[1]
+                                    : 'Unranked'}
+                                  </span>
+                                </div>
                               </div>
-                              <div>
-                                <b style={{ fontSize: '0.875rem' }}>#{favorites[index].riotId}</b>
-                              </div>
-                              <div>
-                                <span style={{ fontSize: '0.875rem' }}>Level: {favorites[index].level}</span>
-                              </div>
-                              <div>
-                                {favorites[index].rank !== null ? (
-                                  <span style={{ fontSize: '0.875rem' }}>{favorites[index].rank.charAt(0) + favorites[index].rank.split(' ')[0].substring(1).toLowerCase() + ' ' + favorites[index].rank.split(' ')[1]}</span>
-                                ) : (
-                                  <span style={{ fontSize: '0.875rem' }}>Unranked</span>
-                                )}
-                              </div>
-                            </div>
-                          </ListItem>
-                        </a>
+                            </ListItem>
+                          </a>
+                        </div>
                       </Grid>
                     ) : (
-                      <Grid className='recentMainContainer' style={{ position: 'relative' }} key={index} xs={12} sm={4}>
-                        <div className='recentSearchItem'>
-                          <ListItem style={{ justifyContent: 'center' }}>
-                            <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`/images/novalue.webp`}></img>
-                            <div className='recentSearchItemText'>
-                              <div>
-                                <b style={{ fontSize: '0.875rem' }}>Summoner</b>
+                      <Grid style={{ 
+                        position: 'relative',
+                        padding: '8px'
+                      }} key={index} xs={12} sm={6} md={4}>
+                        <div style={{
+                          backgroundColor: '#f8f9fa',
+                          borderRadius: '12px',
+                          padding: '16px',
+                          border: '1px solid #e0e0e0',
+                          opacity: 0.5
+                        }}>
+                          <ListItem style={{ 
+                            padding: 0,
+                            display: 'flex',
+                            alignItems: 'center'
+                          }}>
+                            <img 
+                              alt='Summoner Icon' 
+                              style={{ 
+                                borderRadius: '50%', 
+                                width: '56px',
+                                height: '56px',
+                                marginRight: '16px',
+                                flexShrink: 0,
+                                opacity: 0.3
+                              }} 
+                              src={`/images/novalue.webp`}
+                            />
+                            <div style={{
+                              flex: 1,
+                              minWidth: 0
+                            }}>
+                              <div style={{ marginBottom: '4px' }}>
+                                <span style={{ 
+                                  fontSize: '16px', 
+                                  fontWeight: '600',
+                                  color: '#cccccc',
+                                  display: 'block'
+                                }}>Empty Slot</span>
                               </div>
-                              <div>
-                                <b style={{ fontSize: '0.875rem' }}>#RiotID</b>
-                              </div>
-                              <div>
-                                <span style={{ fontSize: '0.875rem' }}>Level:</span>
-                              </div>
-                              <div>
-                                <span style={{ fontSize: '0.875rem' }}>Rank</span>
+                              <div style={{ 
+                                fontSize: '13px',
+                                color: '#cccccc'
+                              }}>
+                                <span>Add to favorites</span>
                               </div>
                             </div>
                           </ListItem>
@@ -542,56 +698,178 @@ function SummonerSearch() {
             )}
 
             {currentTab === 'recent' ? (
-              <List className='favoriteRecentList'>
+              <List style={{ padding: 0 }}>
                 {((recentArr?.length <= 0) || (recentArr === null)) &&
-                  <Typography style={{ marginLeft: '15px', marginBottom: '10px' }}>Recent searches will appear here...</Typography>
+                  <Typography style={{ 
+                    textAlign: 'center', 
+                    color: '#999999', 
+                    fontSize: '14px',
+                    marginTop: '32px',
+                    marginBottom: '32px' 
+                  }}>Recent searches will appear here...</Typography>
                 }
                 <Grid style={{ justifyContent: 'center', alignItems: 'center', marginLeft: '5px' }} container>
                   {Array.from({ length: recentArr !== null ? (recentArr?.length <= 9 ? 9 : recentArr?.length) : 9 }, (_, index) => (
                     recentArr?.length > index ? (
-                      <Grid className='recentMainContainer' style={{ position: 'relative' }} key={`recent_${index}`} xs={12} sm={4}>
-                        <CloseIcon className='deleteRecentButton removeRecentBtn' onClick={() => handleRemoveRecent(recentArr[index])}></CloseIcon>
-                        <a className='recentSearchItem' href={`/profile/${recentArr[index].selectedRegion}/${recentArr[index].summonerName}/${recentArr[index].riotId}`}>
-                          <ListItem style={{ justifyContent: 'center' }} key={index}>
-                            <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${recentArr[index].icon}.png`}></img>
-                            <div className='recentSearchItemText'>
-                              <div>
-                                <b style={{ fontSize: '0.875rem' }}>{recentArr[index].summonerName}</b>
+                      <Grid style={{ 
+                        position: 'relative',
+                        padding: '8px'
+                      }} key={`recent_${index}`} xs={12} sm={6} md={4}>
+                        <div style={{
+                          backgroundColor: '#f8f9fa',
+                          borderRadius: '12px',
+                          padding: '16px',
+                          transition: 'all 0.2s ease',
+                          cursor: 'pointer',
+                          border: '1px solid transparent',
+                          position: 'relative',
+                          overflow: 'hidden'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = '#ffffff';
+                          e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.1)';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.borderColor = '#e0e0e0';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = '#f8f9fa';
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.borderColor = 'transparent';
+                        }}>
+                          <CloseIcon 
+                            style={{
+                              position: 'absolute',
+                              top: '12px',
+                              right: '12px',
+                              fontSize: '20px',
+                              color: '#999999',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s ease',
+                              zIndex: 2
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.transform = 'scale(1.2)';
+                              e.currentTarget.style.color = '#666666';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.transform = 'scale(1)';
+                              e.currentTarget.style.color = '#999999';
+                            }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleRemoveRecent(recentArr[index]);
+                            }}
+                          />
+                          <a 
+                            className='recentSearchItem' 
+                            href={`/profile/${recentArr[index].selectedRegion}/${recentArr[index].summonerName}/${recentArr[index].riotId}`}
+                            style={{ textDecoration: 'none' }}
+                          >
+                            <ListItem style={{ 
+                              padding: 0,
+                              display: 'flex',
+                              alignItems: 'center'
+                            }} key={index}>
+                              <img 
+                                alt='Summoner Icon' 
+                                style={{ 
+                                  borderRadius: '50%', 
+                                  width: '56px',
+                                  height: '56px',
+                                  marginRight: '16px',
+                                  flexShrink: 0
+                                }} 
+                                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${recentArr[index].icon}.png`}
+                              />
+                              <div style={{
+                                flex: 1,
+                                minWidth: 0
+                              }}>
+                                <div style={{ marginBottom: '4px' }}>
+                                  <span style={{ 
+                                    fontSize: '16px', 
+                                    fontWeight: '600',
+                                    color: '#1a1a1a',
+                                    display: 'block',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap'
+                                  }}>{recentArr[index].summonerName}</span>
+                                  <span style={{ 
+                                    fontSize: '14px',
+                                    color: '#666666',
+                                    fontWeight: '400'
+                                  }}>#{recentArr[index].riotId}</span>
+                                </div>
+                                <div style={{ 
+                                  display: 'flex', 
+                                  alignItems: 'center',
+                                  gap: '12px',
+                                  fontSize: '13px',
+                                  color: '#999999'
+                                }}>
+                                  <span>Level {recentArr[index].level}</span>
+                                  <span style={{
+                                    color: recentArr[index].rank ? '#3A5A9B' : '#999999',
+                                    fontWeight: recentArr[index].rank ? '500' : '400'
+                                  }}>
+                                    {recentArr[index].rank !== null ? 
+                                      recentArr[index].rank.charAt(0) + recentArr[index].rank.split(' ')[0].substring(1).toLowerCase() + ' ' + recentArr[index].rank.split(' ')[1]
+                                    : 'Unranked'}
+                                  </span>
+                                </div>
                               </div>
-                              <div>
-                                <b style={{ fontSize: '0.875rem' }}>#{recentArr[index].riotId}</b>
-                              </div>
-                              <div>
-                                <span style={{ fontSize: '0.875rem' }}>Level: {recentArr[index].level}</span>
-                              </div>
-                              <div>
-                                {recentArr[index].rank !== null ? (
-                                  <span style={{ fontSize: '0.875rem' }}>{recentArr[index].rank.charAt(0) + recentArr[index].rank.split(' ')[0].substring(1).toLowerCase() + ' ' + recentArr[index].rank.split(' ')[1]}</span>
-                                ) : (
-                                  <span style={{ fontSize: '0.875rem' }}>Unranked</span>
-                                )}
-                              </div>
-                            </div>
-                          </ListItem>
-                        </a>
+                            </ListItem>
+                          </a>
+                        </div>
                       </Grid>
                     ) : (
-                      <Grid className='recentMainContainer' style={{ position: 'relative' }} key={`recent_${index}`} xs={12} sm={4}>
-                        <div className='recentSearchItem'>
-                          <ListItem style={{ justifyContent: 'center' }}>
-                            <img alt='Summoner Icon' style={{ borderRadius: '100%', border: '3px solid white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)', width: '65px', right: 'auto', left: '8px', position: 'absolute' }} src={`/images/novalue.webp`}></img>
-                            <div className='recentSearchItemText'>
-                              <div>
-                                <b style={{ fontSize: '0.875rem' }}>Summoner</b>
+                      <Grid style={{ 
+                        position: 'relative',
+                        padding: '8px'
+                      }} key={`recent_${index}`} xs={12} sm={6} md={4}>
+                        <div style={{
+                          backgroundColor: '#f8f9fa',
+                          borderRadius: '12px',
+                          padding: '16px',
+                          border: '1px solid #e0e0e0',
+                          opacity: 0.5
+                        }}>
+                          <ListItem style={{ 
+                            padding: 0,
+                            display: 'flex',
+                            alignItems: 'center'
+                          }}>
+                            <img 
+                              alt='Summoner Icon' 
+                              style={{ 
+                                borderRadius: '50%', 
+                                width: '56px',
+                                height: '56px',
+                                marginRight: '16px',
+                                flexShrink: 0,
+                                opacity: 0.3
+                              }} 
+                              src={`/images/novalue.webp`}
+                            />
+                            <div style={{
+                              flex: 1,
+                              minWidth: 0
+                            }}>
+                              <div style={{ marginBottom: '4px' }}>
+                                <span style={{ 
+                                  fontSize: '16px', 
+                                  fontWeight: '600',
+                                  color: '#cccccc',
+                                  display: 'block'
+                                }}>Empty Slot</span>
                               </div>
-                              <div>
-                                <b style={{ fontSize: '0.875rem' }}>#RiotID</b>
-                              </div>
-                              <div>
-                                <span style={{ fontSize: '0.875rem' }}>Level:</span>
-                              </div>
-                              <div>
-                                <span style={{ fontSize: '0.875rem' }}>Rank</span>
+                              <div style={{ 
+                                fontSize: '13px',
+                                color: '#cccccc'
+                              }}>
+                                <span>Search for summoners</span>
                               </div>
                             </div>
                           </ListItem>
