@@ -588,9 +588,9 @@ function SummonerSearch() {
                                 alt='Summoner Icon' 
                                 style={{ 
                                   borderRadius: '50%', 
-                                  width: '56px',
-                                  height: '56px',
-                                  marginRight: '16px',
+                                  width: '52px',
+                                  height: '52px',
+                                  marginRight: '12px',
                                   flexShrink: 0
                                 }} 
                                 src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${favorites[index].icon}.png`}
@@ -601,7 +601,7 @@ function SummonerSearch() {
                               }}>
                                 <div style={{ marginBottom: '4px' }}>
                                   <span style={{ 
-                                    fontSize: '16px', 
+                                    fontSize: '14px', 
                                     fontWeight: '600',
                                     color: '#1a1a1a',
                                     display: 'block',
@@ -610,7 +610,7 @@ function SummonerSearch() {
                                     whiteSpace: 'nowrap'
                                   }}>{favorites[index].summonerName}</span>
                                   <span style={{ 
-                                    fontSize: '14px',
+                                    fontSize: '12px',
                                     color: '#666666',
                                     fontWeight: '400'
                                   }}>#{favorites[index].riotId}</span>
@@ -619,7 +619,7 @@ function SummonerSearch() {
                                   display: 'flex', 
                                   alignItems: 'center',
                                   gap: '12px',
-                                  fontSize: '13px',
+                                  fontSize: '12px',
                                   color: '#999999'
                                 }}>
                                   <span>Level {favorites[index].level}</span>
@@ -658,9 +658,9 @@ function SummonerSearch() {
                               alt='Summoner Icon' 
                               style={{ 
                                 borderRadius: '50%', 
-                                width: '56px',
-                                height: '56px',
-                                marginRight: '16px',
+                                width: '52px',
+                                height: '52px',
+                                marginRight: '12px',
                                 flexShrink: 0,
                                 opacity: 0.3
                               }} 
@@ -775,9 +775,9 @@ function SummonerSearch() {
                                 alt='Summoner Icon' 
                                 style={{ 
                                   borderRadius: '50%', 
-                                  width: '56px',
-                                  height: '56px',
-                                  marginRight: '16px',
+                                  width: '52px',
+                                  height: '52px',
+                                  marginRight: '12px',
                                   flexShrink: 0
                                 }} 
                                 src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${recentArr[index].icon}.png`}
@@ -788,7 +788,7 @@ function SummonerSearch() {
                               }}>
                                 <div style={{ marginBottom: '4px' }}>
                                   <span style={{ 
-                                    fontSize: '16px', 
+                                    fontSize: '14px', 
                                     fontWeight: '600',
                                     color: '#1a1a1a',
                                     display: 'block',
@@ -797,7 +797,7 @@ function SummonerSearch() {
                                     whiteSpace: 'nowrap'
                                   }}>{recentArr[index].summonerName}</span>
                                   <span style={{ 
-                                    fontSize: '14px',
+                                    fontSize: '12px',
                                     color: '#666666',
                                     fontWeight: '400'
                                   }}>#{recentArr[index].riotId}</span>
@@ -806,7 +806,7 @@ function SummonerSearch() {
                                   display: 'flex', 
                                   alignItems: 'center',
                                   gap: '12px',
-                                  fontSize: '13px',
+                                  fontSize: '12px',
                                   color: '#999999'
                                 }}>
                                   <span>Level {recentArr[index].level}</span>
@@ -845,9 +845,9 @@ function SummonerSearch() {
                               alt='Summoner Icon' 
                               style={{ 
                                 borderRadius: '50%', 
-                                width: '56px',
-                                height: '56px',
-                                marginRight: '16px',
+                                width: '52px',
+                                height: '52px',
+                                marginRight: '12px',
                                 flexShrink: 0,
                                 opacity: 0.3
                               }} 
