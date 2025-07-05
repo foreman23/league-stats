@@ -452,7 +452,7 @@ const Battles = (props) => {
 
                     if (battleName === 'Battle for dragon') {
                         let dragonEvent = detailsArr.find(event => event.eventType === "MONSTER_KILL" && event.monsterType?.includes("DRAGON"))
-                        battleDesc = `The ${dragonEvent.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())} was slain by ${dragonEvent.killer.championName || 'a minion'} (${dragonEvent.killer.riotIdGameName || 'a minion'}) for the ${dragonEvent.teamId === 100 ? 'blue' : 'red'} team.`
+                        battleDesc = `The ${dragonEvent?.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())} was slain by ${dragonEvent?.killer?.championName || 'a minion'} (${dragonEvent?.killer?.riotIdGameName || 'a minion'}) for the ${dragonEvent?.teamId === 100 ? 'blue' : 'red'} team.`
                     }
 
                     if (battleName === 'Red secures jungle objectives' || battleName === 'Blue secures jungle objectives') {
@@ -494,18 +494,18 @@ const Battles = (props) => {
                         let dragonEvent = detailsArr.find(event => event.eventType === "MONSTER_KILL" && event.monsterType?.includes("DRAGON"))
                         if (blueDragonKills > 0) {
                             if (battleDesc.length > 0 && battleName !== 'Blue slayed a dragon') {
-                                battleDesc += ` Meanwhile, blue team slayed a ${dragonEvent.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
+                                battleDesc += ` Meanwhile, blue team slayed a ${dragonEvent?.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
                             }
                             else {
-                                battleDesc = `Blue team slayed a ${dragonEvent.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
+                                battleDesc = `Blue team slayed a ${dragonEvent?.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
                             }
                         }
                         else if (redDragonKills > 0) {
                             if (battleDesc.length > 0 && battleName !== 'Red slayed a dragon') {
-                                battleDesc += ` Meanwhile, red team slayed a ${dragonEvent.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
+                                battleDesc += ` Meanwhile, red team slayed a ${dragonEvent?.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
                             }
                             else {
-                                battleDesc = `Red team slayed a ${dragonEvent.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
+                                battleDesc = `Red team slayed a ${dragonEvent?.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
                             }
                         }
                     }
@@ -1078,7 +1078,7 @@ const Battles = (props) => {
 
         if (battleName === 'Battle for dragon') {
             let dragonEvent = detailsArr.find(event => event.eventType === "MONSTER_KILL" && event.monsterType?.includes("DRAGON"))
-            battleDesc = `The ${dragonEvent.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())} was slain by ${dragonEvent.killer.championName || 'a minion'} (${dragonEvent.killer.riotIdGameName || 'a minion'}) for the ${dragonEvent.teamId === 100 ? 'blue' : 'red'} team.`
+            battleDesc = `The ${dragonEvent?.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())} was slain by ${dragonEvent?.killer.championName || 'a minion'} (${dragonEvent?.killer.riotIdGameName || 'a minion'}) for the ${dragonEvent?.teamId === 100 ? 'blue' : 'red'} team.`
         }
 
         if (battleName === 'Red secures jungle objectives' || battleName === 'Blue secures jungle objectives') {
@@ -1120,18 +1120,18 @@ const Battles = (props) => {
             let dragonEvent = detailsArr.find(event => event.eventType === "MONSTER_KILL" && event.monsterType?.includes("DRAGON"))
             if (blueDragonKills > 0) {
                 if (battleDesc.length > 0 && battleName !== 'Blue slayed a dragon') {
-                    battleDesc += ` Meanwhile, blue team slayed a ${dragonEvent.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
+                    battleDesc += ` Meanwhile, blue team slayed a ${dragonEvent?.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
                 }
                 else {
-                    battleDesc = `Blue team slayed a ${dragonEvent.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
+                    battleDesc = `Blue team slayed a ${dragonEvent?.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
                 }
             }
             else if (redDragonKills > 0) {
                 if (battleDesc.length > 0 && battleName !== 'Red slayed a dragon') {
-                    battleDesc += ` Meanwhile, red team slayed a ${dragonEvent.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
+                    battleDesc += ` Meanwhile, red team slayed a ${dragonEvent?.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
                 }
                 else {
-                    battleDesc = `Red team slayed a ${dragonEvent.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
+                    battleDesc = `Red team slayed a ${dragonEvent?.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}.`
                 }
             }
         }

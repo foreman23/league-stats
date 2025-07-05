@@ -300,9 +300,16 @@ const SummonerProfile = () => {
         // riotApiCallCount += 1
         const summonerResData = summonerResponse.data;
 
-        const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerResData.id}`);
-        // riotApiCallCount += 1
-        const rankedData = rankedResponse.data;
+        let rankedData = [];
+        try {
+          const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerResData.id}`);
+          // riotApiCallCount += 1
+          rankedData = rankedResponse.data;
+        } catch (rankedError) {
+          // If ranked data returns 400, player might be unranked - this is OK
+          console.log('Player has no ranked data or is unranked');
+          rankedData = [];
+        }
 
         const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`);
         // riotApiCallCount += 1
@@ -364,9 +371,16 @@ const SummonerProfile = () => {
       // riotApiCallCount += 1
       const summonerData = summonerResponse.data;
 
-      const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`);
-      // riotApiCallCount += 1
-      const rankedData = rankedResponse.data;
+      let rankedData = [];
+      try {
+        const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`);
+        // riotApiCallCount += 1
+        rankedData = rankedResponse.data;
+      } catch (rankedError) {
+        // If ranked data returns 400, player might be unranked - this is OK
+        console.log('Player has no ranked data or is unranked');
+        rankedData = [];
+      }
 
       const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${summonerData.puuid}`);
       // riotApiCallCount += 1
