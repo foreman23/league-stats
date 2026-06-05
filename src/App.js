@@ -1,7 +1,7 @@
 import './App.css';
 import { useEffect, useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import axios from 'axios';
+import { getVersion } from './api/ddragon';
 
 // Eager: rendered on every page or used as the Suspense fallback
 import Navbar from './components/Navbar';
@@ -31,15 +31,12 @@ function App() {
 
   // Set the current ddragon version
   const getDataDragonVersion = async () => {
-    axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
-      .then(function (response) {
-        // console.log(response.data[0])
-        const currentVersion = response.data[0];
-        setDataDragonVersion(currentVersion);
-      })
-      .catch(function (response) {
-        console.log('Error: Error fetching datadragon version')
-      })
+    try {
+      const currentVersion = await getVersion();
+      setDataDragonVersion(currentVersion);
+    } catch (error) {
+      console.log('Error: Error fetching datadragon version')
+    }
   }
 
   useEffect(() => {

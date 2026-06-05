@@ -1,5 +1,5 @@
 import React from 'react'
-import { getChampions, getItems } from '../api/ddragon';
+import { getChampions, getItems, getVersion } from '../api/ddragon';
 import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
@@ -301,15 +301,12 @@ const GenericDetails = () => {
 
     // Set the current ddragon version
     const getDataDragonVersion = async () => {
-        axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
-            .then(function (response) {
-                // console.log(response.data[0])
-                const currentVersion = response.data[0];
-                setDataDragonVersion(currentVersion);
-            })
-            .catch(function (response) {
-                // console.log('Error: Error fetching datadragon version')
-            })
+        try {
+            const currentVersion = await getVersion();
+            setDataDragonVersion(currentVersion);
+        } catch (error) {
+            // console.log('Error: Error fetching datadragon version')
+        }
     }
 
     const fetchGameData = useCallback(async () => {

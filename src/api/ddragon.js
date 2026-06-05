@@ -41,6 +41,20 @@ const fetchCached = async (cacheKey, url) => {
   return data;
 };
 
+// Latest patch version. Cached in-memory only (NOT sessionStorage) so a new
+// patch is picked up on the next hard reload, while still avoiding the
+// per-page refetch during a single session's navigations.
+export const getVersion = async () => {
+  if (memoryCache['ddragon-version']) {
+    return memoryCache['ddragon-version'];
+  }
+  const response = await fetch('https://ddragon.leagueoflegends.com/api/versions.json');
+  const versions = await response.json();
+  const latest = versions[0];
+  memoryCache['ddragon-version'] = latest;
+  return latest;
+};
+
 export const getChampions = (version) =>
   fetchCached(
     `ddragon-champion-${version}`,

@@ -1,5 +1,5 @@
 import '../App.css';
-import { getChampions } from '../api/ddragon';
+import { getChampions, getVersion } from '../api/ddragon';
 import axios from 'axios';
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -27,15 +27,13 @@ function SummonerSearch() {
 
   // Set the current ddragon version
   const getDataDragonVersion = useCallback(async () => {
-    axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
-      .then(function (response) {
-        const currentVersion = response.data[0];
-        setDataDragonVersion(currentVersion);
-        getChampsJSON(currentVersion);
-      })
-      .catch(function (response) {
-        // console.error('Error: Error fetching datadragon version')
-      })
+    try {
+      const currentVersion = await getVersion();
+      setDataDragonVersion(currentVersion);
+      getChampsJSON(currentVersion);
+    } catch (error) {
+      // console.error('Error: Error fetching datadragon version')
+    }
   }, [])
 
   const [dropdownDefaultValue, setDropdownDefaultValue] = useState('');

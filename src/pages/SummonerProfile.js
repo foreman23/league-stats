@@ -1,5 +1,5 @@
 import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress, Tooltip, Divider, Skeleton } from '@mui/material';
-import { getChampions } from '../api/ddragon';
+import { getChampions, getVersion } from '../api/ddragon';
 import React, { useCallback } from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -100,15 +100,13 @@ const SummonerProfile = () => {
 
   // Set the current ddragon version
   const getDataDragonVersion = useCallback(async () => {
-    axios.get(`https://ddragon.leagueoflegends.com/api/versions.json`)
-      .then(function (response) {
-        const currentVersion = response.data[0];
-        setDataDragonVersion(currentVersion);
-        getChampsJSON(currentVersion);
-      })
-      .catch(function (response) {
-        // console.log('Error: Error fetching datadragon version')
-      })
+    try {
+      const currentVersion = await getVersion();
+      setDataDragonVersion(currentVersion);
+      getChampsJSON(currentVersion);
+    } catch (error) {
+      // console.log('Error: Error fetching datadragon version')
+    }
   }, [])
 
   const [loadingMatches, setLoadingMatches] = useState(false);

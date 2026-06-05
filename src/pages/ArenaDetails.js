@@ -1,9 +1,8 @@
 import React from 'react';
-import { getChampions, getItems } from '../api/ddragon';
+import { getChampions, getItems, getVersion } from '../api/ddragon';
 import { Typography, Grid, Tooltip, LinearProgress, Box } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../FirebaseConfig';
 import OverviewTable from '../components/OverviewTable';
@@ -31,8 +30,7 @@ const ArenaDetails = () => {
     // Fetch Data Dragon version
     const getDataDragonVersion = useCallback(async () => {
         try {
-            const response = await axios.get('https://ddragon.leagueoflegends.com/api/versions.json');
-            setDataDragonVersion(response.data[0]);
+            setDataDragonVersion(await getVersion());
         } catch (error) {
             console.error('Error fetching Data Dragon version:', error);
         }
