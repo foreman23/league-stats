@@ -1,4 +1,5 @@
 import React from 'react'
+import { championImg, itemImg, spellImg } from '../api/ddragon';
 import { Typography, Grid, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress, Tooltip } from '@mui/material';
 
 const OverviewTable = (props) => {
@@ -100,7 +101,7 @@ const OverviewTable = (props) => {
                                                     marginRight: '3px',
                                                     border: player.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid'
                                                 }}
-                                                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}>
+                                                src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id)}>
                                             </img>
                                         </div>
                                     </Tooltip>
@@ -111,7 +112,7 @@ const OverviewTable = (props) => {
                                             placement='top'
                                             arrow
                                             slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                            <img alt='Spell 1' style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id}.png`}></img>
+                                            <img alt='Spell 1' style={{ width: '19px', borderRadius: '2px' }} src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id)}></img>
                                         </Tooltip>
                                         <Tooltip
                                             title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
@@ -119,7 +120,7 @@ const OverviewTable = (props) => {
                                             placement='top'
                                             arrow
                                             slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                            <img alt='Spell 2' style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id}.png`}></img>
+                                            <img alt='Spell 2' style={{ width: '19px', borderRadius: '2px' }} src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id)}></img>
                                         </Tooltip>
                                     </div>
 
@@ -177,13 +178,13 @@ const OverviewTable = (props) => {
                                                             <span>{items.data[player.item0]?.plaintext || items.data[player.item0]?.tags[0]}</span><br />
                                                         </>}>
                                                         <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item0 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item0}.png`}
+                                                            src={player.item0 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item0)}
                                                             alt="Item1">
                                                         </img>
                                                     </Tooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item0 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item0}.png`}
+                                                        src={player.item0 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item0)}
                                                         alt="Item1">
                                                     </img>
                                                 )
@@ -199,13 +200,13 @@ const OverviewTable = (props) => {
                                                             <span>{items.data[player.item1]?.plaintext || items.data[player.item1]?.tags[0]}</span><br />
                                                         </>}>
                                                         <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item1 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item1}.png`}
+                                                            src={player.item1 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item1)}
                                                             alt="Item2">
                                                         </img>
                                                     </Tooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item1 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item1}.png`}
+                                                        src={player.item1 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item1)}
                                                         alt="Item2">
                                                     </img>
                                                 )
@@ -221,13 +222,13 @@ const OverviewTable = (props) => {
                                                             <span>{items.data[player.item2]?.plaintext || items.data[player.item2]?.tags[0]}</span><br />
                                                         </>}>
                                                         <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item2 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item2}.png`}
+                                                            src={player.item2 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item2)}
                                                             alt="Item3">
                                                         </img>
                                                     </Tooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item2 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item2}.png`}
+                                                        src={player.item2 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item2)}
                                                         alt="Item3">
                                                     </img>
                                                 )
@@ -243,13 +244,13 @@ const OverviewTable = (props) => {
                                                             <span>{items.data[player.item6]?.plaintext || items.data[player.item6]?.tags[0]}</span><br />
                                                         </>}>
                                                         <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item6}.png`}
+                                                            src={player.item6 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item6)}
                                                             alt="Ward">
                                                         </img>
                                                     </Tooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item6 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item6}.png`}
+                                                        src={player.item6 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item6)}
                                                         alt="Ward">
                                                     </img>
                                                 )
@@ -267,13 +268,13 @@ const OverviewTable = (props) => {
                                                             <span>{items.data[player.item3]?.plaintext || items.data[player.item3]?.tags[0]}</span><br />
                                                         </>}>
                                                         <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item3 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item3}.png`}
+                                                            src={player.item3 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item3)}
                                                             alt="Item4">
                                                         </img>
                                                     </Tooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item3 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item3}.png`}
+                                                        src={player.item3 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item3)}
                                                         alt="Item4">
                                                     </img>
                                                 )
@@ -289,13 +290,13 @@ const OverviewTable = (props) => {
                                                             <span>{items.data[player.item4]?.plaintext || items.data[player.item4]?.tags[0]}</span><br />
                                                         </>}>
                                                         <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item4 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item4}.png`}
+                                                            src={player.item4 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item4)}
                                                             alt="Item5">
                                                         </img>
                                                     </Tooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item4 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item4}.png`}
+                                                        src={player.item4 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item4)}
                                                         alt="Item5">
                                                     </img>
                                                 )
@@ -311,13 +312,13 @@ const OverviewTable = (props) => {
                                                             <span>{items.data[player.item5]?.plaintext || items.data[player.item5]?.tags[0]}</span><br />
                                                         </>}>
                                                         <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item5 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item5}.png`}
+                                                            src={player.item5 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item5)}
                                                             alt="Item6">
                                                         </img>
                                                     </Tooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item5 === 0 ? '/images/blankItem.webp' : `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/item/${player.item5}.png`}
+                                                        src={player.item5 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item5)}
                                                         alt="Item6">
                                                     </img>
                                                 )

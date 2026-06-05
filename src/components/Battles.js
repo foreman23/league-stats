@@ -1,4 +1,5 @@
 import { Typography, Grid, Tooltip, Box } from '@mui/material'
+import { championImg } from '../api/ddragon';
 import React from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
@@ -1349,9 +1350,9 @@ const Battles = (props) => {
                                                                                 ? '3px #568CFF solid'
                                                                                 : '3px #FF3A54 solid',
                                                                         }}
-                                                                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(
+                                                                        src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(
                                                                             champ => champ.key === String(details.killer?.championId)
-                                                                        )?.id}.png`}
+                                                                        )?.id)}
                                                                         alt="Killer Champion"
                                                                     />
                                                                 </a>
@@ -1386,9 +1387,9 @@ const Battles = (props) => {
                                                                             ? '3px #568CFF solid'
                                                                             : '3px #FF3A54 solid',
                                                                     }}
-                                                                    src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(
+                                                                    src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(
                                                                         champ => champ.key === String(details.victim?.championId)
-                                                                    )?.id}.png`}
+                                                                    )?.id)}
                                                                     alt="Killer Champion"
                                                                 />
                                                             </a>
@@ -1419,9 +1420,9 @@ const Battles = (props) => {
                                                                                 ? '3px #568CFF solid'
                                                                                 : '3px #FF3A54 solid',
                                                                         }}
-                                                                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(
+                                                                        src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(
                                                                             champ => champ.key === String(details.killer?.championId)
-                                                                        )?.id}.png`}
+                                                                        )?.id)}
                                                                         alt="Killer Champion"
                                                                     />
                                                                 </a>
@@ -1486,9 +1487,9 @@ const Battles = (props) => {
                                                                                 ? '3px #568CFF solid'
                                                                                 : '3px #FF3A54 solid',
                                                                         }}
-                                                                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(
+                                                                        src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(
                                                                             champ => champ.key === String(details.killer?.championId)
-                                                                        )?.id}.png`}
+                                                                        )?.id)}
                                                                         alt="Killer Champion"
                                                                     />
                                                                 </a>

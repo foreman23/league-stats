@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { Typography, Grid, Divider, LinearProgress, Box, Tooltip } from '@mui/material'
-import { getQueues, getSummonerSpells } from '../api/ddragon'
+import { championImg, getQueues, getSummonerSpells, spellImg } from '../api/ddragon';
 import { queueTitle as getQueueTitle } from '../utils/queues'
 import calculateOpScores from '../functions/CalculateOpScores';
 import calculateOpScoresAram from '../functions/CalculateOpScoresAram';
@@ -305,7 +305,7 @@ const DisplayGame = (props) => {
                                     {participants.filter(player => player.teamId === participant.teamId && player.summonerId !== participant.summonerId).map((player, index) => (
                                         <Tooltip key={`player_${index}_team1`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
                                             <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                                                <img alt='Champion' className='displayGameTeamChamps' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
+                                                <img alt='Champion' className='displayGameTeamChamps' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id)}></img>
                                                 <Box className='displayGameTeamChampsBox' style={{ backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54' }}></Box>
                                             </span>
                                         </Tooltip>
@@ -337,7 +337,7 @@ const DisplayGame = (props) => {
                                     >{participant.champLevel}
                                     </Typography>
                                     <img className='displayGameMainChampImg' style={{ border: participant.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid' }} alt='champion icon'
-                                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).id}.png`}>
+                                        src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).id)}>
                                     </img>
                                 </span>
                             </Tooltip>
@@ -347,14 +347,14 @@ const DisplayGame = (props) => {
                                     disableInteractive
                                     arrow
                                 >
-                                    <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpell1.id}.png`}></img>
+                                    <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpell1.id)}></img>
                                 </Tooltip>
                                 <Tooltip
                                     title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === participant.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === participant.summoner2Id.toString()).description}</span></>}
                                     disableInteractive
                                     arrow
                                 >
-                                    <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpell2.id}.png`}></img>
+                                    <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpell2.id)}></img>
                                 </Tooltip>
                             </Grid>
                         </Grid>
@@ -410,12 +410,12 @@ const DisplayGame = (props) => {
                                     </Typography>
                                     {gameData.info.gameMode !== "CHERRY" &&
                                         <img className='displayGameMainChampImg' style={{ border: participant.teamId === 100 ? '3px #FF3A54 solid' : '3px #568CFF solid' }} alt='champion icon'
-                                            src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`}>
+                                            src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id)}>
                                         </img>
                                     }
                                     {gameData.info.gameMode === "CHERRY" &&
                                         <img className='displayGameMainChampImg' style={{ border: participant.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid' }} alt='champion icon'
-                                            src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id}.png`}>
+                                            src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id)}>
                                         </img>
                                     }
                                 </span>
@@ -426,14 +426,14 @@ const DisplayGame = (props) => {
                                     disableInteractive
                                     arrow
                                 >
-                                    <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${opposingSummonerSpell1.id}.png`}></img>
+                                    <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, opposingSummonerSpell1.id)}></img>
                                 </Tooltip>
                                 <Tooltip
                                     title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).description}</span></>}
                                     disableInteractive
                                     arrow
                                 >
-                                    <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${opposingSummonerSpell2.id}.png`}></img>
+                                    <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, opposingSummonerSpell2.id)}></img>
                                 </Tooltip>
                             </Grid>
                         </Grid>
@@ -453,7 +453,7 @@ const DisplayGame = (props) => {
                                     {participants.filter(player => player.teamId !== participant.teamId && player.summonerId !== opposingLaner.summonerId).map((player, index) => (
                                         <Tooltip key={`player_${index}_team2`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
                                             <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                                                <img alt='Champion' className='displayGameTeamChamps' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}></img>
+                                                <img alt='Champion' className='displayGameTeamChamps' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id)}></img>
                                                 <Box className='displayGameTeamChampsBox' style={{ backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54' }}></Box>
                                             </span>
                                         </Tooltip>
@@ -482,7 +482,7 @@ const DisplayGame = (props) => {
                                                     <img
                                                         alt='Champion'
                                                         className='displayGameTeamChamps'
-                                                        src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id}.png`}
+                                                        src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id)}
                                                     />
                                                     <Box
                                                         className='displayGameTeamChampsBox'

@@ -463,10 +463,11 @@ body,
 
 .summonerProfileRiotName {
     font-weight: bolder;
+    font-size: 1.3rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 215px;
+    max-width: 280px;
 
 }
 
@@ -2681,10 +2682,6 @@ li {
         font-size: 40px;
     }
 
-    .displayGamesMainContainer {
-        width: 95% !important;
-    }
-
     .navBarSearchBar {
         margin-left: 10%;
         width: 55%;
@@ -3212,10 +3209,6 @@ li {
         font-size: 4.75rem !important;
     }
 
-    .displayGamesMainContainer {
-        width: 65% !important;
-    }
-
     .BannedChampImg {
         width: 50px;
     }
@@ -3610,13 +3603,6 @@ li {
     }
 }
 
-@media (min-width: 2000px) {
-    .displayGamesMainContainer {
-        width: 34% !important;
-    }
-
-}
-
 /* Very large screens (4k) */
 @media only screen and (min-width: 3250px) {
 
@@ -3626,10 +3612,6 @@ li {
 
     .privacyPolicy {
         width: 30%;
-    }
-
-    .displayGamesMainContainer {
-        width: 22% !important;
     }
 
     .GameDetailsContainer {
@@ -3695,10 +3677,6 @@ li {
         right: 30%;
     }
 
-    .displayGamesMainContainer {
-        width: 26% !important;
-    }
-
     .GameDetailsContainer {
         width: 50% !important;
     }
@@ -3720,10 +3698,6 @@ li {
 
     .privacyPolicy {
         width: 35%;
-    }
-
-    .displayGamesMainContainer {
-        width: 30% !important;
     }
 
     .GameDetailsContainer {
@@ -3750,4 +3724,14 @@ li {
     .favoriteRecentList {
         min-height: 15vh !important;
     }
+}
+
+/* Summoner profile match feed: single source of truth for width.
+   Fills the screen on small widths, caps on large ones, leaving room on the
+   sides (future ad space). Tune --feed-max-width to taste. */
+.displayGamesMainContainer {
+    width: 100%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 }

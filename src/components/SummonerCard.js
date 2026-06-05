@@ -1,4 +1,5 @@
 import React from 'react';
+import { profileIconImg } from '../api/ddragon';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -29,7 +30,7 @@ function SummonerCard({ summoner, dataDragonVersion, type, onRemove }) {
         <img 
           alt="Summoner Icon" 
           className="summoner-icon"
-          src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${summoner.icon}.png`}
+          src={profileIconImg(dataDragonVersion, summoner.icon)}
         />
         
         <div className="summoner-info">

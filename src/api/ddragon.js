@@ -93,3 +93,16 @@ export const getQueues = async () => {
   memoryCache['ddragon-queues'] = data;
   return data;
 };
+
+// ---------------------------------------------------------------------------
+// Image URL builders. These produce the same DataDragon CDN URLs that were
+// previously hand-built inline (~176 times). `id` is the DataDragon asset id:
+//   champion -> champ.id (e.g. "Zyra")   item -> item id (number/string)
+//   spell    -> spell.id (e.g. "SummonerFlash")   profileicon -> icon id
+// ---------------------------------------------------------------------------
+const CDN_IMG = 'https://ddragon.leagueoflegends.com/cdn';
+
+export const championImg = (version, id) => `${CDN_IMG}/${version}/img/champion/${id}.png`;
+export const itemImg = (version, id) => `${CDN_IMG}/${version}/img/item/${id}.png`;
+export const spellImg = (version, id) => `${CDN_IMG}/${version}/img/spell/${id}.png`;
+export const profileIconImg = (version, id) => `${CDN_IMG}/${version}/img/profileicon/${id}.png`;

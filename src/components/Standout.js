@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { championImg } from '../api/ddragon';
 import { Typography, Box, Grid, Tooltip, Divider } from '@mui/material';
 
 const Standout = (props) => {
@@ -22,7 +23,7 @@ const Standout = (props) => {
         const champion = Object.values(champsJSON.data).find(champ => champ.key === String(championId));
         return {
             name: champion?.name || "Unknown Champion",
-            img: `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${champion?.id}.png`,
+            img: championImg(dataDragonVersion, champion?.id),
         };
     };
 

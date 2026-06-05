@@ -1,5 +1,5 @@
 import React from 'react'
-import { getChampions, getItems, getVersion, getSummonerSpells, getRunes } from '../api/ddragon';
+import { championImg, getChampions, getItems, getRunes, getSummonerSpells, getVersion, spellImg } from '../api/ddragon';
 import { getMatchCluster, isSeaServer } from '../utils/regions';
 import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
@@ -492,7 +492,7 @@ const AramDetails = () => {
                                                 >{playerData.champLevel}
                                                 </Typography>
                                                 <img className='gameDetailsSummaryMainChampImg'
-                                                    src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''>
+                                                    src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id)} alt=''>
                                                 </img>
                                             </div>
                                         </Tooltip>
@@ -502,14 +502,14 @@ const AramDetails = () => {
                                                 disableInteractive
                                                 arrow
                                             >
-                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id}.png`}></img>
+                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id)}></img>
                                             </Tooltip>
                                             <Tooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
-                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id}.png`}></img>
+                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id)}></img>
                                             </Tooltip>
                                         </Grid>
                                     </a>
@@ -540,7 +540,7 @@ const AramDetails = () => {
                                                 >{playerData.champLevel}
                                                 </Typography>
                                                 <img className='gameDetailsSummaryMainChampImg'
-                                                    style={{ filter: 'grayscale(100%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''>
+                                                    style={{ filter: 'grayscale(100%)' }} src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id)} alt=''>
                                                 </img>
                                             </div>
                                         </Tooltip>
@@ -550,14 +550,14 @@ const AramDetails = () => {
                                                 disableInteractive
                                                 arrow
                                             >
-                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id}.png`}></img>
+                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id)}></img>
                                             </Tooltip>
                                             <Tooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
-                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id}.png`}></img>
+                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id)}></img>
                                             </Tooltip>
                                         </Grid>
                                     </a>
@@ -683,7 +683,7 @@ const AramDetails = () => {
                                                 </Tooltip>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                                                        <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                                        <img alt='Champion Graph' className='graphChampIcon' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
                                                     </a>
                                                 </Tooltip>
                                             </div>
@@ -701,7 +701,7 @@ const AramDetails = () => {
                                                 </Tooltip>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                                                        <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                                        <img alt='Champion Graph' className='graphChampIcon' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
                                                     </a>
                                                 </Tooltip>
                                             </div>
@@ -733,7 +733,7 @@ const AramDetails = () => {
                                                 </Tooltip>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                                                        <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                                        <img alt='Champion Graph' className='graphChampIcon' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
                                                     </a>
                                                 </Tooltip>
                                             </div>
@@ -751,7 +751,7 @@ const AramDetails = () => {
                                                 </Tooltip>
                                                 <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
-                                                        <img alt='Champion Graph' className='graphChampIcon' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id}.png`}></img>
+                                                        <img alt='Champion Graph' className='graphChampIcon' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
                                                     </a>
                                                 </Tooltip>
                                             </div>

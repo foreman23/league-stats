@@ -1,5 +1,5 @@
 import React from 'react';
-import { getChampions, getItems, getVersion, getSummonerSpells, getQueues } from '../api/ddragon';
+import { championImg, getChampions, getItems, getQueues, getSummonerSpells, getVersion, spellImg } from '../api/ddragon';
 import { queueTitle as getQueueTitle } from '../utils/queues';
 import { Typography, Grid, Tooltip, LinearProgress, Box } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
@@ -241,7 +241,7 @@ const ArenaDetails = () => {
                                                 >{playerData.champLevel}
                                                 </Typography>
                                                 <img className='gameDetailsSummaryMainChampImg'
-                                                    src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''>
+                                                    src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id)} alt=''>
                                                 </img>
                                             </div>
                                         </Tooltip>
@@ -251,14 +251,14 @@ const ArenaDetails = () => {
                                                 disableInteractive
                                                 arrow
                                             >
-                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id}.png`}></img>
+                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id)}></img>
                                             </Tooltip>
                                             <Tooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
-                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id}.png`}></img>
+                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id)}></img>
                                             </Tooltip>
                                         </Grid>
                                     </a>
@@ -289,7 +289,7 @@ const ArenaDetails = () => {
                                                 >{playerData.champLevel}
                                                 </Typography>
                                                 <img className='gameDetailsSummaryMainChampImg'
-                                                    style={{ filter: 'grayscale(100%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id}.png`} alt=''>
+                                                    style={{ filter: 'grayscale(100%)' }} src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id)} alt=''>
                                                 </img>
                                             </div>
                                         </Tooltip>
@@ -299,14 +299,14 @@ const ArenaDetails = () => {
                                                 disableInteractive
                                                 arrow
                                             >
-                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id}.png`}></img>
+                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id)}></img>
                                             </Tooltip>
                                             <Tooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
-                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id}.png`}></img>
+                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id)}></img>
                                             </Tooltip>
                                         </Grid>
                                     </a>
@@ -339,7 +339,7 @@ const ArenaDetails = () => {
                                                 >{teammateData.champLevel}
                                                 </Typography>
                                                 <img className='gameDetailsSummaryMainChampImg'
-                                                    src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(teammateData.championId)).id}.png`} alt=''>
+                                                    src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(teammateData.championId)).id)} alt=''>
                                                 </img>
                                             </div>
                                         </Tooltip>
@@ -349,14 +349,14 @@ const ArenaDetails = () => {
                                                 disableInteractive
                                                 arrow
                                             >
-                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'dropF-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === teammateData.summoner1Id.toString()).id}.png`}></img>
+                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'dropF-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === teammateData.summoner1Id.toString()).id)}></img>
                                             </Tooltip>
                                             <Tooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === teammateData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === teammateData.summoner2Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
-                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === teammateData.summoner2Id.toString()).id}.png`}></img>
+                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === teammateData.summoner2Id.toString()).id)}></img>
                                             </Tooltip>
                                         </Grid>
                                     </a>
@@ -387,7 +387,7 @@ const ArenaDetails = () => {
                                                 >{playerData.champLevel}
                                                 </Typography>
                                                 <img className='gameDetailsSummaryMainChampImg'
-                                                    style={{ filter: 'grayscale(100%)' }} src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(teammateData.championId)).id}.png`} alt=''>
+                                                    style={{ filter: 'grayscale(100%)' }} src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(teammateData.championId)).id)} alt=''>
                                                 </img>
                                             </div>
                                         </Tooltip>
@@ -397,14 +397,14 @@ const ArenaDetails = () => {
                                                 disableInteractive
                                                 arrow
                                             >
-                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === teammateData.summoner1Id.toString()).id}.png`}></img>
+                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === teammateData.summoner1Id.toString()).id)}></img>
                                             </Tooltip>
                                             <Tooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === teammateData.summoner2Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
-                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${summonerSpellsObj.find(spell => spell.key === teammateData.summoner2Id.toString()).id}.png`}></img>
+                                                <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === teammateData.summoner2Id.toString()).id)}></img>
                                             </Tooltip>
                                         </Grid>
                                     </a>

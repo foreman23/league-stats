@@ -1,5 +1,5 @@
 import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress, Tooltip, Divider, Skeleton } from '@mui/material';
-import { getChampions, getVersion } from '../api/ddragon';
+import { championImg, getChampions, getVersion, profileIconImg } from '../api/ddragon';
 import { getAccountCluster, getMatchCluster } from '../utils/regions';
 import React, { useCallback } from 'react'
 import { getPuuid, getSummoner, getRanked, getHistory, getMatchInfo, getMastery } from '../api/proxy';
@@ -809,11 +809,11 @@ const SummonerProfile = () => {
                 boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)',
                 margin: 'auto',
                 marginRight: '0px',
-                width: '170px',
+                width: '200px',
                 marginBottom: '10px',
                 justifyContent: 'center'
               }}
-                src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/profileicon/${summonerData.summonerData.profileIconId}.png`} alt=''>
+                src={profileIconImg(dataDragonVersion, summonerData.summonerData.profileIconId)} alt=''>
               </img>
               <FavoriteIcon
                 onClick={handleFavoriteClick}
@@ -895,7 +895,7 @@ const SummonerProfile = () => {
                         borderRadius: '100%',
                         border: '4px white solid',
                         filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25',
-                        maxWidth: '150px',
+                        maxWidth: '190px',
                       }}
                         src={`/images/rankIcons/Rank=${(summonerData.rankedData[rankIndex]?.tier)?.charAt(0) + summonerData.rankedData[rankIndex]?.tier.substring(1).toLowerCase()}.webp`}>
                       </img>
@@ -967,10 +967,10 @@ const SummonerProfile = () => {
                             style={{
                               borderRadius: '100%',
                               border: '3px solid white',
-                              width: '65px',
+                              width: '85px',
                               filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
                             }}
-                            src={`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/champion/${champion?.id}.png`}
+                            src={championImg(dataDragonVersion, champion?.id)}
                             alt=""
                           />
                         </Tooltip>
@@ -1005,7 +1005,7 @@ const SummonerProfile = () => {
                         marginRight: index < 2 ? '20px' : '0',
                         borderRadius: '100%',
                         border: '3px solid white',
-                        width: '65px',
+                        width: '85px',
                         filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'
                       }}
                       src={`/images/novalue.webp`}
@@ -1022,7 +1022,6 @@ const SummonerProfile = () => {
           className='displayGamesMainContainer'
           sx={{
             justifyContent: 'center',
-            width: { xs: '100%', sm: '80%', lg: '50%', xl: '37%' },
             margin: 'auto',
             borderRadius: '5px',
             marginTop: '20px',
