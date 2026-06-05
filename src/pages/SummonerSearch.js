@@ -1,5 +1,6 @@
 import '../App.css';
 import { getChampions, getVersion } from '../api/ddragon';
+import { regionValues, getAccountCluster } from '../lib/regions';
 import axios from 'axios';
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -39,25 +40,6 @@ function SummonerSearch() {
   const [dropdownDefaultValue, setDropdownDefaultValue] = useState('');
   const handleRegionChange = async (event) => {
     const value = event.target.value;
-    const regionValues = {
-      10: 'na1',
-      20: 'euw1',
-      30: 'br1',
-      40: 'eun1',
-      50: 'la1',
-      60: 'la2',
-      70: 'oc1',
-      80: 'ru',
-      90: 'tr1',
-      100: 'jp1',
-      110: 'kr',
-      120: 'ph2',
-      130: 'sg2',
-      140: 'tw2',
-      150: 'th2',
-      160: 'vn2'
-    }
-
     localStorage.setItem('searchRegion', regionValues[value])
     setSelectedRegion(regionValues[value]);
     setDropdownDefaultValue(value);
@@ -139,25 +121,6 @@ function SummonerSearch() {
 
   // Retrieve previous region from local storage
   const getPrevRegion = () => {
-
-    const regionValues = {
-      10: 'na1',
-      20: 'euw1',
-      30: 'br1',
-      40: 'eun1',
-      50: 'la1',
-      60: 'la2',
-      70: 'oc1',
-      80: 'ru',
-      90: 'tr1',
-      100: 'jp1',
-      110: 'kr',
-      120: 'ph2',
-      130: 'sg2',
-      140: 'tw2',
-      150: 'th2',
-      160: 'vn2'
-    }
 
     let prevRegion = localStorage.getItem('searchRegion')
     if (prevRegion !== null) {
@@ -399,21 +362,8 @@ function SummonerSearch() {
                 let gameData = featuredData.featuredGameData.matchData
                 let playerData = featuredData.featuredPlayer
                 let selectedRegion = gameData.info.platformId.toLowerCase()
-                let alternateRegion = null;
-                // set alternate routing value
-                const americasServers = ['na1', 'br1', 'la1', 'la2'];
-                const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
-                const europeServer = ['eun1', 'euw1', 'tr1', 'ru'];
-
-                if (americasServers.includes(selectedRegion) && alternateRegion === null) {
-                  alternateRegion = 'americas'
-                }
-                if (asiaServers.includes(selectedRegion) && alternateRegion === null) {
-                  alternateRegion = 'asia'
-                }
-                if (europeServer.includes(selectedRegion) && alternateRegion === null) {
-                  alternateRegion = 'europe'
-                }
+                // account cluster (featured-game routing)
+                let alternateRegion = getAccountCluster(selectedRegion);
 
                 let gameModeHref;
                 if ((gameData.info.gameMode === "CLASSIC" || gameData.info.gameMode === "SWIFTPLAY") && gameData.info.gameDuration > 300) {

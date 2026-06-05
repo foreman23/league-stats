@@ -1,5 +1,6 @@
 import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress, Tooltip, Divider, Skeleton } from '@mui/material';
 import { getChampions, getVersion } from '../api/ddragon';
+import { getAccountCluster, getMatchCluster } from '../lib/regions';
 import React, { useCallback } from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -460,28 +461,13 @@ const SummonerProfile = () => {
 
     setIsLoadingRank(true);
 
-    // set alternate routing value
-    const americasServers = ['na1', 'br1', 'la1', 'la2'];
-    const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
-    const europeServer = ['eun1', 'euw1', 'tr1', 'ru'];
-
-    if (americasServers.includes(selectedRegion) && alternateRegion === null) {
-      setAlternateRegion('americas');
-      setMatchRegion('americas');
-    }
-    if (asiaServers.includes(selectedRegion) && alternateRegion === null) {
-      const seaServer = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2']
-      if (seaServer.includes(selectedRegion)) {
-        setMatchRegion('sea');
+    // set alternate routing value (account cluster for puuid, match cluster for match-v5)
+    if (alternateRegion === null) {
+      const accountCluster = getAccountCluster(selectedRegion);
+      if (accountCluster) {
+        setAlternateRegion(accountCluster);
+        setMatchRegion(getMatchCluster(selectedRegion));
       }
-      else {
-        setMatchRegion('asia');
-      }
-      setAlternateRegion('asia');
-    }
-    if (europeServer.includes(selectedRegion) && alternateRegion === null) {
-      setAlternateRegion('europe');
-      setMatchRegion('europe');
     }
 
     // Get summonerData from firestore

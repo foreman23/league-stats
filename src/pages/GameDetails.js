@@ -1,5 +1,6 @@
 import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
 import { getChampions, getItems, getVersion, getSummonerSpells, getRunes, getQueues } from '../api/ddragon';
+import { getMatchCluster, isSeaServer } from '../lib/regions';
 import React from 'react'
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
@@ -238,31 +239,7 @@ function GameDetails() {
     }
   }, [setChampsJSON, dataDragonVersion])
 
-  const findAltRegion = (selectedRegion) => {
-    // set alternate routing value
-    const americasServers = ['na1', 'br1', 'la1', 'la2'];
-    const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
-    const europeServer = ['eun1', 'euw1', 'tr1', 'ru'];
-
-    let alternateRegion = null
-
-    if (americasServers.includes(selectedRegion)) {
-      alternateRegion = 'americas'
-    }
-    if (asiaServers.includes(selectedRegion)) {
-      const seaServer = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2']
-      if (seaServer.includes(selectedRegion)) {
-        alternateRegion = 'sea'
-      }
-      else {
-        alternateRegion = 'asia'
-      }
-    }
-    if (europeServer.includes(selectedRegion)) {
-      alternateRegion = 'europe'
-    }
-    return alternateRegion
-  }
+  const findAltRegion = (selectedRegion) => getMatchCluster(selectedRegion);
 
   // Set the current ddragon version
   const getDataDragonVersion = async () => {
@@ -301,8 +278,7 @@ function GameDetails() {
     }
     else if (payload !== null) {
       // Special edge case for special Oceania
-      const seaServer = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2']
-      if (seaServer.includes(payload.gameData.metadata.matchId.split('_')[0].toLowerCase())) {
+      if (isSeaServer(payload.gameData.metadata.matchId.split('_')[0].toLowerCase())) {
         setAlternateRegion('sea')
       } else {
         setAlternateRegion(payload.alternateRegion);

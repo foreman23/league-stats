@@ -6,6 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 // import LightModeIcon from '@mui/icons-material/LightMode';
 // import DarkModeIcon from '@mui/icons-material/DarkMode';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { regionValues } from '../lib/regions';
 
 function Navbar(props) {
 
@@ -135,25 +136,6 @@ function Navbar(props) {
     // Retrieve previous region from local storage
     const getPrevRegion = () => {
 
-        const regionValues = {
-            10: 'na1',
-            20: 'euw1',
-            30: 'br1',
-            40: 'eun1',
-            50: 'la1',
-            60: 'la2',
-            70: 'oc1',
-            80: 'ru',
-            90: 'tr1',
-            100: 'jp1',
-            110: 'kr',
-            120: 'ph2',
-            130: 'sg2',
-            140: 'tw2',
-            150: 'th2',
-            160: 'vn2'
-        }
-
         let prevRegion = localStorage.getItem('searchRegion')
         if (prevRegion !== null) {
             setSelectedRegion(prevRegion)
@@ -170,25 +152,6 @@ function Navbar(props) {
     const [dropdownDefaultValue, setDropdownDefaultValue] = useState('');
     const handleRegionChange = async (event) => {
         const value = event.target.value;
-        const regionValues = {
-            10: 'na1',
-            20: 'euw1',
-            30: 'br1',
-            40: 'eun1',
-            50: 'la1',
-            60: 'la2',
-            70: 'oc1',
-            80: 'ru',
-            90: 'tr1',
-            100: 'jp1',
-            110: 'kr',
-            120: 'ph2',
-            130: 'sg2',
-            140: 'tw2',
-            150: 'th2',
-            160: 'vn2'
-        }
-
         localStorage.setItem('searchRegion', regionValues[value])
         setSelectedRegion(regionValues[value]);
         setDropdownDefaultValue(value);
