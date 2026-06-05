@@ -4,7 +4,7 @@ import React from 'react'
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
-// import queues from '../jsonData/queues.json'
+import queuesData from '../jsonData/queues.json';
 import summonerSpells from '../jsonData/summonerSpells.json';
 import runes from '../jsonData/runes.json';
 import getStatsAt15 from '../functions/LaneAnalysis';
@@ -210,9 +210,7 @@ function GameDetails() {
   // Get queue JSON data from riot
   const getQueueJSON = async () => {
     try {
-      const response = await fetch(`https://static.developer.riotgames.com/docs/lol/queues.json`);
-      const data = await response.json();
-      setQueues(data);
+      setQueues(queuesData);
     } catch (error) {
       // console.error('Error fetching queue JSON data');
     }

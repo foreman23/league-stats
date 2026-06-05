@@ -450,6 +450,7 @@ function SummonerSearch() {
                       featured
                       gameData={gameData}
                       dataDragonVersion={dataDragonVersion}
+                      champsJSON={champsJSON}
                       puuid={playerData.puuid}
                     />
                   </a>

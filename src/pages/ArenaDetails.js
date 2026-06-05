@@ -1,5 +1,6 @@
 import React from 'react';
 import { getChampions, getItems, getVersion } from '../api/ddragon';
+import queuesData from '../jsonData/queues.json';
 import { Typography, Grid, Tooltip, LinearProgress, Box } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -110,9 +111,7 @@ const ArenaDetails = () => {
     // Fetch queue JSON
     const getQueueJSON = async () => {
         try {
-            const response = await fetch('https://static.developer.riotgames.com/docs/lol/queues.json');
-            const data = await response.json();
-            setQueues(data);
+            setQueues(queuesData);
         } catch (error) {
             console.error('Error fetching queue data:', error);
         }

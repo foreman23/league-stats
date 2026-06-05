@@ -1119,6 +1119,7 @@ const SummonerProfile = () => {
                     <DisplayGame
                       gameData={gameData}
                       dataDragonVersion={dataDragonVersion}
+                      champsJSON={champsJSON}
                       puuid={summonerData.summonerData.puuid}
                     />
                   </a>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import { getChampions } from '../api/ddragon';
 import { Typography, Grid, Divider, LinearProgress, Box, Tooltip } from '@mui/material'
-// import queues from '../jsonData/queues.json'
+import queuesData from '../jsonData/queues.json'
 import summonerSpells from '../jsonData/summonerSpells.json'
 import calculateOpScores from '../functions/CalculateOpScores';
 import calculateOpScoresAram from '../functions/CalculateOpScoresAram';
@@ -14,9 +13,7 @@ const DisplayGame = (props) => {
 
     const [timeSinceMatch, setTimeSinceMatch] = useState(null);
 
-    const [champsJSON, setChampsJSON] = useState(null);
-
-    const { dataDragonVersion, featured, gameData, puuid } = props;
+    const { champsJSON, dataDragonVersion, featured, gameData, puuid } = props;
 
     // Find participant
     const participant = useMemo(() => {
@@ -174,23 +171,11 @@ const DisplayGame = (props) => {
 
     const getQueueJSON = useCallback(async () => {
         try {
-            const response = await fetch('https://static.developer.riotgames.com/docs/lol/queues.json');
-            const data = await response.json();
-            setQueues(data);
+            setQueues(queuesData);
         } catch (error) {
             // console.error('Error fetching queue data');
         }
     }, [])
-
-    // Get champion JSON data from riot
-    const getChampsJSON = useCallback(async () => {
-        try {
-            const data = await getChampions(dataDragonVersion);
-            setChampsJSON(data);
-        } catch (error) {
-            // console.error('Error fetching champion JSON data',);
-        }
-    }, [dataDragonVersion])
 
     const [playersWithOpScores, setPlayersWithOpScores] = useState(null);
     const [playerScore, setPlayerScore] = useState(null);
@@ -224,10 +209,6 @@ const DisplayGame = (props) => {
     useEffect(() => {
         getQueueJSON();
     }, [getQueueJSON])
-
-    useEffect(() => {
-        getChampsJSON();
-    }, [getChampsJSON])
 
 
     // Set loading to false when data is loaded
