@@ -29,6 +29,12 @@ const getBuildInfo = async (gameData, timelineData, champsJSON, dataDragonVersio
         events.forEach((event) => {
             if (event.type === 'ITEM_PURCHASED' || event.type === 'ITEM_UNDO') {
                 const participantIndex = event.participantId - 1;
+
+                // Skip item events not tied to a tracked player (e.g. participantId 0)
+                if (!itemTimeline[participantIndex]) {
+                    return;
+                }
+
                 const itemObj = {
                     itemId: event.itemId,
                     participantId: event.participantId,
