@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
 import getStatsAt15 from '../functions/LaneAnalysis';
-import axios from 'axios';
+import { getMatchTimeline as fetchMatchTimeline } from '../api/proxy';
 import LanePhaseSummaryCardTop from '../components/LanePhaseSummaryCardTop';
 import LanePhaseSummaryCardJg from '../components/LanePhaseSummaryCardJg';
 import LanePhaseSummaryCardMid from '../components/LanePhaseSummaryCardMid';
@@ -420,7 +420,7 @@ function GameDetails() {
   useEffect(() => {
     if (gameData && alternateRegion) {
       const getMatchTimeline = async (alternateRegion, matchId) => {
-        const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
+        const timelineResponse = await fetchMatchTimeline(alternateRegion, matchId);
         const timelineData = timelineResponse.data;
         setTimelineData(timelineData);
       };

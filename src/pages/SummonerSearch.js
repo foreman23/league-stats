@@ -1,7 +1,7 @@
 import '../App.css';
 import { getChampions, getVersion } from '../api/ddragon';
 import { regionValues, getAccountCluster } from '../utils/regions';
-import axios from 'axios';
+import { getFeaturedGame as fetchFeaturedGame } from '../api/proxy';
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Box, Typography, Autocomplete, Select, MenuItem } from '@mui/material';
@@ -203,7 +203,7 @@ function SummonerSearch() {
   // Retrieve featured game
   const [featuredData, setFeaturedData] = useState(null);
   const getFeaturedGame = async () => {
-    const featuredResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/featuredgame`);
+    const featuredResponse = await fetchFeaturedGame();
     const featuredGame = featuredResponse.data;
     setFeaturedData(featuredGame);
   }

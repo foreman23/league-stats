@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
 import Battles from '../components/Battles';
-import axios from 'axios';
+import { getMatchTimeline as fetchMatchTimeline } from '../api/proxy';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../FirebaseConfig';
 import generateGraphData from '../functions/GenerateGraphData';
@@ -301,7 +301,7 @@ const AramDetails = () => {
     useEffect(() => {
         if (gameData && alternateRegion) {
             const getMatchTimeline = async (alternateRegion, matchId) => {
-                const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
+                const timelineResponse = await fetchMatchTimeline(alternateRegion, matchId);
                 const timelineData = timelineResponse.data;
                 setTimelineData(timelineData);
             };

@@ -2,7 +2,7 @@ import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgre
 import { getChampions, getVersion } from '../api/ddragon';
 import { getAccountCluster, getMatchCluster } from '../utils/regions';
 import React, { useCallback } from 'react'
-import axios from 'axios';
+import { getPuuid, getSummoner, getRanked, getHistory, getMatchInfo, getMastery } from '../api/proxy';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
@@ -142,7 +142,7 @@ const SummonerProfile = () => {
 
           let dateRetrieved = new Date()
           // get match information
-          const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${matchId}`);
+          const matchResponse = await getMatchInfo(matchRegion, matchId);
           if (matchResponse.status !== 200) {
             return null;
           }
@@ -190,7 +190,7 @@ const SummonerProfile = () => {
 
           let dateRetrieved = new Date()
           // get match information
-          const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${matchId}`);
+          const matchResponse = await getMatchInfo(matchRegion, matchId);
           if (matchResponse.status !== 200) {
             return null;
           }
@@ -250,7 +250,7 @@ const SummonerProfile = () => {
     // Create new summoner profile on firestore
     else {
       try {
-        const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
+        const puuidResponse = await getPuuid(alternateRegion, summonerName, riotId);
         const puuidData = puuidResponse.data;
 
 
@@ -259,21 +259,21 @@ const SummonerProfile = () => {
           navigate(`/nosummoner/${summonerName}/${riotId}`)
         }
 
-        const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
+        const summonerResponse = await getSummoner(selectedRegion, puuidData.puuid);
         const summonerResData = summonerResponse.data;
 
         // ranked/history/mastery only depend on puuid/summonerId — fetch concurrently
         const [rankedData, historyData, masteryData] = await Promise.all([
-          axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerResData.id}`)
+          getRanked(selectedRegion, summonerResData.id)
             .then((res) => res.data)
             .catch(() => {
               // If ranked data returns 400, player might be unranked - this is OK
               console.log('Player has no ranked data or is unranked');
               return [];
             }),
-          axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`)
+          getHistory(matchRegion, puuidData.puuid)
             .then((res) => res.data),
-          axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
+          getMastery(selectedRegion, puuidData.puuid, 3)
             .then((res) => res.data),
         ]);
 
@@ -318,24 +318,24 @@ const SummonerProfile = () => {
       setIsLoadingRank(true);
       setRankIndex(null);
 
-      const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
+      const puuidResponse = await getPuuid(alternateRegion, summonerName, riotId);
       const puuidData = puuidResponse.data;
 
-      const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
+      const summonerResponse = await getSummoner(selectedRegion, puuidData.puuid);
       const summonerData = summonerResponse.data;
 
       // ranked/history/mastery only depend on puuid/summonerId — fetch concurrently
       const [rankedData, historyData, masteryData] = await Promise.all([
-        axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`)
+        getRanked(selectedRegion, summonerData.id)
           .then((res) => res.data)
           .catch(() => {
             // If ranked data returns 400, player might be unranked - this is OK
             console.log('Player has no ranked data or is unranked');
             return [];
           }),
-        axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${summonerData.puuid}`)
+        getHistory(matchRegion, summonerData.puuid)
           .then((res) => res.data),
-        axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
+        getMastery(selectedRegion, puuidData.puuid, 3)
           .then((res) => res.data),
       ]);
 
