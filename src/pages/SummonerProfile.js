@@ -1127,7 +1127,7 @@ const SummonerProfile = () => {
                 else if (gameData.info.gameMode === "CHERRY") {
                   gameModeHref = `/arena/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
                 } else {
-                  gameModeHref = "/Test";
+                  gameModeHref = `/altmatch/${gameData.metadata.matchId}/${playerData.riotIdGameName}/${playerData.riotIdTagline}`;
                 }
 
 
