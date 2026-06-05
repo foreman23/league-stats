@@ -153,7 +153,6 @@ const DisplayGame = (props) => {
             const data = await getQueues();
             setQueues(data);
         } catch (error) {
-            // console.error('Error fetching queue data');
         }
     }, [])
 

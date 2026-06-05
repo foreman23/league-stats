@@ -106,7 +106,6 @@ const SummonerProfile = () => {
       setDataDragonVersion(currentVersion);
       getChampsJSON(currentVersion);
     } catch (error) {
-      // console.log('Error: Error fetching datadragon version')
     }
   }, [])
 
@@ -117,7 +116,6 @@ const SummonerProfile = () => {
     let historyData = data.historyData
     setHistoryState(historyData)
     let newMatchDataArray = [];
-    // let riotApiCallCount = 0;
 
     setLoadingMatches(true)
 
@@ -177,7 +175,6 @@ const SummonerProfile = () => {
   const handleLoadMore = async () => {
     setLoadingMore(true)
     let newMatchDataArray = [...matchData];
-    // let riotApiCallCount = 0;
 
     if (!allLoaded) {
       // Load the next 5 matches concurrently; read-through cache preserved per match.
@@ -216,7 +213,6 @@ const SummonerProfile = () => {
       newMatchDataArray.push(...matchResults.filter((m) => m !== null));
     }
 
-    // console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
     setHistoryIndex(newMatchDataArray.length)
     setMatchData(newMatchDataArray);
     setLoadingMore(false)
@@ -230,7 +226,6 @@ const SummonerProfile = () => {
 
     // Check if user exists in firestore
     const docRef = doc(firestore, `${selectedRegion}-users`, `${summonerName}-${riotId}`);
-    // console.log('Reading from firestore (checking user)')
     const docSnap = await getDoc(docRef);
 
     // Reset load more button
@@ -255,9 +250,7 @@ const SummonerProfile = () => {
     // Create new summoner profile on firestore
     else {
       try {
-        // let riotApiCallCount = 0
         const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
-        // riotApiCallCount += 1
         const puuidData = puuidResponse.data;
 
 
@@ -267,7 +260,6 @@ const SummonerProfile = () => {
         }
 
         const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
-        // riotApiCallCount += 1
         const summonerResData = summonerResponse.data;
 
         // ranked/history/mastery only depend on puuid/summonerId — fetch concurrently
@@ -285,7 +277,6 @@ const SummonerProfile = () => {
             .then((res) => res.data),
         ]);
 
-        // console.log(`CALLED RIOT API: ${riotApiCallCount} times`)
 
         // if match history is empty set matchesLoaded to true
         if (historyData.length < 1) {
@@ -302,7 +293,6 @@ const SummonerProfile = () => {
           masteryData: masteryData
         }
         if (puuidData.status !== 400 && puuidData.status !== 404) {
-          // console.log('WRITING TO FIRESTORE')
           await setDoc(newDocRef, {
             lastUpdated: lastUpdated,
             summonerData: summonerResData,
@@ -327,14 +317,11 @@ const SummonerProfile = () => {
     try {
       setIsLoadingRank(true);
       setRankIndex(null);
-      // let riotApiCallCount = 0
 
       const puuidResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/puuid?alternateRegion=${alternateRegion}&summonerName=${summonerName}&riotId=${riotId}`);
-      // riotApiCallCount += 1
       const puuidData = puuidResponse.data;
 
       const summonerResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/summoner?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}`);
-      // riotApiCallCount += 1
       const summonerData = summonerResponse.data;
 
       // ranked/history/mastery only depend on puuid/summonerId — fetch concurrently
@@ -352,7 +339,6 @@ const SummonerProfile = () => {
           .then((res) => res.data),
       ]);
 
-      // console.log(`CALLED RIOT API: ${riotApiCallCount} times`)
 
       let lastUpdated = new Date()
       const docRef = doc(firestore, `${selectedRegion}-users`, `${summonerName}-${riotId}`);

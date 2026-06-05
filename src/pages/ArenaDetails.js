@@ -45,7 +45,6 @@ const ArenaDetails = () => {
             const data = await getItems(dataDragonVersion);
             setItems(data);
         } catch (error) {
-            // console.error('Error fetching item JSON data',);
         }
     }, [setItems, dataDragonVersion])
 
@@ -56,27 +55,8 @@ const ArenaDetails = () => {
             const data = await getChampions(dataDragonVersion);
             setChampsJSON(data);
         } catch (error) {
-            // console.error('Error fetching champion JSON data');
         }
     }, [setChampsJSON, dataDragonVersion])
-
-    // Determine alternate region based on matchId
-    // const findAltRegion = useCallback((selectedRegion) => {
-    //     const americasServers = ['na1', 'br1', 'la1', 'la2'];
-    //     const asiaServers = ['kr', 'jp1', 'oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
-    //     const europeServers = ['eun1', 'euw1', 'tr1', 'ru'];
-
-    //     let alternateRegion = null;
-    //     if (americasServers.includes(selectedRegion)) {
-    //         alternateRegion = 'americas';
-    //     } else if (asiaServers.includes(selectedRegion)) {
-    //         const seaServers = ['oc1', 'ph2', 'sg2', 'th2', 'tw2', 'vn2'];
-    //         alternateRegion = seaServers.includes(selectedRegion) ? 'sea' : 'asia';
-    //     } else if (europeServers.includes(selectedRegion)) {
-    //         alternateRegion = 'europe';
-    //     }
-    //     return alternateRegion;
-    // }, []);
 
     // Fetch game data from local storage or Firestore
     const fetchGameData = useCallback(async () => {

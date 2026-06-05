@@ -95,11 +95,9 @@ const AramDetails = () => {
             if (keystone) {
                 return `https://ddragon.canisback.com/img/${keystone.icon}`;
             } else {
-                // console.error(`Keystone with ID ${keystoneId} not found in style ${styleId}`);
                 return '';
             }
         } else {
-            // console.error(`Style with ID ${styleId} not found`);
             return '';
         }
     };
@@ -214,7 +212,6 @@ const AramDetails = () => {
             const data = await getItems(dataDragonVersion);
             setItems(data);
         } catch (error) {
-            // console.error('Error fetching item JSON data:');
         }
     }, [setItems, dataDragonVersion])
 
@@ -224,7 +221,6 @@ const AramDetails = () => {
             const data = await getChampions(dataDragonVersion);
             setChampsJSON(data);
         } catch (error) {
-            // console.error('Error fetching champion JSON data:');
         }
     }, [setChampsJSON, dataDragonVersion])
 
@@ -236,14 +232,12 @@ const AramDetails = () => {
             const currentVersion = await getVersion();
             setDataDragonVersion(currentVersion);
         } catch (error) {
-            // console.log('Error: Error fetching datadragon version')
         }
     }
 
     const fetchGameData = useCallback(async () => {
         let region = matchId.split('_')[0].toLowerCase()
         const docRef = doc(firestore, `${region}-matches`, matchId)
-        // console.log('Reading from firestore (checking match exists)')
         const docSnap = await getDoc(docRef);
         // If match exists
         if (docSnap.exists()) {
@@ -307,7 +301,6 @@ const AramDetails = () => {
     useEffect(() => {
         if (gameData && alternateRegion) {
             const getMatchTimeline = async (alternateRegion, matchId) => {
-                // console.log('CALLING RIOT API');
                 const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
                 const timelineData = timelineResponse.data;
                 setTimelineData(timelineData);

@@ -195,7 +195,6 @@ function GameDetails() {
       const data = await getQueues();
       setQueues(data);
     } catch (error) {
-      // console.error('Error fetching queue JSON data');
     }
   }
 
@@ -205,7 +204,6 @@ function GameDetails() {
       const data = await getItems(dataDragonVersion);
       setItems(data);
     } catch (error) {
-      // console.error('Error fetching item JSON data',);
     }
   }, [setItems, dataDragonVersion])
 
@@ -215,7 +213,6 @@ function GameDetails() {
       const data = await getChampions(dataDragonVersion);
       setChampsJSON(data);
     } catch (error) {
-      // console.error('Error fetching champion JSON data');
     }
   }, [setChampsJSON, dataDragonVersion])
 
@@ -227,14 +224,12 @@ function GameDetails() {
       const currentVersion = await getVersion();
       setDataDragonVersion(currentVersion);
     } catch (error) {
-      // console.log('Error: Error fetching datadragon version')
     }
   }
 
   const fetchGameData = useCallback(async () => {
     let region = matchId.split('_')[0].toLowerCase()
     const docRef = doc(firestore, `${region}-matches`, matchId)
-    // console.log('Reading from firestore (checking match exists)')
     const docSnap = await getDoc(docRef);
     // If match exists
     if (docSnap.exists()) {
@@ -425,7 +420,6 @@ function GameDetails() {
   useEffect(() => {
     if (gameData && alternateRegion) {
       const getMatchTimeline = async (alternateRegion, matchId) => {
-        // console.log('CALLING RIOT API');
         const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
         const timelineData = timelineResponse.data;
         setTimelineData(timelineData);

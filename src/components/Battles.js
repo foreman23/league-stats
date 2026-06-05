@@ -11,7 +11,6 @@ const Battles = (props) => {
     const participants = gameData.info.participants;
     const champsJSON = props.champsJSON;
     const dataDragonVersion = props.dataDragonVersion;
-    // console.log(timelineData)
 
     // Isolate teamfights from timeline
     const frames = timelineData.info.frames;
@@ -43,7 +42,6 @@ const Battles = (props) => {
         for (const event in frame.events) {
             const currEvent = frame.events[event];
             if (currEvent.type === "CHAMPION_KILL" || currEvent.type === "ELITE_MONSTER_KILL" || currEvent.type === "BUILDING_KILL" || currEvent.type === "CHAMPION_SPECIAL_KILL") {
-                // console.log(currEvent)
                 if (lastKillTime === null) {
                     lastKillTime = currEvent.timestamp;
                     currBattle.push(currEvent);
@@ -300,7 +298,6 @@ const Battles = (props) => {
                         }
                     }
 
-                    //console.log(locationCount, outcome)
                     // If multiple fights in different locations
                     for (const key in locationCount) {
                         if (key === maxKey || locationCount[key] === 0) continue;
@@ -910,7 +907,6 @@ const Battles = (props) => {
             }
         }
 
-        //console.log(locationCount, outcome)
         // If multiple fights in different locations
         for (const key in locationCount) {
             if (key === maxKey || locationCount[key] === 0) continue;

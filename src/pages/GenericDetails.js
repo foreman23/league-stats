@@ -82,7 +82,6 @@ const GenericDetails = () => {
             const data = await getQueues();
             setQueues(data);
         } catch (error) {
-            // console.error('Error fetching queue JSON data');
         }
     }
 
@@ -124,7 +123,6 @@ const GenericDetails = () => {
         if (style) {
             const keystone = style.slots[0].runes.find(rune => rune.id === keystoneId);
             if (keystone) {
-                // console.log(keystone.icon)
                 return `https://ddragon.canisback.com/img/${keystone.icon}`;
             } else {
                 return '';
@@ -244,7 +242,6 @@ const GenericDetails = () => {
             const data = await getItems(dataDragonVersion);
             setItems(data);
         } catch (error) {
-            // console.error('Error fetching item JSON data',);
         }
     }, [setItems, dataDragonVersion])
 
@@ -254,7 +251,6 @@ const GenericDetails = () => {
             const data = await getChampions(dataDragonVersion);
             setChampsJSON(data);
         } catch (error) {
-            // console.error('Error fetching champion JSON data');
         }
     }, [setChampsJSON, dataDragonVersion])
 
@@ -266,14 +262,12 @@ const GenericDetails = () => {
             const currentVersion = await getVersion();
             setDataDragonVersion(currentVersion);
         } catch (error) {
-            // console.log('Error: Error fetching datadragon version')
         }
     }
 
     const fetchGameData = useCallback(async () => {
         let region = matchId.split('_')[0].toLowerCase()
         const docRef = doc(firestore, `${region}-matches`, matchId)
-        // console.log('Reading from firestore (checking match exists)')
         const docSnap = await getDoc(docRef);
         // If match exists
         if (docSnap.exists()) {
@@ -338,7 +332,6 @@ const GenericDetails = () => {
     useEffect(() => {
         if (gameData && alternateRegion) {
             const getMatchTimeline = async (alternateRegion, matchId) => {
-                // console.log('CALLING RIOT API');
                 const timelineResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchtimeline?alternateRegion=${alternateRegion}&matchId=${matchId}`);
                 const timelineData = timelineResponse.data;
                 setTimelineData(timelineData);
@@ -365,7 +358,6 @@ const GenericDetails = () => {
 
             // Find duration and date of game start
             setGameStartDate(new Date(gameData.info.gameCreation));
-            // console.log(gameStartDate)
             let gameDuration = gameData.info.gameDuration;
             if (gameDuration >= 3600) {
                 gameDuration = `${(gameDuration / 3600).toFixed(1)} hrs`

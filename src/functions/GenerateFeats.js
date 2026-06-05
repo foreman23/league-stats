@@ -102,7 +102,6 @@ const determineFeatsFails = (gameData, playerTeamId, timelineData) => {
 
         for (let j = 0; j < frames[i].events.length; j++) {
             let event = frames[i].events[j];
-            // console.log(i, event)
 
             // Find amount of wards placed
             if (event.type === "WARD_PLACED" && teammateIds.includes(event.creatorId)) {
@@ -131,12 +130,6 @@ const determineFeatsFails = (gameData, playerTeamId, timelineData) => {
             }
         }
     }
-    // console.log(`Team destroyed ${towersKilled} towers`)
-    // console.log(`Team destroyed ${towersKilledAt20} towers at 20`)
-    // console.log(`Team destroyed ${outerTowersKilledAt20} outer towers at 20`)
-    // console.log(`Team lost ${towersLost} towers`)
-    // console.log(`Team lost ${towersLostAt20} towers at 20`)
-    // console.log(`Team placed ${wardsPlaced} wards`)
 
 }
 
