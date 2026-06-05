@@ -1,6 +1,7 @@
 import React from 'react'
 import { getChampions, getItems, getVersion, getSummonerSpells, getRunes, getQueues } from '../api/ddragon';
-import { getMatchCluster, isSeaServer } from '../lib/regions';
+import { getMatchCluster, isSeaServer } from '../utils/regions';
+import { queueTitle as getQueueTitle } from '../utils/queues';
 import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
@@ -67,29 +68,11 @@ const GenericDetails = () => {
     const findQueueTitle = useCallback(async () => {
 
         let queue = await findQueueInfo();
-
-        let queueTitle = queue?.description;
-        // let isLaning = true; // set to false for non summoners rift modes
-        if (queueTitle === '5v5 Ranked Solo games') {
-            setQueueTitle('Ranked Solo');
-        }
-        if (queueTitle === '5v5 Ranked Flex games') {
-            setQueueTitle('Ranked Flex');
-        }
-        if (queueTitle === '5v5 Draft Pick games') {
-            setQueueTitle('Normal');
-        }
-        if (queueTitle === 'ARURF games') {
-            setQueueTitle('ARURF')
-        }
-        else if (queueTitle === '5v5 ARAM games') {
-            setQueueTitle('ARAM')
-        }
-        else if (queueTitle === 'Arena') {
-            setQueueTitle('Arena')
-        }
-        else if (gameData.info.gameMode === 'URF') {
-            setQueueTitle('URF')
+        const title = getQueueTitle(queue?.description);
+        if (title) {
+            setQueueTitle(title);
+        } else if (gameData.info.gameMode === 'URF') {
+            setQueueTitle('URF');
         }
     }, [findQueueInfo, gameData])
 

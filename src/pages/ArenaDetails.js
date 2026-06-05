@@ -1,5 +1,6 @@
 import React from 'react';
 import { getChampions, getItems, getVersion, getSummonerSpells, getQueues } from '../api/ddragon';
+import { queueTitle as getQueueTitle } from '../utils/queues';
 import { Typography, Grid, Tooltip, LinearProgress, Box } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -131,13 +132,7 @@ const ArenaDetails = () => {
     const findQueueTitle = useCallback(() => {
         const queue = findQueueInfo();
         if (queue) {
-            let queueTitle = queue.description;
-            if (queueTitle === '5v5 Ranked Solo games') setQueueTitle('Ranked Solo');
-            else if (queueTitle === '5v5 Ranked Flex games') setQueueTitle('Ranked Flex');
-            else if (queueTitle === '5v5 Draft Pick games') setQueueTitle('Normal');
-            else if (queueTitle === '5v5 ARAM games') setQueueTitle('ARAM');
-            else if (queueTitle === 'Arena') setQueueTitle('Arena');
-            else setQueueTitle(queue.description);
+            setQueueTitle(getQueueTitle(queue.description, queue.description));
         }
     }, [findQueueInfo]);
 

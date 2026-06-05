@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { Typography, Grid, Divider, LinearProgress, Box, Tooltip } from '@mui/material'
 import { getQueues, getSummonerSpells } from '../api/ddragon'
+import { queueTitle as getQueueTitle } from '../utils/queues'
 import calculateOpScores from '../functions/CalculateOpScores';
 import calculateOpScoresAram from '../functions/CalculateOpScoresAram';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -137,38 +138,14 @@ const DisplayGame = (props) => {
 
         let queue = await findQueueInfo();
 
-        let queueTitle = queue?.description || null;
-        if (queueTitle === '5v5 Ranked Solo games') {
-            setQueueTitle('Ranked Solo');
+        const description = queue?.description || null;
+        const title = getQueueTitle(description);
+        if (title) {
+            setQueueTitle(title);
+        } else if (description === null) {
+            setQueueTitle('Featured Mode');
         }
-        if (queueTitle === '5v5 Ranked Flex games') {
-            setQueueTitle('Ranked Flex');
-        }
-        if (queueTitle === '5v5 Draft Pick games') {
-            setQueueTitle('Normal');
-        }
-        else if (queueTitle === "Summoner's Rift Clash games") {
-            setQueueTitle('SR Clash')
-        }
-        else if (queueTitle === '5v5 ARAM games') {
-            setQueueTitle('ARAM')
-        }
-        else if (queueTitle === 'ARAM Clash games') {
-            setQueueTitle('ARAM Clash')
-        }
-        else if (queueTitle === 'ARURF games') {
-            setQueueTitle('ARURF')
-        }
-        else if (queueTitle === 'URF games') {
-            setQueueTitle('URF')
-        }
-        else if (queueTitle === 'Arena') {
-            setQueueTitle('Arena')
-        }
-        // CHANGE THIS ONCE RIOT UPDATES THEIR QUEUES JSON
-        else if (queueTitle === null) {
-            setQueueTitle('Featured Mode')
-        }
+        // unknown non-null description: leave queueTitle unchanged (as before)
     }, [findQueueInfo])
 
     const getQueueJSON = useCallback(async () => {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { getChampions, getItems, getVersion, getSummonerSpells, getRunes } from '../api/ddragon';
-import { getMatchCluster, isSeaServer } from '../lib/regions';
+import { getMatchCluster, isSeaServer } from '../utils/regions';
 import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'

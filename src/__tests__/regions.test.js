@@ -3,7 +3,7 @@ import {
   getAccountCluster,
   getMatchCluster,
   regionValues,
-} from './regions';
+} from '../utils/regions';
 
 // Platform regions grouped by their expected routing, used across the suite.
 const AMERICAS = ['na1', 'br1', 'la1', 'la2'];

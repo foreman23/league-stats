@@ -1,6 +1,6 @@
 import '../App.css';
 import { getChampions, getVersion } from '../api/ddragon';
-import { regionValues, getAccountCluster } from '../lib/regions';
+import { regionValues, getAccountCluster } from '../utils/regions';
 import axios from 'axios';
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';

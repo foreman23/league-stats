@@ -1,6 +1,6 @@
 import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress, Tooltip, Divider, Skeleton } from '@mui/material';
 import { getChampions, getVersion } from '../api/ddragon';
-import { getAccountCluster, getMatchCluster } from '../lib/regions';
+import { getAccountCluster, getMatchCluster } from '../utils/regions';
 import React, { useCallback } from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';

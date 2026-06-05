@@ -1,6 +1,7 @@
 import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
 import { getChampions, getItems, getVersion, getSummonerSpells, getRunes, getQueues } from '../api/ddragon';
-import { getMatchCluster, isSeaServer } from '../lib/regions';
+import { getMatchCluster, isSeaServer } from '../utils/regions';
+import { queueTitle as getQueueTitle } from '../utils/queues';
 import React from 'react'
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
@@ -185,28 +186,7 @@ function GameDetails() {
   const findQueueTitle = useCallback(async () => {
 
     let queue = await findQueueInfo();
-
-    let queueTitle = queue?.description;
-    if (queueTitle === '5v5 Ranked Solo games') {
-      setQueueTitle('Ranked Solo');
-    }
-    if (queueTitle === '5v5 Ranked Flex games') {
-      setQueueTitle('Ranked Flex');
-    }
-    if (queueTitle === '5v5 Draft Pick games') {
-      // queueTitle = 'Normal'
-      setQueueTitle('Normal');
-    }
-    else if (queueTitle === '5v5 ARAM games') {
-      // queueTitle = 'ARAM';
-      setQueueTitle('ARAM')
-    }
-    else if (queueTitle === 'Arena') {
-      setQueueTitle('Arena')
-    }
-    else {
-      setQueueTitle('Game')
-    }
+    setQueueTitle(getQueueTitle(queue?.description, 'Game'));
   }, [findQueueInfo])
 
   // Get queue JSON data from riot

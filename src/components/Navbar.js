@@ -6,7 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 // import LightModeIcon from '@mui/icons-material/LightMode';
 // import DarkModeIcon from '@mui/icons-material/DarkMode';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { regionValues } from '../lib/regions';
+import { regionValues } from '../utils/regions';
 
 function Navbar(props) {
 
