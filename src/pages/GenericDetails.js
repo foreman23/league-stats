@@ -1,12 +1,9 @@
 import React from 'react'
-import { getChampions, getItems, getVersion } from '../api/ddragon';
-import queuesData from '../jsonData/queues.json';
+import { getChampions, getItems, getVersion, getSummonerSpells, getRunes, getQueues } from '../api/ddragon';
 import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
-import runes from '../jsonData/runes.json';
-import summonerSpells from '../jsonData/summonerSpells.json';
 import Battles from '../components/Battles';
 import axios from 'axios';
 import { doc, getDoc } from 'firebase/firestore';
@@ -98,7 +95,8 @@ const GenericDetails = () => {
     // Get queue JSON data from riot
     const getQueueJSON = async () => {
         try {
-            setQueues(queuesData);
+            const data = await getQueues();
+            setQueues(data);
         } catch (error) {
             // console.error('Error fetching queue JSON data');
         }
@@ -123,11 +121,15 @@ const GenericDetails = () => {
         }
     }
 
+    // DataDragon static data (fetched live + cached; see effect below)
+    const [summonerSpells, setSummonerSpells] = useState(null);
+    const [runes, setRunes] = useState(null);
+
     // Create summoner spells object
-    const summonerSpellsObj = Object.values(summonerSpells.data);
+    const summonerSpellsObj = summonerSpells ? Object.values(summonerSpells.data) : [];
 
     // Create runes object
-    const runesObj = Object.values(runes);
+    const runesObj = runes ? Object.values(runes) : [];
 
     // Returns keystone url
     const getKeystoneIconUrl = (player, runesObj) => {
@@ -352,6 +354,8 @@ const GenericDetails = () => {
             getQueueJSON();
             getItemsJSON();
             getChampsJSON();
+            getSummonerSpells(dataDragonVersion).then(setSummonerSpells).catch(() => {});
+            getRunes(dataDragonVersion).then(setRunes).catch(() => {});
         }
     }, [dataDragonVersion, getChampsJSON, getItemsJSON])
 
@@ -526,10 +530,10 @@ const GenericDetails = () => {
     const [isLoading, setIsLoading] = useState(true);
     // Render page once data is loaded
     useEffect(() => {
-        if (playersWithScores.length > 0) {
+        if (playersWithScores.length > 0 && summonerSpells && runes) {
             setIsLoading(false);
         }
-    }, [playersWithScores])
+    }, [playersWithScores, summonerSpells, runes])
 
     if (isLoading) {
         return (

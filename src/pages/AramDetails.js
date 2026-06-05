@@ -1,11 +1,9 @@
 import React from 'react'
-import { getChampions, getItems, getVersion } from '../api/ddragon';
+import { getChampions, getItems, getVersion, getSummonerSpells, getRunes } from '../api/ddragon';
 import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
-import runes from '../jsonData/runes.json';
-import summonerSpells from '../jsonData/summonerSpells.json';
 import Battles from '../components/Battles';
 import axios from 'axios';
 import { doc, getDoc } from 'firebase/firestore';
@@ -75,11 +73,15 @@ const AramDetails = () => {
         }
     }
 
+    // DataDragon static data (fetched live + cached; see effect below)
+    const [summonerSpells, setSummonerSpells] = useState(null);
+    const [runes, setRunes] = useState(null);
+
     // Create summoner spells object
-    const summonerSpellsObj = Object.values(summonerSpells.data);
+    const summonerSpellsObj = summonerSpells ? Object.values(summonerSpells.data) : [];
 
     // Create runes object
-    const runesObj = Object.values(runes);
+    const runesObj = runes ? Object.values(runes) : [];
 
     // Returns keystone url
     const getKeystoneIconUrl = (player, runesObj) => {
@@ -304,6 +306,8 @@ const AramDetails = () => {
         if (dataDragonVersion !== null) {
             getItemsJSON();
             getChampsJSON();
+            getSummonerSpells(dataDragonVersion).then(setSummonerSpells).catch(() => {});
+            getRunes(dataDragonVersion).then(setRunes).catch(() => {});
         }
     }, [dataDragonVersion, getChampsJSON, getItemsJSON])
 
@@ -469,10 +473,10 @@ const AramDetails = () => {
     const [isLoading, setIsLoading] = useState(true);
     // Render page once data is loaded
     useEffect(() => {
-        if (playersWithScores.length > 0) {
+        if (playersWithScores.length > 0 && summonerSpells && runes) {
             setIsLoading(false);
         }
-    }, [playersWithScores])
+    }, [playersWithScores, summonerSpells, runes])
 
     if (isLoading) {
         return (

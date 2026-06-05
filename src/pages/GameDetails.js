@@ -1,12 +1,9 @@
 import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
-import { getChampions, getItems, getVersion } from '../api/ddragon';
+import { getChampions, getItems, getVersion, getSummonerSpells, getRunes, getQueues } from '../api/ddragon';
 import React from 'react'
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
-import queuesData from '../jsonData/queues.json';
-import summonerSpells from '../jsonData/summonerSpells.json';
-import runes from '../jsonData/runes.json';
 import getStatsAt15 from '../functions/LaneAnalysis';
 import axios from 'axios';
 import LanePhaseSummaryCardTop from '../components/LanePhaseSummaryCardTop';
@@ -55,11 +52,15 @@ function GameDetails() {
   // Timeline data
   const [timelineData, setTimelineData] = useState(null);
 
+  // DataDragon static data (fetched live + cached; see effect below)
+  const [summonerSpells, setSummonerSpells] = useState(null);
+  const [runes, setRunes] = useState(null);
+
   // Create summoner spells object
-  const summonerSpellsObj = Object.values(summonerSpells.data);
+  const summonerSpellsObj = summonerSpells ? Object.values(summonerSpells.data) : [];
 
   // Create runes object
-  const runesObj = Object.values(runes);
+  const runesObj = runes ? Object.values(runes) : [];
 
   // graph colors
   let blueColors = [
@@ -210,7 +211,8 @@ function GameDetails() {
   // Get queue JSON data from riot
   const getQueueJSON = async () => {
     try {
-      setQueues(queuesData);
+      const data = await getQueues();
+      setQueues(data);
     } catch (error) {
       // console.error('Error fetching queue JSON data');
     }
@@ -316,6 +318,8 @@ function GameDetails() {
       getQueueJSON();
       getItemsJSON();
       getChampsJSON();
+      getSummonerSpells(dataDragonVersion).then(setSummonerSpells).catch(() => {});
+      getRunes(dataDragonVersion).then(setRunes).catch(() => {});
     }
   }, [dataDragonVersion, getChampsJSON, getItemsJSON])
 
@@ -479,10 +483,10 @@ function GameDetails() {
   const [isLoading, setIsLoading] = useState(true);
   // Render page once data is loaded
   useEffect(() => {
-    if (playersWithScores.length > 0 && matchSummaryDesc) {
+    if (playersWithScores.length > 0 && matchSummaryDesc && summonerSpells && runes) {
       setIsLoading(false);
     }
-  }, [playersWithScores, matchSummaryDesc])
+  }, [playersWithScores, matchSummaryDesc, summonerSpells, runes])
 
   if (isLoading) {
     return (

@@ -1,13 +1,11 @@
 import React from 'react';
-import { getChampions, getItems, getVersion } from '../api/ddragon';
-import queuesData from '../jsonData/queues.json';
+import { getChampions, getItems, getVersion, getSummonerSpells, getQueues } from '../api/ddragon';
 import { Typography, Grid, Tooltip, LinearProgress, Box } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../FirebaseConfig';
 import OverviewTable from '../components/OverviewTable';
-import summonerSpells from '../jsonData/summonerSpells.json';
 
 const ArenaDetails = () => {
     const [queues, setQueues] = useState(null);
@@ -19,8 +17,11 @@ const ArenaDetails = () => {
     const [items, setItems] = useState(null);
 
 
+    // DataDragon summoner spells (fetched live + cached; see effect below)
+    const [summonerSpells, setSummonerSpells] = useState(null);
+
     // Create summoner spells object
-    const summonerSpellsObj = Object.values(summonerSpells.data);
+    const summonerSpellsObj = summonerSpells ? Object.values(summonerSpells.data) : [];
 
     // Init navigate
     const navigate = useNavigate();
@@ -111,7 +112,8 @@ const ArenaDetails = () => {
     // Fetch queue JSON
     const getQueueJSON = async () => {
         try {
-            setQueues(queuesData);
+            const data = await getQueues();
+            setQueues(data);
         } catch (error) {
             console.error('Error fetching queue data:', error);
         }
@@ -155,6 +157,13 @@ const ArenaDetails = () => {
         getItemsJSON();
         getChampsJSON();
     }, [fetchGameData, getChampsJSON, getItemsJSON]);
+
+    // Fetch summoner spells once the patch version is known
+    useEffect(() => {
+        if (dataDragonVersion) {
+            getSummonerSpells(dataDragonVersion).then(setSummonerSpells).catch(() => {});
+        }
+    }, [dataDragonVersion]);
 
     // Set queue title when queues or gameData changes
     useEffect(() => {
@@ -208,7 +217,7 @@ const ArenaDetails = () => {
         else placementSuffix = 'th';
     }
 
-    if (isLoading || !gameData || !playerData || !teammateData || !dataDragonVersion || !champsJSON) {
+    if (isLoading || !gameData || !playerData || !teammateData || !dataDragonVersion || !champsJSON || !summonerSpells) {
         return (
             <Grid>
                 <LinearProgress />

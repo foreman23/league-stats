@@ -66,3 +66,30 @@ export const getItems = (version) =>
     `ddragon-item-${version}`,
     `https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/item.json`
   );
+
+// Summoner spells ({ data: {...} }) and rune trees (array). Version-keyed, so a
+// new patch produces a new cache key and auto-refetches.
+export const getSummonerSpells = (version) =>
+  fetchCached(
+    `ddragon-summoner-${version}`,
+    `https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/summoner.json`
+  );
+
+export const getRunes = (version) =>
+  fetchCached(
+    `ddragon-runes-${version}`,
+    `https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/runesReforged.json`
+  );
+
+// Queue id -> mode metadata. Not version-keyed on the CDN, and new queues are
+// added when Riot ships new modes, so cache in-memory only (refetched each
+// session = always current) rather than persisting a snapshot.
+export const getQueues = async () => {
+  if (memoryCache['ddragon-queues']) {
+    return memoryCache['ddragon-queues'];
+  }
+  const response = await fetch('https://static.developer.riotgames.com/docs/lol/queues.json');
+  const data = await response.json();
+  memoryCache['ddragon-queues'] = data;
+  return data;
+};

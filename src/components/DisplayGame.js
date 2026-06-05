@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { Typography, Grid, Divider, LinearProgress, Box, Tooltip } from '@mui/material'
-import queuesData from '../jsonData/queues.json'
-import summonerSpells from '../jsonData/summonerSpells.json'
+import { getQueues, getSummonerSpells } from '../api/ddragon'
 import calculateOpScores from '../functions/CalculateOpScores';
 import calculateOpScoresAram from '../functions/CalculateOpScoresAram';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -22,8 +21,11 @@ const DisplayGame = (props) => {
 
     const participants = gameData.info.participants;
 
+    // DataDragon summoner spells (fetched live + cached; see effect below)
+    const [summonerSpells, setSummonerSpells] = useState(null);
+
     // Find summoner spells
-    const summonerSpellsObj = Object.values(summonerSpells.data);
+    const summonerSpellsObj = summonerSpells ? Object.values(summonerSpells.data) : [];
     const summonerSpell1 = summonerSpellsObj.find(spell => spell.key === participant.summoner1Id.toString());
     const summonerSpell2 = summonerSpellsObj.find(spell => spell.key === participant.summoner2Id.toString());
 
@@ -171,7 +173,8 @@ const DisplayGame = (props) => {
 
     const getQueueJSON = useCallback(async () => {
         try {
-            setQueues(queuesData);
+            const data = await getQueues();
+            setQueues(data);
         } catch (error) {
             // console.error('Error fetching queue data');
         }
@@ -210,15 +213,21 @@ const DisplayGame = (props) => {
         getQueueJSON();
     }, [getQueueJSON])
 
+    useEffect(() => {
+        if (dataDragonVersion) {
+            getSummonerSpells(dataDragonVersion).then(setSummonerSpells).catch(() => {});
+        }
+    }, [dataDragonVersion])
+
 
     // Set loading to false when data is loaded
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        if (playersWithOpScores !== null && playerScore !== null && oppScore !== null && champsJSON !== null) {
+        if (playersWithOpScores !== null && playerScore !== null && oppScore !== null && champsJSON !== null && summonerSpells !== null) {
             setIsLoading(false)
         }
 
-    }, [playersWithOpScores, playerScore, oppScore, champsJSON])
+    }, [playersWithOpScores, playerScore, oppScore, champsJSON, summonerSpells])
 
     useEffect(() => {
 
