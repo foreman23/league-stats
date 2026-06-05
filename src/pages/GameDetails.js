@@ -153,11 +153,15 @@ function GameDetails() {
 
       const fetch15Stats = async () => {
         if (timelineData && champsJSON) {
-          const graphData = await generateGraphData(gameData, timelineData);
-          const stats15 = await getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData);
-          const buildData = await getBuildInfo(gameData, timelineData, champsJSON, dataDragonVersion);
-          setGraphData(graphData);
+          // These three are independent of each other; run them concurrently
+          const [graphData, stats15, buildData] = await Promise.all([
+            generateGraphData(gameData, timelineData),
+            getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData),
+            getBuildInfo(gameData, timelineData, champsJSON, dataDragonVersion),
+          ]);
+          // generateShortSummary depends on stats15, so it runs after
           const shortSummaryRes = await generateShortSummary(gameData, playerData, timelineData, stats15, dataDragonVersion, champsJSON)
+          setGraphData(graphData);
           setShortSummary(shortSummaryRes)
           setStatsAt15(stats15);
           setBuildData(buildData);

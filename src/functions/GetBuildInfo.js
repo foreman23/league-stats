@@ -9,18 +9,24 @@ const getBuildInfo = async (gameData, timelineData, champsJSON, dataDragonVersio
     let skillTimeline = [];
     let champInfo = [];
 
-    for (let i = 0; i < participants.length; i++) {
-        const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participants[i].championId)).id}.json`);
-        const data = await response.json();
+    // Fetch every participant's champion data concurrently (preserves order)
+    const champData = await Promise.all(
+        participants.map((participant) =>
+            fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion/${Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).id}.json`)
+                .then((response) => response.json())
+        )
+    );
+
+    participants.forEach((participant, i) => {
         let itemChampObj = {
-            name: participants[i].championName,
-            participantId: participants[i].participantId,
+            name: participant.championName,
+            participantId: participant.participantId,
             itemHistory: []
         };
         itemTimeline.push(itemChampObj);
         skillTimeline.push([]);
-        champInfo.push(data);
-    }
+        champInfo.push(champData[i]);
+    });
 
     // Process frames to group items and skills
     frames.forEach((frame) => {
