@@ -1,4 +1,5 @@
 import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
+import { getChampions, getItems } from '../api/ddragon';
 import React from 'react'
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
@@ -220,8 +221,7 @@ function GameDetails() {
   // Get item JSON data from riot
   const getItemsJSON = useCallback(async () => {
     try {
-      const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/item.json`);
-      const data = await response.json();
+      const data = await getItems(dataDragonVersion);
       setItems(data);
     } catch (error) {
       // console.error('Error fetching item JSON data',);
@@ -231,8 +231,7 @@ function GameDetails() {
   // Get champion JSON data from riot
   const getChampsJSON = useCallback(async () => {
     try {
-      const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
-      const data = await response.json();
+      const data = await getChampions(dataDragonVersion);
       setChampsJSON(data);
     } catch (error) {
       // console.error('Error fetching champion JSON data');

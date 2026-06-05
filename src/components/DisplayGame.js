@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import { getChampions } from '../api/ddragon';
 import { Typography, Grid, Divider, LinearProgress, Box, Tooltip } from '@mui/material'
 // import queues from '../jsonData/queues.json'
 import summonerSpells from '../jsonData/summonerSpells.json'
@@ -184,8 +185,7 @@ const DisplayGame = (props) => {
     // Get champion JSON data from riot
     const getChampsJSON = useCallback(async () => {
         try {
-            const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/data/en_US/champion.json`);
-            const data = await response.json();
+            const data = await getChampions(dataDragonVersion);
             setChampsJSON(data);
         } catch (error) {
             // console.error('Error fetching champion JSON data',);

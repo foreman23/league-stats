@@ -1,4 +1,5 @@
 import '../App.css';
+import { getChampions } from '../api/ddragon';
 import axios from 'axios';
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -214,8 +215,7 @@ function SummonerSearch() {
   // Get champion JSON data from riot
   const getChampsJSON = async (currentVersion) => {
     try {
-      const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/data/en_US/champion.json`);
-      const data = await response.json();
+      const data = await getChampions(currentVersion);
       setChampsJSON(data);
     } catch (error) {
       // console.error('Error fetching champion JSON data');

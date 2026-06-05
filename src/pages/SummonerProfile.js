@@ -1,4 +1,5 @@
 import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress, Tooltip, Divider, Skeleton } from '@mui/material';
+import { getChampions } from '../api/ddragon';
 import React, { useCallback } from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -581,8 +582,7 @@ const SummonerProfile = () => {
   // Get champion JSON data from riot
   const getChampsJSON = async (currentVersion) => {
     try {
-      const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/data/en_US/champion.json`);
-      const data = await response.json();
+      const data = await getChampions(currentVersion);
       setChampsJSON(data);
     } catch (error) {
     }
