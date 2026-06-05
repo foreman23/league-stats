@@ -131,56 +131,41 @@ const SummonerProfile = () => {
       setLoadingMatches(false);
     }
     else if (historyData.length >= 1) {
-      for (let i = 0; i < 5; i++) {
-        // check if match already exists
-        const docRef = doc(firestore, `${selectedRegion}-matches`, historyData[i]);
-        // console.log('Reading from firestore (checking match exists)')
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          if (!docSnap.data().matchData.status) {
-            newMatchDataArray.push(docSnap.data().matchData);
+      // Load the first 5 matches concurrently; read-through Firestore cache
+      // (check doc -> on miss fetch proxy -> backfill) is preserved per match.
+      const matchResults = await Promise.all(
+        historyData.slice(0, 5).map(async (matchId) => {
+          // check if match already exists
+          const docRef = doc(firestore, `${selectedRegion}-matches`, matchId);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            return docSnap.data().matchData.status ? null : docSnap.data().matchData;
           }
-        }
-        else {
+
           let dateRetrieved = new Date()
           // get match information
-          const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyData[i]}`);
-          // riotApiCallCount += 1;
-
-          // break loop if game too old
-          if (new Date(matchResponse.data.info.gameStartTimestamp + 7776000000) < new Date()) {
-            // if first game too old, rest must be
-            if (i === 0) {
-              break;
-            }
-            else {
-              continue;
-            }
+          const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${matchId}`);
+          if (matchResponse.status !== 200) {
+            return null;
           }
 
-          let matchData = null
-
-          if (matchResponse.status === 200) {
-            matchData = matchResponse.data;
-          }
-          const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyData[i]);
-
-          if (matchResponse.status === 200 && (new Date((matchData.info.gameStartTimestamp) + 7776000000)) > new Date()) {
-            // console.log('WRITING TO FIRESTORE (match)')
-            await setDoc(newDocRef, {
-              dateRetrieved: dateRetrieved,
-              matchData: matchData,
-              expiration: new Date((matchData.info.gameStartTimestamp) + 7776000000)
-            });
+          const matchData = matchResponse.data;
+          // skip games older than the 90-day cache window (not cached, not shown)
+          if (new Date(matchData.info.gameStartTimestamp + 7776000000) < new Date()) {
+            return null;
           }
 
-          // setMatchData(matchData);
-          if (matchData !== null) {
-            newMatchDataArray.push(matchData);
-          }
-        }
-      }
-      // console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
+          const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), matchId);
+          await setDoc(newDocRef, {
+            dateRetrieved: dateRetrieved,
+            matchData: matchData,
+            expiration: new Date((matchData.info.gameStartTimestamp) + 7776000000)
+          });
+          return matchData;
+        })
+      );
+      newMatchDataArray.push(...matchResults.filter((m) => m !== null));
+
       setHistoryIndex(newMatchDataArray.length)
       setMatchData(newMatchDataArray);
       setMatchesLoaded(true);
@@ -195,55 +180,40 @@ const SummonerProfile = () => {
     // let riotApiCallCount = 0;
 
     if (!allLoaded) {
-      for (let i = historyIndex; i < historyIndex + 5; i++) {
-        // check if match already exists
-        const docRef = doc(firestore, `${selectedRegion}-matches`, historyState[i]);
-        // console.log('Reading from firestore (checking match exists)')
-        const docSnap = await getDoc(docRef);
+      // Load the next 5 matches concurrently; read-through cache preserved per match.
+      const idsToLoad = historyState.slice(historyIndex, historyIndex + 5);
+      const matchResults = await Promise.all(
+        idsToLoad.map(async (matchId) => {
+          // check if match already exists
+          const docRef = doc(firestore, `${selectedRegion}-matches`, matchId);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            return docSnap.data().matchData;
+          }
 
-        if (docSnap.exists()) {
-          newMatchDataArray.push(docSnap.data().matchData);
-        }
-
-        else {
           let dateRetrieved = new Date()
           // get match information
-          const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${historyState[i]}`);
-          // riotApiCallCount += 1;
-
-          // break loop if game too old
-          if (new Date(matchResponse.data.info.gameStartTimestamp + 7776000000) < new Date()) {
-            // if first game too old, rest must be
-            if (i === 0) {
-              break;
-            }
-            else {
-              continue;
-            }
+          const matchResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/matchinfo?alternateRegion=${matchRegion}&matchId=${matchId}`);
+          if (matchResponse.status !== 200) {
+            return null;
           }
 
-          let matchData = null
-          if (matchResponse.status === 200) {
-            matchData = matchResponse.data;
+          const matchData = matchResponse.data;
+          // skip games older than the 90-day cache window (not cached, not shown)
+          if (new Date(matchData.info.gameStartTimestamp + 7776000000) < new Date()) {
+            return null;
           }
 
-          const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), historyState[i]);
-
-          if (matchResponse.status === 200 && (new Date((matchData.info.gameStartTimestamp) + 7776000000)) > new Date()) {
-            // console.log('WRITING TO FIRESTORE (match)')
-            await setDoc(newDocRef, {
-              dateRetrieved: dateRetrieved,
-              matchData: matchData,
-              expiration: new Date((matchData.info.gameStartTimestamp) + 7776000000)
-            });
-          }
-
-          // setMatchData(matchData);
-          if (matchData !== null) {
-            newMatchDataArray.push(matchData);
-          }
-        }
-      }
+          const newDocRef = doc(collection(firestore, `${selectedRegion}-matches`), matchId);
+          await setDoc(newDocRef, {
+            dateRetrieved: dateRetrieved,
+            matchData: matchData,
+            expiration: new Date((matchData.info.gameStartTimestamp) + 7776000000)
+          });
+          return matchData;
+        })
+      );
+      newMatchDataArray.push(...matchResults.filter((m) => m !== null));
     }
 
     // console.log(`CALLED RIOT API ${riotApiCallCount} TIMES`)
@@ -300,24 +270,20 @@ const SummonerProfile = () => {
         // riotApiCallCount += 1
         const summonerResData = summonerResponse.data;
 
-        let rankedData = [];
-        try {
-          const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerResData.id}`);
-          // riotApiCallCount += 1
-          rankedData = rankedResponse.data;
-        } catch (rankedError) {
-          // If ranked data returns 400, player might be unranked - this is OK
-          console.log('Player has no ranked data or is unranked');
-          rankedData = [];
-        }
-
-        const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`);
-        // riotApiCallCount += 1
-        const historyData = historyResponse.data;
-
-        const masteryResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
-        // riotApiCallCount += 1
-        const masteryData = masteryResponse.data;
+        // ranked/history/mastery only depend on puuid/summonerId — fetch concurrently
+        const [rankedData, historyData, masteryData] = await Promise.all([
+          axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerResData.id}`)
+            .then((res) => res.data)
+            .catch(() => {
+              // If ranked data returns 400, player might be unranked - this is OK
+              console.log('Player has no ranked data or is unranked');
+              return [];
+            }),
+          axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${puuidData.puuid}`)
+            .then((res) => res.data),
+          axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
+            .then((res) => res.data),
+        ]);
 
         // console.log(`CALLED RIOT API: ${riotApiCallCount} times`)
 
@@ -371,24 +337,20 @@ const SummonerProfile = () => {
       // riotApiCallCount += 1
       const summonerData = summonerResponse.data;
 
-      let rankedData = [];
-      try {
-        const rankedResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`);
-        // riotApiCallCount += 1
-        rankedData = rankedResponse.data;
-      } catch (rankedError) {
-        // If ranked data returns 400, player might be unranked - this is OK
-        console.log('Player has no ranked data or is unranked');
-        rankedData = [];
-      }
-
-      const historyResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${summonerData.puuid}`);
-      // riotApiCallCount += 1
-      const historyData = historyResponse.data;
-
-      const masteryResponse = await axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
-      // riotApiCallCount += 1
-      const masteryData = masteryResponse.data;
+      // ranked/history/mastery only depend on puuid/summonerId — fetch concurrently
+      const [rankedData, historyData, masteryData] = await Promise.all([
+        axios.get(`${process.env.REACT_APP_REST_URL}/ranked?selectedRegion=${selectedRegion}&summonerId=${summonerData.id}`)
+          .then((res) => res.data)
+          .catch(() => {
+            // If ranked data returns 400, player might be unranked - this is OK
+            console.log('Player has no ranked data or is unranked');
+            return [];
+          }),
+        axios.get(`${process.env.REACT_APP_REST_URL}/history?alternateRegion=${matchRegion}&puuid=${summonerData.puuid}`)
+          .then((res) => res.data),
+        axios.get(`${process.env.REACT_APP_REST_URL}/mastery?selectedRegion=${selectedRegion}&puuid=${puuidData.puuid}&count=3`)
+          .then((res) => res.data),
+      ]);
 
       // console.log(`CALLED RIOT API: ${riotApiCallCount} times`)
 
