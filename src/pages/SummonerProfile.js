@@ -465,6 +465,14 @@ const SummonerProfile = () => {
 
   // Handle favorite click
   const handleFavoriteClick = () => {
+    // Don't save while playerData (name) and summonerData (icon/level) are out
+    // of sync mid-navigation — would mix one summoner's icon with another's name.
+    if (
+      !playerData?.puuid ||
+      playerData.puuid !== summonerData?.summonerData?.puuid
+    ) {
+      return;
+    }
     const favorites = localStorage.getItem('favorites')
 
     let rank = null
@@ -628,7 +636,15 @@ const SummonerProfile = () => {
   }, [summonerData, matchData, matchesLoaded, riotId, summonerName])
 
   useEffect(() => {
-    if (playerData !== undefined && playerData !== null) {
+    // Skip if playerData (name) and summonerData (icon/level) are out of sync
+    // mid-navigation, else we'd save one summoner's icon with another's name.
+    if (
+      playerData !== undefined &&
+      playerData !== null &&
+      playerData.puuid &&
+      summonerData?.summonerData?.puuid &&
+      playerData.puuid === summonerData.summonerData.puuid
+    ) {
       document.title = `${playerData.riotIdGameName}#${riotId} - ${selectedRegion}`;
 
       // Add summoner to local storage

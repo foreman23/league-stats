@@ -386,7 +386,7 @@ function SummonerSearch() {
 
                 return (
                   <a
-                    style={{ textDecoration: "inherit", color: "inherit" }}
+                    style={{ textDecoration: "inherit", color: "inherit", display: "block", width: "100%" }}
                     onMouseDown={(e) => {
                       if (e.button === 0 || e.button === 1) {
                         localStorage.setItem("gameData", JSON.stringify(gameDataPayload));

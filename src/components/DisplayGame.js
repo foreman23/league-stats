@@ -65,6 +65,15 @@ const DisplayGame = (props) => {
         opposingLaner = opposingPlayers[0]
     }
 
+    // Lane CS differential vs the lane opponent — derived cheaply from match-info
+    // `challenges` (no timeline / no per-card computation). Junglers are compared
+    // on jungle CS rather than lane minions. Null when challenges are absent
+    // (ARAM/Arena/remakes/old games) so the indicator simply hides.
+    const laneCsField = participant.teamPosition === 'JUNGLE' ? 'jungleCsBefore10Minutes' : 'laneMinionsFirst10Minutes';
+    const playerLaneCs = participant.challenges?.[laneCsField];
+    const oppLaneCs = opposingLaner?.challenges?.[laneCsField];
+    const laneCsDiff = (playerLaneCs !== undefined && oppLaneCs !== undefined) ? playerLaneCs - oppLaneCs : null;
+
     let opposingSummonerSpell1 = null;
     let opposingSummonerSpell2 = null;
     if (opposingLaner) {
@@ -300,6 +309,16 @@ const DisplayGame = (props) => {
                             {/* Mobile */}
                             <Typography className='displayGameSubheader hideDesktop' style={{ color: '#7E7E7E' }}>{`${participant.kills}/${participant.deaths}/${participant.assists}`}</Typography>
                             <Typography className='displayGameSubheader hideDesktop' style={{ color: '#7E7E7E' }}>{`(${participant.totalMinionsKilled + participant.neutralMinionsKilled} CS)`}</Typography>
+                            {laneCsDiff !== null && gameData.info.gameMode !== 'CHERRY' &&
+                                <Typography className='displayGameLaneResult' style={{
+                                    fontWeight: 'bold',
+                                    fontSize: '0.8rem',
+                                    marginTop: '2px',
+                                    color: laneCsDiff > 10 ? '#1B9C4B' : laneCsDiff < -10 ? '#D63A3A' : '#8A8A8A'
+                                }}>
+                                    {laneCsDiff > 10 ? `▲ +${laneCsDiff} CS` : laneCsDiff < -10 ? `▼ ${Math.abs(laneCsDiff)} CS` : '◇ Even lane'}
+                                </Typography>
+                            }
                             {gameData.info.gameMode !== 'CHERRY' &&
                                 <Grid className='teamChampsContainer teamChampsContainerM1'>
                                     {participants.filter(player => player.teamId === participant.teamId && player.summonerId !== participant.summonerId).map((player, index) => (

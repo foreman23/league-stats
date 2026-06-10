@@ -23,9 +23,9 @@ const Builds = (props) => {
 
     return (
         <Grid className='GameDetailsContainer' width={'65%'} container justifyContent={'center'} margin={'auto'} marginTop={'20px'} marginBottom={'10px'}>
-            <Box className='BuildsBox'>
-                <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Builds</Typography>
-                <Typography style={{ fontSize: '1.25rem', marginBottom: '20px', color: '#4B4B4B' }}>Player Items & Level Ups</Typography>
+            <Box className='BuildsBox gameSectionHeader'>
+                <Typography className='gameSectionHeading'>Builds</Typography>
+                <Typography className='gameSectionSubheading'>Player Items & Level Ups</Typography>
             </Box>
             <Box className='BuildsBox2'>
                 <a style={{ color: currBuildChamp?.teamId === 100 ? '#568CFF' : '#FF3F3F' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${currBuildChamp?.riotIdGameName}/${currBuildChamp?.riotIdTagline.toLowerCase()}`}>
@@ -94,7 +94,7 @@ const Builds = (props) => {
                 </div>
                 {/* Skill Order */}
                 <div style={{ display: 'flex', marginLeft: '0px', marginTop: '15px', flexDirection: 'column' }}>
-                    <Typography fontSize={'1.25rem'} color={'#4B4B4B'} marginTop={'10px'}>Skill Order</Typography>
+                    <Typography fontSize={'1.25rem'} color={'#3A3F47'} marginTop={'10px'}>Skill Order</Typography>
                     <div style={{ display: 'flex', overflowX: 'auto', backgroundColor: '#E6E6E6', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', justifyContent: 'start', padding: '10px', paddingTop: '20px', paddingBottom: '10px', borderRadius: '10px', marginTop: '20px' }}>
                         {Array.from({ length: 18 }).map((_, index) => {
                             const skillEvent = buildData.skillTimeline[currBuildChamp.participantId - 1].filter(event => event.type === 'SKILL_LEVEL_UP')[index];
@@ -146,7 +146,7 @@ const Builds = (props) => {
                                         />
                                     </div>
 
-                                    <Typography style={{ textAlign: 'center', color: '#4B4B4B', fontSize: '1rem' }}>
+                                    <Typography style={{ textAlign: 'center', color: '#3A3F47', fontSize: '1rem' }}>
                                         {skillEvent ? index + 1 : ''}
                                     </Typography>
                                 </div>
@@ -157,7 +157,7 @@ const Builds = (props) => {
 
                 {/* Item build */}
                 <div style={{ display: 'flex', marginLeft: '0px', marginTop: '20px', flexDirection: 'column' }}>
-                    <Typography fontSize={'1.25rem'} color={'#4B4B4B'} marginTop={'10px'}>Item Build</Typography>
+                    <Typography fontSize={'1.25rem'} color={'#3A3F47'} marginTop={'10px'}>Item Build</Typography>
                     <div style={{ display: 'flex', justifyContent: 'center', padding: '10px', paddingLeft: '3px', paddingTop: '10px', paddingBottom: '10px', borderRadius: '10px', marginTop: '0px', flexWrap: 'wrap' }}>
                         {buildData.itemTimeline[currBuildChamp.participantId - 1].itemHistory.map((itemGroup, itemGroupIndex) => (
                             <div key={`itemgroup_${itemGroupIndex}`} style={{ display: 'flex', alignItems: 'center' }}>
@@ -171,14 +171,14 @@ const Builds = (props) => {
                                         ))}
                                     </div>
                                     <div>
-                                        <Typography style={{ textAlign: 'center', color: '#747474', fontSize: '0.875rem', fontWeight: 'bold', marginTop: '3px' }}>
+                                        <Typography style={{ textAlign: 'center', color: '#6B7280', fontSize: '0.875rem', fontWeight: 'bold', marginTop: '3px' }}>
                                             {`${String(Math.floor(itemGroup[0].timestamp / 60000)).padStart(2, '0')}:${String(Math.floor((itemGroup[0].timestamp % 60000) / 1000)).padStart(2, '0')}`}
                                         </Typography>
                                     </div>
                                 </div>
                                 {itemGroupIndex !== buildData.itemTimeline[currBuildChamp.participantId - 1].itemHistory.length - 1 && (
                                     <div>
-                                        <ForwardIcon style={{ fontSize: '2.625rem', color: '#A4A4A4', marginLeft: '10px', marginRight: '10px' }}></ForwardIcon>
+                                        <ForwardIcon style={{ fontSize: '2.625rem', color: '#6B7280', marginLeft: '10px', marginRight: '10px' }}></ForwardIcon>
                                     </div>
                                 )}
 

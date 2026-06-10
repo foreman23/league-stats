@@ -2,7 +2,18 @@
   "permissions": {
     "allow": [
       "Bash(rg:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(awk '{print $5/1024 \" KB \" $9}')",
+      "Bash(awk '{print $1/1024/1024 \" MB \" $2}')",
+      "Bash(curl -s \"https://ddragon.leagueoflegends.com/api/versions.json\")",
+      "Bash(mkdir -p src/utils)",
+      "Bash(git mv *)",
+      "Bash(mv src/lib/queues.js src/utils/queues.js)",
+      "Bash(mv src/lib/queues.test.js src/utils/queues.test.js)",
+      "Bash(rmdir src/lib)",
+      "Bash(awk '/@media/{m=$0} /\\\\.displayGamesMainContainer/{print NR\": \"m}' src/App.css)",
+      "Bash(awk '/\\\\.summonerProfileRiotName[ ,{]/{f=1} f{print NR\": \"$0} f&&/}/{f=0}' src/App.css)"
     ],
     "deny": []
   }

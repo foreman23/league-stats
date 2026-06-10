@@ -1287,14 +1287,14 @@ const Battles = (props) => {
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', margin: '0' }}>
-            <Grid container>
+            <Grid container className='gameSectionHeader'>
                 <Grid item xs={12} sm={12} md={6}>
                     <div style={{ position: 'relative', width: '140px' }}>
-                        <Typography fontSize={'1.25rem'} fontWeight={600}>Battles</Typography>
+                        <Typography className='gameSectionHeading'>Battles</Typography>
                         <Typography style={{ position: 'absolute', top: '0px', right: '0px', left: 'auto' }}><span style={{ backgroundColor: 'purple', color: 'white', padding: '10px', borderRadius: '20px', fontSize: '0.875rem', fontWeight: 'bold', filter: 'drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.25))' }}>BETA*</span></Typography>
                     </div>
-                    <Typography style={{ fontSize: '14px', marginTop: '12px', marginBottom: '7px', color: 'rgb(133, 133, 133)' }}>*Descriptions provided below may not be 100% accurate</Typography>
-                    <Typography style={{ fontSize: '20px', color: 'rgb(75, 75, 75)' }} marginBottom={'20px'}>Fights that occurred during the match</Typography>
+                    <Typography style={{ fontSize: '14px', marginTop: '12px', marginBottom: '7px', color: '#6B7280' }}>*Descriptions provided below may not be 100% accurate</Typography>
+                    <Typography className='gameSectionSubheading'>Fights that occurred during the match</Typography>
                 </Grid>
                 <Grid item className='BattlesCollapseBtnContainer' xs={12} sm={12} md={6}>
                     {/* <Typography style={{ marginTop: '4px' }} fontSize={16} fontWeight={600}>Fights Won:</Typography>
@@ -1305,12 +1305,12 @@ const Battles = (props) => {
                     <Box key={fightIndex} style={{ width: '100%', border: '0px solid black', boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px' }}>
                         <div onClick={() => handleCollapseFight(fightIndex)} className='BattlesHeaderContainer'>
                             {fight.outcome[0] === 'E' && fight.blueKills === 0 && fight.redKills === 0 ? (
-                                <div className='BattlesHeader'><Typography style={{ color: '#404040', fontWeight: 'bold', fontSize: '1rem' }}>No Contest 0 - 0</Typography></div>
+                                <div className='BattlesHeader'><Typography style={{ color: '#3A3F47', fontWeight: 'bold', fontSize: '1rem' }}>No Contest 0 - 0</Typography></div>
                             ) : (
                                 <div className='BattlesHeader'><Typography style={{ color: fight.outcome[0] === 'E' ? '#404040' : fight.outcome[0] === 'B' ? '#3374FF' : '#FF3F3F', fontWeight: 'bold', fontSize: '1rem' }}>{fight.outcome}</Typography></div>
                             )
                             }
-                            <div className='BattlesHeader2'><Typography style={{ color: '#4B4B4B', fontWeight: 'bold', fontSize: '0.875rem' }}>{`(${fight.timespan})`}</Typography></div>
+                            <div className='BattlesHeader2'><Typography style={{ color: '#3A3F47', fontWeight: 'bold', fontSize: '0.875rem' }}>{`(${fight.timespan})`}</Typography></div>
                             {!props.aram &&
                                 <div><Typography style={{ color: '#000000', fontWeight: 'bold', fontSize: '0.875rem' }}>{fight.battleName}</Typography></div>
                             }
@@ -1320,7 +1320,7 @@ const Battles = (props) => {
                         <div id={`battle_${fightIndex}`} className='BattlesBodyContainer hide'>
                             <div className='BattlesBodySubContainer1'>
                                 {!props.aram &&
-                                    <Typography marginTop={'30px'} marginLeft={'20px'} color={'#404040'} fontSize={'0.875rem'}>{fight.battleDesc}</Typography>
+                                    <Typography marginTop={'30px'} marginLeft={'20px'} color={'#3A3F47'} fontSize={'0.875rem'}>{fight.battleDesc}</Typography>
                                 }
                                 <div style={{ marginTop: '20px', marginLeft: '25px', marginBottom: '15px' }}>
                                     <TeamGoldDifGraph arrow max={Math.round((fight.details[fight.details.length - 1].timestamp) / 60000) - 1} width={400} height={180} teamId={props.playerData.teamId} hideTitle yAxisGold={props.graphData.yAxisGold} xAxisGold={props.graphData.xAxisGold}></TeamGoldDifGraph>

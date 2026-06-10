@@ -44,17 +44,68 @@ body,
     height: initial !important;
 }
 
+.gameDetailsMatchSummaryList {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 16px;
+}
+
 .gameDetailsMatchSummaryList li {
-    color: #4B4B4B;
-    font-size: 1rem;
+    position: relative;
+    padding-left: 22px;
+    color: #3A3F47;
+    font-size: 0.95rem;
     width: 400px;
-    line-height: 1.4;
+    line-height: 1.65;
+    letter-spacing: 0.1px;
+    margin-bottom: 16px;
+}
+
+.gameDetailsMatchSummaryList li:last-child {
+    margin-bottom: 0;
+}
+
+.gameDetailsMatchSummaryList li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #6B7280;
+}
+
+/* Reusable modern section header (title + optional subtitle + divider) used
+   across the Game Details page to match the Match Summary styling. */
+.gameSectionHeader {
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+    border-bottom: 2px solid #E6E8EC;
+}
+
+.gameSectionHeading {
+    margin: 0 !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #1A1C20;
+}
+
+.gameSectionSubheading {
+    margin: 3px 0 0 0 !important;
+    font-size: 0.85rem !important;
+    font-weight: 500;
+    color: #6B7280;
 }
 
 .LanePhaseSummaryDetailsActive p {
-    font-size: 1rem;
+    font-size: 0.95rem;
     width: 97%;
-    line-height: 1.6;
+    line-height: 1.65;
+    letter-spacing: 0.1px;
+    color: #3A3F47;
 }
 
 .lanePhaseSummarySwords {
@@ -97,6 +148,46 @@ body,
     color: #7E7E7E !important;
     font-weight: bold !important;
     font-size: 1rem !important;
+}
+
+/* Standout tier badges (MVP / 2ND / INT) — tinted pills, color-coded by tier. */
+.standoutTierPill {
+    display: inline-block;
+    padding: 2px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-align: center;
+}
+
+.standoutTierPill--mvp {
+    color: #ffffff;
+    background-color: #C9A227;
+}
+
+.standoutTierPill--2nd {
+    color: #ffffff;
+    background-color: #8A8F98;
+}
+
+.standoutTierPill--int {
+    color: #ffffff;
+    background-color: #D63A3A;
+}
+
+.standoutTierPill--inactive {
+    opacity: 0.5;
+}
+
+.standoutTierPill--portrait {
+    align-self: center;
+    margin-top: 9px !important;
+}
+
+.standoutTierPill--header {
+    align-self: flex-start;
+    margin-bottom: 12px !important;
 }
 
 .summonerNameTable:hover {
@@ -379,6 +470,7 @@ body,
     border-radius: 5px;
     position: relative;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .displayGameMainContainer {
@@ -679,7 +771,7 @@ body,
     justify-content: center;
     margin: auto;
     margin-top: 16px;
-    width: 675px;
+    width: 715px;
     background-color: white;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -833,7 +925,7 @@ body,
 .searchSearchContainer {
     display: flex;
     justify-content: center;
-    width: 675px;
+    width: 715px;
     margin: 0 auto;
 }
 
@@ -1353,7 +1445,8 @@ li {
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     padding: 16px 20px;
     margin: 16px auto;
-    width: 675px;
+    width: 715px;
+    box-sizing: border-box;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -3735,3 +3828,12 @@ li {
     margin-left: auto;
     margin-right: auto;
 }
+
+/* Larger center op-score bars on the wider profile cards (scoped, >=768px). */
+@media only screen and (min-width: 768px) {
+    .displayGamesMainContainer .displayGameGoldBar {
+        width: 115px !important;
+        height: 25px !important;
+    }
+}
+

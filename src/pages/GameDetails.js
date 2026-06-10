@@ -683,21 +683,23 @@ function GameDetails() {
                 <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={12} sm={7} md={7} lg={6}>
                   {shortSummary !== null &&
                     <div>
-                      <Typography className='MatchSummaryText' marginLeft={'15px'} fontSize={'1.25rem'} fontWeight={'bold'}>Match Summary</Typography>
+                      <div className='gameSectionHeader' style={{ marginLeft: '16px', marginRight: '16px' }}>
+                        <Typography className='gameSectionHeading'>Match Summary</Typography>
+                      </div>
                       <ul className='gameDetailsMatchSummaryList'>
-                        <li style={{ marginBottom: '20px' }}>{shortSummary}</li>
+                        <li>{shortSummary}</li>
                         <li>{matchSummaryDesc}</li>
                         {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === false &&
-                          <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s team surrendered the game at {gameDuration}.</li>
+                          <li>{playerData.riotIdGameName}'s team surrendered the game at {gameDuration}.</li>
                         }
                         {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === true &&
-                          <li style={{ marginTop: '20px' }}>The enemy team surrendered the game at {gameDuration}.</li>
+                          <li>The enemy team surrendered the game at {gameDuration}.</li>
                         }
                         {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === false &&
-                          <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s nexus was destroyed at {gameDuration}.</li>
+                          <li>{playerData.riotIdGameName}'s nexus was destroyed at {gameDuration}.</li>
                         }
                         {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === true &&
-                          <li style={{ marginTop: '20px' }}>The enemy team's nexus was destroyed at {gameDuration}.</li>
+                          <li>The enemy team's nexus was destroyed at {gameDuration}.</li>
                         }
                       </ul>
                     </div>
@@ -763,9 +765,9 @@ function GameDetails() {
           <Grid className='GameDetailsContainer' style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '20px' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             {/* Details */}
             <Grid id='DetailsAnchor' justifyContent={'center'} margin={'auto'} container marginTop={'20px'}>
-              <div style={{ display: 'flex', marginLeft: '0', marginRight: 'auto', flexDirection: 'column' }}>
-                <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem', marginRight: '30px' }}>Match Details</Typography>
-                <Typography style={{ fontSize: '1.25rem', marginBottom: '20px', color: '#4B4B4B' }}>Results @ the end of game</Typography>
+              <div className='gameSectionHeader' style={{ marginRight: 'auto' }}>
+                <Typography className='gameSectionHeading'>Match Details</Typography>
+                <Typography className='gameSectionSubheading'>Results @ the end of game</Typography>
               </div>
               <Box className='MatchDetailsGraphBox' minWidth={'100%'} maxWidth={'100%'} style={{ display: 'flex', backgroundColor: 'white', padding: '20px', boxShadow: '0px 6px 24px 0px rgba(0, 0, 0, 0.25)' }} border={'1px solid #BBBBBB'} borderRadius={'10px'}>
                 {/* Red Team */}
@@ -789,7 +791,7 @@ function GameDetails() {
                       {gameData.info.teams[1].objectives.riftHerald.kills >= 1 ? (
                         <CheckIcon className='MatchDetailsObjectiveIcon' style={{ color: '#17BA6C' }}></CheckIcon>
                       ) : (
-                        <CloseIcon className='MatchDetailsObjectiveIcon' style={{ color: '#777777' }}></CloseIcon>
+                        <CloseIcon className='MatchDetailsObjectiveIcon' style={{ color: '#6B7280' }}></CloseIcon>
                       )}
                       <Typography className='matchDetailsObjectiveText'>Herald</Typography>
                     </Grid>
@@ -804,7 +806,7 @@ function GameDetails() {
                       {gameData.info.teams[1].objectives?.atakhan?.kills >= 1 ? (
                         <CheckIcon className='MatchDetailsObjectiveIcon' style={{ color: '#17BA6C' }}></CheckIcon>
                       ) : (
-                        <CloseIcon className='MatchDetailsObjectiveIcon' style={{ color: '#777777' }}></CloseIcon>
+                        <CloseIcon className='MatchDetailsObjectiveIcon' style={{ color: '#6B7280' }}></CloseIcon>
                       )}
                       <Typography className='matchDetailsObjectiveText'>Atakhan</Typography>
                     </Grid>
@@ -848,7 +850,7 @@ function GameDetails() {
                       {gameData.info.teams[0].objectives.riftHerald.kills >= 1 ? (
                         <CheckIcon className='MatchDetailsObjectiveIcon' style={{ color: '#17BA6C' }}></CheckIcon>
                       ) : (
-                        <CloseIcon className='MatchDetailsObjectiveIcon' style={{ color: '#777777' }}></CloseIcon>
+                        <CloseIcon className='MatchDetailsObjectiveIcon' style={{ color: '#6B7280' }}></CloseIcon>
                       )}
                       <Typography className='matchDetailsObjectiveText'>Herald</Typography>
                     </Grid>
@@ -863,7 +865,7 @@ function GameDetails() {
                       {gameData.info.teams[0].objectives?.atakhan?.kills >= 1 ? (
                         <CheckIcon className='MatchDetailsObjectiveIcon' style={{ color: '#17BA6C' }}></CheckIcon>
                       ) : (
-                        <CloseIcon className='MatchDetailsObjectiveIcon' style={{ color: '#777777' }}></CloseIcon>
+                        <CloseIcon className='MatchDetailsObjectiveIcon' style={{ color: '#6B7280' }}></CloseIcon>
                       )}
                       <Typography className='matchDetailsObjectiveText'>Atakhan</Typography>
                     </Grid>
@@ -1023,12 +1025,12 @@ function GameDetails() {
           ) : (
             <Grid className='LaningGridContainer' container >
               <Grid className='LaningGridSubContainer'>
-                <div style={{ marginLeft: '15px', marginBottom: '20px', }}>
-                  <Typography fontSize={'1.25rem'} fontWeight={600}>Laning Phase Results</Typography>
+                <div className='gameSectionHeader' style={{ marginLeft: '15px' }}>
+                  <Typography className='gameSectionHeading'>Laning Phase Results</Typography>
                   {gameData.info.gameDuration > 900 ? (
-                    <Typography style={{ fontSize: '1.25rem', color: '#4B4B4B' }}>How each lane was performing @ 15 minutes</Typography>
+                    <Typography className='gameSectionSubheading'>How each lane was performing @ 15 minutes</Typography>
                   ) : (
-                    <Typography style={{ fontSize: '1.25rem', color: '#4B4B4B' }}>{`How each lane was performing @ ${gameDuration} (game ended early)`}</Typography>
+                    <Typography className='gameSectionSubheading'>{`How each lane was performing @ ${gameDuration} (game ended early)`}</Typography>
                   )
                   }
                 </div>
@@ -1045,9 +1047,9 @@ function GameDetails() {
         {/* Graphs */}
         <div id='GraphsAnchor' style={{ backgroundColor: '#f2f2f2' }}>
           <Grid className='GameDetailsContainer' width={'65%'} container style={{ display: 'flex', justifyContent: 'center', margin: 'auto', paddingTop: '30px', textAlign: 'flex-start' }}>
-            <Box className='GraphSectionHeaderBox'>
-              <Typography style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Graphs</Typography>
-              <Typography style={{ fontSize: '1.25rem', marginBottom: '20px', color: '#4B4B4B' }}>Match Data Visualized</Typography>
+            <Box className='GraphSectionHeaderBox gameSectionHeader'>
+              <Typography className='gameSectionHeading'>Graphs</Typography>
+              <Typography className='gameSectionSubheading'>Match Data Visualized</Typography>
             </Box>
           </Grid>
           {statsAt15 && graphData ? (
