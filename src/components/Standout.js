@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { championImg } from '../api/ddragon';
-import { Typography, Box, Grid, Tooltip, Divider } from '@mui/material';
+import { Typography, Box, Grid, Divider } from '@mui/material';
+import StyledTooltip from './StyledTooltip';
 
 const Standout = (props) => {
     const { gameData, champsJSON, dataDragonVersion } = props;
@@ -85,13 +86,13 @@ const Standout = (props) => {
         const totalDamage = activePlayer.player.totalDamageDealtToChampions;
         const damageThreshold = Math.ceil((gameData.info.gameDuration / 60) * 900); // Average 900 damage per minute
         if (totalDamage > damageThreshold) {
-            descStr += `With ${totalDamage.toLocaleString()} damage dealt, they were pivotal in helping the ${activePlayer.player.teamId === 100 ? 'blue' : 'red'} team dominate teamfights. `;
+            descStr += `With ${totalDamage.toLocaleString()} damage dealt, they were pivotal in helping the ${activePlayer.player.teamId === 100 ? 'blue' : 'purple'} team dominate teamfights. `;
         }
 
         const kills = activePlayer.player.kills;
         const killThreshold = Math.ceil((gameData.info.gameDuration / 60) * 0.5); // 0.5 kills per minute
         if (kills > killThreshold) {
-            descStr += `Their ${kills} kills ${activePlayer.player.win ? 'helped to secure a decisive victory' : 'kept their team in contention'} for the ${activePlayer.player.teamId === 100 ? 'blue' : 'red'} team. `;
+            descStr += `Their ${kills} kills ${activePlayer.player.win ? 'helped to secure a decisive victory' : 'kept their team in contention'} for the ${activePlayer.player.teamId === 100 ? 'blue' : 'purple'} team. `;
         }
 
         // Add jungle objectives to the description
@@ -153,7 +154,7 @@ const Standout = (props) => {
                     <div className='StandoutImagesSubContainer'>
                         {performances.map(({ title, player, activeIndex: index }) => {
                             const { name, img } = getChampionData(player?.championId);
-                            const teamColor = player?.teamId === 100 ? '#568CFF' : '#FF3F3F';
+                            const teamColor = player?.teamId === 100 ? '#568CFF' : '#A35BFF';
 
                             return (
 
@@ -174,7 +175,7 @@ const Standout = (props) => {
                                         borderRadius: '5px'
                                     }}
                                 >
-                                    <Tooltip
+                                    <StyledTooltip
                                         placement='top'
                                         arrow
                                         disableInteractive
@@ -208,7 +209,7 @@ const Standout = (props) => {
                                                 alt=''
                                             />
                                         </div>
-                                    </Tooltip>
+                                    </StyledTooltip>
                                     <Typography className={`standoutTierPill standoutTierPill--portrait standoutTierPill--${title.toLowerCase()}${activeIndex === index ? '' : ' standoutTierPill--inactive'}`}>{title}</Typography>
                                     {activeIndex === index && <Divider color='#2b2b2b' style={{ width: '40%', margin: 'auto' }} />}
                                 </div>
@@ -221,7 +222,7 @@ const Standout = (props) => {
                 <div className='StandoutTextContainer'>
                     <Typography className={`hideMobile hideTablet standoutTierPill standoutTierPill--header standoutTierPill--${activePlayer.title.toLowerCase()}`}>{activePlayer.title}</Typography>
                     <p style={{ color: '#3A3F47', fontSize: '1rem', maxWidth: '425px' }}>
-                        <a style={{ color: activePlayer.player.teamId === 100 ? '#568CFF' : '#FF3F3F', textDecoration: 'underline' }} className='matchSummaryPlayerLink' href={`/profile/${gameData.info.platformId.toLowerCase()}/${activePlayer.player.riotIdGameName}/${activePlayer.player.riotIdTagline.toLowerCase()}`}>'{activePlayer?.player.riotIdGameName || "Unknown Player"}' <span style={{ textDecoration: 'none' }}>({championName})</span></a> {descStr}
+                        <a style={{ color: activePlayer.player.teamId === 100 ? '#568CFF' : '#A35BFF', textDecoration: 'underline' }} className='matchSummaryPlayerLink' href={`/profile/${gameData.info.platformId.toLowerCase()}/${activePlayer.player.riotIdGameName}/${activePlayer.player.riotIdTagline.toLowerCase()}`}>'{activePlayer?.player.riotIdGameName || "Unknown Player"}' <span style={{ textDecoration: 'none' }}>({championName})</span></a> {descStr}
                     </p>
                 </div>
             </Grid>

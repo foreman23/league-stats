@@ -1,6 +1,7 @@
 import { React, useState } from 'react'
 import { championImg, itemImg } from '../api/ddragon';
-import { Grid, Box, Typography, Tooltip } from '@mui/material'
+import { Grid, Box, Typography } from '@mui/material'
+import StyledTooltip from './StyledTooltip';
 import ForwardIcon from '@mui/icons-material/Forward';
 
 const Builds = (props) => {
@@ -28,7 +29,7 @@ const Builds = (props) => {
                 <Typography className='gameSectionSubheading'>Player Items & Level Ups</Typography>
             </Box>
             <Box className='BuildsBox2'>
-                <a style={{ color: currBuildChamp?.teamId === 100 ? '#568CFF' : '#FF3F3F' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${currBuildChamp?.riotIdGameName}/${currBuildChamp?.riotIdTagline.toLowerCase()}`}>
+                <a style={{ color: currBuildChamp?.teamId === 100 ? '#568CFF' : '#A35BFF' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${currBuildChamp?.riotIdGameName}/${currBuildChamp?.riotIdTagline.toLowerCase()}`}>
                     <Typography fontSize={'1.25rem'} marginBottom={'20px'} fontWeight={'bold'}>
                         {`${currBuildChamp?.championName} (${currBuildChamp?.riotIdGameName} #${currBuildChamp?.riotIdTagline})`}
                     </Typography>
@@ -40,7 +41,7 @@ const Builds = (props) => {
                                 <Typography style={{
                                     fontSize: '0.75rem',
                                     position: 'absolute',
-                                    backgroundColor: item.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                    backgroundColor: item.teamId === 100 ? '#568CFF' : '#A35BFF',
                                     color: 'white',
                                     borderRadius: '0px',
                                     borderBottomRightRadius: '5px',
@@ -66,11 +67,11 @@ const Builds = (props) => {
                     </Grid>
                     <Grid order={{ xs: playerData.teamId === 200 ? 1 : 3 }}>
                         {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
-                            <div key={`champ_${index}_2`} className='pointer' onClick={() => handleBuildClick(item)} style={{ border: '4px solid #FF3F3F', borderRadius: '5px', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', margin: '5px', transform: item.championId === currBuildChamp.championId ? 'scale(115%)' : 'scale(100%)' }}>
+                            <div key={`champ_${index}_2`} className='pointer' onClick={() => handleBuildClick(item)} style={{ border: '4px solid #A35BFF', borderRadius: '5px', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', margin: '5px', transform: item.championId === currBuildChamp.championId ? 'scale(115%)' : 'scale(100%)' }}>
                                 <Typography style={{
                                     fontSize: '0.75rem',
                                     position: 'absolute',
-                                    backgroundColor: item.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                    backgroundColor: item.teamId === 100 ? '#568CFF' : '#A35BFF',
                                     color: 'white',
                                     borderRadius: '0px',
                                     borderBottomRightRadius: '5px',
@@ -165,9 +166,9 @@ const Builds = (props) => {
                                 <div style={{ display: 'flex', filter: 'drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.25))', boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px', margin: '15px', marginRight: '0px', marginLeft: '0px', backgroundColor: '#E6E6E6', padding: '10px', paddingBottom: '5px', borderRadius: '5px', flexDirection: 'column' }}>
                                     <div style={{ display: 'flex' }}>
                                         {itemGroup.map((item, itemIndex) => (
-                                            <Tooltip key={`item_${itemIndex}`} placement='top' arrow title={<><u>{items.data[item.itemId]?.name}</u><br></br>{items.data[item.itemId]?.plaintext || items.data[item.itemId]?.tags[0]}</>}>
+                                            <StyledTooltip key={`item_${itemIndex}`} placement='top' arrow title={<><u>{items.data[item.itemId]?.name}</u><br></br>{items.data[item.itemId]?.plaintext || items.data[item.itemId]?.tags[0]}</>}>
                                                 <img alt='Item' key={itemIndex} className='BuildSectionItemImg' src={itemImg(dataDragonVersion, item.itemId)}></img>
-                                            </Tooltip>
+                                            </StyledTooltip>
                                         ))}
                                     </div>
                                     <div>

@@ -1,4 +1,4 @@
-import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
+import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress } from '@mui/material';
 import { championImg, getChampions, getItems, getQueues, getRunes, getSummonerSpells, getVersion, spellImg } from '../api/ddragon';
 import { getMatchCluster, isSeaServer } from '../utils/regions';
 import { queueTitle as getQueueTitle } from '../utils/queues';
@@ -8,11 +8,10 @@ import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
 import getStatsAt15 from '../functions/LaneAnalysis';
 import { getMatchTimeline as fetchMatchTimeline } from '../api/proxy';
-import LanePhaseSummaryCardTop from '../components/LanePhaseSummaryCardTop';
-import LanePhaseSummaryCardJg from '../components/LanePhaseSummaryCardJg';
-import LanePhaseSummaryCardMid from '../components/LanePhaseSummaryCardMid';
-import LanePhaseSummaryCardBot from '../components/LanePhaseSummaryCardBot';
+import LaneCard from '../components/lanePhase/LaneCard';
+import { LANES, toLaneVM } from '../components/lanePhase/laneAdapter';
 import Battles from '../components/Battles';
+import StyledTooltip from '../components/StyledTooltip';
 import TeamGoldDifGraph from '../components/TeamGoldDifGraph';
 import generateGraphData from '../functions/GenerateGraphData';
 import calculateOpScores from '../functions/CalculateOpScores';
@@ -74,11 +73,11 @@ function GameDetails() {
   ]
 
   let redColors = [
-    '#FF3F3F',  // Lightest
-    '#E83B3B',
-    '#D23838',
-    '#BB3535',
-    '#A53131' // Darkest
+    '#A35BFF',  // Lightest
+    '#9450E8',
+    '#8546D2',
+    '#763BBB',
+    '#673189' // Darkest
   ]
 
   // Returns keystone url
@@ -460,12 +459,12 @@ function GameDetails() {
                   {/* Player Win */}
                   {playerData.win ? (
                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                      <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
-                        <div style={{ border: playerData.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
+                      <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                        <div style={{ border: playerData.teamId === 100 ? '4px #568CFF solid' : '4px #A35BFF solid', borderRadius: '50%', display: 'inline-flex' }}>
                           <Typography className='displayGameChampLevel' style={{
                             fontSize: '0.875rem',
                             position: 'absolute',
-                            backgroundColor: playerData.teamId === 200 ? '#FF3A54' : '#568CFF',
+                            backgroundColor: playerData.teamId === 200 ? '#A35BFF' : '#568CFF',
                             color: 'white',
                             fontWeight: 'bold',
                             borderRadius: '100%',
@@ -487,33 +486,33 @@ function GameDetails() {
                             src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id)} alt=''>
                           </img>
                         </div>
-                      </Tooltip>
+                      </StyledTooltip>
                       <Grid className='gameDetailsSummarySpells'>
-                        <Tooltip
+                        <StyledTooltip
                           title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).description}</span></>}
                           disableInteractive
                           arrow
                         >
                           <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id)}></img>
-                        </Tooltip>
-                        <Tooltip
+                        </StyledTooltip>
+                        <StyledTooltip
                           title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).description}</span></>}
                           disableInteractive
                           arrow
                         >
                           <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id)}></img>
-                        </Tooltip>
+                        </StyledTooltip>
                       </Grid>
                     </a>
                   ) : (
                     // Player Lose
                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                      <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
-                        <div style={{ border: playerData.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
+                      <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                        <div style={{ border: playerData.teamId === 100 ? '4px #568CFF solid' : '4px #A35BFF solid', borderRadius: '50%', display: 'inline-flex' }}>
                           <Typography className='displayGameChampLevel' style={{
                             fontSize: '0.875rem',
                             position: 'absolute',
-                            backgroundColor: playerData.teamId === 200 ? '#FF3A54' : '#568CFF',
+                            backgroundColor: playerData.teamId === 200 ? '#A35BFF' : '#568CFF',
                             color: 'white',
                             fontWeight: 'bold',
                             borderRadius: '100%',
@@ -535,22 +534,22 @@ function GameDetails() {
                             style={{ filter: 'grayscale(100%)' }} src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id)} alt=''>
                           </img>
                         </div>
-                      </Tooltip>
+                      </StyledTooltip>
                       <Grid className='gameDetailsSummarySpells'>
-                        <Tooltip
+                        <StyledTooltip
                           title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).description}</span></>}
                           disableInteractive
                           arrow
                         >
                           <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id)}></img>
-                        </Tooltip>
-                        <Tooltip
+                        </StyledTooltip>
+                        <StyledTooltip
                           title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).description}</span></>}
                           disableInteractive
                           arrow
                         >
                           <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id)}></img>
-                        </Tooltip>
+                        </StyledTooltip>
                       </Grid>
                     </a>
                   )}
@@ -558,12 +557,12 @@ function GameDetails() {
                   {/* Player Win */}
                   {playerData.win ? (
                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                      <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
-                        <div style={{ border: playerData.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
+                      <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
+                        <div style={{ border: playerData.teamId === 200 ? '4px #568CFF solid' : '4px #A35BFF solid', borderRadius: '50%', display: 'inline-flex' }}>
                           <Typography className='displayGameChampLevel' style={{
                             fontSize: '0.875rem',
                             position: 'absolute',
-                            backgroundColor: opposingLaner.teamId === 200 ? '#FF3A54' : '#568CFF',
+                            backgroundColor: opposingLaner.teamId === 200 ? '#A35BFF' : '#568CFF',
                             color: 'white',
                             fontWeight: 'bold',
                             borderRadius: '100%',
@@ -585,33 +584,33 @@ function GameDetails() {
                             style={{ filter: 'grayscale(100%)' }} src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id)} alt=''>
                           </img>
                         </div>
-                      </Tooltip>
+                      </StyledTooltip>
                       <Grid className='gameDetailsSummarySpells'>
-                        <Tooltip
+                        <StyledTooltip
                           title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).description}</span></>}
                           disableInteractive
                           arrow
                         >
                           <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).id)}></img>
-                        </Tooltip>
-                        <Tooltip
+                        </StyledTooltip>
+                        <StyledTooltip
                           title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).description}</span></>}
                           disableInteractive
                           arrow
                         >
                           <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).id)}></img>
-                        </Tooltip>
+                        </StyledTooltip>
                       </Grid>
                     </a>
                   ) : (
                     // Player Lose
-                    <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', color: 'red', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                      <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
-                        <div style={{ border: playerData.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', borderRadius: '50%', display: 'inline-flex' }}>
+                    <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', color: opposingLaner.teamId === 200 ? '#A35BFF' : '#568CFF', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
+                      <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
+                        <div style={{ border: playerData.teamId === 200 ? '4px #568CFF solid' : '4px #A35BFF solid', borderRadius: '50%', display: 'inline-flex' }}>
                           <Typography className='displayGameChampLevel' style={{
                             fontSize: '0.875rem',
                             position: 'absolute',
-                            backgroundColor: opposingLaner.teamId === 200 ? '#FF3A54' : '#568CFF',
+                            backgroundColor: opposingLaner.teamId === 200 ? '#A35BFF' : '#568CFF',
                             color: 'white',
                             fontWeight: 'bold',
                             borderRadius: '100%',
@@ -633,35 +632,35 @@ function GameDetails() {
                             src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id)} alt=''>
                           </img>
                         </div>
-                      </Tooltip>
+                      </StyledTooltip>
                       <Grid className='gameDetailsSummarySpells'>
-                        <Tooltip
+                        <StyledTooltip
                           title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).description}</span></>}
                           disableInteractive
                           arrow
                         >
                           <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).id)}></img>
-                        </Tooltip>
-                        <Tooltip
+                        </StyledTooltip>
+                        <StyledTooltip
                           title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).description}</span></>}
                           disableInteractive
                           arrow
                         >
                           <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).id)}></img>
-                        </Tooltip>
+                        </StyledTooltip>
                       </Grid>
                     </a>
                   )}
                 </Grid>
                 <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={12} md={7}>
                   <Typography className='GameDetailsMainSummaryHeader'>
-                    <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                    <StyledTooltip offset={[0, -1]} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
                       <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ color: 'inherit' }}>
                         {playerData.riotIdGameName}
                       </a>
-                    </Tooltip>
+                    </StyledTooltip>
 
-                    <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'red team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
+                    <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'purple team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                   </Typography>
                   <Typography className='GameDetailsMainSummarySubHeader'>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
                   <div className='GameDetailsCatBtnContainer'>
@@ -770,20 +769,20 @@ function GameDetails() {
                 <Typography className='gameSectionSubheading'>Results @ the end of game</Typography>
               </div>
               <Box className='MatchDetailsGraphBox' minWidth={'100%'} maxWidth={'100%'} style={{ display: 'flex', backgroundColor: 'white', padding: '20px', boxShadow: '0px 6px 24px 0px rgba(0, 0, 0, 0.25)' }} border={'1px solid #BBBBBB'} borderRadius={'10px'}>
-                {/* Red Team */}
+                {/* Purple Team */}
                 <Grid item order={playerData.teamId === 100 ? 2 : 1} xs={12} sm={6}>
-                  <Typography className='matchDetailsTeamNameText'>Red Team</Typography>
+                  <Typography className='matchDetailsTeamNameText'>Purple Team</Typography>
 
                   <div className='matchDetailsTeamDetails'>
-                    <Typography fontWeight={'bold'} fontSize={'1.125rem'} marginRight={'50px'} color={'#FF3F3F'}>{gameData.info.teams[1].objectives.champion.kills} kills</Typography>
-                    <Typography fontWeight={'bold'} fontSize={'1.125rem'} color={'#FF3F3F'}>{totalTeamGoldRed.toLocaleString()}g</Typography>
+                    <Typography fontWeight={'bold'} fontSize={'1.125rem'} marginRight={'50px'} color={'#A35BFF'}>{gameData.info.teams[1].objectives.champion.kills} kills</Typography>
+                    <Typography fontWeight={'bold'} fontSize={'1.125rem'} color={'#A35BFF'}>{totalTeamGoldRed.toLocaleString()}g</Typography>
                   </div>
 
                   <Grid container style={{ display: 'flex', alignItems: 'flex-end', height: '180px', justifyContent: 'center' }}>
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.horde.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 6) * gameData.info.teams[1].objectives.horde.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 6) * gameData.info.teams[1].objectives.horde.kills}px`} backgroundColor={'#A35BFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Grubs</Typography>
                     </Grid>
 
@@ -798,7 +797,7 @@ function GameDetails() {
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.dragon.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[1].objectives.dragon.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[1].objectives.dragon.kills}px`} backgroundColor={'#A35BFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Dragons</Typography>
                     </Grid>
 
@@ -813,19 +812,19 @@ function GameDetails() {
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.baron.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 2) * gameData.info.teams[1].objectives.baron.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 2) * gameData.info.teams[1].objectives.baron.kills}px`} backgroundColor={'#A35BFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Barons</Typography>
                     </Grid>
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.tower.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 11) * gameData.info.teams[1].objectives.tower.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 11) * gameData.info.teams[1].objectives.tower.kills}px`} backgroundColor={'#A35BFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Towers</Typography>
                     </Grid>
 
                     <Grid className='matchDetailsObjectiveContainer'>
                       <Typography className='matchDetailsObjectiveValueText'>{gameData.info.teams[1].objectives.inhibitor.kills}</Typography>
-                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[1].objectives.inhibitor.kills}px`} backgroundColor={'#FF3F3F'}></Box>
+                      <Box className='matchDetailsObjectiveBar' height={`${(100 / 5) * gameData.info.teams[1].objectives.inhibitor.kills}px`} backgroundColor={'#A35BFF'}></Box>
                       <Typography className='matchDetailsObjectiveText'>Inhibs.</Typography>
                     </Grid>
 
@@ -923,7 +922,7 @@ function GameDetails() {
                       else {
                         return (
                           item.championId !== -1 &&
-                          <Tooltip disableInteractive arrow placement='top'
+                          <StyledTooltip disableInteractive arrow placement='top'
                             key={`ban_${index}_1`}
                             title={<>{Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).name} banned by blue</>}>
                             <div style={{ border: '3px #568CFF solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
@@ -937,7 +936,7 @@ function GameDetails() {
                                 src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}>
                               </img>
                             </div>
-                          </Tooltip>
+                          </StyledTooltip>
                         )
                       }
                     })}
@@ -945,7 +944,7 @@ function GameDetails() {
                   <Grid className='hideMobile hideKindle' style={{ alignSelf: 'center' }} order={{ xs: 2 }}>
                     <Box marginBottom={'3px'} marginLeft={'20px'} marginRight={'20px'} width={'10px'} height={'10px'} borderRadius={'100%'} backgroundColor={'#C3C3C3'}></Box>
                   </Grid>
-                  {/* Red team */}
+                  {/* Purple team */}
                   <Grid item className='BansTeamContainer' order={{ xs: playerData.teamId === 200 ? 1 : 3 }} style={{ display: 'flex', justifyContent: playerData.teamId === 200 ? 'flex-end' : 'flex-start' }} xs={12} sm={6}>
                     {playerData.teamId === 200 &&
                       <div className='hideMobile hideKindle' style={{ alignSelf: 'center', marginRight: '25px' }}>
@@ -963,7 +962,7 @@ function GameDetails() {
                               borderRadius: '100%',
                               marginRight: '1.5px',
                               marginLeft: '1.5px',
-                              border: '3px #FF3F3F solid'
+                              border: '3px #A35BFF solid'
                             }}
                             src={`/images/novalue.webp`}>
                           </img>
@@ -972,10 +971,10 @@ function GameDetails() {
                       else {
                         return (
                           item.championId !== -1 &&
-                          <Tooltip disableInteractive arrow placement='top'
+                          <StyledTooltip disableInteractive arrow placement='top'
                             key={`ban_${index}_2`}
                             title={<>{Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).name} banned by red</>}>
-                            <div style={{ border: '3px #FF3F3F solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
+                            <div style={{ border: '3px #A35BFF solid', marginRight: '1.5px', marginLeft: '1.5px', borderRadius: '100%', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
                               <img
                                 alt='Banned Champion'
                                 className='BannedChampImg'
@@ -986,7 +985,7 @@ function GameDetails() {
                                 src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}>
                               </img>
                             </div>
-                          </Tooltip>
+                          </StyledTooltip>
                         )
                       }
                     })}
@@ -1034,10 +1033,12 @@ function GameDetails() {
                   )
                   }
                 </div>
-                <LanePhaseSummaryCardTop gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15}></LanePhaseSummaryCardTop>
-                <LanePhaseSummaryCardJg gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15}></LanePhaseSummaryCardJg>
-                <LanePhaseSummaryCardMid gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15}></LanePhaseSummaryCardMid>
-                <LanePhaseSummaryCardBot gameData={gameData} gameDuration={gameDuration} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} timelineData={timelineData} statsAt15={statsAt15}></LanePhaseSummaryCardBot>
+                {LANES.map((laneDef) => (
+                  <LaneCard
+                    key={laneDef.data}
+                    lane={toLaneVM(laneDef, statsAt15, { gameData, champsJSON, dataDragonVersion, timelineData })}
+                  />
+                ))}
               </Grid>
             </Grid>
 
@@ -1064,20 +1065,20 @@ function GameDetails() {
                   <Typography className='damageDealtGraphHeader'>DMG<br></br>DEALT</Typography>
                 </div>
                 <div className='GraphSectionDivContainer'>
-                  {/* Red Team */}
+                  {/* Purple Team */}
                   <Grid className='GraphSectionDivSubContainer' item order={playerData.teamId === 200 ? 1 : 2} xs={12} sm={6}>
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                       {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
                         <div key={`red_dealt_${index}`} className='matchDetailsObjectiveContainer'>
                           <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageDealtToChampions / 1000)}k</Typography>
-                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
+                          <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
                             <Box className='graphDamageBar' height={`${(item.totalDamageDealtToChampions / highestDamageDealt) * 200}px`} backgroundColor={redColors[index]}></Box>
-                          </Tooltip>
-                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                          </StyledTooltip>
+                          <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                             <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
                               <img alt='Champion Graph' className='graphChampIcon' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
                             </a>
-                          </Tooltip>
+                          </StyledTooltip>
                         </div>
                       ))}
                     </div>
@@ -1088,14 +1089,14 @@ function GameDetails() {
                       {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
                         <div key={`blue_dealt_${index}`} className='matchDetailsObjectiveContainer'>
                           <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageDealtToChampions / 1000)}k</Typography>
-                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
+                          <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
                             <Box className='graphDamageBar' height={`${(item.totalDamageDealtToChampions / highestDamageDealt) * 200}px`} backgroundColor={blueColors[index]}></Box>
-                          </Tooltip>
-                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                          </StyledTooltip>
+                          <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                             <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
                               <img alt='Champion Graph' className='graphChampIcon' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
                             </a>
-                          </Tooltip>
+                          </StyledTooltip>
                         </div>
                       ))}
                     </div>
@@ -1114,20 +1115,20 @@ function GameDetails() {
                   <Typography className='damageDealtGraphHeader'>DMG<br></br>TAKEN</Typography>
                 </div>
                 <div className='GraphSectionDivContainer'>
-                  {/* Red Team */}
+                  {/* Purple Team */}
                   <Grid className='GraphSectionDivSubContainer' order={playerData.teamId === 200 ? 1 : 2}>
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                       {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
                         <div key={`red_taken_${index}`} className='matchDetailsObjectiveContainer'>
                           <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageTaken / 1000)}k</Typography>
-                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
+                          <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
                             <Box className='graphDamageBar' height={`${(item.totalDamageTaken / highestDamageTaken) * 200}px`} backgroundColor={redColors[index]}></Box>
-                          </Tooltip>
-                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                          </StyledTooltip>
+                          <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                             <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
                               <img alt='Champion Graph' className='graphChampIcon' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
                             </a>
-                          </Tooltip>
+                          </StyledTooltip>
                         </div>
                       ))}
                     </div>
@@ -1138,14 +1139,14 @@ function GameDetails() {
                       {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
                         <div key={`blue_taken_${index}`} className='matchDetailsObjectiveContainer'>
                           <Typography className='matchDetailsObjectiveValueText'>{Math.floor(item.totalDamageTaken / 1000)}k</Typography>
-                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
+                          <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
                             <Box className='graphDamageBar' height={`${(item.totalDamageTaken / highestDamageTaken) * 200}px`} backgroundColor={blueColors[index]}></Box>
-                          </Tooltip>
-                          <Tooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                          </StyledTooltip>
+                          <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
                             <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
                               <img alt='Champion Graph' className='graphChampIcon' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
                             </a>
-                          </Tooltip>
+                          </StyledTooltip>
                         </div>
                       ))}
                     </div>

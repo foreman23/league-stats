@@ -114,7 +114,7 @@ const determineWinnersBot = (statsAt15Arr) => {
             bubbleColor = '#37B7FF'
         }
         else {
-            bubbleColor = '#FF3F3F'
+            bubbleColor = '#A35BFF'
         }
     }
     else if (goldDifference >= 2000) {
@@ -124,7 +124,7 @@ const determineWinnersBot = (statsAt15Arr) => {
             bubbleColor = '#37B7FF'
         }
         else {
-            bubbleColor = '#FF3F3F'
+            bubbleColor = '#A35BFF'
         }
     }
     else if (goldDifference >= 1000) {
@@ -134,7 +134,7 @@ const determineWinnersBot = (statsAt15Arr) => {
             bubbleColor = '#9EDCFF'
         }
         else {
-            bubbleColor = '#FF8B8B'
+            bubbleColor = '#C9A6FF'
         }
     }
     else if (goldDifference >= 650) {
@@ -144,7 +144,7 @@ const determineWinnersBot = (statsAt15Arr) => {
             bubbleColor = '#9EDCFF'
         }
         else {
-            bubbleColor = '#FF8B8B'
+            bubbleColor = '#C9A6FF'
         }
     }
     else if (goldDifference >= 150) {
@@ -154,7 +154,7 @@ const determineWinnersBot = (statsAt15Arr) => {
             bubbleColor = '#9EDCFF'
         }
         else {
-            bubbleColor = '#FF8B8B'
+            bubbleColor = '#C9A6FF'
         }
     }
     else if (goldDifference < 150) {
@@ -218,7 +218,7 @@ const determineWinners = (statsAt15Arr) => {
                 bubbleColor = '#568CFF'
             }
             else {
-                bubbleColor = '#FF3F3F'
+                bubbleColor = '#A35BFF'
             }
         }
         else if (goldDifference >= 2000) {
@@ -228,7 +228,7 @@ const determineWinners = (statsAt15Arr) => {
                 bubbleColor = '#568CFF'
             }
             else {
-                bubbleColor = '#FF3F3F'
+                bubbleColor = '#A35BFF'
             }
         }
         else if (goldDifference >= 1000) {
@@ -238,7 +238,7 @@ const determineWinners = (statsAt15Arr) => {
                 bubbleColor = '#7AC9FF'
             }
             else {
-                bubbleColor = '#FF8B8B'
+                bubbleColor = '#C9A6FF'
             }
         }
         else if (goldDifference >= 650) {
@@ -248,7 +248,7 @@ const determineWinners = (statsAt15Arr) => {
                 bubbleColor = '#7AC9FF'
             }
             else {
-                bubbleColor = '#FF8B8B'
+                bubbleColor = '#C9A6FF'
             }
         }
         else if (goldDifference >= 150) {
@@ -258,7 +258,7 @@ const determineWinners = (statsAt15Arr) => {
                 bubbleColor = '#7AC9FF'
             }
             else {
-                bubbleColor = '#FF8B8B'
+                bubbleColor = '#C9A6FF'
             }
         }
         else if (goldDifference < 150) {

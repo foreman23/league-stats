@@ -1,7 +1,8 @@
 import React from 'react';
 import { championImg } from '../api/ddragon';
 import { useState } from 'react';
-import { Grid, Typography, Box, Button, Tooltip } from '@mui/material';
+import { Grid, Typography, Box, Button } from '@mui/material';
+import StyledTooltip from './StyledTooltip';
 import { LineChart } from '@mui/x-charts';
 
 const LanePhaseSummaryCardTop = (props) => {
@@ -37,16 +38,16 @@ const LanePhaseSummaryCardTop = (props) => {
   // Generate string for advantage description
   let advantageStr = null;
   if (statsAt15.laneResults.TOP.goldDifference > 3000) {
-    advantageStr = `almost guaranteeing ${statsAt15.laneResults.TOP.teamWonLane === 100 ? 'blue' : 'red'} team the victory`
+    advantageStr = `almost guaranteeing ${statsAt15.laneResults.TOP.teamWonLane === 100 ? 'blue' : 'purple'} team the victory`
   }
   else if (statsAt15.laneResults.TOP.goldDifference > 2000) {
-    advantageStr = `giving ${statsAt15.laneResults.TOP.teamWonLane === 100 ? 'blue' : 'red'} team a big lead entering the mid phase`
+    advantageStr = `giving ${statsAt15.laneResults.TOP.teamWonLane === 100 ? 'blue' : 'purple'} team a big lead entering the mid phase`
   }
   else if (statsAt15.laneResults.TOP.goldDifference > 650) {
-    advantageStr = `giving ${statsAt15.laneResults.TOP.teamWonLane === 100 ? 'blue' : 'red'} team an advantage entering the mid phase`
+    advantageStr = `giving ${statsAt15.laneResults.TOP.teamWonLane === 100 ? 'blue' : 'purple'} team an advantage entering the mid phase`
   }
   else if (statsAt15.laneResults.TOP.goldDifference >= 150) {
-    advantageStr = `giving ${statsAt15.laneResults.TOP.teamWonLane === 100 ? 'blue' : 'red'} team a small advantage entering the mid phase`
+    advantageStr = `giving ${statsAt15.laneResults.TOP.teamWonLane === 100 ? 'blue' : 'purple'} team a small advantage entering the mid phase`
   }
   else if (statsAt15.laneResults.TOP.goldDifference < 150) {
     advantageStr = `so we consider bottom lane to be a tie`
@@ -63,7 +64,7 @@ const LanePhaseSummaryCardTop = (props) => {
             {statsAt15.laneResults.TOP.resTag === 'draw' ? (
               <Typography fontWeight={'bold'}>{`Top lane was a draw`}</Typography>
             ) : (
-              <Typography fontWeight={'bold'}>{`${statsAt15.laneResults.TOP.teamWonLane === 100 ? 'Blue' : 'Red'} ${statsAt15.laneResults.TOP.resTag} top lane`}</Typography>
+              <Typography fontWeight={'bold'}>{`${statsAt15.laneResults.TOP.teamWonLane === 100 ? 'Blue' : 'Purple'} ${statsAt15.laneResults.TOP.resTag} top lane`}</Typography>
             )}
           </div>
 
@@ -113,26 +114,26 @@ const LanePhaseSummaryCardTop = (props) => {
         <Grid item xs={12} sm={6}>
           {statsAt15.laneResults.TOP.resTag !== 'draw' ? (
             <p>
-              <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) in the top lane earned {statsAt15.laneResults.TOP.goldDifference} more gold than <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, {advantageStr}.
+              <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#8A3FE6', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) in the top lane earned {statsAt15.laneResults.TOP.goldDifference} more gold than <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#8A3FE6', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) at the end of {props.gameData.info.gameDuration < 900 ? props.gameDuration : '15 minutes'}, {advantageStr}.
             </p>
           ) : (
             <p>
-              <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} </a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) in the top lane only earned a small gold lead of {statsAt15.laneResults.TOP.goldDifference} over <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser?.riotIdGameName} </a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS), so we consider top lane to be a draw.
+              <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#8A3FE6', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} </a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) in the top lane only earned a small gold lead of {statsAt15.laneResults.TOP.goldDifference} over <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#8A3FE6', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser?.riotIdGameName} </a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS), so we consider top lane to be a draw.
             </p>
           )}
         </Grid>
         <Grid item style={{ display: 'inline-flex', justifyContent: 'center' }} xs={12} sm={6}>
-          <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} #${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline}`}>
+          <StyledTooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} #${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline}`}>
             <div style={{ display: 'inline-block' }}>
-              <a alt='Champion' href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={championImg(props.dataDragonVersion, winnerChampName)}></img></a>
+              <a alt='Champion' href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '4px #568CFF solid' : '4px #A35BFF solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={championImg(props.dataDragonVersion, winnerChampName)}></img></a>
             </div>
-          </Tooltip>
+          </StyledTooltip>
           <img alt='' className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
-          <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName} #${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline}`}>
+          <StyledTooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName} #${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline}`}>
             <div style={{ position: 'relative', display: 'inline-block' }}>
-              <a alt='Champion' href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={championImg(props.dataDragonVersion, loserChampName)}></img></a>
+              <a alt='Champion' href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #A35BFF solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={championImg(props.dataDragonVersion, loserChampName)}></img></a>
             </div>
-          </Tooltip>
+          </StyledTooltip>
           <img alt='Lane' className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/TopLane.png'></img>
         </Grid>
       </Grid>
@@ -140,26 +141,26 @@ const LanePhaseSummaryCardTop = (props) => {
       <Grid className={lastButtonPressedTop === 'laneSumTop2' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
         <Grid item xs={12} sm={6}>
           <p style={{ marginBottom: '15px' }}>
-            Results of the deaths and objectives involving <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) during laning phase.
+            Results of the deaths and objectives involving <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#8A3FE6', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#8A3FE6', fontWeight: 'bold' }}> {statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}</a> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) during laning phase.
           </p>
           <div style={{ marginBottom: '10px' }}>
             {topLaneKillTimeline.map((kill, index) => {
               if (kill.victimId !== 0 && kill.killerId !== 0) {
                 return (
-                  <Typography key={`kill_${index}`}>{Math.round(kill.timestamp / 60000)}m - <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.killerId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.killerId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}</a><img alt='Killer' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
-                    src={championImg(props.dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.killerId).championId)).id)}></img> killed <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.victimId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.victimId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}</a>
+                  <Typography key={`kill_${index}`}>{Math.round(kill.timestamp / 60000)}m - <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.killerId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.killerId).teamId === 100 ? '#0089D6' : '#8A3FE6', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}</a><img alt='Killer' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
+                    src={championImg(props.dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.killerId).championId)).id)}></img> killed <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.victimId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.victimId).teamId === 100 ? '#0089D6' : '#8A3FE6', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}</a>
                     <img alt='Champion' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }} src={championImg(props.dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.victimId).championId)).id)}></img></Typography>
                 )
               }
               if (kill.victimId === 0) {
                 return (
-                  <Typography key={`kill_${index}`}>{Math.round(kill.timestamp / 60000)}m - <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.killerId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.killerId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}</a><img alt='Killer' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
+                  <Typography key={`kill_${index}`}>{Math.round(kill.timestamp / 60000)}m - <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.killerId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.killerId).teamId === 100 ? '#0089D6' : '#8A3FE6', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.killerId)?.riotIdGameName}</a><img alt='Killer' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
                     src={championImg(props.dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.killerId).championId)).id)}></img> killed <span style={{ color: '#6A00AB', fontWeight: 'bold' }}>{kill.monsterType.toLowerCase()}</span></Typography>
                 )
               }
               if (kill.killerId === 0) {
                 return (
-                  <Typography key={`kill_${index}`}>{Math.round(kill.timestamp / 60000)}m - <span style={{ fontWeight: 'bold', color: 'green' }}>Environment</span> killed <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.victimId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.victimId).teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}</a><img alt='Victim' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
+                  <Typography key={`kill_${index}`}>{Math.round(kill.timestamp / 60000)}m - <span style={{ fontWeight: 'bold', color: 'green' }}>Environment</span> killed <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}/${participants.find(player => player.participantId === kill.victimId)?.riotIdTagline.toLowerCase()}`} style={{ color: participants.find(player => player.participantId === kill.victimId).teamId === 100 ? '#0089D6' : '#8A3FE6', fontWeight: 'bold' }}>{participants.find(player => player.participantId === kill.victimId)?.riotIdGameName}</a><img alt='Victim' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px' }}
                     src={championImg(props.dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(participants.find(player => player.participantId === kill.victimId).championId)).id)}></img></Typography>
                 )
               }
@@ -171,19 +172,19 @@ const LanePhaseSummaryCardTop = (props) => {
         </Grid>
         <Grid item style={{ display: 'inline-flex', justifyContent: 'center' }} xs={12} sm={6}>
           <div style={{ position: 'relative', display: 'inline-block' }}>
-            <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} #${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline}`}>
+            <StyledTooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName} #${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline}`}>
               <div style={{ position: 'relative', display: 'inline-flex' }}>
-                <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 200 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={championImg(props.dataDragonVersion, winnerChampName)}></img></a>
+                <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 200 ? '4px #568CFF solid' : '4px #A35BFF solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={championImg(props.dataDragonVersion, winnerChampName)}></img></a>
               </div>
-            </Tooltip>
+            </StyledTooltip>
           </div>
           <img alt='' className='lanePhaseSummarySwords' src='/images/swords.svg'></img>
           <div style={{ position: 'relative', display: 'inline-block' }}>
-            <Tooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName} #${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline}`}>
+            <StyledTooltip arrow placement='top' slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15] } }] } }} title={`${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName} #${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline}`}>
               <div style={{ borderRadius: '50%', display: 'inline-flex' }}>
-                <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #FF3A54 solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={championImg(props.dataDragonVersion, loserChampName)}></img></a>
+                <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`}><img alt='Champion' style={{ border: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '4px #568CFF solid' : '4px #A35BFF solid', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} className='lanePhaseChampImgLarge' src={championImg(props.dataDragonVersion, loserChampName)}></img></a>
               </div>
-            </Tooltip>
+            </StyledTooltip>
           </div>
           <img alt='Lane' className='hideMobile hideTablet' style={{ margin: '20px', maxWidth: '75px', maxHeight: '75px' }} src='/images/laneIcons/TopLane.png'></img>
         </Grid>
@@ -192,7 +193,7 @@ const LanePhaseSummaryCardTop = (props) => {
       <Grid className={lastButtonPressedTop === 'laneSumTop3' ? 'LanePhaseSummaryDetailsActive' : 'LanePhaseSummaryDetailsInActive'} style={{ flexDirection: 'row', display: 'flex' }}>
         <Grid item xs={12}>
           <p style={{ marginBottom: '15px' }}>
-            Graph of CS killed each minute by <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}</a><img alt='Champion' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={championImg(props.dataDragonVersion, winnerChampName)}></img>({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#FF1616', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}</a><img alt='Champion' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={championImg(props.dataDragonVersion, loserChampName)}></img> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) during laning phase.
+            Graph of CS killed each minute by <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}/${statsAt15.laneResults.TOP.laneWinner?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#0089D6' : '#8A3FE6', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneWinner?.riotIdGameName}</a><img alt='Champion' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={championImg(props.dataDragonVersion, winnerChampName)}></img>({statsAt15.laneResults.TOP.laneWinner.kdaAlt}, {statsAt15.laneResults.TOP.laneWinner.cs} CS) and <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}/${statsAt15.laneResults.TOP.laneLoser?.riotIdTagline.toLowerCase()}`} style={{ color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#0089D6' : '#8A3FE6', fontWeight: 'bold' }}>{statsAt15.laneResults.TOP.laneLoser?.riotIdGameName}</a><img alt='Champion' style={{ maxWidth: '20px', maxHeight: '20px', marginLeft: '5px', marginRight: '5px' }} src={championImg(props.dataDragonVersion, loserChampName)}></img> ({statsAt15.laneResults.TOP.laneLoser.kdaAlt}, {statsAt15.laneResults.TOP.laneLoser.cs} CS) during laning phase.
           </p>
           <div style={{ height: '300px', width: '100%' }}>
             <LineChart
@@ -201,12 +202,12 @@ const LanePhaseSummaryCardTop = (props) => {
               series={[
                 {
                   data: yAxisDataWinner,
-                  color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#37B7FF' : '#FF3F3F',
+                  color: statsAt15.laneResults.TOP.laneWinner.teamId === 100 ? '#37B7FF' : '#A35BFF',
                   label: statsAt15.laneResults.TOP.laneWinner?.riotIdGameName,
                 },
                 {
                   data: yAxisDataLoser,
-                  color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#37B7FF' : '#FF3F3F',
+                  color: statsAt15.laneResults.TOP.laneLoser.teamId === 100 ? '#37B7FF' : '#A35BFF',
                   label: statsAt15.laneResults.TOP.laneLoser?.riotIdGameName,
                 }
               ]}

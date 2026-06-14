@@ -1,4 +1,5 @@
-import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress, Tooltip, Divider, Skeleton } from '@mui/material';
+import { Box, List, ListItem, LinearProgress, Button, Typography, CircularProgress, Divider, Skeleton } from '@mui/material';
+import StyledTooltip from '../components/StyledTooltip';
 import { championImg, getChampions, getVersion, profileIconImg } from '../api/ddragon';
 import { getAccountCluster, getMatchCluster } from '../utils/regions';
 import React, { useCallback } from 'react'
@@ -894,7 +895,7 @@ const SummonerProfile = () => {
               <Grid className='summonerProfileInformation'>
                 {rankIndex !== null && !isLoadingRank ? (
                   <div>
-                    <Tooltip
+                    <StyledTooltip
                       slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -40] } }] } }}
                       placement='top'
                       arrow
@@ -915,7 +916,7 @@ const SummonerProfile = () => {
                       }}
                         src={`/images/rankIcons/Rank=${(summonerData.rankedData[rankIndex]?.tier)?.charAt(0) + summonerData.rankedData[rankIndex]?.tier.substring(1).toLowerCase()}.webp`}>
                       </img>
-                    </Tooltip>
+                    </StyledTooltip>
                     <Typography style={{
                       position: 'absolute',
                       margin: 'auto',
@@ -966,7 +967,7 @@ const SummonerProfile = () => {
 
                     return (
                       <Grid key={index} marginRight={index < 2 ? '20px' : '0'} flex="column">
-                        <Tooltip
+                        <StyledTooltip
                           disableInteractive
                           placement="top"
                           arrow
@@ -989,7 +990,7 @@ const SummonerProfile = () => {
                             src={championImg(dataDragonVersion, champion?.id)}
                             alt=""
                           />
-                        </Tooltip>
+                        </StyledTooltip>
                         <Typography
                           style={{
                             textAlign: 'center',

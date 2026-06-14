@@ -1,12 +1,13 @@
 import React from 'react'
-import { Grid, Tooltip, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
+import StyledTooltip from './StyledTooltip';
 
 const DisplayFeats = () => {
     return (
         <div>
             <Grid style={{ width: '65%', marginTop: '2px' }} container spacing={1}>
                 <Grid item>
-                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
+                    <StyledTooltip disableInteractive TransitionProps={{ timeout: 10 }}
                         slotProps={{
                             popper: {
                                 modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
@@ -20,10 +21,10 @@ const DisplayFeats = () => {
                         title='Ler only died 2 time(s) during the match.'
                     >
                         <Typography className='FeatBadge'>Tower Dominance</Typography>
-                    </Tooltip>
+                    </StyledTooltip>
                 </Grid>
                 <Grid item>
-                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
+                    <StyledTooltip disableInteractive TransitionProps={{ timeout: 10 }}
                         slotProps={{
                             popper: {
                                 modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
@@ -37,10 +38,10 @@ const DisplayFeats = () => {
                         title='Ler only died 2 time(s) during the match.'
                     >
                         <Typography className='FeatBadge'>Flawless Victory</Typography>
-                    </Tooltip>
+                    </StyledTooltip>
                 </Grid>
                 <Grid item>
-                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
+                    <StyledTooltip disableInteractive TransitionProps={{ timeout: 10 }}
                         slotProps={{
                             popper: {
                                 modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
@@ -54,10 +55,10 @@ const DisplayFeats = () => {
                         title='Ler only died 2 time(s) during the match.'
                     >
                         <Typography className='FeatBadge'>Survivor</Typography>
-                    </Tooltip>
+                    </StyledTooltip>
                 </Grid>
                 <Grid item>
-                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
+                    <StyledTooltip disableInteractive TransitionProps={{ timeout: 10 }}
                         slotProps={{
                             popper: {
                                 modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
@@ -71,10 +72,10 @@ const DisplayFeats = () => {
                         title='Ler only died 2 time(s) during the match.'
                     >
                         <Typography className='FeatBadge'>Swift Execution</Typography>
-                    </Tooltip>
+                    </StyledTooltip>
                 </Grid>
                 <Grid item>
-                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
+                    <StyledTooltip disableInteractive TransitionProps={{ timeout: 10 }}
                         slotProps={{
                             popper: {
                                 modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
@@ -88,10 +89,10 @@ const DisplayFeats = () => {
                         title='Ler only died 2 time(s) during the match.'
                     >
                         <Typography className='FailBadge'>Teamfight Follies</Typography>
-                    </Tooltip>
+                    </StyledTooltip>
                 </Grid>
                 <Grid item>
-                    <Tooltip disableInteractive TransitionProps={{ timeout: 10 }}
+                    <StyledTooltip disableInteractive TransitionProps={{ timeout: 10 }}
                         slotProps={{
                             popper: {
                                 modifiers: [{ name: 'offset', options: { offset: [10, -60] } }]
@@ -105,7 +106,7 @@ const DisplayFeats = () => {
                         title='Ler only died 2 time(s) during the match.'
                     >
                         <Typography className='FailBadge'>No Dragons</Typography>
-                    </Tooltip>
+                    </StyledTooltip>
                 </Grid>
             </Grid>
         </div>

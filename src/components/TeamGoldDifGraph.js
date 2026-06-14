@@ -19,10 +19,10 @@ const TeamGoldDifGraph = (props) => {
 
     // If player team is red flip negative gold to positive
     let yAxisGold = [...props.yAxisGold];
-    let colors = ['#FF3F3F', '#568CFF'];
+    let colors = ['#A35BFF', '#568CFF'];
     if (props.teamId === 200) {
         yAxisGold = yAxisGold.map((value) => value * -1);
-        colors = ['#568CFF', '#FF3F3F'];
+        colors = ['#568CFF', '#A35BFF'];
     }
 
     let xAxisGold = props.xAxisGold;
@@ -73,7 +73,7 @@ const TeamGoldDifGraph = (props) => {
     return (
         <div style={{ overflow: 'hidden', position: 'relative', width: '100%' }}>
             {props.arrow &&
-                <div style={{ position: 'absolute', left: 'auto', right: '0px', top: '0px', display: 'flex', alignItems: 'center', backgroundColor: arrowColor === 'black' ? '#E9E9E9' : arrowColor === '#568CFF' ? '#ECF2FF' : '#FFF1F3', padding: '5px', borderRadius: '10px' }}>
+                <div style={{ position: 'absolute', left: 'auto', right: '0px', top: '0px', display: 'flex', alignItems: 'center', backgroundColor: arrowColor === 'black' ? '#E9E9E9' : arrowColor === '#568CFF' ? '#ECF2FF' : '#F4ECFF', padding: '5px', borderRadius: '10px' }}>
                     <Typography style={{ textAlign: 'center', color: arrowColor, fontSize: '0.938rem' }}>{`${valueChange > 0 ? '+' : ''}${valueChange.toLocaleString()}g`}</Typography>
                     {arrowType === 'up' &&
                         <KeyboardArrowUpIcon style={{ color: arrowColor, fontSize: '1.875rem' }}></KeyboardArrowUpIcon>

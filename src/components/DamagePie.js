@@ -12,11 +12,11 @@ const DamagePie = (props) => {
     ]
 
     let redColors = [
-        '#FF3F3F',  // Lightest
-        '#E83B3B',
-        '#D23838',
-        '#BB3535',
-        '#A53131' // Darkest
+        '#A35BFF',  // Lightest
+        '#9450E8',
+        '#8546D2',
+        '#763BBB',
+        '#673189' // Darkest
     ]
 
     let participants = props.participants

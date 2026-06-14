@@ -1,7 +1,8 @@
 import React from 'react';
 import { championImg, getChampions, getItems, getQueues, getSummonerSpells, getVersion, spellImg } from '../api/ddragon';
 import { queueTitle as getQueueTitle } from '../utils/queues';
-import { Typography, Grid, Tooltip, LinearProgress, Box } from '@mui/material';
+import { Typography, Grid, LinearProgress, Box } from '@mui/material';
+import StyledTooltip from '../components/StyledTooltip';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
@@ -217,12 +218,12 @@ const ArenaDetails = () => {
                                 {/* Player Win */}
                                 {playerData.win ? (
                                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                                        <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
-                                            <div style={{ border: `4px ${playerData.teamId === 100 ? '#568CFF' : '#FF3A54'} solid`, borderRadius: '50%', display: 'inline-flex' }}>
+                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                                            <div style={{ border: `4px ${playerData.teamId === 100 ? '#568CFF' : '#A35BFF'} solid`, borderRadius: '50%', display: 'inline-flex' }}>
                                                 <Typography className='displayGameChampLevel' style={{
                                                     fontSize: '0.875rem',
                                                     position: 'absolute',
-                                                    backgroundColor: playerData.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                                    backgroundColor: playerData.teamId === 100 ? '#568CFF' : '#A35BFF',
                                                     color: 'white',
                                                     fontWeight: 'bold',
                                                     borderRadius: '100%',
@@ -244,33 +245,33 @@ const ArenaDetails = () => {
                                                     src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id)} alt=''>
                                                 </img>
                                             </div>
-                                        </Tooltip>
+                                        </StyledTooltip>
                                         <Grid className='gameDetailsSummarySpells'>
-                                            <Tooltip
+                                            <StyledTooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
                                                 <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id)}></img>
-                                            </Tooltip>
-                                            <Tooltip
+                                            </StyledTooltip>
+                                            <StyledTooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
                                                 <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id)}></img>
-                                            </Tooltip>
+                                            </StyledTooltip>
                                         </Grid>
                                     </a>
                                 ) : (
                                     // Player Lose
                                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                                        <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
-                                            <div style={{ border: `4px ${playerData.teamId === 100 ? '#568CFF' : '#FF3A54'} solid`, borderRadius: '50%', display: 'inline-flex' }}>
+                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                                            <div style={{ border: `4px ${playerData.teamId === 100 ? '#568CFF' : '#A35BFF'} solid`, borderRadius: '50%', display: 'inline-flex' }}>
                                                 <Typography className='displayGameChampLevel' style={{
                                                     fontSize: '0.875rem',
                                                     position: 'absolute',
-                                                    backgroundColor: playerData.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                                    backgroundColor: playerData.teamId === 100 ? '#568CFF' : '#A35BFF',
                                                     color: 'white',
                                                     fontWeight: 'bold',
                                                     borderRadius: '100%',
@@ -292,22 +293,22 @@ const ArenaDetails = () => {
                                                     style={{ filter: 'grayscale(100%)' }} src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).id)} alt=''>
                                                 </img>
                                             </div>
-                                        </Tooltip>
+                                        </StyledTooltip>
                                         <Grid className='gameDetailsSummarySpells'>
-                                            <Tooltip
+                                            <StyledTooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
                                                 <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).id)}></img>
-                                            </Tooltip>
-                                            <Tooltip
+                                            </StyledTooltip>
+                                            <StyledTooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
                                                 <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).id)}></img>
-                                            </Tooltip>
+                                            </StyledTooltip>
                                         </Grid>
                                     </a>
                                 )}
@@ -315,12 +316,12 @@ const ArenaDetails = () => {
 
                                 {playerData.win ? (
                                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${teammateData.riotIdGameName}/${teammateData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                                        <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${teammateData.riotIdGameName} #${teammateData.riotIdTagline}`}>
-                                            <div style={{ border: `4px ${playerData.teamId === 100 ? '#568CFF' : '#FF3A54'} solid`, borderRadius: '50%', display: 'inline-flex' }}>
+                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${teammateData.riotIdGameName} #${teammateData.riotIdTagline}`}>
+                                            <div style={{ border: `4px ${playerData.teamId === 100 ? '#568CFF' : '#A35BFF'} solid`, borderRadius: '50%', display: 'inline-flex' }}>
                                                 <Typography className='displayGameChampLevel' style={{
                                                     fontSize: '0.875rem',
                                                     position: 'absolute',
-                                                    backgroundColor: playerData.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                                    backgroundColor: playerData.teamId === 100 ? '#568CFF' : '#A35BFF',
                                                     color: 'white',
                                                     fontWeight: 'bold',
                                                     borderRadius: '100%',
@@ -342,33 +343,33 @@ const ArenaDetails = () => {
                                                     src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(teammateData.championId)).id)} alt=''>
                                                 </img>
                                             </div>
-                                        </Tooltip>
+                                        </StyledTooltip>
                                         <Grid className='gameDetailsSummarySpells'>
-                                            <Tooltip
+                                            <StyledTooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === teammateData.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === teammateData.summoner1Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
                                                 <img style={{ width: '28px', borderRadius: '2px', filter: 'dropF-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === teammateData.summoner1Id.toString()).id)}></img>
-                                            </Tooltip>
-                                            <Tooltip
+                                            </StyledTooltip>
+                                            <StyledTooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === teammateData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === teammateData.summoner2Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
                                                 <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === teammateData.summoner2Id.toString()).id)}></img>
-                                            </Tooltip>
+                                            </StyledTooltip>
                                         </Grid>
                                     </a>
                                 ) : (
                                     // Player Lose
                                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${teammateData.riotIdGameName}/${teammateData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                                        <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${teammateData.riotIdGameName} #${teammateData.riotIdTagline}`}>
-                                            <div style={{ border: `4px ${playerData.teamId === 100 ? '#568CFF' : '#FF3A54'} solid`, borderRadius: '50%', display: 'inline-flex' }}>
+                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${teammateData.riotIdGameName} #${teammateData.riotIdTagline}`}>
+                                            <div style={{ border: `4px ${playerData.teamId === 100 ? '#568CFF' : '#A35BFF'} solid`, borderRadius: '50%', display: 'inline-flex' }}>
                                                 <Typography className='displayGameChampLevel' style={{
                                                     fontSize: '0.875rem',
                                                     position: 'absolute',
-                                                    backgroundColor: playerData.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                                    backgroundColor: playerData.teamId === 100 ? '#568CFF' : '#A35BFF',
                                                     color: 'white',
                                                     fontWeight: 'bold',
                                                     borderRadius: '100%',
@@ -390,22 +391,22 @@ const ArenaDetails = () => {
                                                     style={{ filter: 'grayscale(100%)' }} src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(teammateData.championId)).id)} alt=''>
                                                 </img>
                                             </div>
-                                        </Tooltip>
+                                        </StyledTooltip>
                                         <Grid className='gameDetailsSummarySpells'>
-                                            <Tooltip
+                                            <StyledTooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === teammateData.summoner1Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
                                                 <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === teammateData.summoner1Id.toString()).id)}></img>
-                                            </Tooltip>
-                                            <Tooltip
+                                            </StyledTooltip>
+                                            <StyledTooltip
                                                 title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === playerData.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === teammateData.summoner2Id.toString()).description}</span></>}
                                                 disableInteractive
                                                 arrow
                                             >
                                                 <img style={{ width: '28px', borderRadius: '2px', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === teammateData.summoner2Id.toString()).id)}></img>
-                                            </Tooltip>
+                                            </StyledTooltip>
                                         </Grid>
                                     </a>
                                 )}
@@ -413,12 +414,12 @@ const ArenaDetails = () => {
                             </Grid>
                             <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={12} md={7}>
                                 <Typography style={{ marginTop: '20px' }} className='GameDetailsMainSummaryHeader'>
-                                    <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                                    <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
                                         <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ color: 'inherit' }}>
                                             {playerData.riotIdGameName}
                                         </a>
-                                    </Tooltip>
-                                    <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}> placed {playerData.placement}{placementSuffix}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} alongside <Tooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${teammateData.riotIdGameName} #${teammateData.riotIdTagline}`}><a style={{ color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${teammateData.riotIdGameName}/${teammateData.riotIdTagline.toLowerCase()}`}>{teammateData.riotIdGameName}</a></Tooltip> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists}.
+                                    </StyledTooltip>
+                                    <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}> placed {playerData.placement}{placementSuffix}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} alongside <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${teammateData.riotIdGameName} #${teammateData.riotIdTagline}`}><a style={{ color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${teammateData.riotIdGameName}/${teammateData.riotIdTagline.toLowerCase()}`}>{teammateData.riotIdGameName}</a></StyledTooltip> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists}.
                                 </Typography>
                                 {queueTitle !== null ? (
                                     <Typography className='GameDetailsMainSummarySubHeader'>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>

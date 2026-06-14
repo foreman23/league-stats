@@ -1,6 +1,7 @@
 import React from 'react'
 import { championImg, itemImg, spellImg } from '../api/ddragon';
-import { Typography, Grid, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress, Tooltip } from '@mui/material';
+import { Typography, Grid, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress } from '@mui/material';
+import StyledTooltip from './StyledTooltip';
 
 const OverviewTable = (props) => {
 
@@ -74,12 +75,12 @@ const OverviewTable = (props) => {
                         <TableRow key={index}>
                             <TableCell style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                    <Tooltip title={Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).name} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
+                                    <StyledTooltip title={Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).name} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
                                         <div style={{ position: 'relative', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                             <Typography style={{
                                                 fontSize: '0.688rem',
                                                 position: 'absolute',
-                                                backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                                backgroundColor: player.teamId === 100 ? '#568CFF' : '#A35BFF',
                                                 color: 'white',
                                                 borderRadius: '100%',
                                                 paddingLeft: '4px',
@@ -99,36 +100,36 @@ const OverviewTable = (props) => {
                                                     width: '38px',
                                                     borderRadius: '100%',
                                                     marginRight: '3px',
-                                                    border: player.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid'
+                                                    border: player.teamId === 100 ? '3px #568CFF solid' : '3px #A35BFF solid'
                                                 }}
                                                 src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id)}>
                                             </img>
                                         </div>
-                                    </Tooltip>
+                                    </StyledTooltip>
                                     <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
-                                        <Tooltip
+                                        <StyledTooltip
                                             title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).description}</span></>}
                                             disableInteractive
                                             placement='top'
                                             arrow
                                             slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
                                             <img alt='Spell 1' style={{ width: '19px', borderRadius: '2px' }} src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id)}></img>
-                                        </Tooltip>
-                                        <Tooltip
+                                        </StyledTooltip>
+                                        <StyledTooltip
                                             title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
                                             disableInteractive
                                             placement='top'
                                             arrow
                                             slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
                                             <img alt='Spell 2' style={{ width: '19px', borderRadius: '2px' }} src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id)}></img>
-                                        </Tooltip>
+                                        </StyledTooltip>
                                     </div>
 
-                                    <Tooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
+                                    <StyledTooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
                                         <a style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}>
                                             <Typography marginLeft={'10px'} className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'0.75rem'}>{player.riotIdGameName}</Typography>
                                         </a>
-                                    </Tooltip>
+                                    </StyledTooltip>
 
 
                                 </div>
@@ -144,9 +145,9 @@ const OverviewTable = (props) => {
                             </TableCell>
                             <TableCell align='center'>
                                 <Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
-                                <Tooltip disableInteractive title={<div>{`Physical: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`Magical: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
+                                <StyledTooltip disableInteractive title={<div>{`Physical: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`Magical: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
                                     <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#37B7FF' }, width: '50%', height: '10px' }}></LinearProgress>
-                                </Tooltip>
+                                </StyledTooltip>
                             </TableCell>
                             <TableCell align='center'><Typography fontSize={'13px'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
                             {gameMode !== "CHERRY" ? (
@@ -168,7 +169,7 @@ const OverviewTable = (props) => {
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                                             <div style={{ display: 'flex', flexDirection: 'row' }}>
                                                 {player?.item0 ? (
-                                                    <Tooltip
+                                                    <StyledTooltip
                                                         arrow
                                                         disableInteractive
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
@@ -181,7 +182,7 @@ const OverviewTable = (props) => {
                                                             src={player.item0 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item0)}
                                                             alt="Item1">
                                                         </img>
-                                                    </Tooltip>
+                                                    </StyledTooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
                                                         src={player.item0 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item0)}
@@ -190,7 +191,7 @@ const OverviewTable = (props) => {
                                                 )
                                                 }
                                                 {player?.item1 ? (
-                                                    <Tooltip
+                                                    <StyledTooltip
                                                         arrow
                                                         disableInteractive
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
@@ -203,7 +204,7 @@ const OverviewTable = (props) => {
                                                             src={player.item1 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item1)}
                                                             alt="Item2">
                                                         </img>
-                                                    </Tooltip>
+                                                    </StyledTooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
                                                         src={player.item1 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item1)}
@@ -212,7 +213,7 @@ const OverviewTable = (props) => {
                                                 )
                                                 }
                                                 {player?.item2 ? (
-                                                    <Tooltip
+                                                    <StyledTooltip
                                                         arrow
                                                         disableInteractive
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
@@ -225,7 +226,7 @@ const OverviewTable = (props) => {
                                                             src={player.item2 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item2)}
                                                             alt="Item3">
                                                         </img>
-                                                    </Tooltip>
+                                                    </StyledTooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
                                                         src={player.item2 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item2)}
@@ -234,7 +235,7 @@ const OverviewTable = (props) => {
                                                 )
                                                 }
                                                 {player?.item6 ? (
-                                                    <Tooltip
+                                                    <StyledTooltip
                                                         arrow
                                                         disableInteractive
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
@@ -247,7 +248,7 @@ const OverviewTable = (props) => {
                                                             src={player.item6 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item6)}
                                                             alt="Ward">
                                                         </img>
-                                                    </Tooltip>
+                                                    </StyledTooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
                                                         src={player.item6 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item6)}
@@ -258,7 +259,7 @@ const OverviewTable = (props) => {
                                             </div>
                                             <div style={{ display: 'flex', flexDirection: 'row' }}>
                                                 {player?.item3 ? (
-                                                    <Tooltip
+                                                    <StyledTooltip
                                                         arrow
                                                         disableInteractive
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
@@ -271,7 +272,7 @@ const OverviewTable = (props) => {
                                                             src={player.item3 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item3)}
                                                             alt="Item4">
                                                         </img>
-                                                    </Tooltip>
+                                                    </StyledTooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
                                                         src={player.item3 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item3)}
@@ -280,7 +281,7 @@ const OverviewTable = (props) => {
                                                 )
                                                 }
                                                 {player?.item4 ? (
-                                                    <Tooltip
+                                                    <StyledTooltip
                                                         arrow
                                                         disableInteractive
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
@@ -293,7 +294,7 @@ const OverviewTable = (props) => {
                                                             src={player.item4 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item4)}
                                                             alt="Item5">
                                                         </img>
-                                                    </Tooltip>
+                                                    </StyledTooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
                                                         src={player.item4 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item4)}
@@ -302,7 +303,7 @@ const OverviewTable = (props) => {
                                                 )
                                                 }
                                                 {player?.item5 ? (
-                                                    <Tooltip
+                                                    <StyledTooltip
                                                         arrow
                                                         disableInteractive
                                                         slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
@@ -315,7 +316,7 @@ const OverviewTable = (props) => {
                                                             src={player.item5 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item5)}
                                                             alt="Item6">
                                                         </img>
-                                                    </Tooltip>
+                                                    </StyledTooltip>
                                                 ) : (
                                                     <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
                                                         src={player.item5 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item5)}

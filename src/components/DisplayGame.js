@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import { Typography, Grid, Divider, LinearProgress, Box, Tooltip } from '@mui/material'
+import { Typography, Grid, Divider, LinearProgress, Box } from '@mui/material'
+import StyledTooltip from './StyledTooltip';
 import { championImg, getQueues, getSummonerSpells, spellImg } from '../api/ddragon';
 import { queueTitle as getQueueTitle } from '../utils/queues'
 import calculateOpScores from '../functions/CalculateOpScores';
@@ -322,23 +323,23 @@ const DisplayGame = (props) => {
                             {gameData.info.gameMode !== 'CHERRY' &&
                                 <Grid className='teamChampsContainer teamChampsContainerM1'>
                                     {participants.filter(player => player.teamId === participant.teamId && player.summonerId !== participant.summonerId).map((player, index) => (
-                                        <Tooltip key={`player_${index}_team1`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
+                                        <StyledTooltip key={`player_${index}_team1`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
                                             <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                                 <img alt='Champion' className='displayGameTeamChamps' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id)}></img>
-                                                <Box className='displayGameTeamChampsBox' style={{ backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54' }}></Box>
+                                                <Box className='displayGameTeamChampsBox' style={{ backgroundColor: player.teamId === 100 ? '#568CFF' : '#A35BFF' }}></Box>
                                             </span>
-                                        </Tooltip>
+                                        </StyledTooltip>
                                     ))}
                                 </Grid>
                             }
                         </Grid>
                         <Grid display={'flex'} flexDirection={'column'} position={'relative'}>
-                            <Tooltip arrow placement='top' title={`${participant.riotIdGameName} #${participant.riotIdTagline}`}>
+                            <StyledTooltip arrow placement='top' title={`${participant.riotIdGameName} #${participant.riotIdTagline}`}>
                                 <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${participant.riotIdGameName}/${participant.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                     <Typography className='displayGameChampLevel' style={{
                                         fontSize: '0.875rem',
                                         position: 'absolute',
-                                        backgroundColor: participant.teamId === 200 ? '#FF3A54' : '#568CFF',
+                                        backgroundColor: participant.teamId === 200 ? '#A35BFF' : '#568CFF',
                                         color: 'white',
                                         fontWeight: 'bold',
                                         borderRadius: '100%',
@@ -355,26 +356,26 @@ const DisplayGame = (props) => {
                                     }}
                                     >{participant.champLevel}
                                     </Typography>
-                                    <img className='displayGameMainChampImg' style={{ border: participant.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid' }} alt='champion icon'
+                                    <img className='displayGameMainChampImg' style={{ border: participant.teamId === 100 ? '3px #568CFF solid' : '3px #A35BFF solid' }} alt='champion icon'
                                         src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(participant.championId)).id)}>
                                     </img>
                                 </span>
-                            </Tooltip>
+                            </StyledTooltip>
                             <Grid className={`${gameData.info.gameMode !== "CHERRY" ? 'displayGameSummonerSpells' : 'displayGameSummonerSpellsCherry'} defaultCursor`}>
-                                <Tooltip
+                                <StyledTooltip
                                     title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === participant.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === participant.summoner1Id.toString()).description}</span></>}
                                     disableInteractive
                                     arrow
                                 >
                                     <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, summonerSpell1.id)}></img>
-                                </Tooltip>
-                                <Tooltip
+                                </StyledTooltip>
+                                <StyledTooltip
                                     title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === participant.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === participant.summoner2Id.toString()).description}</span></>}
                                     disableInteractive
                                     arrow
                                 >
                                     <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, summonerSpell2.id)}></img>
-                                </Tooltip>
+                                </StyledTooltip>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -383,14 +384,14 @@ const DisplayGame = (props) => {
                         <Grid item order={{ xs: 2 }} xs={2} sm={2} className='displayGameGoldBarContainer'>
                             <div style={{ display: 'flex' }}>
                                 <div style={{ marginRight: '-50px' }}>
-                                    <Tooltip className='displayGameGoldBar' title={`Overall: ${playerScore.score.toFixed(1)}`}>
-                                        <LinearProgress className='displayGameOpScoreBar' variant='determinate' value={parseInt((playerScore.score * 10).toFixed(2))} sx={{ backgroundColor: participant.teamId === 100 ? '#BED3FF' : '#FFC3CC', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#568CFF' : '#FF3A54' } }}></LinearProgress>
-                                    </Tooltip>
+                                    <StyledTooltip className='displayGameGoldBar' title={`Overall: ${playerScore.score.toFixed(1)}`}>
+                                        <LinearProgress className='displayGameOpScoreBar' variant='determinate' value={parseInt((playerScore.score * 10).toFixed(2))} sx={{ backgroundColor: participant.teamId === 100 ? '#BED3FF' : '#E2D0FF', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#568CFF' : '#A35BFF' } }}></LinearProgress>
+                                    </StyledTooltip>
                                 </div>
                                 <div style={{ marginLeft: '0px' }}>
-                                    <Tooltip className='displayGameGoldBar' title={`Overall: ${oppScore.score.toFixed(1)}`}>
-                                        <LinearProgress className='displayGameOpScoreBar' variant='determinate' value={parseInt((oppScore.score * 10).toFixed(2))} sx={{ backgroundColor: participant.teamId === 100 ? '#FFC3CC' : '#BED3FF', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#FF3A54' : '#568CFF' } }}></LinearProgress>
-                                    </Tooltip>
+                                    <StyledTooltip className='displayGameGoldBar' title={`Overall: ${oppScore.score.toFixed(1)}`}>
+                                        <LinearProgress className='displayGameOpScoreBar' variant='determinate' value={parseInt((oppScore.score * 10).toFixed(2))} sx={{ backgroundColor: participant.teamId === 100 ? '#E2D0FF' : '#BED3FF', '& .MuiLinearProgress-bar': { backgroundColor: participant.teamId === 100 ? '#A35BFF' : '#568CFF' } }}></LinearProgress>
+                                    </StyledTooltip>
                                 </div>
                             </div>
                         </Grid>
@@ -405,12 +406,12 @@ const DisplayGame = (props) => {
                     {/* Opposing summoner profile */}
                     <Grid item className='displayGameOpposingProfileContainer' order={{ xs: 3 }} xs={5} sm={5} display={'flex'} flexDirection={'row'} margin={'auto'} textAlign={'center'}>
                         <Grid display={'flex'} flexDirection={'column'} position={'relative'}>
-                            <Tooltip arrow placement='top' title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
+                            <StyledTooltip arrow placement='top' title={`${opposingLaner.riotIdGameName} #${opposingLaner.riotIdTagline}`}>
                                 <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${opposingLaner.riotIdGameName}/${opposingLaner.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                     <Typography className='displayGameChampLevel' style={{
                                         fontSize: '0.875rem',
                                         position: 'absolute',
-                                        backgroundColor: gameData.info.gameMode !== "CHERRY" ? (participant.teamId === 100 ? '#FF3A54' : '#568CFF') : participant.teamId === 100 ? '#568CFF' : '#FF3A54',
+                                        backgroundColor: gameData.info.gameMode !== "CHERRY" ? (participant.teamId === 100 ? '#A35BFF' : '#568CFF') : participant.teamId === 100 ? '#568CFF' : '#A35BFF',
                                         color: 'white',
                                         fontWeight: 'bold',
                                         borderRadius: '100%',
@@ -428,32 +429,32 @@ const DisplayGame = (props) => {
                                     >{opposingLaner.champLevel}
                                     </Typography>
                                     {gameData.info.gameMode !== "CHERRY" &&
-                                        <img className='displayGameMainChampImg' style={{ border: participant.teamId === 100 ? '3px #FF3A54 solid' : '3px #568CFF solid' }} alt='champion icon'
+                                        <img className='displayGameMainChampImg' style={{ border: participant.teamId === 100 ? '3px #A35BFF solid' : '3px #568CFF solid' }} alt='champion icon'
                                             src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id)}>
                                         </img>
                                     }
                                     {gameData.info.gameMode === "CHERRY" &&
-                                        <img className='displayGameMainChampImg' style={{ border: participant.teamId === 100 ? '3px #568CFF solid' : '3px #FF3A54 solid' }} alt='champion icon'
+                                        <img className='displayGameMainChampImg' style={{ border: participant.teamId === 100 ? '3px #568CFF solid' : '3px #A35BFF solid' }} alt='champion icon'
                                             src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(opposingLaner.championId)).id)}>
                                         </img>
                                     }
                                 </span>
-                            </Tooltip>
+                            </StyledTooltip>
                             <Grid className={`${gameData.info.gameMode !== "CHERRY" ? 'displayGameSummonerSpells' : 'displayGameSummonerSpellsCherry'} defaultCursor`}>
-                                <Tooltip
+                                <StyledTooltip
                                     title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner1Id.toString()).description}</span></>}
                                     disableInteractive
                                     arrow
                                 >
                                     <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 1' src={spellImg(dataDragonVersion, opposingSummonerSpell1.id)}></img>
-                                </Tooltip>
-                                <Tooltip
+                                </StyledTooltip>
+                                <StyledTooltip
                                     title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === opposingLaner.summoner2Id.toString()).description}</span></>}
                                     disableInteractive
                                     arrow
                                 >
                                     <img style={{ width: '23px', borderRadius: '2px' }} alt='summoner spell 2' src={spellImg(dataDragonVersion, opposingSummonerSpell2.id)}></img>
-                                </Tooltip>
+                                </StyledTooltip>
                             </Grid>
                         </Grid>
                         <Grid className='displayGameOpposingTextContainer'>
@@ -470,12 +471,12 @@ const DisplayGame = (props) => {
                             {gameData.info.gameMode !== 'CHERRY' &&
                                 <Grid className='teamChampsContainer teamChampsContainerM2'>
                                     {participants.filter(player => player.teamId !== participant.teamId && player.summonerId !== opposingLaner.summonerId).map((player, index) => (
-                                        <Tooltip key={`player_${index}_team2`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
+                                        <StyledTooltip key={`player_${index}_team2`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
                                             <span className='defaultCursor' href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`} style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
                                                 <img alt='Champion' className='displayGameTeamChamps' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id)}></img>
-                                                <Box className='displayGameTeamChampsBox' style={{ backgroundColor: player.teamId === 100 ? '#568CFF' : '#FF3A54' }}></Box>
+                                                <Box className='displayGameTeamChampsBox' style={{ backgroundColor: player.teamId === 100 ? '#568CFF' : '#A35BFF' }}></Box>
                                             </span>
-                                        </Tooltip>
+                                        </StyledTooltip>
                                     ))}
                                 </Grid>
                             }
@@ -492,7 +493,7 @@ const DisplayGame = (props) => {
                                         const backgroundColor = arenaColors[pairIndex];
 
                                         return (
-                                            <Tooltip disableInteractive key={`player_${index}_team2`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
+                                            <StyledTooltip disableInteractive key={`player_${index}_team2`} arrow title={`${player.riotIdGameName} #${player.riotIdTagline}`}>
                                                 <span
                                                     className='defaultCursor cherryChampItem'
                                                     href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}
@@ -508,7 +509,7 @@ const DisplayGame = (props) => {
                                                         style={{ backgroundColor: backgroundColor }}
                                                     />
                                                 </span>
-                                            </Tooltip>
+                                            </StyledTooltip>
                                         );
                                     })}
                             </div>
