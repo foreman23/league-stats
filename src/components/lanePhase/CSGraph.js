@@ -11,7 +11,7 @@ export default function CSGraph({ lane }) {
   const innerW = W - padL - padR;
   const innerH = H - padT - padB;
 
-  const series = [...lane.blue, ...lane.purple].map((p) => ({
+  const series = [...lane.left, ...lane.right].map((p) => ({
     key: p.participantId,
     name: p.name,
     side: p.side,

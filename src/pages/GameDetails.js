@@ -1036,7 +1036,7 @@ function GameDetails() {
                 {LANES.map((laneDef) => (
                   <LaneCard
                     key={laneDef.data}
-                    lane={toLaneVM(laneDef, statsAt15, { gameData, champsJSON, dataDragonVersion, timelineData })}
+                    lane={toLaneVM(laneDef, statsAt15, { gameData, champsJSON, dataDragonVersion, timelineData, viewerTeam: playerData?.teamId })}
                   />
                 ))}
               </Grid>

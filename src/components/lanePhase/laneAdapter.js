@@ -10,7 +10,7 @@
 //     deaths have killerId 0. They are NOT pre-filtered per lane.
 //   - BOTTOM's laneWinner/laneLoser are ARRAYS of two players ([ADC|SUP]).
 
-import { championImg } from '../../api/ddragon';
+import { championImg, profileIconImg } from '../../api/ddragon';
 
 // data key -> { laneKey, label, anchor }. Anchor IDs are preserved from the old
 // cards (scroll targets referenced elsewhere on the page).
@@ -78,6 +78,7 @@ function toActor(p, platformId, champsJSON, ddVersion) {
     champ: entry ? entry.name : String(p.championId),
     side: p.teamId === 100 ? 'blue' : 'purple',
     portrait: entry ? championImg(ddVersion, entry.id) : null,
+    profilePic: p.profileIcon != null ? profileIconImg(ddVersion, p.profileIcon) : null,
     href: profileHref(platformId, p.riotIdGameName, p.riotIdTagline),
   };
 }
@@ -154,15 +155,29 @@ export function toLaneVM(laneDef, statsAt15, ctx) {
   const losers = [].concat(lr.laneLoser);
   const duo = laneDef.data === 'BOTTOM';
 
-  const laners = [...winners, ...losers].map((p) =>
-    toPlayer(p, lr, platformId, champsJSON, dataDragonVersion)
-  );
+  // participantId -> profile-icon URL, sourced from the match data itself
+  // (`profileIcon` ships with each participant — no extra query needed).
+  const iconUrlById = {};
+  gameData.info.participants.forEach((gp) => {
+    iconUrlById[String(gp.participantId)] =
+      gp.profileIcon != null ? profileIconImg(dataDragonVersion, gp.profileIcon) : null;
+  });
+  const laners = [...winners, ...losers].map((p) => {
+    const vm = toPlayer(p, lr, platformId, champsJSON, dataDragonVersion);
+    vm.profilePic = iconUrlById[vm.participantId];
+    return vm;
+  });
 
-  // Blue (teamId 100) always renders left, purple (200) always right —
-  // independent of who won. In a duo lane, ADC sits above SUP.
+  // The VIEWED player's team renders on the LEFT, opponents on the RIGHT
+  // (default to blue-left when the viewer team is unknown). Team COLORS still
+  // follow teamId (blue = 100, purple = 200) via each player's `side`; only the
+  // left/right placement is viewer-relative. In a duo lane, ADC sits above SUP.
   const orderDuo = (a, b) => (a.role === 'ADC' ? -1 : b.role === 'ADC' ? 1 : 0);
-  const blue = laners.filter((p) => p.teamId === 100).sort(orderDuo);
-  const purple = laners.filter((p) => p.teamId === 200).sort(orderDuo);
+  const leftTeam = ctx.viewerTeam === 200 ? 200 : 100;
+  const rightTeam = leftTeam === 100 ? 200 : 100;
+  const teamPlayers = (t) => laners.filter((p) => p.teamId === t).sort(orderDuo);
+  const left = teamPlayers(leftTeam);
+  const right = teamPlayers(rightTeam);
 
   const rosterById = {};
   gameData.info.participants.forEach((p) => {
@@ -177,10 +192,11 @@ export function toLaneVM(laneDef, statsAt15, ctx) {
     duo,
     resTag: lr.resTag,
     teamWonLane: lr.teamWonLane,
+    leftTeam,
     goldDifference: lr.goldDifference,
     bubbleCount: lr.bubbleCount,
-    blue,
-    purple,
+    left,
+    right,
     kills: adaptKills(statsAt15.laningKills, laneIds, rosterById),
     cs: adaptCS(timelineData, laners),
   };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { goldLabel } from './laneAdapter';
 import CSGraph from './CSGraph';
 import LaneMinimap from './LaneMinimap';
+import StyledTooltip from '../StyledTooltip';
 
 // Redesigned Laning Phase card — one parameterized component for all four lanes
 // (TOP/JUNGLE/MID 1v1, BOTTOM 2v2). Header (outcome headline + severity meter +
@@ -50,39 +51,105 @@ function SeverityDots({ count, side, draw }) {
   );
 }
 
-function GoldChip({ diff, winnerTeam, draw }) {
-  const tier = goldLabel(diff);
-  const cls = draw ? ' lpr-t-even' : winnerTeam === 100 ? ' lpr-t-blue' : ' lpr-t-purple';
+// Team color / name helpers + the shared gold breakdown shown by both the
+// header chip and the center tug-of-war bar on hover.
+const teamColor = (t) => (t === 100 ? '#568CFF' : '#A35BFF');
+const teamName = (t) => (t === 100 ? 'Blue' : 'Purple');
+const sumGold = (arr) => arr.reduce((s, p) => s + (p.gold || 0), 0);
+
+// Rows are labeled with the summoner name(s) on each side (joined for the 2v2
+// bottom lane), colored by team; the gold total per side is the row value.
+function GoldTip({ left, right, leftTeam, diff, draw }) {
+  const rightTeam = leftTeam === 100 ? 200 : 100;
+  const namesOf = (arr) => arr.map((p) => p.name).join(' + ');
   return (
-    <span className="lpr-gold-chip">
-      <span className={'lpr-amt' + cls}>+{diff.toLocaleString()}</span>
-      <span className="lpr-tier">{tier} gold</span>
+    <span className="lpr-tug-tip">
+      <span className="lpr-tug-tip-row">
+        <b style={{ color: teamColor(leftTeam) }}>{namesOf(left)}</b>
+        <span>{sumGold(left).toLocaleString()}g</span>
+      </span>
+      <span className="lpr-tug-tip-row">
+        <b style={{ color: teamColor(rightTeam) }}>{namesOf(right)}</b>
+        <span>{sumGold(right).toLocaleString()}g</span>
+      </span>
+      <span className="lpr-tug-tip-diff">
+        {draw
+          ? `Even — within ${diff.toLocaleString()} gold`
+          : `+${diff.toLocaleString()} gold · ${goldLabel(diff)}`}
+      </span>
     </span>
   );
 }
 
+function GoldChip({ diff, winnerTeam, leftTeam, left, right, draw }) {
+  const tier = goldLabel(diff);
+  const cls = draw ? ' lpr-t-even' : winnerTeam === 100 ? ' lpr-t-blue' : ' lpr-t-purple';
+  return (
+    <StyledTooltip
+      placement="top"
+      disableInteractive
+      title={<GoldTip left={left} right={right} leftTeam={leftTeam} diff={diff} draw={draw} />}
+    >
+      <span className="lpr-gold-chip">
+        <span className={'lpr-amt' + cls}>+{diff.toLocaleString()}</span>
+        <span className="lpr-tier">{tier} gold</span>
+      </span>
+    </StyledTooltip>
+  );
+}
+
 // Center gold tug-of-war (SVG, rendered at final geometry — no transform anim).
-function GoldTug({ diff, winnerTeam, draw }) {
+// `leftTeam` is the team shown in the left column; the winner's fill grows from
+// center toward whichever side its column is on, and the end labels follow.
+// Hovering the bar reveals each side's total gold and the lead.
+function GoldTug({ diff, winnerTeam, leftTeam, left, right, draw }) {
   const VB = 200, C = 100, H = 14;
   const len = Math.min(diff / 4000, 1) * C; // up to half the bar
-  const winnerBlue = winnerTeam === 100;
-  const blue = draw ? { x: C - 16, w: 16 } : winnerBlue ? { x: C - len, w: len } : { x: C, w: 0 };
-  const purple = draw ? { x: C, w: 16 } : !winnerBlue ? { x: C, w: len } : { x: C, w: 0 };
+  const rightTeam = leftTeam === 100 ? 200 : 100;
+  const endCls = (t) => (t === 100 ? 'lpr-e-blue' : 'lpr-e-purple');
+  const fill = draw ? null : (winnerTeam === leftTeam ? { x: C - len, w: len } : { x: C, w: len });
   const op = draw ? 0.5 : 1;
   return (
     <div className="lpr-gold-center">
       <span className="lpr-gold-vs">VS</span>
-      <svg className="lpr-tug" viewBox={`0 0 ${VB} ${H}`} preserveAspectRatio="none" aria-hidden="true">
-        <rect x="0" y="1" width={VB} height="12" rx="6" fill="#E7E9EE" />
-        {blue.w > 0 && <rect x={blue.x} y="1" width={blue.w} height="12" rx="6" fill="#568CFF" opacity={op} />}
-        {purple.w > 0 && <rect x={purple.x} y="1" width={purple.w} height="12" rx="6" fill="#A35BFF" opacity={op} />}
-        <rect x={C - 1} y="-1" width="2" height="16" fill="#fff" />
-      </svg>
+      <StyledTooltip
+        placement="top"
+        disableInteractive
+        title={<GoldTip left={left} right={right} leftTeam={leftTeam} diff={diff} draw={draw} />}
+      >
+        <svg className="lpr-tug" viewBox={`0 0 ${VB} ${H}`} preserveAspectRatio="none">
+          <rect x="0" y="1" width={VB} height="12" rx="6" fill="#E7E9EE" />
+          {draw && (
+            <>
+              <rect x={C - 16} y="1" width="16" height="12" rx="6" fill={teamColor(leftTeam)} opacity={op} />
+              <rect x={C} y="1" width="16" height="12" rx="6" fill={teamColor(rightTeam)} opacity={op} />
+            </>
+          )}
+          {fill && fill.w > 0 && (
+            <rect x={fill.x} y="1" width={fill.w} height="12" rx="6" fill={teamColor(winnerTeam)} opacity={op} />
+          )}
+          <rect x={C - 1} y="-1" width="2" height="16" fill="#fff" />
+        </svg>
+      </StyledTooltip>
       <div className="lpr-gold-ends">
-        <span className={!draw && winnerBlue ? 'lpr-e-blue' : 'lpr-e-off'}>Blue</span>
-        <span className={!draw && !winnerBlue ? 'lpr-e-purple' : 'lpr-e-off'}>Purple</span>
+        <span className={!draw && winnerTeam === leftTeam ? endCls(leftTeam) : 'lpr-e-off'}>{teamName(leftTeam)}</span>
+        <span className={!draw && winnerTeam === rightTeam ? endCls(rightTeam) : 'lpr-e-off'}>{teamName(rightTeam)}</span>
       </div>
     </div>
+  );
+}
+
+// Hover card for a summoner name: profile icon + name #tag (icon comes from the
+// match data, so no extra lookup).
+function NameTip({ player }) {
+  return (
+    <span className="lpr-name-tip">
+      {player.profilePic && <img className="lpr-name-tip-icon" src={player.profilePic} alt="" />}
+      <span className="lpr-name-tip-text">
+        <span className="lpr-name-tip-name">{player.name}</span>
+        <span className="lpr-name-tip-tag">#{player.tag}</span>
+      </span>
+    </span>
   );
 }
 
@@ -92,7 +159,9 @@ function PlayerRow({ player, sizeSm }) {
     <div className="lpr-player">
       <Portrait player={player} size={sizeSm ? 'sm' : null} />
       <div className="lpr-pmeta">
-        <a className={'lpr-pname' + nameCls} href={player.href}>{player.name}</a>
+        <StyledTooltip placement="top" disableInteractive title={<NameTip player={player} />}>
+          <a className={'lpr-pname' + nameCls} href={player.href}>{player.name}</a>
+        </StyledTooltip>
         <span className="lpr-pchamp">
           {player.champ}{player.role ? <span className="lpr-role-tag"> · {player.role}</span> : null}
         </span>
@@ -110,11 +179,18 @@ function Matchup({ lane }) {
   return (
     <div className={'lpr-matchup' + (lane.duo ? ' lpr-duo' : '')}>
       <div className="lpr-side lpr-left">
-        {lane.blue.map((p) => <PlayerRow key={p.participantId} player={p} sizeSm={sizeSm} />)}
+        {lane.left.map((p) => <PlayerRow key={p.participantId} player={p} sizeSm={sizeSm} />)}
       </div>
-      <GoldTug diff={lane.goldDifference} winnerTeam={lane.teamWonLane} draw={lane.resTag === 'draw'} />
+      <GoldTug
+        diff={lane.goldDifference}
+        winnerTeam={lane.teamWonLane}
+        leftTeam={lane.leftTeam}
+        left={lane.left}
+        right={lane.right}
+        draw={lane.resTag === 'draw'}
+      />
       <div className="lpr-side lpr-right">
-        {lane.purple.map((p) => <PlayerRow key={p.participantId} player={p} sizeSm={sizeSm} />)}
+        {lane.right.map((p) => <PlayerRow key={p.participantId} player={p} sizeSm={sizeSm} />)}
       </div>
     </div>
   );
@@ -126,7 +202,9 @@ function FeedActor({ actor }) {
   return (
     <span className="lpr-feed-actor">
       <Portrait player={actor} size="xs" />
-      <a className={'lpr-kf-name' + nameCls} href={actor.href}>{actor.name}</a>
+      <StyledTooltip placement="top" disableInteractive title={<NameTip player={actor} />}>
+        <a className={'lpr-kf-name' + nameCls} href={actor.href}>{actor.name}</a>
+      </StyledTooltip>
     </span>
   );
 }
@@ -224,18 +302,18 @@ function TakeawayLine({ lane }) {
   if (draw) {
     inner = (
       <>
-        <b>Dead even.</b> {lane.blue[0].name} and {lane.purple[0].name} traded blows and CS,
+        <b>Dead even.</b> {lane.left[0].name} and {lane.right[0].name} traded blows and CS,
         separated by just <b className="lpr-c-even">+{lane.goldDifference.toLocaleString()} gold</b>.
       </>
     );
   } else {
-    const win = (lane.teamWonLane === 100 ? lane.blue : lane.purple)[0];
+    const win = (lane.teamWonLane === lane.leftTeam ? lane.left : lane.right)[0];
     const cls = lane.teamWonLane === 100 ? 'lpr-c-blue' : 'lpr-c-purple';
     const team = lane.teamWonLane === 100 ? 'Blue' : 'Purple';
     const tier = goldLabel(lane.goldDifference);
     const lead = {
-      obliterates: 'crushed the lane',
-      dominates: 'won the trades',
+      obliterates: 'obliterates in lane',
+      dominates: 'dominates in lane',
       won: 'came out ahead',
     }[lane.resTag] || 'won the lane';
     inner = (
@@ -293,7 +371,14 @@ export default function LaneCard({ lane }) {
           <Headline lane={lane} />
           <SeverityDots count={lane.bubbleCount} side={lane.teamWonLane} draw={draw} />
         </div>
-        <GoldChip diff={lane.goldDifference} winnerTeam={lane.teamWonLane} draw={draw} />
+        <GoldChip
+          diff={lane.goldDifference}
+          winnerTeam={lane.teamWonLane}
+          leftTeam={lane.leftTeam}
+          left={lane.left}
+          right={lane.right}
+          draw={draw}
+        />
       </div>
 
       <div className="lpr-seg" role="tablist">

@@ -4009,6 +4009,16 @@ li {
 .lpr-gold-ends .lpr-e-blue { color: #0089D6; }
 .lpr-gold-ends .lpr-e-purple { color: #8A3FE6; }
 .lpr-gold-ends .lpr-e-off { color: #6B7280; }
+/* gold-bar hover tooltip body */
+.lpr-tug-tip { display: flex; flex-direction: column; gap: 3px; min-width: 132px; font-variant-numeric: tabular-nums; }
+.lpr-tug-tip-row { display: flex; justify-content: space-between; gap: 16px; }
+.lpr-tug-tip-diff { margin-top: 3px; padding-top: 4px; border-top: 1px solid rgba(255, 255, 255, .12); font-weight: 700; }
+/* summoner-name hover card (profile icon + name #tag) */
+.lpr-name-tip { display: flex; align-items: center; gap: 9px; }
+.lpr-name-tip-icon { width: 34px; height: 34px; border-radius: 50%; flex: 0 0 auto; }
+.lpr-name-tip-text { display: flex; flex-direction: column; line-height: 1.25; }
+.lpr-name-tip-name { font-weight: 700; }
+.lpr-name-tip-tag { font-size: 11px; color: #B0B6C0; }
 
 /* kill feed (modern timeline list + Summoner's Rift minimap) */
 .lpr-feed { display: flex; gap: 22px; align-items: flex-start; padding: 4px 2px 2px; }
