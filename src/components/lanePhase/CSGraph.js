@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import StyledTooltip from '../StyledTooltip';
+import NameTip from './NameTip';
 
 // CS/min line graph — cumulative CS, minutes 2–15. One line per player, colored
 // by team; support lines dashed. Draws itself in on mount via stroke-dashoffset.
@@ -14,6 +16,9 @@ export default function CSGraph({ lane }) {
   const series = [...lane.left, ...lane.right].map((p) => ({
     key: p.participantId,
     name: p.name,
+    tag: p.tag,
+    href: p.href,
+    profilePic: p.profilePic,
     side: p.side,
     color: p.side === 'blue' ? '#568CFF' : '#A35BFF',
     finalColor: p.side === 'blue' ? '#0089D6' : '#8A3FE6',
@@ -181,7 +186,9 @@ export default function CSGraph({ lane }) {
         {series.map((s) => (
           <span key={s.key} className="lpr-lg2" style={{ color: s.finalColor }}>
             <span className={'lpr-ln' + (s.sup ? ' lpr-sup' : '')} />
-            <span>{s.name}</span>
+            <StyledTooltip placement="top" disableInteractive title={<NameTip player={s} />}>
+              <a className="lpr-csg-legend-name" href={s.href} style={{ color: 'inherit' }}>{s.name}</a>
+            </StyledTooltip>
             <span className="lpr-fin">· {s.final} CS{s.sup ? ' (sup)' : ''}</span>
           </span>
         ))}

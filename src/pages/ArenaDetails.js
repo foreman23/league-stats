@@ -1,5 +1,5 @@
 import React from 'react';
-import { championImg, getChampions, getItems, getQueues, getSummonerSpells, getVersion, spellImg } from '../api/ddragon';
+import { championImg, getChampions, getItems, getQueues, getSummonerSpells, getVersion, profileIconImg, spellImg } from '../api/ddragon';
 import { queueTitle as getQueueTitle } from '../utils/queues';
 import { Typography, Grid, LinearProgress, Box } from '@mui/material';
 import StyledTooltip from '../components/StyledTooltip';
@@ -8,6 +8,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../FirebaseConfig';
 import OverviewTable from '../components/OverviewTable';
+import SummonerName from '../components/SummonerName';
+import SummonerNameTip from '../components/SummonerNameTip';
 
 const ArenaDetails = () => {
     const [queues, setQueues] = useState(null);
@@ -218,7 +220,7 @@ const ArenaDetails = () => {
                                 {/* Player Win */}
                                 {playerData.win ? (
                                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} disableInteractive title={<SummonerNameTip name={playerData.riotIdGameName} tag={playerData.riotIdTagline} iconUrl={profileIconImg(dataDragonVersion, playerData.profileIcon)} />}>
                                             <div style={{ border: `4px ${playerData.teamId === 100 ? '#568CFF' : '#A35BFF'} solid`, borderRadius: '50%', display: 'inline-flex' }}>
                                                 <Typography className='displayGameChampLevel' style={{
                                                     fontSize: '0.875rem',
@@ -266,7 +268,7 @@ const ArenaDetails = () => {
                                 ) : (
                                     // Player Lose
                                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} disableInteractive title={<SummonerNameTip name={playerData.riotIdGameName} tag={playerData.riotIdTagline} iconUrl={profileIconImg(dataDragonVersion, playerData.profileIcon)} />}>
                                             <div style={{ border: `4px ${playerData.teamId === 100 ? '#568CFF' : '#A35BFF'} solid`, borderRadius: '50%', display: 'inline-flex' }}>
                                                 <Typography className='displayGameChampLevel' style={{
                                                     fontSize: '0.875rem',
@@ -316,7 +318,7 @@ const ArenaDetails = () => {
 
                                 {playerData.win ? (
                                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${teammateData.riotIdGameName}/${teammateData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${teammateData.riotIdGameName} #${teammateData.riotIdTagline}`}>
+                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} disableInteractive title={<SummonerNameTip name={teammateData.riotIdGameName} tag={teammateData.riotIdTagline} iconUrl={profileIconImg(dataDragonVersion, teammateData.profileIcon)} />}>
                                             <div style={{ border: `4px ${playerData.teamId === 100 ? '#568CFF' : '#A35BFF'} solid`, borderRadius: '50%', display: 'inline-flex' }}>
                                                 <Typography className='displayGameChampLevel' style={{
                                                     fontSize: '0.875rem',
@@ -364,7 +366,7 @@ const ArenaDetails = () => {
                                 ) : (
                                     // Player Lose
                                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${teammateData.riotIdGameName}/${teammateData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${teammateData.riotIdGameName} #${teammateData.riotIdTagline}`}>
+                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} disableInteractive title={<SummonerNameTip name={teammateData.riotIdGameName} tag={teammateData.riotIdTagline} iconUrl={profileIconImg(dataDragonVersion, teammateData.profileIcon)} />}>
                                             <div style={{ border: `4px ${playerData.teamId === 100 ? '#568CFF' : '#A35BFF'} solid`, borderRadius: '50%', display: 'inline-flex' }}>
                                                 <Typography className='displayGameChampLevel' style={{
                                                     fontSize: '0.875rem',
@@ -414,12 +416,8 @@ const ArenaDetails = () => {
                             </Grid>
                             <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={12} md={7}>
                                 <Typography style={{ marginTop: '20px' }} className='GameDetailsMainSummaryHeader'>
-                                    <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
-                                        <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ color: 'inherit' }}>
-                                            {playerData.riotIdGameName}
-                                        </a>
-                                    </StyledTooltip>
-                                    <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}> placed {playerData.placement}{placementSuffix}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} alongside <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${teammateData.riotIdGameName} #${teammateData.riotIdTagline}`}><a style={{ color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${teammateData.riotIdGameName}/${teammateData.riotIdTagline.toLowerCase()}`}>{teammateData.riotIdGameName}</a></StyledTooltip> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists}.
+                                    <SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} color='inherit' />
+                                    <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}> placed {playerData.placement}{placementSuffix}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} alongside <SummonerName participant={teammateData} version={dataDragonVersion} platformId={gameData.info.platformId} color='inherit' /> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists}.
                                 </Typography>
                                 {queueTitle !== null ? (
                                     <Typography className='GameDetailsMainSummarySubHeader'>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>

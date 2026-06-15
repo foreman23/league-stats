@@ -2,6 +2,7 @@ import React from 'react'
 import { championImg, itemImg, spellImg } from '../api/ddragon';
 import { Grid, Table, TableHead, TableContainer, TableCell, TableRow, TableBody, Typography, LinearProgress } from '@mui/material'
 import StyledTooltip from './StyledTooltip';
+import SummonerName from './SummonerName';
 
 const DetailsTable = (props) => {
 
@@ -112,20 +113,24 @@ const DetailsTable = (props) => {
                                                     <img alt='Perk' style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                                                 </StyledTooltip>
                                             </div>
-                                            <StyledTooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
-                                                <a style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}>
-                                                    <Typography className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'0.75rem'}>{player.riotIdGameName}</Typography>
-                                                    <span className={
-                                                        (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
-                                                            'TableStandingMVP' :
-                                                            'TableStanding')
-                                                    }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}
-                                                    </span>
-                                                    <span className='TableStandingScore'>
-                                                        {player.score.toFixed(1)}
-                                                    </span>
-                                                </a>
-                                            </StyledTooltip>
+                                            <SummonerName
+                                                participant={player}
+                                                version={dataDragonVersion}
+                                                platformId={gameData.info.platformId}
+                                                color='inherit'
+                                                style={{ textDecoration: 'none' }}
+                                            >
+                                                <Typography className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'0.75rem'}>{player.riotIdGameName}</Typography>
+                                                <span className={
+                                                    (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
+                                                        'TableStandingMVP' :
+                                                        'TableStanding')
+                                                }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}
+                                                </span>
+                                                <span className='TableStandingScore'>
+                                                    {player.score.toFixed(1)}
+                                                </span>
+                                            </SummonerName>
                                         </div>
                                     </TableCell>
                                     {!props.aram && !props.urf &&
@@ -408,20 +413,24 @@ const DetailsTable = (props) => {
                                                     <img alt='Perk' style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
                                                 </StyledTooltip>
                                             </div>
-                                            <StyledTooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
-                                                <a style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}>
-                                                    <Typography className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'0.75rem'}>{player.riotIdGameName}</Typography>
-                                                    <span className={
-                                                        (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
-                                                            'TableStandingMVP' :
-                                                            'TableStanding')
-                                                    }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}
-                                                    </span>
-                                                    <span className='TableStandingScore'>
-                                                        {player.score.toFixed(1)}
-                                                    </span>
-                                                </a>
-                                            </StyledTooltip>
+                                            <SummonerName
+                                                participant={player}
+                                                version={dataDragonVersion}
+                                                platformId={gameData.info.platformId}
+                                                color='inherit'
+                                                style={{ textDecoration: 'none' }}
+                                            >
+                                                <Typography className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'0.75rem'}>{player.riotIdGameName}</Typography>
+                                                <span className={
+                                                    (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
+                                                        'TableStandingMVP' :
+                                                        'TableStanding')
+                                                }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}
+                                                </span>
+                                                <span className='TableStandingScore'>
+                                                    {player.score.toFixed(1)}
+                                                </span>
+                                            </SummonerName>
                                         </div>
                                     </TableCell>
                                     {!props.aram && !props.urf &&

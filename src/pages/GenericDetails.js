@@ -1,5 +1,5 @@
 import React from 'react'
-import { championImg, getChampions, getItems, getQueues, getRunes, getSummonerSpells, getVersion, spellImg } from '../api/ddragon';
+import { championImg, getChampions, getItems, getQueues, getRunes, getSummonerSpells, getVersion, profileIconImg, spellImg } from '../api/ddragon';
 import { getMatchCluster, isSeaServer } from '../utils/regions';
 import { queueTitle as getQueueTitle } from '../utils/queues';
 import { Button, Typography, Box, Grid, Divider, LinearProgress, CircularProgress } from '@mui/material';
@@ -19,6 +19,8 @@ import getBuildInfo from '../functions/GetBuildInfo';
 import Builds from '../components/Builds';
 import DetailsTable from '../components/DetailsTable';
 import ScrollTopButton from '../components/ScrollTopButton';
+import SummonerName from '../components/SummonerName';
+import SummonerNameTip from '../components/SummonerNameTip';
 
 const GenericDetails = () => {
 
@@ -435,17 +437,17 @@ const GenericDetails = () => {
             let teamLeadingSentence = '';
             if (!closeGame && !blowout) {
                 if (graphData.leadChanges === 1) {
-                    teamLeadingSentence = (<>{playerData.riotIdGameName}'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} most of the game</u> which had {graphData.leadChanges} lead change.</>)
+                    teamLeadingSentence = (<><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} />'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} most of the game</u> which had {graphData.leadChanges} lead change.</>)
                 } else {
-                    teamLeadingSentence = (<>{playerData.riotIdGameName}'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} most of the game</u> which had {graphData.leadChanges} lead changes.</>)
+                    teamLeadingSentence = (<><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} />'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} most of the game</u> which had {graphData.leadChanges} lead changes.</>)
                 }
             } if (blowout) {
-                teamLeadingSentence = (<>{playerData.riotIdGameName}'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} the whole game.</u></>)
+                teamLeadingSentence = (<><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} />'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} the whole game.</u></>)
             } else if (nearBlowout) {
                 if (graphData.leadChanges > 1) {
-                    teamLeadingSentence = (<>{playerData.riotIdGameName}'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} for almost the whole game</u> which had {graphData.leadChanges} lead changes.</>)
+                    teamLeadingSentence = (<><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} />'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} for almost the whole game</u> which had {graphData.leadChanges} lead changes.</>)
                 } else {
-                    teamLeadingSentence = (<>{playerData.riotIdGameName}'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} for almost the whole game</u> which had {graphData.leadChanges} lead change.</>)
+                    teamLeadingSentence = (<><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} />'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} for almost the whole game</u> which had {graphData.leadChanges} lead change.</>)
                 }
             }
             else if (closeGame) {
@@ -466,10 +468,10 @@ const GenericDetails = () => {
             }
             // Player's team lost
             if (!playerData.win && playerTeamLeading === true) {
-                lastSentence = `Unfortunately the other team made a comeback and ${playerData.riotIdGameName}'s team ended up losing the game.`
+                lastSentence = (<>Unfortunately the other team made a comeback and <SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} />'s team ended up losing the game.</>)
             }
             if (!playerData.win && playerTeamLeading === false && closeGame === true) {
-                lastSentence = `Unfortunately, in the end, ${playerData.riotIdGameName}'s team lost.`
+                lastSentence = (<>Unfortunately, in the end, <SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} />'s team lost.</>)
             }
             if (!playerData.win && playerTeamLeading === false && closeGame === false) {
                 lastSentence = `In the end that resulted in defeat.`
@@ -477,7 +479,7 @@ const GenericDetails = () => {
 
             setMatchSummaryDesc(<>{teamLeadingSentence} {lastSentence}</>)
         }
-    }, [graphData, playerData])
+    }, [graphData, playerData, gameData, dataDragonVersion])
 
     const [isLoading, setIsLoading] = useState(true);
     // Render page once data is loaded
@@ -508,7 +510,7 @@ const GenericDetails = () => {
                                 {/* Player Win */}
                                 {playerData.win ? (
                                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} disableInteractive title={<SummonerNameTip name={playerData.riotIdGameName} tag={playerData.riotIdTagline} iconUrl={profileIconImg(dataDragonVersion, playerData.profileIcon)} />}>
                                             <div style={{ border: playerData.teamId === 100 ? '4px #568CFF solid' : '4px #A35BFF solid', borderRadius: '50%', display: 'inline-flex' }}>
                                                 <Typography className='displayGameChampLevel' style={{
                                                     fontSize: '0.875rem',
@@ -556,7 +558,7 @@ const GenericDetails = () => {
                                 ) : (
                                     // Player Lose
                                     <a className='clickableName' href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ position: 'relative', display: 'inline-block', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))', margin: '15px' }}>
-                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
+                                        <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} disableInteractive title={<SummonerNameTip name={playerData.riotIdGameName} tag={playerData.riotIdTagline} iconUrl={profileIconImg(dataDragonVersion, playerData.profileIcon)} />}>
                                             <div style={{ border: playerData.teamId === 100 ? '4px #568CFF solid' : '4px #A35BFF solid', borderRadius: '50%', display: 'inline-flex' }}>
                                                 <Typography className='displayGameChampLevel' style={{
                                                     fontSize: '0.875rem',
@@ -614,11 +616,7 @@ const GenericDetails = () => {
                             </Grid>
                             <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={12} md={7}>
                                 <Typography className='GameDetailsMainSummaryHeader'>
-                                    <StyledTooltip placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -1] } }] } }} title={`${playerData.riotIdGameName} #${playerData.riotIdTagline}`}>
-                                        <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${playerData.riotIdGameName}/${playerData.riotIdTagline.toLowerCase()}`} style={{ color: 'inherit' }}>
-                                            {playerData.riotIdGameName}
-                                        </a>
-                                    </StyledTooltip>
+                                    <SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} color='inherit' />
                                     <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'purple team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                                 </Typography>
                                 {queueTitle !== null ? (
@@ -648,13 +646,13 @@ const GenericDetails = () => {
                                         <ul className='gameDetailsMatchSummaryList'>
                                             <li>{matchSummaryDesc}</li>
                                             {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === false &&
-                                                <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s team surrendered the game at {gameDuration}.</li>
+                                                <li style={{ marginTop: '20px' }}><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} />'s team surrendered the game at {gameDuration}.</li>
                                             }
                                             {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === true &&
                                                 <li style={{ marginTop: '20px' }}>The enemy team surrendered the game at {gameDuration}.</li>
                                             }
                                             {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === false &&
-                                                <li style={{ marginTop: '20px' }}>{playerData.riotIdGameName}'s nexus was destroyed at {gameDuration}.</li>
+                                                <li style={{ marginTop: '20px' }}><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} />'s nexus was destroyed at {gameDuration}.</li>
                                             }
                                             {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === true &&
                                                 <li style={{ marginTop: '20px' }}>The enemy team's nexus was destroyed at {gameDuration}.</li>
@@ -747,7 +745,7 @@ const GenericDetails = () => {
                                                 <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
                                                     <Box className='graphDamageBar' height={`${(item.totalDamageDealtToChampions / highestDamageDealt) * 200}px`} backgroundColor={redColors[index]}></Box>
                                                 </StyledTooltip>
-                                                <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                                                <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} disableInteractive title={<SummonerNameTip name={item.riotIdGameName} tag={item.riotIdTagline} iconUrl={profileIconImg(dataDragonVersion, item.profileIcon)} />}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
                                                         <img alt='Champion Graph' className='graphChampIcon' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
                                                     </a>
@@ -765,7 +763,7 @@ const GenericDetails = () => {
                                                 <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {item.magicDamageDealtToChampions.toLocaleString()}<br />True: {item.trueDamageDealtToChampions.toLocaleString()}</>}>
                                                     <Box className='graphDamageBar' height={`${(item.totalDamageDealtToChampions / highestDamageDealt) * 200}px`} backgroundColor={blueColors[index]}></Box>
                                                 </StyledTooltip>
-                                                <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                                                <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} disableInteractive title={<SummonerNameTip name={item.riotIdGameName} tag={item.riotIdTagline} iconUrl={profileIconImg(dataDragonVersion, item.profileIcon)} />}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
                                                         <img alt='Champion Graph' className='graphChampIcon' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
                                                     </a>
@@ -797,7 +795,7 @@ const GenericDetails = () => {
                                                 <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
                                                     <Box className='graphDamageBar' height={`${(item.totalDamageTaken / highestDamageTaken) * 200}px`} backgroundColor={redColors[index]}></Box>
                                                 </StyledTooltip>
-                                                <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                                                <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} disableInteractive title={<SummonerNameTip name={item.riotIdGameName} tag={item.riotIdTagline} iconUrl={profileIconImg(dataDragonVersion, item.profileIcon)} />}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
                                                         <img alt='Champion Graph' className='graphChampIcon' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
                                                     </a>
@@ -815,7 +813,7 @@ const GenericDetails = () => {
                                                 <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, 15] } }] } }} disableInteractive placement='top' title={<>AD: {item.physicalDamageTaken.toLocaleString()}<br />AP: {item.magicDamageTaken.toLocaleString()}<br />True: {item.trueDamageTaken.toLocaleString()}</>}>
                                                     <Box className='graphDamageBar' height={`${(item.totalDamageTaken / highestDamageTaken) * 200}px`} backgroundColor={blueColors[index]}></Box>
                                                 </StyledTooltip>
-                                                <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} title={`${item.riotIdGameName} #${item.riotIdTagline}`}>
+                                                <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -10] } }] } }} disableInteractive title={<SummonerNameTip name={item.riotIdGameName} tag={item.riotIdTagline} iconUrl={profileIconImg(dataDragonVersion, item.profileIcon)} />}>
                                                     <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${item.riotIdGameName}/${item.riotIdTagline.toLowerCase()}`}>
                                                         <img alt='Champion Graph' className='graphChampIcon' src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
                                                     </a>

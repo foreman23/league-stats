@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { championImg } from '../api/ddragon';
 import { Typography, Box, Grid, Divider } from '@mui/material';
 import StyledTooltip from './StyledTooltip';
+import SummonerName from './SummonerName';
 
 const Standout = (props) => {
     const { gameData, champsJSON, dataDragonVersion } = props;
@@ -222,7 +223,11 @@ const Standout = (props) => {
                 <div className='StandoutTextContainer'>
                     <Typography className={`hideMobile hideTablet standoutTierPill standoutTierPill--header standoutTierPill--${activePlayer.title.toLowerCase()}`}>{activePlayer.title}</Typography>
                     <p style={{ color: '#3A3F47', fontSize: '1rem', maxWidth: '425px' }}>
-                        <a style={{ color: activePlayer.player.teamId === 100 ? '#568CFF' : '#A35BFF', textDecoration: 'underline' }} className='matchSummaryPlayerLink' href={`/profile/${gameData.info.platformId.toLowerCase()}/${activePlayer.player.riotIdGameName}/${activePlayer.player.riotIdTagline.toLowerCase()}`}>'{activePlayer?.player.riotIdGameName || "Unknown Player"}' <span style={{ textDecoration: 'none' }}>({championName})</span></a> {descStr}
+                        <SummonerName
+                            participant={activePlayer.player}
+                            version={dataDragonVersion}
+                            platformId={gameData.info.platformId}
+                        >'{activePlayer?.player.riotIdGameName || "Unknown Player"}' ({championName})</SummonerName> {descStr}
                     </p>
                 </div>
             </Grid>

@@ -4020,6 +4020,15 @@ li {
 .lpr-name-tip-name { font-weight: 700; }
 .lpr-name-tip-tag { font-size: 11px; color: #B0B6C0; }
 
+/* Standardized summoner-name link + hover card (used app-wide via SummonerName) */
+.summonerName { font-weight: 700; text-decoration: none; cursor: pointer; }
+.summonerName:hover { text-decoration: underline; }
+.summonerNameTip { display: flex; align-items: center; gap: 9px; }
+.summonerNameTip-icon { width: 34px; height: 34px; border-radius: 50%; flex: 0 0 auto; }
+.summonerNameTip-text { display: flex; flex-direction: column; line-height: 1.25; }
+.summonerNameTip-name { font-weight: 700; }
+.summonerNameTip-tag { font-size: 11px; color: #B0B6C0; }
+
 /* kill feed (modern timeline list + Summoner's Rift minimap) */
 .lpr-feed { display: flex; gap: 22px; align-items: flex-start; padding: 4px 2px 2px; }
 .lpr-kf-main { flex: 1 1 auto; min-width: 0; }
@@ -4076,6 +4085,8 @@ li {
 .lpr-takeaway .lpr-c-blue { color: #0089D6; }
 .lpr-takeaway .lpr-c-purple { color: #8A3FE6; }
 .lpr-takeaway .lpr-c-even { color: #6B7280; }
+.lpr-takeaway-name { font-weight: 700; text-decoration: none; }
+.lpr-takeaway-name:hover { text-decoration: underline; }
 
 /* CS graph */
 .lpr-csg { padding: 6px 4px 2px; }
@@ -4089,6 +4100,8 @@ li {
 .lpr-csg-legend .lpr-ln { width: 16px; height: 0; border-top: 3px solid currentColor; border-radius: 2px; }
 .lpr-csg-legend .lpr-ln.lpr-sup { border-top-style: dashed; }
 .lpr-csg-legend .lpr-fin { color: #6B7280; font-variant-numeric: tabular-nums; }
+.lpr-csg-legend-name { text-decoration: none; }
+.lpr-csg-legend-name:hover { text-decoration: underline; }
 /* CS graph hover crosshair + readout */
 .lpr-csg-guide { stroke: #9AA1AD; stroke-width: 1; stroke-dasharray: 3 3; }
 .lpr-csg-readout-bg { fill: #1A1C20; stroke: rgba(255, 255, 255, .1); }

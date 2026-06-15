@@ -3,6 +3,7 @@ import { championImg, itemImg } from '../api/ddragon';
 import { Grid, Box, Typography } from '@mui/material'
 import StyledTooltip from './StyledTooltip';
 import ForwardIcon from '@mui/icons-material/Forward';
+import SummonerName from './SummonerName';
 
 const Builds = (props) => {
 
@@ -29,11 +30,11 @@ const Builds = (props) => {
                 <Typography className='gameSectionSubheading'>Player Items & Level Ups</Typography>
             </Box>
             <Box className='BuildsBox2'>
-                <a style={{ color: currBuildChamp?.teamId === 100 ? '#568CFF' : '#A35BFF' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${currBuildChamp?.riotIdGameName}/${currBuildChamp?.riotIdTagline.toLowerCase()}`}>
+                <SummonerName participant={currBuildChamp} version={dataDragonVersion} platformId={gameData.info.platformId}>
                     <Typography fontSize={'1.25rem'} marginBottom={'20px'} fontWeight={'bold'}>
                         {`${currBuildChamp?.championName} (${currBuildChamp?.riotIdGameName} #${currBuildChamp?.riotIdTagline})`}
                     </Typography>
-                </a>
+                </SummonerName>
                 <div className='BuildsChampPicsContainer'>
                     <Grid order={{ xs: playerData.teamId === 100 ? 1 : 3 }} style={{}}>
                         {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (

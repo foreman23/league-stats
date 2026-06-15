@@ -1,5 +1,6 @@
 import { Typography, Grid, Box } from '@mui/material'
 import StyledTooltip from './StyledTooltip';
+import SummonerName from './SummonerName';
 import { championImg } from '../api/ddragon';
 import React from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -1397,11 +1398,11 @@ const Battles = (props) => {
                                                         </StyledTooltip>
                                                         {details.killer?.riotIdGameName ? (
                                                             <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
-                                                                {<><a href={`/profile/${gameData.info.platformId.toLowerCase()}/${details.killer?.riotIdGameName}/${details.killer?.riotIdTagline.toLowerCase()}`} style={{ color: details.killer.teamId === 100 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minion'}</a> killed <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${details.victim?.riotIdGameName}/${details.victim?.riotIdTagline.toLowerCase()}`} style={{ color: details.victim.teamId === 100 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.victim?.riotIdGameName}</a></>}
+                                                                {<><SummonerName participant={details.killer} version={dataDragonVersion} platformId={gameData.info.platformId} style={{ fontWeight: 'bold' }} /> killed <SummonerName participant={details.victim} version={dataDragonVersion} platformId={gameData.info.platformId} style={{ fontWeight: 'bold' }} /></>}
                                                             </Typography>
                                                         ) : (
                                                             <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
-                                                                {<><span style={{ color: details.victim.teamId === 200 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minion'}</span> killed <a href={`/profile/${gameData.info.platformId.toLowerCase()}/${details.victim?.riotIdGameName}/${details.victim?.riotIdTagline.toLowerCase()}`} style={{ color: details.victim.teamId === 100 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.victim?.riotIdGameName}</a></>}
+                                                                {<><span style={{ color: details.victim.teamId === 200 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minion'}</span> killed <SummonerName participant={details.victim} version={dataDragonVersion} platformId={gameData.info.platformId} style={{ fontWeight: 'bold' }} /></>}
                                                             </Typography>
                                                         )}
                                                     </>
@@ -1463,7 +1464,7 @@ const Battles = (props) => {
                                                         </StyledTooltip>
                                                         {details.killer?.riotIdGameName ? (
                                                             <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
-                                                                {<><a href={`/profile/${gameData.info.platformId.toLowerCase()}/${details.killer?.riotIdGameName}/${details.killer?.riotIdTagline.toLowerCase()}`} style={{ color: details.teamId === 200 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minions'}</a> destroyed <span style={{ color: details.teamId === 100 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.buildingType === 'TOWER_BUILDING' ? 'a tower' : 'an inhibitor'}</span></>}
+                                                                {<><SummonerName participant={details.killer} version={dataDragonVersion} platformId={gameData.info.platformId} style={{ fontWeight: 'bold' }} /> destroyed <span style={{ color: details.teamId === 100 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.buildingType === 'TOWER_BUILDING' ? 'a tower' : 'an inhibitor'}</span></>}
                                                             </Typography>
                                                         ) : (
                                                             <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
@@ -1528,7 +1529,7 @@ const Battles = (props) => {
                                                         </StyledTooltip>
                                                         {details.killer?.riotIdGameName ? (
                                                             <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
-                                                                {<><a href={`/profile/${gameData.info.platformId.toLowerCase()}/${details.killer?.riotIdGameName}/${details.killer?.riotIdTagline?.toLowerCase()}`} style={{ color: details.killer?.teamId === 100 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minion'}</a> killed <span style={{ color: '#EF00D3', fontWeight: 'bold' }}>{details.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</span></>}
+                                                                {<><SummonerName participant={details.killer} version={dataDragonVersion} platformId={gameData.info.platformId} style={{ fontWeight: 'bold' }} /> killed <span style={{ color: '#EF00D3', fontWeight: 'bold' }}>{details.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</span></>}
                                                             </Typography>
                                                         ) : (
                                                             <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>

@@ -3,6 +3,7 @@ import { goldLabel } from './laneAdapter';
 import CSGraph from './CSGraph';
 import LaneMinimap from './LaneMinimap';
 import StyledTooltip from '../StyledTooltip';
+import NameTip from './NameTip';
 
 // Redesigned Laning Phase card — one parameterized component for all four lanes
 // (TOP/JUNGLE/MID 1v1, BOTTOM 2v2). Header (outcome headline + severity meter +
@@ -136,20 +137,6 @@ function GoldTug({ diff, winnerTeam, leftTeam, left, right, draw }) {
         <span className={!draw && winnerTeam === rightTeam ? endCls(rightTeam) : 'lpr-e-off'}>{teamName(rightTeam)}</span>
       </div>
     </div>
-  );
-}
-
-// Hover card for a summoner name: profile icon + name #tag (icon comes from the
-// match data, so no extra lookup).
-function NameTip({ player }) {
-  return (
-    <span className="lpr-name-tip">
-      {player.profilePic && <img className="lpr-name-tip-icon" src={player.profilePic} alt="" />}
-      <span className="lpr-name-tip-text">
-        <span className="lpr-name-tip-name">{player.name}</span>
-        <span className="lpr-name-tip-tag">#{player.tag}</span>
-      </span>
-    </span>
   );
 }
 
@@ -296,13 +283,24 @@ function KillFeedPanel({ lane }) {
   );
 }
 
+// A summoner name inside the takeaway sentence: clickable profile link + the
+// same hover card, bold and team-colored.
+function TakeawayName({ player }) {
+  const cls = player.side === 'blue' ? 'lpr-c-blue' : 'lpr-c-purple';
+  return (
+    <StyledTooltip placement="top" disableInteractive title={<NameTip player={player} />}>
+      <a className={'lpr-takeaway-name ' + cls} href={player.href}>{player.name}</a>
+    </StyledTooltip>
+  );
+}
+
 function TakeawayLine({ lane }) {
   const draw = lane.resTag === 'draw';
   let inner;
   if (draw) {
     inner = (
       <>
-        <b>Dead even.</b> {lane.left[0].name} and {lane.right[0].name} traded blows and CS,
+        <b>Dead even.</b> <TakeawayName player={lane.left[0]} /> and <TakeawayName player={lane.right[0]} /> traded blows and CS,
         separated by just <b className="lpr-c-even">+{lane.goldDifference.toLocaleString()} gold</b>.
       </>
     );
@@ -318,7 +316,7 @@ function TakeawayLine({ lane }) {
     }[lane.resTag] || 'won the lane';
     inner = (
       <>
-        <b className={cls}>{win.name}</b> {lead} (<b>{win.kda}</b>) — {tier},{' '}
+        <TakeawayName player={win} /> {lead} (<b>{win.kda}</b>) — {tier},{' '}
         <b className={cls}>+{lane.goldDifference.toLocaleString()} gold</b> for {team}.
       </>
     );

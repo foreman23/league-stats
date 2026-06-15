@@ -2,6 +2,7 @@ import React from 'react'
 import { championImg, itemImg, spellImg } from '../api/ddragon';
 import { Typography, Grid, TableContainer, Table, TableHead, TableRow, TableCell, LinearProgress } from '@mui/material';
 import StyledTooltip from './StyledTooltip';
+import SummonerName from './SummonerName';
 
 const OverviewTable = (props) => {
 
@@ -125,11 +126,15 @@ const OverviewTable = (props) => {
                                         </StyledTooltip>
                                     </div>
 
-                                    <StyledTooltip disableInteractive slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -9] } }] } }} arrow placement='top' title={<div>{`${player.riotIdGameName} #${player.riotIdTagline}`}</div>}>
-                                        <a style={{ textDecoration: 'none', color: 'inherit' }} href={`/profile/${gameData.info.platformId.toLowerCase()}/${player.riotIdGameName}/${player.riotIdTagline.toLowerCase()}`}>
-                                            <Typography marginLeft={'10px'} className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'0.75rem'}>{player.riotIdGameName}</Typography>
-                                        </a>
-                                    </StyledTooltip>
+                                    <SummonerName
+                                        participant={player}
+                                        version={dataDragonVersion}
+                                        platformId={gameData.info.platformId}
+                                        color='inherit'
+                                        style={{ textDecoration: 'none' }}
+                                    >
+                                        <Typography marginLeft={'10px'} className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'0.75rem'}>{player.riotIdGameName}</Typography>
+                                    </SummonerName>
 
 
                                 </div>
