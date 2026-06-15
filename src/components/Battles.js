@@ -1,11 +1,7 @@
-import { Typography, Grid, Box } from '@mui/material'
-import StyledTooltip from './StyledTooltip';
-import SummonerName from './SummonerName';
-import { championImg } from '../api/ddragon';
+import { Typography, Grid } from '@mui/material'
 import React from 'react'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import TeamGoldDifGraph from './TeamGoldDifGraph';
+import BattleCard from './battlesPhase/BattleCard';
+import { toBattleVM } from './battlesPhase/battleAdapter';
 
 const Battles = (props) => {
 
@@ -1267,26 +1263,6 @@ const Battles = (props) => {
         teamfights.push(battlePayload);
     }
 
-    const handleCollapseFight = (index) => {
-        const fight = document.getElementById(`battle_${index}`)
-        // show fight
-        if (fight.classList.contains('hide')) {
-            const downIcon = document.getElementById(`down_icon_${index}`)
-            const upIcon = document.getElementById(`up_icon_${index}`)
-            downIcon.classList.remove('hide')
-            upIcon.classList.add('hide')
-            fight.classList.remove('hide')
-        }
-        // collapse fight
-        else {
-            const downIcon = document.getElementById(`down_icon_${index}`)
-            const upIcon = document.getElementById(`up_icon_${index}`)
-            downIcon.classList.add('hide')
-            upIcon.classList.remove('hide')
-            fight.classList.add('hide')
-        }
-    }
-
     return (
         <div style={{ display: 'flex', justifyContent: 'center', margin: '0' }}>
             <Grid container className='gameSectionHeader'>
@@ -1303,251 +1279,17 @@ const Battles = (props) => {
                     <Typography marginBottom={'20px'}><span style={{ color: '#3374FF', marginRight: '10px', fontWeight: 'bold' }}>{`Blue: ${blueTotalFightsWon} `}</span><span style={{ color: '#FF3F3F', fontWeight: 'bold' }}>{`Red: ${redTotalFightsWon}`}</span></Typography> */}
                 </Grid>
 
-                {teamfights.map((fight, fightIndex) => (
-                    <Box key={fightIndex} style={{ width: '100%', border: '0px solid black', boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px' }}>
-                        <div onClick={() => handleCollapseFight(fightIndex)} className='BattlesHeaderContainer'>
-                            {fight.outcome[0] === 'E' && fight.blueKills === 0 && fight.redKills === 0 ? (
-                                <div className='BattlesHeader'><Typography style={{ color: '#3A3F47', fontWeight: 'bold', fontSize: '1rem' }}>No Contest 0 - 0</Typography></div>
-                            ) : (
-                                <div className='BattlesHeader'><Typography style={{ color: fight.outcome[0] === 'E' ? '#404040' : fight.outcome[0] === 'B' ? '#3374FF' : '#A35BFF', fontWeight: 'bold', fontSize: '1rem' }}>{fight.outcome}</Typography></div>
-                            )
-                            }
-                            <div className='BattlesHeader2'><Typography style={{ color: '#3A3F47', fontWeight: 'bold', fontSize: '0.875rem' }}>{`(${fight.timespan})`}</Typography></div>
-                            {!props.aram &&
-                                <div><Typography style={{ color: '#000000', fontWeight: 'bold', fontSize: '0.875rem' }}>{fight.battleName}</Typography></div>
-                            }
-                            <ArrowDropDownIcon id={`down_icon_${fightIndex}`} className='hideMobile hide' style={{ marginRight: '0px', marginLeft: 'auto' }}></ArrowDropDownIcon>
-                            <ArrowRightIcon id={`up_icon_${fightIndex}`} className='hideMobile' style={{ marginRight: '0px', marginLeft: 'auto' }}></ArrowRightIcon>
-                        </div>
-                        <div id={`battle_${fightIndex}`} className='BattlesBodyContainer hide'>
-                            <div className='BattlesBodySubContainer1'>
-                                {!props.aram &&
-                                    <Typography marginTop={'30px'} marginLeft={'20px'} color={'#3A3F47'} fontSize={'0.875rem'}>{fight.battleDesc}</Typography>
-                                }
-                                <div style={{ marginTop: '20px', marginLeft: '25px', marginBottom: '15px' }}>
-                                    <TeamGoldDifGraph arrow max={Math.round((fight.details[fight.details.length - 1].timestamp) / 60000) - 1} width={400} height={180} teamId={props.playerData.teamId} hideTitle yAxisGold={props.graphData.yAxisGold} xAxisGold={props.graphData.xAxisGold}></TeamGoldDifGraph>
-                                </div>
-                            </div>
-
-                            <div style={{ paddingTop: '0px', padding: '0px', width: '65%' }}>
-                                <ul style={{ display: 'flex', flexDirection: 'column', padding: '0px' }}>
-                                    {fight.details.map((details, detailsIndex) => (
-                                        <li key={detailsIndex} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <Typography style={{ fontSize: '0.875', marginRight: '10px', width: '40px', minWidth: '40px' }}>
-                                                    {String(Math.floor(details.timestamp / 60000)).padStart(2, '0')}:
-                                                    {String(Math.floor((details.timestamp % 60000) / 1000)).padStart(2, '0')}
-                                                </Typography>
-                                                {details.eventType === 'CHAMPION_KILL' && (
-                                                    <>
-                                                        {details.killer?.championId ? (
-                                                            <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.killer?.riotIdGameName} ({details.killer?.championName})</>}>
-                                                                <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${details.killer?.riotIdGameName}/${details.killer?.riotIdTagline.toLowerCase()}`}>
-                                                                    <img
-                                                                        style={{
-                                                                            filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-                                                                            borderRadius: '50%',
-                                                                            width: '28px',
-                                                                            border: details.killer.teamId === 100
-                                                                                ? '3px #568CFF solid'
-                                                                                : '3px #A35BFF solid',
-                                                                        }}
-                                                                        src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(
-                                                                            champ => champ.key === String(details.killer?.championId)
-                                                                        )?.id)}
-                                                                        alt="Killer Champion"
-                                                                    />
-                                                                </a>
-                                                            </StyledTooltip>
-                                                        ) : (
-                                                            <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.teamId === 200 ? 'Blue Minion' : 'Purple Minion'}</>}>
-                                                                <span>
-                                                                    <img
-                                                                        style={{
-                                                                            filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-                                                                            borderRadius: '50%',
-                                                                            width: '28px',
-                                                                            border: details.victim.teamId === 200
-                                                                                ? '3px #568CFF solid'
-                                                                                : '3px #A35BFF solid',
-                                                                        }}
-                                                                        src={`/images/monsterIcons/${details.victim.teamId === 200 ? 'blue' : 'red'}Minion.webp`}
-                                                                        alt="Minion"
-                                                                    />
-                                                                </span>
-                                                            </StyledTooltip>
-                                                        )}
-                                                        <img alt='' style={{ width: '20px', opacity: '65%' }} src='/images/swords.svg'></img>
-                                                        <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.victim?.riotIdGameName} ({details.victim?.championName})</>}>
-                                                            <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${details.victim?.riotIdGameName}/${details.victim?.riotIdTagline.toLowerCase()}`}>
-                                                                <img
-                                                                    style={{
-                                                                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-                                                                        borderRadius: '50%',
-                                                                        width: '28px',
-                                                                        border: details.victim.teamId === 100
-                                                                            ? '3px #568CFF solid'
-                                                                            : '3px #A35BFF solid',
-                                                                    }}
-                                                                    src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(
-                                                                        champ => champ.key === String(details.victim?.championId)
-                                                                    )?.id)}
-                                                                    alt="Killer Champion"
-                                                                />
-                                                            </a>
-                                                        </StyledTooltip>
-                                                        {details.killer?.riotIdGameName ? (
-                                                            <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
-                                                                {<><SummonerName participant={details.killer} version={dataDragonVersion} platformId={gameData.info.platformId} style={{ fontWeight: 'bold' }} /> killed <SummonerName participant={details.victim} version={dataDragonVersion} platformId={gameData.info.platformId} style={{ fontWeight: 'bold' }} /></>}
-                                                            </Typography>
-                                                        ) : (
-                                                            <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
-                                                                {<><span style={{ color: details.victim.teamId === 200 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minion'}</span> killed <SummonerName participant={details.victim} version={dataDragonVersion} platformId={gameData.info.platformId} style={{ fontWeight: 'bold' }} /></>}
-                                                            </Typography>
-                                                        )}
-                                                    </>
-                                                )}
-
-                                                {details.eventType === 'BUILDING_DESTROY' && (
-                                                    <>
-                                                        {details.killer?.championId ? (
-                                                            <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.killer?.riotIdGameName} ({details.killer?.championName})</>}>
-                                                                <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${details.killer?.riotIdGameName}/${details.killer?.riotIdTagline.toLowerCase()}`}>
-                                                                    <img
-                                                                        style={{
-                                                                            filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-                                                                            borderRadius: '50%',
-                                                                            width: '28px',
-                                                                            border: details.teamId === 200
-                                                                                ? '3px #568CFF solid'
-                                                                                : '3px #A35BFF solid',
-                                                                        }}
-                                                                        src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(
-                                                                            champ => champ.key === String(details.killer?.championId)
-                                                                        )?.id)}
-                                                                        alt="Killer Champion"
-                                                                    />
-                                                                </a>
-                                                            </StyledTooltip>
-                                                        ) : (
-                                                            <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.teamId === 200 ? 'Blue Minion' : 'Purple Minion'}</>}>
-                                                                <span>
-                                                                    <img
-                                                                        style={{
-                                                                            filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-                                                                            borderRadius: '50%',
-                                                                            width: '28px',
-                                                                            border: details.teamId === 200
-                                                                                ? '3px #568CFF solid'
-                                                                                : '3px #A35BFF solid',
-                                                                        }}
-                                                                        src={`/images/monsterIcons/${details.teamId === 200 ? 'blue' : 'red'}Minion.webp`}
-                                                                        alt="Minion"
-                                                                    />
-                                                                </span>
-                                                            </StyledTooltip>
-                                                        )}
-                                                        <img style={{ width: '20px', opacity: '45%' }} src='/images/hammer.svg' alt="Swords" />
-                                                        <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.teamId === 100 ? 'Blue ' : 'Purple '} {details.buildingType === 'TOWER_BUILDING' ? 'Tower' : 'Inhibitor'}</>}>
-                                                            <span>
-                                                                <img
-                                                                    style={{
-                                                                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-                                                                        width: '28px',
-                                                                        border: '3px solid #E5E5E5',
-                                                                    }}
-                                                                    src={`/images/monsterIcons/${details.buildingType === 'TOWER_BUILDING' ? 'turret' : 'inhibitor'}_${details.teamId === 100 ? 'blue' : 'red'
-                                                                        }_square.webp`}
-                                                                    alt={details.buildingType === 'TOWER_BUILDING' ? 'Tower' : 'Inhibitor'}
-                                                                />
-                                                            </span>
-                                                        </StyledTooltip>
-                                                        {details.killer?.riotIdGameName ? (
-                                                            <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
-                                                                {<><SummonerName participant={details.killer} version={dataDragonVersion} platformId={gameData.info.platformId} style={{ fontWeight: 'bold' }} /> destroyed <span style={{ color: details.teamId === 100 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.buildingType === 'TOWER_BUILDING' ? 'a tower' : 'an inhibitor'}</span></>}
-                                                            </Typography>
-                                                        ) : (
-                                                            <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
-                                                                {<><span style={{ color: details.teamId === 200 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minions'}</span> destroyed <span style={{ color: details.teamId === 100 ? '#568CFF' : '#A35BFF', fontWeight: 'bold' }}>{details.buildingType === 'TOWER_BUILDING' ? 'a tower' : 'an inhibitor'}</span></>}
-                                                            </Typography>
-                                                        )}
-
-                                                    </>
-                                                )}
-
-                                                {details.eventType === 'MONSTER_KILL' && (
-                                                    <>
-                                                        {details.killer?.championId ? (
-                                                            <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.killer?.riotIdGameName} ({details.killer?.championName})</>}>
-                                                                <a href={`/profile/${props.gameData.info.platformId.toLowerCase()}/${details.killer?.riotIdGameName}/${details.killer?.riotIdTagline.toLowerCase()}`}>
-                                                                    <img
-                                                                        style={{
-                                                                            filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-                                                                            borderRadius: '50%',
-                                                                            width: '28px',
-                                                                            border: details.killer.teamId === 100
-                                                                                ? '3px #568CFF solid'
-                                                                                : '3px #A35BFF solid',
-                                                                        }}
-                                                                        src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(
-                                                                            champ => champ.key === String(details.killer?.championId)
-                                                                        )?.id)}
-                                                                        alt="Killer Champion"
-                                                                    />
-                                                                </a>
-                                                            </StyledTooltip>
-                                                        ) : (
-                                                            <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{'A Minion'}</>}>
-                                                                <span>
-                                                                    <img
-                                                                        style={{
-                                                                            filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-                                                                            borderRadius: '50%',
-                                                                            width: '28px',
-                                                                            border: '3px black solid'
-                                                                        }}
-                                                                        src={`/images/monsterIcons/neutralMinion.webp`}
-                                                                        alt="Minion"
-                                                                    />
-                                                                </span>
-                                                            </StyledTooltip>
-                                                        )}
-                                                        <img style={{ width: '20px', opacity: '65%', transform: 'rotate(25deg)' }} src='/images/bow.svg' alt="Swords" />
-                                                        <StyledTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5] } }] } }} disableInteractive arrow placement='top' title={<>{details.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</>}>
-                                                            <span>
-                                                                <img
-                                                                    style={{
-                                                                        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-                                                                        borderRadius: '50%',
-                                                                        width: '28px',
-                                                                        border: '3px solid #EF00D3',
-                                                                    }}
-                                                                    src={`/images/monsterIcons/${details.monsterType}.webp`}
-                                                                    alt={details.monsterType}
-                                                                />
-                                                            </span>
-                                                        </StyledTooltip>
-                                                        {details.killer?.riotIdGameName ? (
-                                                            <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
-                                                                {<><SummonerName participant={details.killer} version={dataDragonVersion} platformId={gameData.info.platformId} style={{ fontWeight: 'bold' }} /> killed <span style={{ color: '#EF00D3', fontWeight: 'bold' }}>{details.monsterType?.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</span></>}
-                                                            </Typography>
-                                                        ) : (
-                                                            <Typography style={{ fontSize: '0.875rem', marginLeft: '10px', overflow: 'hidden' }}>
-                                                                {<><span style={{ color: 'black', fontWeight: 'bold' }}>{details.killer?.riotIdGameName || 'Minion'}</span> killed <span style={{ color: '#EF00D3', fontWeight: 'bold' }}>{details.monsterType.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</span></>}
-                                                            </Typography>
-                                                        )}
-                                                    </>
-                                                )}
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-
-                    </Box>
-                ))}
-            </Grid>
+                <Grid item xs={12} style={{ width: '100%', marginTop: '18px' }}>
+                    {teamfights.map((fight, fightIndex) => (
+                        <BattleCard
+                            key={fightIndex}
+                            battle={toBattleVM(fight, fightIndex, props.graphData)}
+                            ctx={{ champsJSON, dataDragonVersion, platformId: gameData.info.platformId }}
+                            defaultOpen={fightIndex === 0}
+                        />
+                    ))}
+                </Grid>
+                            </Grid>
         </div>
     )
 }
