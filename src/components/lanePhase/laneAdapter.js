@@ -99,6 +99,7 @@ function toPlayer(p, laneResult, platformId, champsJSON, ddVersion) {
     gold: p.gold,
     role: roleFor(p.teamPosition),
     winner: laneResult.teamWonLane === p.teamId && laneResult.resTag !== 'draw',
+    lost: laneResult.teamWonLane !== p.teamId && laneResult.resTag !== 'draw',
     portrait: entry ? championImg(ddVersion, entry.id) : null,
     href: profileHref(platformId, p.riotIdGameName, p.riotIdTagline),
   };

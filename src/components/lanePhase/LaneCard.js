@@ -22,11 +22,11 @@ function useMounted() {
   return m;
 }
 
-function Portrait({ player, size }) {
+function Portrait({ player, size, dim }) {
   const ring = player.side === 'blue' ? '#568CFF' : '#A35BFF';
   const sizeCls = size === 'sm' ? ' lpr-sm' : size === 'xs' ? ' lpr-xs' : '';
   return (
-    <div className={'lpr-portrait' + sizeCls} style={{ '--lpr-ring': ring }} title={player.champ}>
+    <div className={'lpr-portrait' + sizeCls + (dim ? ' lpr-dim' : '')} style={{ '--lpr-ring': ring }} title={player.champ}>
       <img className="lpr-portrait-img" src={player.portrait} alt={player.champ} />
     </div>
   );
@@ -144,7 +144,7 @@ function PlayerRow({ player, sizeSm }) {
   const nameCls = player.side === 'blue' ? ' lpr-blue' : ' lpr-purple';
   return (
     <div className="lpr-player">
-      <Portrait player={player} size={sizeSm ? 'sm' : null} />
+      <Portrait player={player} size={sizeSm ? 'sm' : null} dim={player.lost} />
       <div className="lpr-pmeta">
         <StyledTooltip placement="top" disableInteractive title={<NameTip player={player} />}>
           <a className={'lpr-pname' + nameCls} href={player.href}>{player.name}</a>
@@ -309,11 +309,12 @@ function TakeawayLine({ lane }) {
     const cls = lane.teamWonLane === 100 ? 'lpr-c-blue' : 'lpr-c-purple';
     const team = lane.teamWonLane === 100 ? 'Blue' : 'Purple';
     const tier = goldLabel(lane.goldDifference);
+    const where = lane.laneKey === 'jungle' ? 'the jungle' : `in ${lane.laneKey} lane`;
     const lead = {
-      obliterates: 'obliterates in lane',
-      dominates: 'dominates in lane',
-      won: 'came out ahead',
-    }[lane.resTag] || 'won the lane';
+      obliterates: `obliterates ${where}`,
+      dominates: `dominates ${where}`,
+      won: `won ${where}`,
+    }[lane.resTag] || `won ${where}`;
     inner = (
       <>
         <TakeawayName player={win} /> {lead} (<b>{win.kda}</b>) — {tier},{' '}
@@ -397,8 +398,8 @@ export default function LaneCard({ lane }) {
       <div className="lpr-seg-panel" key={tab}>
         {tab === 'summary' && (
           <>
-            <Matchup lane={lane} />
             <TakeawayLine lane={lane} />
+            <Matchup lane={lane} />
           </>
         )}
         {tab === 'feed' && <KillFeedPanel lane={lane} />}
