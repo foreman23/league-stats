@@ -195,6 +195,9 @@ export function toLaneVM(laneDef, statsAt15, ctx) {
     teamWonLane: lr.teamWonLane,
     leftTeam,
     goldDifference: lr.goldDifference,
+    // Game clock the lane stats were sampled at: 15:00, or end-of-game for
+    // shorter matches (drives the receipt line's "@ m:ss" label).
+    atClock: clock(Math.min(900, gameData.info.gameDuration) * 1000),
     bubbleCount: lr.bubbleCount,
     left,
     right,

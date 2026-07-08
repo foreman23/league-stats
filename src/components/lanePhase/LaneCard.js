@@ -330,6 +330,30 @@ function TakeawayLine({ lane }) {
   );
 }
 
+// The receipts: the raw side-vs-side gold behind the verdict, always visible
+// under the takeaway. (CS already appears on each player row, so gold — the
+// stat the verdict is actually computed from — is the only number here.)
+// Winning side is listed first (left side on a draw); duo-lane values are the
+// pair's combined totals.
+function ReceiptLine({ lane }) {
+  const winnerRight = lane.resTag !== 'draw' && lane.teamWonLane !== lane.leftTeam;
+  const a = winnerRight ? lane.right : lane.left;
+  const b = winnerRight ? lane.left : lane.right;
+  const sum = (side, key) => side.reduce((t, p) => t + (p[key] || 0), 0);
+  const clsA = a[0].side === 'blue' ? 'lpr-c-blue' : 'lpr-c-purple';
+  const clsB = b[0].side === 'blue' ? 'lpr-c-blue' : 'lpr-c-purple';
+  return (
+    <p className="lpr-receipt">
+      <span className="lpr-receipt-stat">
+        <b className={clsA}>{sum(a, 'gold').toLocaleString()}</b>
+        <span className="lpr-receipt-vs">vs</span>
+        <b className={clsB}>{sum(b, 'gold').toLocaleString()}</b>
+      </span>
+      <span className="lpr-receipt-at">gold @ {lane.atClock}</span>
+    </p>
+  );
+}
+
 const LANE_ICON = {
   top: 'TopLane.png',
   jungle: 'Jungle.png',
@@ -398,6 +422,7 @@ export default function LaneCard({ lane }) {
       <div className="lpr-seg-panel" key={tab}>
         {tab === 'summary' && (
           <>
+            <ReceiptLine lane={lane} />
             <TakeawayLine lane={lane} />
             <Matchup lane={lane} />
           </>
