@@ -19,7 +19,7 @@ import StyledTooltip from '../components/StyledTooltip';
 import TeamGoldDifGraph from '../components/TeamGoldDifGraph';
 import generateGraphData from '../functions/GenerateGraphData';
 import calculateOpScores from '../functions/CalculateOpScores';
-import generateShortSummary from '../functions/GenerateShortSummary';
+import generateMatchStory, { MOMENT_ICONS } from '../functions/GenerateMatchStory';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../FirebaseConfig';
 import DamagePie from '../components/DamagePie';
@@ -28,7 +28,9 @@ import Standout from '../components/Standout';
 import DetailsTable from '../components/DetailsTable';
 import Builds from '../components/Builds';
 import ScrollTopButton from '../components/ScrollTopButton';
-import BubblesSummary from '../components/BubblesSummary';
+import MatchStoryGraph from '../components/MatchStoryGraph';
+import { setMatchNavContext, clearMatchNavContext } from '../hooks/useMatchNavContext';
+import { focusBattleAt } from '../hooks/useBattleFocus';
 
 function GameDetails() {
 
@@ -113,12 +115,11 @@ function GameDetails() {
 
   // Calculate individual player scores
   const [playersWithScores, setPlayersWithScore] = useState([]);
-  const [matchSummaryDesc, setMatchSummaryDesc] = useState(null);
   const [highestDamageDealt, setHighestDamageDealt] = useState(null);
   const [highestDamageTaken, setHighestDamageTaken] = useState(null);
 
   const [statsAt15, setStatsAt15] = useState(null);
-  const [shortSummary, setShortSummary] = useState(null);
+  const [matchStory, setMatchStory] = useState(null);
   const [graphData, setGraphData] = useState(null);
   const [buildData, setBuildData] = useState(null);
   useEffect(() => {
@@ -139,10 +140,10 @@ function GameDetails() {
             getStatsAt15(alternateRegion, gameData.metadata.matchId, gameData, timelineData),
             getBuildInfo(gameData, timelineData, champsJSON, dataDragonVersion),
           ]);
-          // generateShortSummary depends on stats15, so it runs after
-          const shortSummaryRes = await generateShortSummary(gameData, playerData, timelineData, stats15, dataDragonVersion, champsJSON)
+          // The match story needs both stats15 and graphData, so it runs after
+          const story = generateMatchStory(gameData, playerData, stats15, graphData, dataDragonVersion, champsJSON, timelineData);
           setGraphData(graphData);
-          setShortSummary(shortSummaryRes)
+          setMatchStory(story);
           setStatsAt15(stats15);
           setBuildData(buildData);
         }
@@ -288,112 +289,6 @@ function GameDetails() {
   }, [queues, gameData, findQueueTitle])
 
   useEffect(() => {
-    if (graphData) {
-      let playerTeamLeading = null;
-      let closeGame = false;
-      let blowout = false;
-      let nearBlowout = false;
-
-      // Determine which team was winning most of the match
-      let gameLength = graphData.blueLeadingTime + graphData.redLeadingTime;
-      let blueLeadingPercentage = graphData.blueLeadingTime / gameLength;
-      let redLeadingPercentage = graphData.redLeadingTime / gameLength
-
-      // Blue has more time winning
-      if (graphData.blueLeadingTime > graphData.redLeadingTime) {
-        if (blueLeadingPercentage - redLeadingPercentage < 0.25) {
-          closeGame = true;
-        }
-        if (graphData.redLeadingTime <= 1) {
-          blowout = true;
-        }
-        if (graphData.redLeadingTime < 3) {
-          nearBlowout = true;
-        }
-        if (playerData.teamId === 100) {
-          playerTeamLeading = true;
-        }
-        else if (playerData.teamId === 200) {
-          playerTeamLeading = false;
-        }
-      }
-      // Red has more time winning
-      if (graphData.blueLeadingTime < graphData.redLeadingTime) {
-        if (redLeadingPercentage - blueLeadingPercentage < 0.25) {
-          closeGame = true;
-        }
-        if (graphData.blueLeadingTime <= 1) {
-          blowout = true;
-        }
-        if (graphData.blueLeadingTime < 3) {
-          nearBlowout = true;
-        }
-        if (playerData.teamId === 100) {
-          playerTeamLeading = false;
-        }
-        else if (playerData.teamId === 200) {
-          playerTeamLeading = true;
-        }
-      }
-
-      else if (graphData.blueLeadingTime === graphData.redLeadingTime) {
-        playerTeamLeading = false;
-        closeGame = true;
-      }
-
-      if (closeGame === true) {
-        playerTeamLeading = false;
-      }
-
-      // Determine team leading most of game
-      let teamLeadingSentence = '';
-      if (!closeGame && !blowout) {
-        if (graphData.leadChanges === 1) {
-          teamLeadingSentence = (<><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId}>{playerData.riotIdGameName}</SummonerName>'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} most of the game</u> which had {graphData.leadChanges} lead change.</>)
-        } else {
-          teamLeadingSentence = (<><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId}>{playerData.riotIdGameName}</SummonerName>'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} most of the game</u> which had {graphData.leadChanges} lead changes.</>)
-        }
-      } if (blowout) {
-        teamLeadingSentence = (<><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId}>{playerData.riotIdGameName}</SummonerName>'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} the whole game.</u></>)
-      } else if (nearBlowout) {
-        if (graphData.leadChanges > 1) {
-          teamLeadingSentence = (<><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId}>{playerData.riotIdGameName}</SummonerName>'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} for almost the whole game</u> which had {graphData.leadChanges} lead changes.</>)
-        } else {
-          teamLeadingSentence = (<><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId}>{playerData.riotIdGameName}</SummonerName>'s team was <u>{playerTeamLeading ? 'winning' : 'losing'} for almost the whole game</u> which had {graphData.leadChanges} lead change.</>)
-        }
-      }
-      else if (closeGame) {
-        teamLeadingSentence = (<><u>The game was evenly matched</u>, with both teams fighting hard.</>)
-      }
-
-      // Determine closing sentence
-      let lastSentence = '';
-      // Player's team won
-      if (playerData.win && playerTeamLeading === false && closeGame === true) {
-        lastSentence = 'Luckily, their team ended up winning the game.'
-      }
-      if (playerData.win && playerTeamLeading === false && closeGame === false) {
-        lastSentence = 'Despite of that, their team made a comeback and ended up winning the game.'
-      }
-      if (playerData.win && playerTeamLeading === true) {
-        lastSentence = `In the end that resulted in victory.`
-      }
-      // Player's team lost
-      if (!playerData.win && playerTeamLeading === true) {
-        lastSentence = (<>Unfortunately the other team made a comeback and <SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId}>{playerData.riotIdGameName}</SummonerName>'s team ended up losing the game.</>)
-      }
-      if (!playerData.win && playerTeamLeading === false && closeGame === true) {
-        lastSentence = (<>Unfortunately, in the end, <SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId}>{playerData.riotIdGameName}</SummonerName>'s team lost.</>)
-      }
-      if (!playerData.win && playerTeamLeading === false && closeGame === false) {
-        lastSentence = `In the end that resulted in defeat.`
-      }
-
-      setMatchSummaryDesc(<>{teamLeadingSentence} {lastSentence}</>)
-    }
-  }, [graphData, playerData, gameData, dataDragonVersion])
-
-  useEffect(() => {
     if (gameData && alternateRegion) {
       const getMatchTimeline = async (alternateRegion, matchId) => {
         const timelineResponse = await fetchMatchTimeline(alternateRegion, matchId);
@@ -406,13 +301,29 @@ function GameDetails() {
 
   }, [gameData, alternateRegion]);
 
+  // Publish the match context so the site navbar morphs into the match
+  // context bar once the header scrolls away; cleared on leaving the page.
+  useEffect(() => {
+    if (!playerData || !champsJSON || !gameData || !dataDragonVersion) return undefined;
+    const entry = Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId));
+    setMatchNavContext({
+      player: playerData,
+      platformId: gameData.info.platformId,
+      version: dataDragonVersion,
+      champImg: championImg(dataDragonVersion, entry?.id),
+      teamId: playerData.teamId,
+      win: playerData.win,
+    });
+    return () => clearMatchNavContext();
+  }, [playerData, champsJSON, gameData, dataDragonVersion]);
+
   const [isLoading, setIsLoading] = useState(true);
   // Render page once data is loaded
   useEffect(() => {
-    if (playersWithScores.length > 0 && matchSummaryDesc && summonerSpells && runes) {
+    if (playersWithScores.length > 0 && matchStory && summonerSpells && runes) {
       setIsLoading(false);
     }
-  }, [playersWithScores, matchSummaryDesc, summonerSpells, runes])
+  }, [playersWithScores, matchStory, summonerSpells, runes])
 
   if (isLoading) {
     return (
@@ -630,14 +541,35 @@ function GameDetails() {
                   )}
                 </Grid>
                 <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={12} md={7}>
-                  <Typography className='GameDetailsMainSummaryHeader'>
-                    <SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} color="inherit">
+                  <div className='hd-top'>
+                    <SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} className='hd-name'>
                       {playerData.riotIdGameName}
                     </SummonerName>
-
-                    <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'purple team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
-                  </Typography>
-                  <Typography className='GameDetailsMainSummarySubHeader'>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
+                    <span className={'hd-vpill ' + (playerData.win ? 'hd-win' : 'hd-loss')}>
+                      {playerData.win && <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>}
+                      {playerData.win ? 'Victory' : 'Defeat'}
+                    </span>
+                  </div>
+                  <div className='hd-subline'>
+                    <b>{Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name}</b>
+                    {' · '}{playerData.teamPosition === 'UTILITY' ? 'Support' : playerData.teamPosition.charAt(0) + playerData.teamPosition.slice(1).toLowerCase()}
+                    {' · '}<span className={playerData.teamId === 100 ? 'hd-t-blue' : 'hd-t-purple'}>{playerData.teamId === 100 ? 'Blue' : 'Purple'} Team</span>
+                  </div>
+                  <div className='hd-chips'>
+                    <span className={'hd-chip ' + (playerData.win ? 'hd-acc-win' : 'hd-acc-loss')}>
+                      {(((playerData.kills + playerData.assists) / Math.max(1, playerData.deaths))).toFixed(1)}<span className='hd-cl'>KDA</span>
+                    </span>
+                    <span className='hd-chip'>
+                      {playerData.kills}<span className='hd-sl'>/</span>{playerData.deaths}<span className='hd-sl'>/</span>{playerData.assists}<span className='hd-cl'>K/D/A</span>
+                    </span>
+                    <span className='hd-chip'>
+                      {playerData.totalMinionsKilled + playerData.neutralMinionsKilled}<span className='hd-cl'>CS</span>
+                    </span>
+                    <span className='hd-chip'>
+                      {Math.round(((playerData.kills + playerData.assists) / Math.max(1, gameData.info.participants.filter(p => p.teamId === playerData.teamId).reduce((t, p) => t + p.kills, 0))) * 100)}%<span className='hd-cl'>KP</span>
+                    </span>
+                  </div>
+                  <Typography className='GameDetailsMainSummarySubHeader'>{queueTitle} · {gameStartDate.toLocaleDateString()}, {gameStartDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} · {gameDuration}</Typography>
                   <div className='GameDetailsCatBtnContainer'>
                     <Button onClick={() => scrollToSection('DetailsAnchor')} className='GameDetailsCatBtn' variant='contained'>Details</Button>
                     <Button onClick={() => scrollToSection('LaningAnchor')} className='GameDetailsCatBtn' variant='contained'>Laning</Button>
@@ -654,28 +586,41 @@ function GameDetails() {
             <Grid className='GameDetailsSubContainer' container >
               <Box className='GameDetailsBox'>
 
-                <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} item xs={12} sm={7} md={7} lg={6}>
-                  {shortSummary !== null &&
+                <Grid className='MatchSummaryGrid' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }} item xs={12} sm={7} md={7} lg={6}>
+                  {matchStory !== null &&
                     <div>
                       <div className='gameSectionHeader' style={{ marginLeft: '16px', marginRight: '16px' }}>
                         <Typography className='gameSectionHeading'>Match Summary</Typography>
                       </div>
-                      <ul className='gameDetailsMatchSummaryList'>
-                        <li>{shortSummary}</li>
-                        <li>{matchSummaryDesc}</li>
-                        {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === false &&
-                          <li><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId}>{playerData.riotIdGameName}</SummonerName>'s team surrendered the game at {gameDuration}.</li>
+                      <div className='ms-story'>
+                        <h2 className='ms-headline'>{matchStory.headline}</h2>
+                        <p className='ms-lede'>{matchStory.lede}</p>
+                        <div className='ms-chips'>{matchStory.chips}</div>
+                        {matchStory.moments.length > 0 &&
+                          <div className='ms-moments'>
+                            <div className='ms-mhead'>Key Moments</div>
+                            <div className='ms-mgrid'>
+                              {matchStory.moments.map((m, i) => (
+                                <div
+                                  key={i}
+                                  className='ms-mtile ms-mtile-click'
+                                  role='button'
+                                  tabIndex={0}
+                                  title='Jump to this battle'
+                                  onClick={() => focusBattleAt(m.at)}
+                                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); focusBattleAt(m.at); } }}
+                                >
+                                  <span className={'ms-mic ms-m' + m.side}>{MOMENT_ICONS[m.icon]}</span>
+                                  <span className='ms-mbody'>
+                                    <span className='ms-mtitle'>{m.title}</span>
+                                    <span className='ms-msub'>{m.sub}</span>
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
                         }
-                        {gameData.info.participants[0].gameEndedInSurrender === true && playerData.win === true &&
-                          <li>The enemy team surrendered the game at {gameDuration}.</li>
-                        }
-                        {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === false &&
-                          <li><SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId}>{playerData.riotIdGameName}</SummonerName>'s nexus was destroyed at {gameDuration}.</li>
-                        }
-                        {gameData.info.participants[0].gameEndedInSurrender === false && playerData.win === true &&
-                          <li>The enemy team's nexus was destroyed at {gameDuration}.</li>
-                        }
-                      </ul>
+                      </div>
                     </div>
                     // ) : (
                     //   // Skeleton Loader Matching Summary Layout
@@ -701,15 +646,8 @@ function GameDetails() {
                   }
                 </Grid>
                 <Grid className='gameDetailsMatchSummaryGraph hideMobile' style={{ borderRadius: '10px', marginLeft: '30px', marginTop: '20px' }} backgroundColor='white' item xs={12} sm={5} md={5} lg={6}>
-
-                  <BubblesSummary statsAt15={statsAt15} gameData={gameData}></BubblesSummary>
-
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Divider width={'75%'} style={{ margin: 'auto', paddingTop: '20px', paddingBottom: '0px' }}></Divider>
-                  </div>
-
-                  {graphData ? (
-                    <TeamGoldDifGraph width={400} teamId={playerData.teamId} height={250} hideTitle yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
+                  {graphData && matchStory ? (
+                    <MatchStoryGraph graphData={graphData} moments={matchStory.moments} viewerTeam={playerData.teamId} />
                   ) : (
                     <CircularProgress style={{ justifyContent: 'center', marginTop: '20px' }}></CircularProgress>
                   )}
@@ -720,16 +658,13 @@ function GameDetails() {
             {/* Mobile Gold Dif Graph */}
             <Grid style={{ justifyContent: 'center', marginTop: '20px', width: '95%' }} className='hideDesktop' container>
               <Box style={{ flexDirection: 'column' }} className='GameDetailsBox'>
-                <BubblesSummary statsAt15={statsAt15} gameData={gameData}></BubblesSummary>
-                <div style={{ marginLeft: '50px', marginRight: '20px', overflow: 'hidden' }}>
-                  <TeamGoldDifGraph hideTitle teamId={playerData.teamId} height={250} yAxisGold={graphData.yAxisGold} xAxisGold={graphData.xAxisGold}></TeamGoldDifGraph>
-                </div>
+                <MatchStoryGraph graphData={graphData} moments={matchStory ? matchStory.moments : []} viewerTeam={playerData.teamId} />
               </Box>
             </Grid>
 
             {/* Standout Performances */}
             <Grid className='StandoutContainer' container>
-              <Standout gameData={gameData} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion}></Standout>
+              <Standout gameData={gameData} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} playerData={playerData}></Standout>
             </Grid>
 
           </Grid>
@@ -745,6 +680,7 @@ function GameDetails() {
               </div>
               <MatchDetails
                   match={toMatchVM(gameData, champsJSON, dataDragonVersion)}
+                  viewerTeam={playerData.teamId}
                 />
               </Grid>
 
@@ -788,7 +724,7 @@ function GameDetails() {
                 {LANES.map((laneDef) => (
                   <LaneCard
                     key={laneDef.data}
-                    lane={toLaneVM(laneDef, statsAt15, { gameData, champsJSON, dataDragonVersion, timelineData, viewerTeam: playerData?.teamId })}
+                    lane={toLaneVM(laneDef, statsAt15, { gameData, champsJSON, dataDragonVersion, timelineData, viewerTeam: playerData?.teamId, viewerParticipantId: playerData?.participantId })}
                   />
                 ))}
               </Grid>
