@@ -1,196 +1,182 @@
-import { React, useState } from 'react'
+import { React, useState } from 'react';
 import { championImg, itemImg } from '../api/ddragon';
-import { Grid, Box, Typography } from '@mui/material'
+import { Grid, Box, Typography } from '@mui/material';
 import StyledTooltip from './StyledTooltip';
-import ForwardIcon from '@mui/icons-material/Forward';
 import SummonerName from './SummonerName';
 
-const Builds = (props) => {
+// Builds — modernized to the shared design system (white card, circular
+// team-ring portraits, Q/W/E/R skill grid, item path as soft chips).
+// Same data contract as before: buildData.skillTimeline / itemTimeline /
+// champInfo, indexed by participantId - 1.
 
-    const {
-        playerData,
-        gameData,
-        dataDragonVersion,
-        champsJSON,
-        items,
-        buildData
-    } = props;
+const clock = (ms) =>
+  `${Math.floor(ms / 60000)}:${String(Math.floor((ms % 60000) / 1000)).padStart(2, '0')}`;
 
-    const [currBuildChamp, setCurrBuildChamp] = useState(playerData);
-    const handleBuildClick = (champ) => {
-        if (champ !== currBuildChamp) {
-            setCurrBuildChamp(champ)
-        }
-    }
+const SKILLS = [
+  { slot: 1, letter: 'Q' },
+  { slot: 2, letter: 'W' },
+  { slot: 3, letter: 'E' },
+  { slot: 4, letter: 'R' },
+];
 
-    return (
-        <Grid className='GameDetailsContainer' width={'65%'} container justifyContent={'center'} margin={'auto'} marginTop={'20px'} marginBottom={'10px'}>
-            <Box className='BuildsBox gameSectionHeader'>
-                <Typography className='gameSectionHeading'>Builds</Typography>
-                <Typography className='gameSectionSubheading'>Player Items & Level Ups</Typography>
-            </Box>
-            <Box className='BuildsBox2'>
-                <SummonerName participant={currBuildChamp} version={dataDragonVersion} platformId={gameData.info.platformId}>
-                    <Typography fontSize={'1.25rem'} marginBottom={'20px'} fontWeight={'bold'}>
-                        {`${currBuildChamp?.championName} (${currBuildChamp?.riotIdGameName} #${currBuildChamp?.riotIdTagline})`}
-                    </Typography>
-                </SummonerName>
-                <div className='BuildsChampPicsContainer'>
-                    <Grid order={{ xs: playerData.teamId === 100 ? 1 : 3 }} style={{}}>
-                        {gameData.info.participants.filter(players => players.teamId === 100).map((item, index) => (
-                            <div key={`champ_${index}_1`} className='pointer' onClick={() => handleBuildClick(item)} style={{ border: '4px solid #568CFF', borderRadius: '5px', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', margin: '5px', transform: item.championId === currBuildChamp.championId ? 'scale(115%)' : 'scale(100%)' }}>
-                                <Typography style={{
-                                    fontSize: '0.75rem',
-                                    position: 'absolute',
-                                    backgroundColor: item.teamId === 100 ? '#568CFF' : '#A35BFF',
-                                    color: 'white',
-                                    borderRadius: '0px',
-                                    borderBottomRightRadius: '5px',
-                                    paddingLeft: '0px',
-                                    paddingRight: '4px',
-                                    paddingTop: '1px',
-                                    paddingBottom: '1px',
-                                    textAlign: 'center',
-                                    right: 'auto',
-                                    bottom: 'auto',
-                                    top: '0px',
-                                    left: '0px',
-                                    justifyContent: 'center',
-                                    zIndex: 1
-                                }}>{item.champLevel}
-                                </Typography>
-                                <img alt='Champion' className='BuildsChampPic' style={{ filter: item.championId !== currBuildChamp.championId ? 'grayscale(100%)' : 'grayscale(0%)', borderRadius: '0%' }} src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
-                            </div>
-                        ))}
-                    </Grid>
-                    <Grid className='hideMobile hideSmallTablet' style={{ alignSelf: 'center' }} order={{ xs: 2 }}>
-                        <Box marginBottom={'3px'} marginLeft={'20px'} marginRight={'20px'} width={'10px'} height={'10px'} borderRadius={'100%'} backgroundColor={'#C3C3C3'}></Box>
-                    </Grid>
-                    <Grid order={{ xs: playerData.teamId === 200 ? 1 : 3 }}>
-                        {gameData.info.participants.filter(players => players.teamId === 200).map((item, index) => (
-                            <div key={`champ_${index}_2`} className='pointer' onClick={() => handleBuildClick(item)} style={{ border: '4px solid #A35BFF', borderRadius: '5px', display: 'inline-flex', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', margin: '5px', transform: item.championId === currBuildChamp.championId ? 'scale(115%)' : 'scale(100%)' }}>
-                                <Typography style={{
-                                    fontSize: '0.75rem',
-                                    position: 'absolute',
-                                    backgroundColor: item.teamId === 100 ? '#568CFF' : '#A35BFF',
-                                    color: 'white',
-                                    borderRadius: '0px',
-                                    borderBottomRightRadius: '5px',
-                                    paddingLeft: '0px',
-                                    paddingRight: '4px',
-                                    paddingTop: '1px',
-                                    paddingBottom: '1px',
-                                    textAlign: 'center',
-                                    right: 'auto',
-                                    bottom: 'auto',
-                                    top: '0px',
-                                    left: '0px',
-                                    justifyContent: 'center',
-                                    zIndex: 1
-                                }}>{item.champLevel}
-                                </Typography>
-                                <img alt='Champion' className='BuildsChampPic' style={{ filter: item.championId !== currBuildChamp.championId ? 'grayscale(100%)' : 'grayscale(0%)', borderRadius: '0px' }} src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(item.championId)).id)}></img>
-                            </div>
-                        ))}
-                    </Grid>
-                </div>
-                {/* Skill Order */}
-                <div style={{ display: 'flex', marginLeft: '0px', marginTop: '15px', flexDirection: 'column' }}>
-                    <Typography fontSize={'1.25rem'} color={'#3A3F47'} marginTop={'10px'}>Skill Order</Typography>
-                    <div style={{ display: 'flex', overflowX: 'auto', backgroundColor: '#E6E6E6', filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))', justifyContent: 'start', padding: '10px', paddingTop: '20px', paddingBottom: '10px', borderRadius: '10px', marginTop: '20px' }}>
-                        {Array.from({ length: 18 }).map((_, index) => {
-                            const skillEvent = buildData.skillTimeline[currBuildChamp.participantId - 1].filter(event => event.type === 'SKILL_LEVEL_UP')[index];
-
-                            return (
-                                <div key={index}>
-                                    <div style={{ filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25))' }}>
-                                        <Typography
-                                            className='BuildSectionSkillLetter'
-                                            style={{
-                                                backgroundColor: skillEvent ? (skillEvent.skillSlot !== 4 ? '#FFFFFF' : '#6E6E6E') : '#f2f2f2',
-                                                color: skillEvent
-                                                    ? skillEvent.skillSlot === 1
-                                                        ? '#2a1e96'
-                                                        : skillEvent.skillSlot === 2
-                                                            ? '#3c756a'
-                                                            : skillEvent.skillSlot === 3
-                                                                ? '#a3a53f'
-                                                                : skillEvent.skillSlot === 4
-                                                                    ? 'white'
-                                                                    : 'black'
-                                                    : 'black',
-                                            }}
-                                        >
-                                            {skillEvent ? (skillEvent.skillSlot === 1 ? 'Q' : skillEvent.skillSlot === 2 ? 'W' : skillEvent.skillSlot === 3 ? 'E' : 'R') : ' '}
-                                        </Typography>
-
-                                        <img
-                                            className='BuildSectionSkillIcon'
-                                            src={
-                                                skillEvent
-                                                    ? `https://ddragon.leagueoflegends.com/cdn/${dataDragonVersion}/img/spell/${buildData.champInfo[currBuildChamp.participantId - 1].data[
-                                                        Object.values(champsJSON.data).find(
-                                                            champ =>
-                                                                champ.key ===
-                                                                String(
-                                                                    gameData.info.participants
-                                                                        .slice() // Create a shallow copy of the array
-                                                                        .sort((a, b) => a.participantId - b.participantId)[
-                                                                        currBuildChamp.participantId - 1
-                                                                    ].championId
-                                                                )
-                                                        )?.id
-                                                    ]?.spells[skillEvent.skillSlot - 1].image.full
-                                                    }`
-                                                    : '/images/blankItem.webp'
-                                            }
-                                            alt={skillEvent ? `${skillEvent.skillSlot} Skill` : 'Empty'}
-                                        />
-                                    </div>
-
-                                    <Typography style={{ textAlign: 'center', color: '#3A3F47', fontSize: '1rem' }}>
-                                        {skillEvent ? index + 1 : ''}
-                                    </Typography>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-
-                {/* Item build */}
-                <div style={{ display: 'flex', marginLeft: '0px', marginTop: '20px', flexDirection: 'column' }}>
-                    <Typography fontSize={'1.25rem'} color={'#3A3F47'} marginTop={'10px'}>Item Build</Typography>
-                    <div style={{ display: 'flex', justifyContent: 'center', padding: '10px', paddingLeft: '3px', paddingTop: '10px', paddingBottom: '10px', borderRadius: '10px', marginTop: '0px', flexWrap: 'wrap' }}>
-                        {buildData.itemTimeline[currBuildChamp.participantId - 1].itemHistory.map((itemGroup, itemGroupIndex) => (
-                            <div key={`itemgroup_${itemGroupIndex}`} style={{ display: 'flex', alignItems: 'center' }}>
-
-                                <div style={{ display: 'flex', filter: 'drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.25))', boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px', margin: '15px', marginRight: '0px', marginLeft: '0px', backgroundColor: '#E6E6E6', padding: '10px', paddingBottom: '5px', borderRadius: '5px', flexDirection: 'column' }}>
-                                    <div style={{ display: 'flex' }}>
-                                        {itemGroup.map((item, itemIndex) => (
-                                            <StyledTooltip key={`item_${itemIndex}`} placement='top' arrow title={<><u>{items.data[item.itemId]?.name}</u><br></br>{items.data[item.itemId]?.plaintext || items.data[item.itemId]?.tags[0]}</>}>
-                                                <img alt='Item' key={itemIndex} className='BuildSectionItemImg' src={itemImg(dataDragonVersion, item.itemId)}></img>
-                                            </StyledTooltip>
-                                        ))}
-                                    </div>
-                                    <div>
-                                        <Typography style={{ textAlign: 'center', color: '#6B7280', fontSize: '0.875rem', fontWeight: 'bold', marginTop: '3px' }}>
-                                            {`${String(Math.floor(itemGroup[0].timestamp / 60000)).padStart(2, '0')}:${String(Math.floor((itemGroup[0].timestamp % 60000) / 1000)).padStart(2, '0')}`}
-                                        </Typography>
-                                    </div>
-                                </div>
-                                {itemGroupIndex !== buildData.itemTimeline[currBuildChamp.participantId - 1].itemHistory.length - 1 && (
-                                    <div>
-                                        <ForwardIcon style={{ fontSize: '2.625rem', color: '#6B7280', marginLeft: '10px', marginRight: '10px' }}></ForwardIcon>
-                                    </div>
-                                )}
-
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </Box>
-        </Grid>
-    )
+function champEntry(champsJSON, championId) {
+  return Object.values(champsJSON.data).find((c) => c.key === String(championId));
 }
 
-export default Builds
+// One selectable champion portrait: circular, team ring, level badge.
+// The viewed player's portrait carries a small "YOU" badge.
+function ChampButton({ p, selected, isMe, version, champsJSON, onClick }) {
+  const entry = champEntry(champsJSON, p.championId);
+  return (
+    <StyledTooltip disableInteractive arrow placement="top" title={`${p.riotIdGameName} — ${entry?.name}`}>
+      <button
+        className={'bd-pick' + (selected ? ' bd-active' : '') + (isMe ? ' bd-me' : '')}
+        style={{ '--bd-ring': p.teamId === 100 ? '#568CFF' : '#A35BFF' }}
+        onClick={onClick}
+        aria-pressed={selected}
+      >
+        <img className="bd-pick-img" src={championImg(version, entry?.id)} alt={entry?.name} />
+        <span className="bd-pick-level">{p.champLevel}</span>
+        {isMe && <span className="bd-pick-you">You</span>}
+      </button>
+    </StyledTooltip>
+  );
+}
+
+// Q/W/E/R rows x 18 level columns. A filled cell = that skill was taken at
+// that champion level; ults get the dark emphasis.
+function SkillGrid({ events, spells, version }) {
+  const bySlot = {};
+  events.forEach((ev, i) => { bySlot[`${ev.skillSlot}-${i + 1}`] = true; });
+  return (
+    <div className="bd-skill-scroll">
+      <div className="bd-skill-grid">
+        {SKILLS.map(({ slot, letter }) => {
+          const spell = spells?.[slot - 1];
+          return (
+            <div className="bd-skill-row" key={slot}>
+              <div className="bd-skill-head">
+                {spell ? (
+                  <StyledTooltip disableInteractive arrow placement="top" title={spell.name}>
+                    <img
+                      className="bd-skill-icon"
+                      src={`https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/${spell.image.full}`}
+                      alt={spell.name}
+                    />
+                  </StyledTooltip>
+                ) : (
+                  <span className="bd-skill-icon bd-skill-icon-empty" />
+                )}
+                <span className={'bd-skill-key bd-k-' + letter.toLowerCase()}>{letter}</span>
+              </div>
+              {Array.from({ length: 18 }, (_, i) => {
+                const taken = bySlot[`${slot}-${i + 1}`];
+                return (
+                  <span
+                    key={i}
+                    className={'bd-cell' + (taken ? (slot === 4 ? ' bd-on bd-ult' : ' bd-on') : '')}
+                  >
+                    {taken ? i + 1 : ''}
+                  </span>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// The purchase path: chip per buy-group with a timestamp, chevrons between.
+function ItemPath({ history, version, items }) {
+  return (
+    <div className="bd-path">
+      {history.map((group, gi) => (
+        <div className="bd-path-seg" key={gi}>
+          <div className="bd-step">
+            <div className="bd-step-items">
+              {group.map((it, ii) => (
+                <StyledTooltip
+                  key={ii}
+                  disableInteractive
+                  arrow
+                  placement="top"
+                  title={<><u>{items.data[it.itemId]?.name}</u><br />{items.data[it.itemId]?.plaintext || items.data[it.itemId]?.tags?.[0]}</>}
+                >
+                  <img className="bd-item" src={itemImg(version, it.itemId)} alt={items.data[it.itemId]?.name || 'item'} />
+                </StyledTooltip>
+              ))}
+            </div>
+            <span className="bd-step-time">{clock(group[0].timestamp)}</span>
+          </div>
+          {gi !== history.length - 1 && (
+            <svg className="bd-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M9 5l7 7-7 7" /></svg>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const Builds = (props) => {
+  const { playerData, gameData, dataDragonVersion, champsJSON, items, buildData } = props;
+
+  const [cur, setCur] = useState(playerData);
+  const pid = cur.participantId - 1;
+  const entry = champEntry(champsJSON, cur.championId);
+  const spells = buildData.champInfo[pid]?.data?.[entry?.id]?.spells;
+  const skillEvents = buildData.skillTimeline[pid].filter((ev) => ev.type === 'SKILL_LEVEL_UP');
+
+  const blue = gameData.info.participants.filter((p) => p.teamId === 100);
+  const purple = gameData.info.participants.filter((p) => p.teamId === 200);
+  // Viewer's team renders first, mirroring the rest of the page.
+  const teams = playerData.teamId === 200 ? [purple, blue] : [blue, purple];
+
+  return (
+    <Grid className="GameDetailsContainer" container justifyContent={'center'} margin={'auto'} marginTop={'20px'} marginBottom={'10px'}>
+      {/* 65% of GameDetailsContainer — the same nesting the other sections get
+          (.StandoutContainer / #DetailsAnchor / .sb-wrap), so card widths match. */}
+      <div className="bd-wrap">
+      <Box className="BuildsBox gameSectionHeader">
+        <Typography className="gameSectionHeading">Builds</Typography>
+        <Typography className="gameSectionSubheading">Player Items & Level Ups</Typography>
+      </Box>
+      <div className="bd-card">
+        <div className="bd-who">
+          <SummonerName participant={cur} version={dataDragonVersion} platformId={gameData.info.platformId} className="bd-name">
+            {cur.riotIdGameName}
+          </SummonerName>
+          <span className="bd-champ">{entry?.name}</span>
+        </div>
+
+        <div className="bd-picker">
+          {teams.map((team, ti) => (
+            <div className="bd-team" key={ti}>
+              {team.map((p) => (
+                <ChampButton
+                  key={p.participantId}
+                  p={p}
+                  selected={p.participantId === cur.participantId}
+                  isMe={p.participantId === playerData.participantId}
+                  version={dataDragonVersion}
+                  champsJSON={champsJSON}
+                  onClick={() => setCur(p)}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+
+        <h4 className="bd-subhead">Skill Order</h4>
+        <SkillGrid events={skillEvents} spells={spells} version={dataDragonVersion} />
+
+        <h4 className="bd-subhead">Item Build</h4>
+        <ItemPath history={buildData.itemTimeline[pid].itemHistory} version={dataDragonVersion} items={items} />
+      </div>
+      </div>
+    </Grid>
+  );
+};
+
+export default Builds;
