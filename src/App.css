@@ -4632,6 +4632,7 @@ li {
 /* the match context that fades into the bar once the page header scrolls away */
 .nvb-ctx {
     display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
+    margin-left: 26px;
     opacity: 0; transform: translateY(6px); pointer-events: none;
     transition: opacity .2s ease, transform .2s ease;
 }
