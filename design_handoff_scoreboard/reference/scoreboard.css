@@ -1,0 +1,124 @@
+/* ============================================================
+   Post-game Scoreboard — styles.
+   Loaded with styles.css (tokens + .portrait base, reused).
+   Shared grid template keeps header + rows aligned.
+   ============================================================ */
+
+.sb-wrap { max-width: 1080px; margin: 0 auto; }
+.sb-head { margin: 0 0 16px; }
+.sb-head h2 {
+  font-size: 13px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--ink-2); margin: 0 0 3px;
+}
+.sb-head .sub { color: var(--muted); font-size: 13.5px; margin: 0; }
+
+/* team table card */
+.sb-table {
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--card-sh); margin-bottom: 16px; overflow: hidden;
+}
+.sb-scroll { overflow-x: auto; }
+.sb-inner { min-width: 968px; }
+
+/* shared column grid */
+.sb-row, .sb-header {
+  display: grid;
+  grid-template-columns: 300px 66px 86px 118px 80px 84px 54px 1fr;
+  align-items: center;
+}
+
+/* header band (team-tinted) */
+.sb-header {
+  padding: 13px 20px; border-bottom: 1px solid var(--line);
+}
+.sb-table.blue .sb-header { background: var(--blue-soft); }
+.sb-table.purple .sb-header { background: var(--purple-soft); }
+
+.sb-team { display: flex; align-items: center; gap: 11px; }
+.sb-team .tn { font-size: 16px; font-weight: 700; letter-spacing: -.2px; white-space: nowrap; }
+.sb-table.blue .sb-team .tn { color: var(--blue); }
+.sb-table.purple .sb-team .tn { color: var(--purple); }
+.sb-result {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px;
+}
+.sb-result.win { color: #1F8A5B; background: #E4F6EC; }
+.sb-result.loss { color: #B14457; background: #FBEDEF; }
+
+.sb-colh { font-size: 10.5px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: var(--faint); }
+.sb-colh.r { text-align: right; padding-right: 6px; }
+.sb-colh.c { text-align: center; }
+
+/* data row */
+.sb-row { padding: 9px 20px; }
+.sb-row + .sb-row { border-top: 1px solid #F2F3F5; }
+.sb-row:hover { background: #FAFBFC; }
+
+/* ---- identity cell ---- */
+.sb-ident { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.sb-port { position: relative; flex: 0 0 auto; }
+.sb-port .portrait { width: 50px; height: 50px; border-radius: 9px; font-size: 13px; }
+.sb-level {
+  position: absolute; top: -5px; left: -5px; z-index: 3; min-width: 19px; height: 19px; padding: 0 4px;
+  border-radius: 999px; background: #2C3140; color: #fff; font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #fff;
+}
+
+/* spells + runes mini columns */
+.sb-mini { display: flex; flex-direction: column; gap: 3px; flex: 0 0 auto; }
+.sb-spell { width: 20px; height: 20px; border-radius: 5px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+.sb-rune { width: 20px; height: 20px; border-radius: 50%; background: #15171C; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+.sb-rune.key { background: radial-gradient(circle at 50% 38%, #3A3F4B, #15171C); }
+.sb-rune .rd { width: 9px; height: 9px; border-radius: 50%; }
+.sb-rune.sec { width: 18px; height: 18px; }
+
+/* name block */
+.sb-nameblock { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.sb-name { font-size: 14px; font-weight: 600; text-decoration: none; line-height: 1.15;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 178px; }
+.sb-table.blue .sb-name { color: var(--blue-link); }
+.sb-table.purple .sb-name { color: var(--purple-link); }
+.sb-name:hover { text-decoration: underline; }
+.sb-sub { display: flex; align-items: center; gap: 7px; }
+.sb-place {
+  font-size: 10px; font-weight: 700; letter-spacing: .3px; padding: 2px 6px; border-radius: 5px;
+  background: #EDEEF1; color: #5C636F; font-variant-numeric: tabular-nums;
+}
+.sb-place.p1 { background: #FBF1D2; color: #9A7416; }
+.sb-place.p2 { background: #ECEFF3; color: #5C636F; }
+.sb-place.p3 { background: #F5E6D6; color: #97632B; }
+.sb-score { font-size: 12.5px; font-weight: 700; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.sb-score.hi { color: #1F8A5B; }
+.sb-score.lo { color: var(--faint); }
+
+/* ---- stat cells ---- */
+.sb-cell { font-variant-numeric: tabular-nums; }
+.sb-role { font-size: 13px; color: var(--ink-2); }
+.sb-kda { line-height: 1.2; }
+.sb-kda .line { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.sb-kda .line .sl { color: var(--faint); font-weight: 400; margin: 0 1px; }
+.sb-kda .ratio { font-size: 12px; color: var(--muted); }
+.sb-kda .ratio.good { color: #1F8A5B; font-weight: 600; }
+
+.sb-dmg { padding-right: 8px; }
+.sb-dmg .v { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.sb-dmg .bar { height: 5px; border-radius: 3px; background: var(--track); margin-top: 5px; overflow: hidden; }
+.sb-dmg .bar .fill { height: 100%; width: 0; border-radius: 3px; transition: width .9s cubic-bezier(.22,1,.36,1); }
+.sb-table.blue .sb-dmg .bar .fill { background: var(--blue); }
+.sb-table.purple .sb-dmg .bar .fill { background: var(--purple); }
+
+.sb-gold { font-size: 13.5px; font-weight: 600; color: #B8901E; }
+.sb-cs .v { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.sb-cs .m { font-size: 12px; color: var(--muted); }
+.sb-wards { font-size: 13.5px; font-weight: 600; color: var(--ink-2); text-align: center; }
+
+/* ---- build ---- */
+.sb-build { display: flex; align-items: center; gap: 3px; }
+.sb-item { width: 26px; height: 26px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); flex: 0 0 auto; }
+.sb-item.empty { background: #F1F2F4 !important; box-shadow: inset 0 0 0 1px var(--line); }
+.sb-trinket { width: 26px; height: 26px; border-radius: 50%; margin-left: 3px; flex: 0 0 auto;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); }
+
+@media (max-width: 760px) {
+  .sb-head { padding: 0 4px; }
+}

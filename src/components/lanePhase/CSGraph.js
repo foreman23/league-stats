@@ -21,7 +21,7 @@ export default function CSGraph({ lane }) {
     profilePic: p.profilePic,
     side: p.side,
     color: p.side === 'blue' ? '#568CFF' : '#A35BFF',
-    finalColor: p.side === 'blue' ? '#0089D6' : '#8A3FE6',
+    finalColor: p.side === 'blue' ? '#0074B7' : '#8A3FE6',
     sup: p.role === 'SUP',
     data: lane.cs[p.participantId] || [],
     final: p.cs,

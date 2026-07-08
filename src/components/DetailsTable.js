@@ -1,635 +1,201 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { championImg, itemImg, spellImg } from '../api/ddragon';
-import { Grid, Table, TableHead, TableContainer, TableCell, TableRow, TableBody, Typography, LinearProgress } from '@mui/material'
 import StyledTooltip from './StyledTooltip';
 import SummonerName from './SummonerName';
 
-const DetailsTable = (props) => {
+// Modernized post-game scoreboard. Same columns/data as before; restyled to the
+// shared design system with real Data Dragon art (champ / spells / runes / items).
 
-    const {
-        playerData,
-        gameData,
-        champsJSON,
-        dataDragonVersion,
-        summonerSpellsObj,
-        summonerName,
-        playersWithScores,
-        getKeystoneIconUrl,
-        runesObj,
-        highestDamageDealt,
-        items
-    } = props;
-
-    return (
-        <Grid className='GameOverViewContainer' width={'65%'} style={{ margin: 'auto', justifyContent: 'center', paddingBottom: '10px', paddingTop: '40px', maxWidth: '100vw' }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-            {/* Blue Team */}
-            <Grid order={playerData.teamId === 100 ? 1 : 2} width={'100%'} className={playerData.teamId === 100 ? 'GameOverviewTable1' : 'GameOverviewTable2'} style={{ display: 'flex', justifyContent: 'center', margin: 'auto', textAlign: 'center' }} justifyContent={'center'} backgroundColor='#EDF8FF' boxShadow={'rgba(100, 100, 111, 0.1) 0px 7px 29px 0px'} item xs={12}>
-                <TableContainer>
-                    <Table size='small'>
-                        <TableHead>
-                            <TableRow style={{ alignItems: 'center' }}>
-                                <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                        <Typography color={gameData.info.teams[0].win ? '#3374FF' : '#FF3F3F'} fontWeight={'bold'} fontSize={'1.125rem'}>{gameData.info.teams[0].win ? "Victory" : "Defeat"}</Typography>
-                                        <Typography style={{ marginLeft: '10px', fontWeight: '600' }} fontSize={'0.875rem'}>(Blue Team)</Typography>
-                                    </div>
-                                </TableCell>
-                                {!props.aram && !props.urf &&
-                                    <TableCell align='center' style={{ fontWeight: '600' }}>Role</TableCell>
-                                }
-                                <TableCell align='center' style={{ fontWeight: '600' }}>KDA</TableCell>
-                                <TableCell align='center' style={{ fontWeight: '600' }}>Damage</TableCell>
-                                <TableCell align='center' style={{ fontWeight: '600' }}>Gold</TableCell>
-                                <TableCell align='center' style={{ fontWeight: '600' }}>CS</TableCell>
-                                {!props.aram &&
-                                    <TableCell align='center' style={{ fontWeight: '600' }}>Wards</TableCell>
-                                }
-                                <TableCell align='left' style={{ fontWeight: '600' }}>Build</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {gameData.info.participants.filter(player => player.teamId === 100).map((player, index) => (
-                                <TableRow key={`blue_row_${index}`}>
-                                    <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                            <StyledTooltip title={Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).name} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                <div style={{ position: 'relative', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                                                    <Typography style={{
-                                                        fontSize: '0.688rem',
-                                                        position: 'absolute',
-                                                        backgroundColor: player.teamId === 100 ? '#568CFF' : '#A35BFF',
-                                                        color: 'white',
-                                                        borderRadius: '100%',
-                                                        paddingLeft: '4px',
-                                                        paddingRight: '4px',
-                                                        paddingTop: '1px',
-                                                        paddingBottom: '1px',
-                                                        textAlign: 'center',
-                                                        right: 'auto',
-                                                        bottom: 'auto',
-                                                        top: '-5px',
-                                                        left: '0px',
-                                                        justifyContent: 'center'
-                                                    }}>{player.champLevel}
-                                                    </Typography>
-                                                    <img
-                                                        alt='Champion'
-                                                        style={{
-                                                            width: '38px',
-                                                            borderRadius: '100%',
-                                                            marginRight: '3px',
-                                                            border: player.teamId === 100 ? '3px #568CFF solid' : '3px #A35BFF solid'
-                                                        }}
-                                                        src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id)}>
-                                                    </img>
-                                                </div>
-                                            </StyledTooltip>
-                                            <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
-                                                <StyledTooltip
-                                                    title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).description}</span></>}
-                                                    disableInteractive
-                                                    placement='top'
-                                                    arrow
-                                                    slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img alt='Spell 1' style={{ width: '19px', borderRadius: '2px' }} src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id)}></img>
-                                                </StyledTooltip>
-                                                <StyledTooltip
-                                                    title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
-                                                    disableInteractive
-                                                    placement='top'
-                                                    arrow
-                                                    slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img alt='Spell 2' style={{ width: '19px', borderRadius: '2px' }} src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id)}></img>
-                                                </StyledTooltip>
-                                            </div>
-                                            <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
-                                                <img style={{ width: '19px', borderRadius: '2px' }} src={getKeystoneIconUrl(player, runesObj)} alt="Keystone"></img>
-                                                <StyledTooltip
-                                                    title={<>{runesObj.find(keystone => keystone.id === player.perks.styles[0].style).key}</>}
-                                                    disableInteractive
-                                                    placement='top'
-                                                    arrow
-                                                    slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img alt='Perk' style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
-                                                </StyledTooltip>
-                                            </div>
-                                            <SummonerName
-                                                participant={player}
-                                                version={dataDragonVersion}
-                                                platformId={gameData.info.platformId}
-                                                color='inherit'
-                                                style={{ textDecoration: 'none' }}
-                                            >
-                                                <Typography className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'0.75rem'}>{player.riotIdGameName}</Typography>
-                                                <span className={
-                                                    (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
-                                                        'TableStandingMVP' :
-                                                        'TableStanding')
-                                                }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}
-                                                </span>
-                                                <span className='TableStandingScore'>
-                                                    {player.score.toFixed(1)}
-                                                </span>
-                                            </SummonerName>
-                                        </div>
-                                    </TableCell>
-                                    {!props.aram && !props.urf &&
-                                        <TableCell align='center'><Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
-                                    }
-                                    <TableCell align='center'>
-                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography>
-                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.kills + player.assists) / player.deaths).toFixed(1)}</Typography>
-                                    </TableCell>
-                                    <TableCell align='center'>
-                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
-                                        <StyledTooltip disableInteractive title={<div>{`AD: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`AP: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
-                                            <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#37B7FF' }, width: '50%', height: '10px' }}></LinearProgress>
-                                        </StyledTooltip>
-                                    </TableCell>
-                                    <TableCell align='center'><Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
-                                    <TableCell align='center'>
-                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography>
-                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.totalMinionsKilled + player.neutralMinionsKilled) / (gameData.info.gameDuration / 60)).toFixed(1)}/m</Typography>
-                                    </TableCell>
-                                    {!props.aram &&
-                                        <TableCell align='center'><Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
-                                    }
-                                    <TableCell align='center'>
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                                {player?.item0 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item0]?.name}</span><br />
-                                                            <span>{items.data[player.item0]?.plaintext || items.data[player.item0]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item0 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item0)}
-                                                            alt="Item1">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item0 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item0)}
-                                                        alt="Item1">
-                                                    </img>
-                                                )
-                                                }
-                                                {player?.item1 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item1]?.name}</span><br />
-                                                            <span>{items.data[player.item1]?.plaintext || items.data[player.item1]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item1 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item1)}
-                                                            alt="Item2">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item1 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item1)}
-                                                        alt="Item2">
-                                                    </img>
-                                                )
-                                                }
-                                                {player?.item2 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item2]?.name}</span><br />
-                                                            <span>{items.data[player.item2]?.plaintext || items.data[player.item2]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item2 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item2)}
-                                                            alt="Item3">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item2 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item2)}
-                                                        alt="Item3">
-                                                    </img>
-                                                )
-                                                }
-                                                {player?.item6 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item6]?.name}</span><br />
-                                                            <span>{items.data[player.item6]?.plaintext || items.data[player.item6]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item6 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item6)}
-                                                            alt="Ward">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item6 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item6)}
-                                                        alt="Ward">
-                                                    </img>
-                                                )
-                                                }
-                                            </div>
-                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                                {player?.item3 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item3]?.name}</span><br />
-                                                            <span>{items.data[player.item3]?.plaintext || items.data[player.item3]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item3 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item3)}
-                                                            alt="Item4">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item3 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item3)}
-                                                        alt="Item4">
-                                                    </img>
-                                                )
-                                                }
-                                                {player?.item4 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item4]?.name}</span><br />
-                                                            <span>{items.data[player.item4]?.plaintext || items.data[player.item4]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item4 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item4)}
-                                                            alt="Item5">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item4 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item4)}
-                                                        alt="Item5">
-                                                    </img>
-                                                )
-                                                }
-                                                {player?.item5 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item5]?.name}</span><br />
-                                                            <span>{items.data[player.item5]?.plaintext || items.data[player.item5]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item5 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item5)}
-                                                            alt="Item6">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item5 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item5)}
-                                                        alt="Item6">
-                                                    </img>
-                                                )
-                                                }
-                                            </div>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Grid>
-            {/* Purple Team */}
-            <Grid order={playerData.teamId === 200 ? 1 : 2} className={playerData.teamId === 200 ? 'GameOverviewTable1' : 'GameOverviewTable2'} style={{ display: 'flex', justifyContent: 'center', margin: 'auto', marginLeft: '0%', marginRight: '0%' }} marginLeft={'10%'} marginRight={'10%'} backgroundColor='#F4ECFF' boxShadow={'rgba(100, 100, 111, 0.1) 0px 7px 29px 0px'} item xs={12}>
-                <TableContainer>
-                    <Table size='small'>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                        <Typography color={gameData.info.teams[1].win ? '#3374FF' : '#FF3F3F'} fontWeight={'bold'} fontSize={'1.125rem'}>{gameData.info.teams[1].win ? "Victory" : "Defeat"}</Typography>
-                                        <Typography style={{ marginLeft: '10px', fontWeight: '600' }} fontSize={'0.875rem'}>(Purple Team)</Typography>
-                                    </div>
-                                </TableCell>
-                                {!props.aram && !props.urf &&
-                                    <TableCell align='center' style={{ fontWeight: '600' }}>Role</TableCell>
-                                }
-                                <TableCell align='center' style={{ fontWeight: '600' }}>KDA</TableCell>
-                                <TableCell align='center' style={{ fontWeight: '600' }}>Damage</TableCell>
-                                <TableCell align='center' style={{ fontWeight: '600' }}>Gold</TableCell>
-                                <TableCell align='center' style={{ fontWeight: '600' }}>CS</TableCell>
-                                {!props.aram &&
-                                    <TableCell align='center' style={{ fontWeight: '600' }}>Wards</TableCell>
-                                }
-                                <TableCell align='left' style={{ fontWeight: '600' }}>Build</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {gameData.info.participants.filter(player => player.teamId === 200).map((player, index) => (
-                                <TableRow key={`red${index}`}>
-                                    <TableCell style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                            <StyledTooltip title={Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).name} disableInteractive placement='top' arrow slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                <div style={{ position: 'relative', filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}>
-                                                    <Typography style={{
-                                                        fontSize: '0.688rem',
-                                                        position: 'absolute',
-                                                        backgroundColor: player.teamId === 100 ? '#568CFF' : '#A35BFF',
-                                                        color: 'white',
-                                                        borderRadius: '100%',
-                                                        paddingLeft: '4px',
-                                                        paddingRight: '4px',
-                                                        paddingTop: '1px',
-                                                        paddingBottom: '1px',
-                                                        textAlign: 'center',
-                                                        right: 'auto',
-                                                        bottom: 'auto',
-                                                        top: '-5px',
-                                                        left: '0px',
-                                                        justifyContent: 'center'
-                                                    }}>{player.champLevel}
-                                                    </Typography>
-                                                    <img 
-                                                    alt='Champion'
-                                                    style={{
-                                                        width: '38px',
-                                                        borderRadius: '100%',
-                                                        marginRight: '3px',
-                                                        border: player.teamId === 100 ? '3px #568CFF solid' : '3px #A35BFF solid'
-                                                    }}
-                                                        src={championImg(dataDragonVersion, Object.values(champsJSON.data).find(champ => champ.key === String(player.championId)).id)}>
-                                                    </img>
-                                                </div>
-                                            </StyledTooltip>
-                                            <div style={{ display: 'flex', flexDirection: 'column', marginRight: '3px' }}>
-                                                <StyledTooltip
-                                                    title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).description}</span></>}
-                                                    disableInteractive
-                                                    placement='top'
-                                                    arrow
-                                                    slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img alt='Spell 1' style={{ width: '19px', borderRadius: '2px' }} src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === player.summoner1Id.toString()).id)}></img>
-                                                </StyledTooltip>
-                                                <StyledTooltip
-                                                    title={<><span style={{ textDecoration: 'underline' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).name}</span><br /><span style={{ color: '#f2f2f2' }}>{summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).description}</span></>}
-                                                    disableInteractive
-                                                    placement='top'
-                                                    arrow
-                                                    slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img alt='Spell 2' style={{ width: '19px', borderRadius: '2px' }} src={spellImg(dataDragonVersion, summonerSpellsObj.find(spell => spell.key === player.summoner2Id.toString()).id)}></img>
-                                                </StyledTooltip>
-                                            </div>
-                                            <div style={{ display: 'flex', flexDirection: 'column', marginRight: '15px' }}>
-                                                <img style={{ width: '19px', borderRadius: '2px' }} src={getKeystoneIconUrl(player, runesObj)} alt="Keystone"></img>
-                                                <StyledTooltip
-                                                    title={<>{runesObj.find(keystone => keystone.id === player.perks.styles[0].style).key}</>}
-                                                    disableInteractive
-                                                    placement='top'
-                                                    arrow
-                                                    slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}>
-                                                    <img alt='Perk' style={{ width: '19px', borderRadius: '2px' }} src={`https://ddragon.canisback.com/img/${runesObj.find(keystone => keystone.id === player.perks.styles[0].style).icon}`}></img>
-                                                </StyledTooltip>
-                                            </div>
-                                            <SummonerName
-                                                participant={player}
-                                                version={dataDragonVersion}
-                                                platformId={gameData.info.platformId}
-                                                color='inherit'
-                                                style={{ textDecoration: 'none' }}
-                                            >
-                                                <Typography className='summonerNameTable' fontWeight={playerData.puuid === player.puuid ? 'bold' : 'normal'} fontSize={'0.75rem'}>{player.riotIdGameName}</Typography>
-                                                <span className={
-                                                    (playersWithScores.find(participant => participant.puuid === player.puuid)?.standing === '1st' ?
-                                                        'TableStandingMVP' :
-                                                        'TableStanding')
-                                                }>{(playersWithScores.find(participant => participant.puuid === player.puuid)).standing}
-                                                </span>
-                                                <span className='TableStandingScore'>
-                                                    {player.score.toFixed(1)}
-                                                </span>
-                                            </SummonerName>
-                                        </div>
-                                    </TableCell>
-                                    {!props.aram && !props.urf &&
-                                        <TableCell align='center'><Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.teamPosition.toLowerCase().charAt(0).toUpperCase() + player.teamPosition.toLowerCase().slice(1)}</Typography></TableCell>
-                                    }
-                                    <TableCell align='center'>
-                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.kills}/{player.deaths}/{player.assists}</Typography>
-                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.kills + player.assists) / player.deaths).toFixed(1)}</Typography>
-                                    </TableCell>
-                                    <TableCell align='center'>
-                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalDamageDealtToChampions.toLocaleString()}</Typography>
-                                        <StyledTooltip disableInteractive title={<div>{`AD: ${player.physicalDamageDealtToChampions.toLocaleString()}`} <br></br>  {`AP: ${player.magicDamageDealtToChampions.toLocaleString()}`} <br></br> {`True: ${player.trueDamageDealtToChampions.toLocaleString()}`} </div>}>
-                                            <LinearProgress variant='determinate' value={(player.totalDamageDealtToChampions / highestDamageDealt) * 100} sx={{ margin: 'auto', marginTop: '2px', backgroundColor: '#D9D9D9', '& .MuiLinearProgress-bar': { backgroundColor: '#A35BFF' }, width: '50%', height: '10px' }}></LinearProgress>
-                                        </StyledTooltip>
-                                    </TableCell>
-                                    <TableCell align='center'><Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.goldEarned.toLocaleString()}g</Typography></TableCell>
-                                    <TableCell align='center'>
-                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.totalMinionsKilled + player.neutralMinionsKilled}</Typography>
-                                        <Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{((player.totalMinionsKilled + player.neutralMinionsKilled) / (gameData.info.gameDuration / 60)).toFixed(1)}/m</Typography>
-                                    </TableCell>
-                                    {!props.aram &&
-                                        <TableCell align='center'><Typography fontSize={'0.813rem'} fontWeight={player.riotIdGameName.toLowerCase() === summonerName ? 'Bold' : '500'}>{player.wardsPlaced}</Typography></TableCell>
-                                    }
-                                    <TableCell align='center'>
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                                {player?.item0 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item0]?.name}</span><br />
-                                                            <span>{items.data[player.item0]?.plaintext || items.data[player.item0]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item0 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item0)}
-                                                            alt="Item1">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item0 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item0)}
-                                                        alt="Item1">
-                                                    </img>
-                                                )
-                                                }
-
-                                                {player?.item1 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item1]?.name}</span><br />
-                                                            <span>{items.data[player.item1]?.plaintext || items.data[player.item1]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item1 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item1)}
-                                                            alt="Item2">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item1 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item1)}
-                                                        alt="Item2">
-                                                    </img>
-                                                )
-                                                }
-
-                                                {player?.item2 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item2]?.name}</span><br />
-                                                            <span>{items.data[player.item2]?.plaintext || items.data[player.item2]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item2 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item2)}
-                                                            alt="Item3">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item2 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item2)}
-                                                        alt="Item3">
-                                                    </img>
-                                                )
-                                                }
-
-                                                {player?.item6 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item6]?.name}</span><br />
-                                                            <span>{items.data[player.item6]?.plaintext || items.data[player.item6]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item6 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item6)}
-                                                            alt="Ward">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '100%', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item6 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item6)}
-                                                        alt="Ward">
-                                                    </img>
-                                                )
-                                                }
-                                            </div>
-
-                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                                {player?.item3 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item3]?.name}</span><br />
-                                                            <span>{items.data[player.item3]?.plaintext || items.data[player.item3]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item3 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item3)}
-                                                            alt="Item4">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item3 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item3)}
-                                                        alt="Item4">
-                                                    </img>
-                                                )
-                                                }
-
-                                                {player?.item4 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item4]?.name}</span><br />
-                                                            <span>{items.data[player.item4]?.plaintext || items.data[player.item4]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item4 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item4)}
-                                                            alt="Item5">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item4 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item4)}
-                                                        alt="Item5">
-                                                    </img>
-                                                )
-                                                }
-
-                                                {player?.item5 ? (
-                                                    <StyledTooltip
-                                                        arrow
-                                                        disableInteractive
-                                                        slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } }}
-                                                        placement='top'
-                                                        title={<><span style={{ textDecoration: 'underline' }}>
-                                                            {items.data[player.item5]?.name}</span><br />
-                                                            <span>{items.data[player.item5]?.plaintext || items.data[player.item5]?.tags[0]}</span><br />
-                                                        </>}>
-                                                        <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                            src={player.item5 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item5)}
-                                                            alt="Item6">
-                                                        </img>
-                                                    </StyledTooltip>
-                                                ) : (
-                                                    <img style={{ width: '24px', borderRadius: '2px', marginBottom: '2px', marginRight: '1px' }}
-                                                        src={player.item5 === 0 ? '/images/blankItem.webp' : itemImg(dataDragonVersion, player.item5)}
-                                                        alt="Item6">
-                                                    </img>
-                                                )
-                                                }
-                                            </div>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Grid>
-        </Grid>
-    )
+// Bar reveal — setTimeout (NOT rAF, which is paused in hidden/background iframes
+// and would leave the bars at width 0). Visible end-state is the base.
+function useGrown() {
+  const [g, setG] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setG(true), 60);
+    return () => clearTimeout(t);
+  }, []);
+  return g;
 }
 
-export default DetailsTable
+const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : '');
+// "UTILITY" is Riot's data value for the support role — display it as "Support".
+const roleLabel = (pos) => (pos === 'UTILITY' ? 'Support' : cap(pos));
+const tipOffset = { popper: { modifiers: [{ name: 'offset', options: { offset: [0, -6] } }] } };
+
+function SpellIcon({ id, version, spellsObj }) {
+  const sp = spellsObj.find((s) => s.key === String(id));
+  if (!sp) return <span className="sb-spell-empty" />;
+  return (
+    <StyledTooltip disableInteractive arrow placement="top" slotProps={tipOffset}
+      title={<><span style={{ textDecoration: 'underline' }}>{sp.name}</span><br /><span style={{ color: '#f2f2f2' }}>{sp.description}</span></>}>
+      <img className="sb-spell" src={spellImg(version, sp.id)} alt={sp.name} />
+    </StyledTooltip>
+  );
+}
+
+function Runes({ player, getKeystoneIconUrl, runesObj, version }) {
+  const secId = player.perks?.styles?.[1]?.style;
+  const sec = runesObj.find((r) => r.id === secId);
+  return (
+    <>
+      <span className="sb-rune sb-rune-key"><img src={getKeystoneIconUrl(player, runesObj)} alt="Keystone" /></span>
+      {sec && (
+        <StyledTooltip disableInteractive arrow placement="top" slotProps={tipOffset} title={sec.key}>
+          <span className="sb-rune sb-rune-sec"><img src={`https://ddragon.leagueoflegends.com/cdn/img/${sec.icon}`} alt={sec.key} /></span>
+        </StyledTooltip>
+      )}
+    </>
+  );
+}
+
+function ItemSlot({ id, version, items, round }) {
+  if (!id || id === 0) {
+    if (round) return <img className="sb-trinket" src="/images/blankItem.webp" alt="" />;
+    return <span className="sb-item-empty" />;
+  }
+  const it = items?.data?.[id];
+  return (
+    <StyledTooltip disableInteractive arrow placement="top" slotProps={tipOffset}
+      title={it ? <><span style={{ textDecoration: 'underline' }}>{it.name}</span><br /><span>{it.plaintext || it.tags?.[0]}</span></> : ''}>
+      <img className={round ? 'sb-trinket' : 'sb-item'} src={itemImg(version, id)} alt={it?.name || 'item'} />
+    </StyledTooltip>
+  );
+}
+
+function PlayerRow({ player, side, ctx }) {
+  const grown = useGrown();
+  const { version, champsJSON, items, spellsObj, getKeystoneIconUrl, runesObj, maxDamage, summonerName, playerData, playersWithScores, gameData, aram, urf } = ctx;
+
+  const champ = Object.values(champsJSON.data).find((c) => c.key === String(player.championId));
+  const cs = player.totalMinionsKilled + player.neutralMinionsKilled;
+  const csm = (cs / (gameData.info.gameDuration / 60)).toFixed(1);
+  const ratio = (player.kills + player.assists) / Math.max(1, player.deaths);
+  const dmgPct = grown ? Math.max(4, (player.totalDamageDealtToChampions / maxDamage) * 100) : 0;
+
+  const sw = playersWithScores.find((p) => p.puuid === player.puuid);
+  const standing = sw?.standing || '';
+  const place = parseInt(standing, 10) || 0;
+  const placeCls = place === 1 ? ' sb-p1' : place === 2 ? ' sb-p2' : place === 3 ? ' sb-p3' : '';
+  const scoreCls = player.score >= 6.5 ? ' sb-hi' : player.score < 5 ? ' sb-lo' : '';
+  const isMe = player.riotIdGameName.toLowerCase() === summonerName || playerData.puuid === player.puuid;
+
+  return (
+    <div className={'sb-row' + (aram ? ' sb-row--aram' : '') + (isMe ? ' sb-me' : '')}>
+      <div className="sb-ident">
+        <StyledTooltip disableInteractive arrow placement="top" slotProps={tipOffset} title={champ?.name}>
+          <span className="sb-port" style={{ '--sb-ring': side === 'blue' ? '#568CFF' : '#A35BFF' }}>
+            <img className="sb-port-img" src={championImg(version, champ?.id)} alt={champ?.name} />
+            <span className="sb-level">{player.champLevel}</span>
+          </span>
+        </StyledTooltip>
+        <span className="sb-mini">
+          <SpellIcon id={player.summoner1Id} version={version} spellsObj={spellsObj} />
+          <SpellIcon id={player.summoner2Id} version={version} spellsObj={spellsObj} />
+        </span>
+        <span className="sb-mini">
+          <Runes player={player} getKeystoneIconUrl={getKeystoneIconUrl} runesObj={runesObj} version={version} />
+        </span>
+        <span className="sb-nameblock">
+          <SummonerName participant={player} version={version} platformId={gameData.info.platformId} className="sb-name">{player.riotIdGameName}</SummonerName>
+          <span className="sb-sub">
+            {standing && <span className={'sb-place' + placeCls}>{standing}</span>}
+            <span className={'sb-score' + scoreCls}>{player.score.toFixed(1)}</span>
+          </span>
+        </span>
+      </div>
+
+      {!aram && !urf && <div className="sb-cell sb-role">{roleLabel(player.teamPosition)}</div>}
+
+      <div className="sb-cell sb-kda">
+        <div className="sb-kda-line">{player.kills}<span className="sb-sl">/</span>{player.deaths}<span className="sb-sl">/</span>{player.assists}</div>
+        <div className={'sb-kda-ratio' + (ratio >= 4 ? ' sb-good' : '')}>{ratio.toFixed(1)} KDA</div>
+      </div>
+
+      <div className="sb-cell sb-dmg">
+        <span className="sb-dmg-v">{player.totalDamageDealtToChampions.toLocaleString()}</span>
+        <StyledTooltip disableInteractive placement="top" title={<div>AD: {player.physicalDamageDealtToChampions.toLocaleString()}<br />AP: {player.magicDamageDealtToChampions.toLocaleString()}<br />True: {player.trueDamageDealtToChampions.toLocaleString()}</div>}>
+          <div className="sb-dmg-bar"><div className="sb-dmg-fill" style={{ width: dmgPct + '%' }} /></div>
+        </StyledTooltip>
+      </div>
+
+      <div className="sb-cell sb-gold">{player.goldEarned.toLocaleString()}g</div>
+
+      <div className="sb-cell sb-cs"><span className="sb-cs-v">{cs}</span> <span className="sb-cs-m">{csm}/m</span></div>
+
+      {!aram && <div className="sb-cell sb-wards">{player.wardsPlaced}</div>}
+
+      <div className="sb-cell sb-build">
+        <div className="sb-build-row">
+          <ItemSlot id={player.item0} version={version} items={items} />
+          <ItemSlot id={player.item1} version={version} items={items} />
+          <ItemSlot id={player.item2} version={version} items={items} />
+          <ItemSlot id={player.item6} version={version} items={items} round />
+        </div>
+        <div className="sb-build-row">
+          <ItemSlot id={player.item3} version={version} items={items} />
+          <ItemSlot id={player.item4} version={version} items={items} />
+          <ItemSlot id={player.item5} version={version} items={items} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TeamTable({ side, win, players, ctx }) {
+  return (
+    <div className={'sb-table sb-' + side}>
+      <div className="sb-scroll">
+        <div className="sb-inner">
+          <div className={'sb-header' + (ctx.aram ? ' sb-row--aram' : '')}>
+            <div className="sb-team">
+              <span className="sb-tn">{side === 'blue' ? 'Blue Team' : 'Purple Team'}</span>
+              <span className={'sb-result ' + (win ? 'sb-win' : 'sb-loss')}>
+                {win && <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>}
+                {win ? 'Victory' : 'Defeat'}
+              </span>
+            </div>
+            {!ctx.aram && !ctx.urf && <div className="sb-colh">Role</div>}
+            <div className="sb-colh">KDA</div>
+            <div className="sb-colh">Damage</div>
+            <div className="sb-colh">Gold</div>
+            <div className="sb-colh">CS</div>
+            {!ctx.aram && <div className="sb-colh sb-c">Wards</div>}
+            <div className="sb-colh">Build</div>
+          </div>
+          {players.map((p, i) => <PlayerRow key={i} player={p} side={side} ctx={ctx} />)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const DetailsTable = (props) => {
+  const { playerData, gameData, champsJSON, dataDragonVersion, summonerSpellsObj, summonerName, playersWithScores, getKeystoneIconUrl, runesObj, highestDamageDealt, items } = props;
+
+  const ctx = {
+    version: dataDragonVersion, champsJSON, items, spellsObj: summonerSpellsObj,
+    getKeystoneIconUrl, runesObj, maxDamage: highestDamageDealt, summonerName,
+    playerData, playersWithScores, gameData, aram: props.aram, urf: props.urf,
+  };
+
+  const blue = gameData.info.participants.filter((p) => p.teamId === 100);
+  const purple = gameData.info.participants.filter((p) => p.teamId === 200);
+
+  const tables = [
+    <TeamTable key="blue" side="blue" win={gameData.info.teams[0].win} players={blue} ctx={ctx} />,
+    <TeamTable key="purple" side="purple" win={gameData.info.teams[1].win} players={purple} ctx={ctx} />,
+  ];
+  if (playerData.teamId === 200) tables.reverse(); // viewed player's team first
+
+  return (
+    <div className="sb-wrap">
+      <div className="sb-head">
+        <h2>Match Scoreboard</h2>
+        <p className="sb-sub">Per-player results at the end of the game</p>
+      </div>
+      {tables}
+    </div>
+  );
+};
+
+export default DetailsTable;

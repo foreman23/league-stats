@@ -27,7 +27,7 @@ export default function SummonerName({
   const icon = profileIcon ?? participant?.profileIcon;
 
   const href = `/profile/${String(platformId).toLowerCase()}/${gName}/${String(gTag).toLowerCase()}`;
-  const linkColor = color || (tId === 200 ? '#8A3FE6' : tId === 100 ? '#0089D6' : undefined);
+  const linkColor = color || (tId === 200 ? '#8A3FE6' : tId === 100 ? '#0074B7' : undefined);
   const iconUrl = icon != null && version ? profileIconImg(version, icon) : null;
 
   const tip = <SummonerNameTip name={gName} tag={gTag} iconUrl={iconUrl} />;
