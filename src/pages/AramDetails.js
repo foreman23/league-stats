@@ -96,7 +96,7 @@ const AramDetails = () => {
         if (style) {
             const keystone = style.slots[0].runes.find(rune => rune.id === keystoneId);
             if (keystone) {
-                return `https://ddragon.canisback.com/img/${keystone.icon}`;
+                return `https://ddragon.leagueoflegends.com/cdn/img/${keystone.icon}`;
             } else {
                 return '';
             }
