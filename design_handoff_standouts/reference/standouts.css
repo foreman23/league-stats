@@ -1,0 +1,97 @@
+/* ============================================================
+   Standout Performances — section styles.
+   Loaded with styles.css (tokens + .portrait base, reused).
+   ============================================================ */
+
+/* rank theming */
+.so-card { --rank: #C9A227; --rank-d: #B8901E; --rank-soft: #FBF4DE; --rank-border: #EBD9A3; }
+
+.so-rank-MVP { --rank: #C9A227; --rank-d: #9A7416; --rank-soft: #FBF4DE; --rank-border: #EBD9A3; }
+.so-rank-2ND { --rank: #8B93A1; --rank-d: #5C636F; --rank-soft: #F1F2F4; --rank-border: #E2E4E9; }
+.so-rank-INT { --rank: #D26072; --rank-d: #B14457; --rank-soft: #FBEDEF; --rank-border: #F2D4D9; }
+
+/* ---- card ---- */
+.so-card {
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--card-sh); padding: 22px 24px 24px;
+}
+.so-head { padding: 0 0 12px; border-bottom: 1px solid var(--line); margin-bottom: 20px; }
+.so-head h2 {
+  font-size: 13px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--ink-2); margin: 0;
+}
+
+/* ---- layout: rail | detail ---- */
+.so-grid { display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: stretch; }
+.so-rail { display: flex; gap: 8px; align-items: flex-start; }
+
+/* a selectable performer */
+.so-item {
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+  background: none; border: 0; font: inherit; cursor: pointer; padding: 12px 10px 10px;
+  border-radius: 14px; transition: background .16s ease; position: relative;
+}
+.so-item:hover { background: #F7F8FA; }
+.so-item.active { background: var(--rank-soft); }
+.so-item.active::after {
+  content: ""; position: absolute; left: 14px; right: 14px; bottom: 5px; height: 3px;
+  background: var(--rank); border-radius: 2px;
+}
+
+/* avatar (reuses .portrait, made round + larger) */
+.so-port { position: relative; }
+.so-port .portrait {
+  width: 68px; height: 68px; border-radius: 50%; font-size: 19px;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--ring, var(--track));
+}
+.so-item .rankpill {
+  margin-top: -11px; z-index: 2; position: relative;
+  font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
+  color: #fff; background: var(--rank); padding: 3px 11px; border-radius: 999px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.18), 0 0 0 2px #fff;
+}
+.so-item.active .rankpill { background: var(--rank-d); }
+.so-item .rankpill.silver { color: #3C4150; }
+
+/* ---- detail panel ---- */
+.so-detail { display: flex; flex-direction: column; min-width: 0; }
+.so-badge {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+  font-size: 12px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
+  color: #fff; background: var(--rank); padding: 6px 13px; border-radius: 999px; margin-bottom: 14px;
+}
+.so-badge.silver { color: #3C4150; }
+.so-badge .ic { display: flex; }
+
+.so-who { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-bottom: 14px; }
+.so-name { font-size: 19px; font-weight: 700; letter-spacing: -.3px; text-decoration: none; }
+.so-name.blue { color: var(--blue-link); }
+.so-name.purple { color: var(--purple-link); }
+.so-name:hover { text-decoration: underline; }
+.so-champ { font-size: 14px; color: var(--muted); }
+
+/* stat strip */
+.so-stats { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.so-stat {
+  display: flex; flex-direction: column; gap: 2px; padding: 9px 14px; border-radius: 9px;
+  background: #F7F8FA; border: 1px solid var(--line); min-width: 76px;
+}
+.so-stat .v { font-size: 17px; font-weight: 700; letter-spacing: -.3px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.so-stat .v .sl { color: var(--faint); font-weight: 600; margin: 0 1px; }
+.so-stat .l { font-size: 10.5px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--faint); }
+.so-stat.accent { background: var(--rank-soft); border-color: var(--rank-border); }
+.so-stat.accent .v { color: var(--rank-d); }
+.so-stat.accent .l { color: var(--rank-d); opacity: .8; }
+
+/* summary sentence */
+.so-summary { font-size: 14.5px; line-height: 1.6; color: var(--ink-2); margin: 0; max-width: 60ch; }
+.so-summary b { font-weight: 700; color: var(--ink); }
+.so-summary .nm { font-weight: 700; }
+.so-summary .nm.blue { color: var(--blue-link); }
+.so-summary .nm.purple { color: var(--purple-link); }
+
+@media (max-width: 680px) {
+  .so-grid { grid-template-columns: 1fr; gap: 22px; }
+  .so-rail { justify-content: center; }
+  .so-card { padding: 18px; }
+}
