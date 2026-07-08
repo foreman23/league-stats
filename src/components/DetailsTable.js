@@ -96,7 +96,10 @@ function PlayerRow({ player, side, ctx }) {
           <Runes player={player} getKeystoneIconUrl={getKeystoneIconUrl} runesObj={runesObj} version={version} />
         </span>
         <span className="sb-nameblock">
-          <SummonerName participant={player} version={version} platformId={gameData.info.platformId} className="sb-name">{player.riotIdGameName}</SummonerName>
+          <span className="sb-nameline">
+            <SummonerName participant={player} version={version} platformId={gameData.info.platformId} className="sb-name">{player.riotIdGameName}</SummonerName>
+            {isMe && <span className={'you-chip ' + (side === 'blue' ? 'you-blue' : 'you-purple')}>you</span>}
+          </span>
           <span className="sb-sub">
             {standing && <span className={'sb-place' + placeCls}>{standing}</span>}
             <span className={'sb-score' + scoreCls}>{player.score.toFixed(1)}</span>
@@ -108,7 +111,12 @@ function PlayerRow({ player, side, ctx }) {
 
       <div className="sb-cell sb-kda">
         <div className="sb-kda-line">{player.kills}<span className="sb-sl">/</span>{player.deaths}<span className="sb-sl">/</span>{player.assists}</div>
-        <div className={'sb-kda-ratio' + (ratio >= 4 ? ' sb-good' : '')}>{ratio.toFixed(1)} KDA</div>
+        <div className="sb-kda-ratio">
+          <span className={ratio >= 4 ? 'sb-good' : ''}>{ratio.toFixed(1)} KDA</span>
+        </div>
+        <div className="sb-kda-ratio">
+          {Math.round(((player.kills + player.assists) / Math.max(1, ctx.teamKills[player.teamId])) * 100)}% KP
+        </div>
       </div>
 
       <div className="sb-cell sb-dmg">
@@ -172,14 +180,19 @@ function TeamTable({ side, win, players, ctx }) {
 const DetailsTable = (props) => {
   const { playerData, gameData, champsJSON, dataDragonVersion, summonerSpellsObj, summonerName, playersWithScores, getKeystoneIconUrl, runesObj, highestDamageDealt, items } = props;
 
+  const blue = gameData.info.participants.filter((p) => p.teamId === 100);
+  const purple = gameData.info.participants.filter((p) => p.teamId === 200);
+
   const ctx = {
     version: dataDragonVersion, champsJSON, items, spellsObj: summonerSpellsObj,
     getKeystoneIconUrl, runesObj, maxDamage: highestDamageDealt, summonerName,
     playerData, playersWithScores, gameData, aram: props.aram, urf: props.urf,
+    // team kill totals for the per-player kill-participation number
+    teamKills: {
+      100: blue.reduce((t, p) => t + p.kills, 0),
+      200: purple.reduce((t, p) => t + p.kills, 0),
+    },
   };
-
-  const blue = gameData.info.participants.filter((p) => p.teamId === 100);
-  const purple = gameData.info.participants.filter((p) => p.teamId === 200);
 
   const tables = [
     <TeamTable key="blue" side="blue" win={gameData.info.teams[0].win} players={blue} ctx={ctx} />,

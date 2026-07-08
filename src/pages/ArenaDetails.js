@@ -417,7 +417,7 @@ const ArenaDetails = () => {
                             <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={12} md={7}>
                                 <Typography style={{ marginTop: '20px' }} className='GameDetailsMainSummaryHeader'>
                                     <SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} color='inherit' />
-                                    <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}> placed {playerData.placement}{placementSuffix}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} alongside <SummonerName participant={teammateData} version={dataDragonVersion} platformId={gameData.info.platformId} color='inherit' /> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists}.
+                                    <span style={{ color: playerData.win ? '#17754C' : '#B14457' }}> placed {playerData.placement}{placementSuffix}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} alongside <SummonerName participant={teammateData} version={dataDragonVersion} platformId={gameData.info.platformId} color='inherit' /> finishing {playerData.kills}/{playerData.deaths}/{playerData.assists}.
                                 </Typography>
                                 {queueTitle !== null ? (
                                     <Typography className='GameDetailsMainSummarySubHeader'>{queueTitle} played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>

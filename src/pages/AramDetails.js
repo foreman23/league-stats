@@ -574,7 +574,7 @@ const AramDetails = () => {
                             <Grid className='GameDetailsCatBtnMainContainer' item xs={12} sm={12} md={7}>
                                 <Typography className='GameDetailsMainSummaryHeader'>
                                     <SummonerName participant={playerData} version={dataDragonVersion} platformId={gameData.info.platformId} color='inherit' />
-                                    <span style={{ color: playerData.win ? '#17BA6C' : '#FF3F3F' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'purple team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
+                                    <span style={{ color: playerData.win ? '#17754C' : '#B14457' }}>{playerData.win ? ' won' : ' lost'}</span> playing {Object.values(champsJSON.data).find(champ => champ.key === String(playerData.championId)).name} {playerData.teamPosition.toLowerCase()} for {playerData.teamId === 100 ? 'blue team' : 'purple team'} finishing {playerData.kills}/{playerData.deaths}/{playerData.assists} with {playerData.totalMinionsKilled + playerData.neutralMinionsKilled} CS.
                                 </Typography>
                                 <Typography className='GameDetailsMainSummarySubHeader'>ARAM played on {gameStartDate.toLocaleDateString()} at {gameStartDate.toLocaleTimeString()} lasting for {gameDuration}</Typography>
                                 <div className='GameDetailsCatBtnContainer'>

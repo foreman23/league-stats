@@ -34,7 +34,7 @@ function RankPill({ rank }) {
   return <span className={'so-rankpill' + (m.silver ? ' so-silver' : '')}>{m.pill}</span>;
 }
 
-function StandoutDetail({ s, version, platformId }) {
+function StandoutDetail({ s, version, platformId, isMe }) {
   const m = RANK_META[s.rank];
   return (
     <div className="so-detail">
@@ -45,6 +45,7 @@ function StandoutDetail({ s, version, platformId }) {
         <SummonerName participant={s.player} version={version} platformId={platformId} className="so-name">
           {s.name}
         </SummonerName>
+        {isMe && <span className={'you-chip ' + (s.side === 'blue' ? 'you-blue' : 'you-purple')}>you</span>}
         <span className="so-champ">{s.champ}</span>
       </div>
       <div className="so-stats">
@@ -56,10 +57,14 @@ function StandoutDetail({ s, version, platformId }) {
           <span className="so-v">{s.k}<span className="so-sl">/</span>{s.d}<span className="so-sl">/</span>{s.a}</span>
           <span className="so-l">K / D / A</span>
         </div>
+        <div className="so-stat">
+          <span className="so-v">{s.cs}</span>
+          <span className="so-l">CS</span>
+        </div>
         {s.kp != null && (
           <div className="so-stat">
             <span className="so-v">{s.kp}%</span>
-            <span className="so-l">Kill part.</span>
+            <span className="so-l">KP</span>
           </div>
         )}
       </div>
@@ -70,9 +75,10 @@ function StandoutDetail({ s, version, platformId }) {
   );
 }
 
-export default function StandoutsCard({ standouts, version, platformId }) {
+export default function StandoutsCard({ standouts, version, platformId, viewerId }) {
   const [sel, setSel] = useState(0);
   const cur = standouts[sel];
+  const isMe = (s) => viewerId != null && String(s.player?.participantId) === String(viewerId);
 
   return (
     <div className={'so-card so-rank-' + cur.rank}>
@@ -88,10 +94,11 @@ export default function StandoutsCard({ standouts, version, platformId }) {
             >
               <Portrait s={s} />
               <RankPill rank={s.rank} />
+              {isMe(s) && <span className={'you-chip so-you ' + (s.side === 'blue' ? 'you-blue' : 'you-purple')}>you</span>}
             </button>
           ))}
         </div>
-        <StandoutDetail s={cur} version={version} platformId={platformId} />
+        <StandoutDetail s={cur} version={version} platformId={platformId} isMe={isMe(cur)} />
       </div>
     </div>
   );

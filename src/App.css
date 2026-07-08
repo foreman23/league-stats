@@ -424,70 +424,37 @@ body,
     white-space: nowrap;
 }
 
-/* Lane matchup hover tooltip content (LaneMatchupTooltip.js) — winning side
-   stacked above losing side with a "vs" divider, color-coded by team. */
-.laneMatchupTooltip {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    padding: 2px;
+/* Lane matchup hover card (LaneMatchupTooltip.js) — header with the lane +
+   verdict, then winner side stacked above loser side; each player a ringed
+   champ portrait + name/champion + KDA/CS at 15. Rendered on the dark
+   StyledTooltip surface. All `lmt-` prefixed. */
+.lmt { display: flex; flex-direction: column; min-width: 210px; padding: 4px 2px 2px; }
+.lmt-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+    padding: 0 2px 7px; margin-bottom: 7px; border-bottom: 1px solid rgba(255, 255, 255, .12);
 }
+.lmt-lane { font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: #B0B6C0; }
+.lmt-res { font-size: 11.5px; font-weight: 700; color: #E7E9EE; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
-.laneMatchupRow {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.lmt-side { display: flex; flex-direction: column; gap: 6px; }
+.lmt-side.lmt-lost { opacity: .62; }
+
+.lmt-row { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; cursor: pointer; }
+.lmt-ic {
+    width: 30px; height: 30px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+    border: 2px solid #888; display: block;
 }
+.lmt-id { display: flex; flex-direction: column; min-width: 0; margin-right: auto; }
+.lmt-name { font-size: 12.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
+.lmt-row:hover .lmt-name { text-decoration: underline; }
+.lmt-champ { font-size: 10.5px; color: #B0B6C0; line-height: 1.2; white-space: nowrap; }
+.lmt-stats { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; }
+.lmt-kda { font-size: 12px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+.lmt-cs { font-size: 10.5px; color: #B0B6C0; font-variant-numeric: tabular-nums; }
 
-/* Loser side dimmed; the winner side carries a trophy in the outcome slot. */
-.laneMatchupRow--lost {
-    opacity: 0.5;
-}
-
-.laneMatchupOutcome {
-    width: 16px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.laneMatchupChip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-}
-
-.laneMatchupChip:hover .laneMatchupName {
-    text-decoration: underline;
-}
-
-.laneMatchupIcon {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-}
-
-.laneMatchupName {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: #ffffff;
-    white-space: nowrap;
-}
-
-.laneMatchupVs {
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #9aa0a6;
-    margin: 5px 0 5px 58px;
+.lmt-vs {
+    font-size: 9.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: #7C828D; margin: 5px 0; padding-left: 40px;
 }
 
 .matchSummaryPlayerLink {
@@ -680,63 +647,15 @@ body,
     }
 }
 
-.BuildSectionItemImg {
-    height: 40px;
-    width: 40px;
-    border-radius: 5px;
-    margin: 2px;
-}
 
-.BuildSectionSkillLetter {
-    width: 40px !important;
-    height: 40px !important;
-    font-weight: bold !important;
-    margin: 5px !important;
-    font-size: 1.75rem !important;
-    padding: 0 !important;
-    text-align: center !important;
-    margin-bottom: 0px !important;
-    line-height: 38px !important;
-    border-top-left-radius: 5px !important;
-    border-top-right-radius: 5px !important;
-    overflow: hidden !important;
-    white-space: nowrap !important;
-}
 
-.BuildSectionSkillIcon {
-    height: 40px;
-    width: 40px;
-    margin: 5px;
-    margin-top: 0px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
 
 /* medium monitor screens */
 @media only screen and (min-width: 1201px) and (max-width: 1920px) {
 
-    .BuildSectionSkillLetter {
-        width: 40px;
-        height: 40px;
-        margin: 3px !important;
-        margin-bottom: 0px !important;
-    }
 
-    .BuildSectionSkillIcon {
-        height: 40px;
-        width: 40px;
-        margin: 3px;
-        margin-top: 0px;
-    }
 
-    .BuildSectionItemImg {
-        height: 32px;
-        width: 32px;
-    }
 
-    .BuildsChampPic {
-        width: 56px !important;
-    }
 
     .displayGameTeamChamps {
         width: 24px;
@@ -1331,25 +1250,8 @@ body,
     border-radius: 10px;
 }
 
-.BuildsBox2 {
-    width: 65%;
-    display: flex;
-    padding: 20px;
-    box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.25);
-    background-color: #FFFFFF;
-    flex-direction: column;
-    border: 1px solid #BBBBBB;
-    border-radius: 10px;
-}
 
-.BuildsChampPicsContainer {
-    display: flex;
-    align-items: center;
-}
 
-.BuildsChampPic {
-    width: 64px;
-}
 
 .GraphSectionGoldAdvantage {
     width: 65%;
@@ -2220,17 +2122,8 @@ li {
         text-align: center !important;
     }
 
-    .BuildsChampPic {
-        width: 48px;
-    }
 
-    .BuildsChampPicsContainer {
-        flex-direction: column;
-    }
 
-    .BuildsBox2 {
-        width: 85%;
-    }
 
     .BuildsBox {
         min-width: 85%;
@@ -2930,9 +2823,6 @@ li {
         padding-left: 2px;
     }
 
-    .BuildsChampPic {
-        width: 42px;
-    }
 
     .gameDetailsMatchSummaryGraph {
         align-content: center;
@@ -2975,9 +2865,6 @@ li {
         min-width: 90%;
     }
 
-    .BuildsBox2 {
-        min-width: 90%;
-    }
 
     .TimelineSubContainer {
         width: 90%;
@@ -3197,9 +3084,6 @@ li {
         width: 50%;
     }
 
-    .BuildsChampPic {
-        width: 42px;
-    }
 
     .gameDetailsMatchSummaryGraph {
         align-content: center;
@@ -3242,9 +3126,6 @@ li {
         min-width: 90%;
     }
 
-    .BuildsBox2 {
-        min-width: 90%;
-    }
 
     .TimelineSubContainer {
         width: 90%;
@@ -3389,9 +3270,6 @@ li {
         width: 50%;
     }
 
-    .BuildsChampPic {
-        width: 50px;
-    }
 
     .gameDetailsMatchSummaryGraph {
         align-content: center;
@@ -3407,9 +3285,6 @@ li {
         min-width: 90%;
     }
 
-    .BuildsBox2 {
-        min-width: 90%;
-    }
 
     .TimelineSubContainer {
         width: 90%;
@@ -3522,9 +3397,6 @@ li {
         font-size: 0.6rem !important;
     }
 
-    .BuildsChampPic {
-        width: 42px;
-    }
 
     .displayGameGoldBar {
         width: 70px !important;
@@ -3624,9 +3496,6 @@ li {
         width: 75%;
     }
 
-    .BuildsChampPic {
-        width: 54px !important;
-    }
 
     .matchDetailsObjectiveText {
         font-size: 0.75rem !important;
@@ -3647,9 +3516,6 @@ li {
     }
 
 
-    .BuildsChampPic {
-        width: 48px !important;
-    }
 
     .matchDetailsObjectiveText {
         font-size: 0.688rem !important;
@@ -3657,9 +3523,6 @@ li {
 }
 
 @media only screen and (min-width: 1201px) and (max-width: 1560px) {
-    .BuildsChampPic {
-        width: 46px !important;
-    }
 
     .matchDetailsObjectiveBar {
         width: 32px !important;
@@ -3670,11 +3533,6 @@ li {
     }
 }
 
-@media only screen and (min-width: 1201px) and (max-width: 1516px) {
-    .BuildsChampPic {
-        width: 42px !important;
-    }
-}
 
 @media only screen and (min-width: 1201px) and (max-width: 1428px) {
 
@@ -3682,9 +3540,6 @@ li {
         width: 350px;
     }
 
-    .BuildsChampPic {
-        width: 38px !important;
-    }
 
     .matchDetailsObjectiveBar {
         width: 28px !important;
@@ -3693,13 +3548,7 @@ li {
 
 @media only screen and (min-width: 1201px) and (max-width: 1340px) {
 
-    .BuildsChampPic {
-        width: 32px !important;
-    }
 
-    .BuildsChampPic {
-        width: 54px !important;
-    }
 
     .lanePhaseChampImgLarge {
         max-width: 70px;
@@ -3766,9 +3615,6 @@ li {
         width: 90% !important;
     }
 
-    .BuildsBox2 {
-        width: 90% !important;
-    }
 }
 
 /* Very large screens (4k) */
@@ -3794,9 +3640,6 @@ li {
         margin: auto;
     }
 
-    .BuildsBox2 {
-        margin: auto;
-    }
 
     .GraphSectionGoldAdvantage {
         margin: auto;
@@ -3929,11 +3772,10 @@ li {
     transition: box-shadow .18s ease;
     scroll-margin-top: 80px;
 }
-.lpr-lane-card:hover { box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.3); }
 .lpr-lane-card.lpr-is-draw { background: #F0F2F5; }
 
 /* header: headline + severity (left), gold tier chip (right) */
-.lpr-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.lpr-card-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
 .lpr-headline-wrap { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .lpr-headline { font-size: 18px; font-weight: 700; letter-spacing: -.2px; line-height: 1.2; color: #14171F; }
 .lpr-headline .lpr-t-blue { color: #568CFF; }
@@ -3941,11 +3783,6 @@ li {
 .lpr-lane-icon { height: 21px; width: 21px; object-fit: contain; vertical-align: middle; margin-left: 9px; position: relative; top: -1px; }
 
 /* severity dots */
-.lpr-sev { display: flex; align-items: center; gap: 5px; }
-.lpr-sev .lpr-pip { width: 9px; height: 9px; border-radius: 50%; background: #E7E9EE; }
-.lpr-sev .lpr-pip.lpr-on-blue { background: #568CFF; }
-.lpr-sev .lpr-pip.lpr-on-purple { background: #A35BFF; }
-.lpr-sev .lpr-sev-label { margin-left: 6px; font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: #6B7280; }
 
 /* gold tier chip */
 .lpr-gold-chip {
@@ -3986,6 +3823,14 @@ li {
 .lpr-pname.lpr-purple { color: #8A3FE6; }
 .lpr-pname:hover { text-decoration: underline; }
 .lpr-pchamp { font-size: 12px; color: #6B7280; line-height: 1.2; }
+/* "you" pill next to the viewed player's name */
+.lpr-you {
+    display: inline-block; margin-left: 6px; vertical-align: 1px;
+    font-size: 8.5px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase;
+    color: #fff; padding: 1.5px 6px; border-radius: 999px;
+}
+.lpr-you-blue { background: #0074B7; }
+.lpr-you-purple { background: #8A3FE6; }
 .lpr-role-tag { font-size: 9.5px; font-weight: 700; letter-spacing: .6px; color: #6B7280; }
 .lpr-pstats { display: flex; gap: 10px; margin-top: 3px; font-variant-numeric: tabular-nums; }
 .lpr-side.lpr-left .lpr-pstats { justify-content: flex-end; }
@@ -4143,6 +3988,9 @@ li {
 .bcr-card, .bcr-card * { box-sizing: border-box; }
 .bcr-card {
     width: 100%;
+    /* breathing room above the card when scrollIntoView targets it —
+       generous enough to clear the sticky navbar (~52px) plus a gap */
+    scroll-margin-top: 76px;
     background: #F6F7FA; border: 1px solid rgba(20, 23, 31, .09); border-radius: 10px;
     box-shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 4px 14px rgba(16, 24, 40, .05);
     margin-bottom: 12px; overflow: hidden; transition: box-shadow .18s ease;
@@ -4326,14 +4174,16 @@ li {
 .so-name { font-size: 19px; letter-spacing: -.3px; }
 .so-champ { font-size: 14px; color: #6B7280; }
 
-.so-stats { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.so-stats { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+/* chips (value first, small uppercase label after) — same grammar as the
+   header and match-summary chips */
 .so-stat {
-    display: flex; flex-direction: column; gap: 2px; padding: 9px 14px; border-radius: 9px;
-    background: #EFF1F4; border: 1px solid rgba(20, 23, 31, .09); min-width: 76px;
+    display: inline-flex; align-items: baseline; gap: 6px; padding: 4px 11px; border-radius: 999px;
+    background: #EFF1F4; border: 1px solid rgba(20, 23, 31, .09); white-space: nowrap;
 }
-.so-v { font-size: 17px; font-weight: 700; letter-spacing: -.3px; color: #14171F; font-variant-numeric: tabular-nums; }
+.so-v { font-size: 13px; font-weight: 700; letter-spacing: -.2px; color: #3C4150; font-variant-numeric: tabular-nums; }
 .so-sl { color: #9AA1AD; font-weight: 600; margin: 0 1px; }
-.so-l { font-size: 10.5px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: #6B7280; }
+.so-l { font-size: 9.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: #6B7280; }
 .so-stat.so-accent { background: var(--so-rank-soft); border-color: var(--so-rank-border); }
 .so-stat.so-accent .so-v { color: var(--so-rank-d); }
 .so-stat.so-accent .so-l { color: var(--so-rank-d); opacity: .85; }
@@ -4380,8 +4230,10 @@ li {
 .md-splits { display: flex; flex-direction: column; gap: 14px; margin: 18px 0 6px; }
 .md-split { display: grid; grid-template-columns: 92px 1fr 92px; align-items: center; gap: 14px; }
 .md-sv { font-size: 17px; font-weight: 700; letter-spacing: -.3px; font-variant-numeric: tabular-nums; }
-.md-sv.md-l { text-align: right; color: #0074B7; }
-.md-sv.md-r { text-align: left; color: #8A3FE6; }
+.md-sv.md-l { text-align: right; }
+.md-sv.md-r { text-align: left; }
+.md-sv.md-t-blue { color: #0074B7; }
+.md-sv.md-t-purple { color: #8A3FE6; }
 .md-sv.md-dim { color: #6B7280; font-weight: 600; }
 .md-split-mid { position: relative; }
 .md-split-label { text-align: center; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #6B7280; margin-bottom: 6px; }
@@ -4398,8 +4250,10 @@ li {
     margin: 24px 0 8px; padding-bottom: 8px; border-bottom: 1px solid rgba(20, 23, 31, .09);
 }
 .md-h { font-size: 10.5px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: #6B7280; }
-.md-h.md-l { text-align: right; color: #0074B7; }
-.md-h.md-r { text-align: left; color: #8A3FE6; }
+.md-h.md-l { text-align: right; }
+.md-h.md-r { text-align: left; }
+.md-h.md-t-blue { color: #0074B7; }
+.md-h.md-t-purple { color: #8A3FE6; }
 .md-h.md-c { text-align: center; }
 
 .md-objs { display: flex; flex-direction: column; }
@@ -4421,8 +4275,8 @@ li {
     opacity: 0; transform: scale(.4);
     transition: opacity .3s ease, transform .45s cubic-bezier(.22, 1, .36, 1);
 }
-.md-tally.md-l .md-tick { background: #568CFF; }
-.md-tally.md-r .md-tick { background: #A35BFF; }
+.md-tally.md-team-blue .md-tick { background: #568CFF; }
+.md-tally.md-team-purple .md-tick { background: #A35BFF; }
 .md-tick.md-on { opacity: 1; transform: none; }
 
 .md-obj-label { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 0 6px; }
@@ -4484,7 +4338,7 @@ li {
 .sb-scroll { overflow-x: auto; }
 /* Fills the card edge-to-edge (so the header band is full-width, no side strips).
    The grid columns absorb any extra card width proportionally — see below. */
-.sb-inner { min-width: 862px; }
+.sb-inner { min-width: 878px; }
 
 .sb-row, .sb-header {
     display: grid;
@@ -4492,7 +4346,7 @@ li {
        minmax(base, base-fr): they keep their base width on a snug table and
        grow *proportionally* to fill a wider card, so the slack spreads evenly
        across all of them instead of pooling into one big gap or a wide bar. */
-    grid-template-columns: 250px minmax(56px, 56fr) minmax(78px, 78fr) minmax(104px, 104fr) minmax(74px, 74fr) minmax(78px, 78fr) minmax(64px, 64fr) minmax(118px, 118fr);
+    grid-template-columns: 250px minmax(72px, 72fr) minmax(78px, 78fr) minmax(104px, 104fr) minmax(74px, 74fr) minmax(78px, 78fr) minmax(64px, 64fr) minmax(118px, 118fr);
     align-items: center;
 }
 .sb-row--aram { grid-template-columns: 250px minmax(78px, 78fr) minmax(104px, 104fr) minmax(74px, 74fr) minmax(78px, 78fr) minmax(118px, 118fr); }
@@ -4513,6 +4367,9 @@ li {
 .sb-row { padding: 9px 20px; }
 .sb-row + .sb-row { border-top: 1px solid #F2F3F5; }
 .sb-row:hover { background: #FAFBFC; }
+/* the viewed player's row gets a thin team-colored edge */
+.sb-blue .sb-row.sb-me { box-shadow: inset 3px 0 0 #568CFF; }
+.sb-purple .sb-row.sb-me { box-shadow: inset 3px 0 0 #A35BFF; }
 
 /* identity */
 .sb-ident { display: flex; align-items: center; gap: 9px; min-width: 0; }
@@ -4548,9 +4405,9 @@ li {
 .sb-kda { line-height: 1.2; }
 .sb-kda-line { font-size: 13.5px; font-weight: 600; color: #14171F; }
 .sb-sl { color: #9AA1AD; font-weight: 400; margin: 0 1px; }
-.sb-kda-ratio { font-size: 12px; color: #6B7280; }
-.sb-kda-ratio.sb-good { color: #17754C; font-weight: 600; }
-.sb-dmg { padding-right: 18px; }
+.sb-kda-ratio { font-size: 12px; color: #6B7280; white-space: nowrap; }
+.sb-kda-ratio .sb-good { color: #17754C; font-weight: 600; }
+.sb-dmg { padding-left: 10px; padding-right: 28px; }
 .sb-dmg-v { font-size: 13.5px; font-weight: 600; color: #14171F; }
 .sb-dmg-bar { height: 5px; border-radius: 3px; background: #E7E9EE; margin-top: 5px; overflow: hidden; cursor: default; }
 .sb-dmg-fill { height: 100%; width: 0; border-radius: 3px; transition: width .9s cubic-bezier(.22, 1, .36, 1); }
@@ -4567,3 +4424,328 @@ li {
 .sb-item { width: 26px; height: 26px; border-radius: 6px; display: block; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .14); flex: 0 0 auto; }
 .sb-item-empty { width: 26px; height: 26px; border-radius: 6px; background: #F1F2F4; box-shadow: inset 0 0 0 1px rgba(20, 23, 31, .09); flex: 0 0 auto; }
 .sb-trinket { width: 26px; height: 26px; border-radius: 50%; margin-left: 3px; display: block; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .14); flex: 0 0 auto; }
+
+/* ============================================================================
+   Builds — modernized. All `bd-` prefixed.
+   ========================================================================== */
+/* 65% of GameDetailsContainer — same wrapper level as .StandoutContainer /
+   #DetailsAnchor / .sb-wrap, so the card lines up with the other sections.
+   align-items:center centers the card's ±21px overflow symmetrically. */
+.bd-wrap { width: 65%; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+/* stretch the section header to the wrap's full width so it sits on the left
+   margin (its legacy min-width:65% would otherwise center-shrink in the wrap) */
+.bd-wrap .BuildsBox { min-width: 100%; }
+.bd-card, .bd-card * { box-sizing: border-box; }
+.bd-card {
+    /* match the Match Summary card (.GameDetailsBox): content-box + min-width
+       100% so it overflows its 65% container by its 20px horizontal padding. */
+    box-sizing: content-box;
+    min-width: 100%;
+    background: #fff; border: 1px solid #BBBBBB; border-radius: 10px;
+    box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.25);
+    padding: 22px 20px 24px;
+}
+
+/* selected player header */
+.bd-who { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-bottom: 16px; }
+.bd-name { font-size: 19px; font-weight: 700; letter-spacing: -.3px; text-decoration: none; }
+.bd-name:hover { text-decoration: underline; }
+.bd-champ { font-size: 14px; color: #6B7280; }
+
+/* champion picker: two team groups of circular ring portraits */
+.bd-picker { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-bottom: 6px; }
+.bd-team { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.bd-team + .bd-team { padding-left: 22px; border-left: 1px solid #E7E9EE; }
+.bd-pick {
+    position: relative; border: 0; padding: 0; background: none; cursor: pointer;
+    display: inline-flex; border-radius: 50%;
+    transition: transform .15s ease;
+}
+.bd-pick-img {
+    width: 46px; height: 46px; border-radius: 50%; object-fit: cover; display: block;
+    border: 3px solid var(--bd-ring, #888);
+    filter: grayscale(1) brightness(.97); opacity: .8;
+    transition: filter .15s ease, opacity .15s ease;
+}
+.bd-pick:hover .bd-pick-img { filter: grayscale(.4); opacity: 1; }
+.bd-pick.bd-active { transform: scale(1.12); }
+.bd-pick.bd-active .bd-pick-img { filter: none; opacity: 1; box-shadow: 0 2px 8px rgba(0, 0, 0, .28); }
+.bd-pick-level {
+    position: absolute; bottom: -3px; right: -3px; z-index: 2; min-width: 18px; height: 18px; padding: 0 4px;
+    border-radius: 999px; background: var(--bd-ring, #2C3140); color: #fff; font-size: 10.5px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #fff;
+}
+/* "YOU" badge on the viewed player's portrait */
+.bd-pick-you {
+    position: absolute; top: -7px; left: 50%; transform: translateX(-50%); z-index: 2;
+    font-size: 8.5px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase;
+    color: #fff; background: var(--bd-ring, #2C3140); padding: 1.5px 6px; border-radius: 999px;
+    box-shadow: 0 0 0 1.5px #fff;
+}
+
+/* section subheads inside the card */
+.bd-subhead {
+    margin: 22px 0 10px; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: #6B7280;
+}
+
+/* skill order: Q/W/E/R rows x 18 level columns */
+.bd-skill-scroll { overflow-x: auto; }
+.bd-skill-grid { display: flex; flex-direction: column; gap: 5px; min-width: 640px; }
+.bd-skill-row { display: flex; align-items: center; gap: 4px; }
+.bd-skill-head { display: flex; align-items: center; gap: 6px; flex: 0 0 58px; }
+.bd-skill-icon { width: 24px; height: 24px; border-radius: 6px; display: block; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .14); }
+.bd-skill-icon-empty { background: #F1F2F4; }
+.bd-skill-key { font-size: 12px; font-weight: 700; width: 14px; text-align: center; }
+.bd-k-q { color: #2F6FD6; }
+.bd-k-w { color: #2E8F83; }
+.bd-k-e { color: #8A6D1F; }
+.bd-k-r { color: #3C4150; }
+.bd-cell {
+    flex: 1 0 26px; height: 26px; border-radius: 6px; background: #F4F5F7;
+    box-shadow: inset 0 0 0 1px rgba(20, 23, 31, .06);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11.5px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.bd-skill-row:nth-child(1) .bd-cell.bd-on { background: #EAF1FC; color: #2F6FD6; box-shadow: inset 0 0 0 1px #CBDDF6; }
+.bd-skill-row:nth-child(2) .bd-cell.bd-on { background: #E7F5F3; color: #2E8F83; box-shadow: inset 0 0 0 1px #C4E6E1; }
+.bd-skill-row:nth-child(3) .bd-cell.bd-on { background: #F7F1DC; color: #8A6D1F; box-shadow: inset 0 0 0 1px #EBDCAE; }
+.bd-cell.bd-on.bd-ult { background: #3C4150; color: #fff; box-shadow: none; }
+
+/* item build path */
+.bd-path { display: flex; align-items: center; flex-wrap: wrap; row-gap: 14px; }
+.bd-path-seg { display: flex; align-items: center; }
+.bd-step {
+    display: flex; flex-direction: column; gap: 5px; align-items: center;
+    background: #F6F7FA; border: 1px solid rgba(20, 23, 31, .09); border-radius: 9px;
+    padding: 8px 9px 6px;
+}
+.bd-step-items { display: flex; gap: 4px; }
+.bd-item { width: 28px; height: 28px; border-radius: 6px; display: block; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .14); }
+.bd-step-time { font-size: 10px; font-weight: 700; letter-spacing: .5px; color: #6B7280; font-variant-numeric: tabular-nums; }
+.bd-chev { color: #B0B6C0; margin: 0 6px; flex: 0 0 auto; }
+
+@media (max-width: 680px) {
+    .bd-card { padding: 16px 14px 18px; }
+    .bd-pick-img { width: 40px; height: 40px; }
+    .bd-team { gap: 7px; }
+    .bd-picker { gap: 14px; }
+    .bd-team + .bd-team { padding-left: 14px; }
+}
+
+/* ============================================================================
+   Match Summary story — headline + lede + storyline chips. All `ms-` prefixed.
+   ========================================================================== */
+.ms-story { margin: 10px 16px 0; }
+.ms-headline { margin: 0 0 10px; font-size: 22px; font-weight: 800; letter-spacing: -.4px; color: #14171F; line-height: 1.2; }
+.ms-lede { margin: 0 0 4px; font-size: 14px; line-height: 1.6; color: #3C4150; }
+.ms-story .ms-name { font-weight: 700; text-decoration: none; }
+.ms-story .ms-name:hover { text-decoration: underline; }
+/* lane-phrase links inside the lede keep the tooltip but read as part of the
+   sentence (dotted underline instead of the old solid one) */
+.ms-lede .matchSummaryLaneLink { text-decoration: underline dotted; text-underline-offset: 3px; cursor: pointer; }
+
+.ms-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.ms-chip {
+    font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px;
+    background: #F1F2F4; color: #3C4150; border: 1px solid rgba(20, 23, 31, .08);
+    font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: 5px;
+    white-space: nowrap;
+}
+.ms-chip.ms-good { background: #E4F6EC; color: #17754C; border-color: #C8EAD6; }
+.ms-chip.ms-bad { background: #FBEDEF; color: #B14457; border-color: #F2D4D9; }
+.ms-chip.ms-click { cursor: pointer; }
+.ms-chip.ms-click:hover { filter: brightness(.96); }
+/* chips wrapped in LaneMatchupTooltip render inside a <u> trigger — the chip
+   itself is the visual; suppress the underline */
+.ms-chips .matchSummaryLaneLink { text-decoration: none; }
+
+/* key moments — compact icon tiles in a two-column grid under the chips */
+.ms-moments { margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(20, 23, 31, .09); }
+.ms-mhead { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #6B7280; margin-bottom: 8px; }
+.ms-mgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.ms-mtile {
+    display: flex; align-items: center; gap: 9px; min-width: 0;
+    background: #F6F7FA; border: 1px solid rgba(20, 23, 31, .07); border-radius: 8px;
+    padding: 7px 10px;
+}
+.ms-mic {
+    flex: 0 0 26px; width: 26px; height: 26px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+.ms-mic.ms-mblue { background: #E0EBFF; color: #3D6FD6; }
+.ms-mic.ms-mpurple { background: #F0E4FF; color: #8A3FE6; }
+.ms-mbody { display: flex; flex-direction: column; min-width: 0; }
+.ms-mtile-click { cursor: pointer; transition: background .15s, border-color .15s; }
+.ms-mtile-click:hover { background: #EFF1F5; border-color: rgba(20, 23, 31, .16); }
+
+/* Key Moment jump: the target card darkens the INSTANT the tile is clicked
+   (fast 80ms transition in), stays dim through the scroll, then eases back to
+   normal (550ms) once the scroll settles — see BattleCard's focusSignal effect. */
+.bcr-card { transition: background-color .55s ease; }
+.bcr-card.bcr-dimmed { background-color: var(--bcr-dim-bg, #E0E3E9); transition: background-color .08s ease; }
+.bcr-card.bcr-win-blue { --bcr-dim-bg: #D6E2F8; }
+.bcr-card.bcr-win-purple { --bcr-dim-bg: #E6DAF8; }
+.ms-mtitle { font-size: 12px; font-weight: 700; color: #14171F; line-height: 1.25; white-space: nowrap; }
+.ms-msub { font-size: 11.5px; color: #6B7280; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.ms-t-blue { color: #0074B7; font-weight: 700; }
+.ms-t-purple { color: #8A3FE6; font-weight: 700; }
+
+@media (max-width: 680px) {
+    .ms-mgrid { grid-template-columns: 1fr; }
+}
+
+/* scroll targets clear the sticky navbar (~52px) plus a breathing gap */
+#SummaryAnchor, #DetailsAnchor, #LaningAnchor, #GraphsAnchor, #TeamfightsAnchor, #BuildsAnchor,
+.lpr-lane-card {
+    scroll-margin-top: 64px;
+}
+
+/* ============================================================================
+   Shared "you" chip — marks the viewed player in player lists.
+   ========================================================================== */
+.you-chip {
+    display: inline-block; flex: 0 0 auto;
+    font-size: 8.5px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase;
+    color: #fff; padding: 1.5px 6px; border-radius: 999px; vertical-align: 1px;
+}
+.you-chip.you-blue { background: #0074B7; }
+.you-chip.you-purple { background: #8A3FE6; }
+/* standouts rail avatar badge */
+.so-item { position: relative; }
+.so-item .so-you { position: absolute; top: -6px; right: -3px; z-index: 3; box-shadow: 0 0 0 1.5px #fff; }
+/* scoreboard: name + chip on one line, name keeps its ellipsis */
+.sb-nameline { display: flex; align-items: center; gap: 5px; min-width: 0; }
+
+/* ============================================================================
+   Site navbar (Navbar.js) — slim white bar matching the sticky context bar.
+   ========================================================================== */
+.nvb {
+    position: sticky; top: 0; z-index: 1200;
+    background: #fff; border-bottom: 1px solid rgba(20, 23, 31, .12);
+}
+.nvb-inner { display: flex; align-items: center; gap: 14px; max-width: 1240px; margin: 0 auto; padding: 8px 16px; }
+.nvb-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.nvb-brand img { width: 34px; display: block; }
+.nvb-brand span { font-size: 17px; font-weight: 800; letter-spacing: -.3px; color: #14171F; }
+
+/* the match context that fades into the bar once the page header scrolls away */
+.nvb-ctx {
+    display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
+    opacity: 0; transform: translateY(6px); pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+}
+.nvb-ctx.nvb-ctx-show { opacity: 1; transform: none; pointer-events: auto; }
+
+/* shared search / region / favorites cluster (NavSearch.js) */
+.ns { display: flex; align-items: center; gap: 8px; }
+.ns .ns-region { height: 36px; }
+.ns .ns-input { width: 300px; }
+.ns.ns-compact .ns-input { width: 180px; }
+.ns .ns-btn { color: #3C4150; padding: 7px; }
+.ns .ns-btn:hover { background: #F1F2F4; }
+@media (max-width: 680px) {
+    .ns .ns-input { width: 150px; }
+    .nvb-brand span { display: none; }
+}
+
+/* match context pieces rendered inside the navbar's .nvb-ctx section */
+.mcb-champ { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--mcb-ring, #888); object-fit: cover; flex: 0 0 auto; }
+.mcb-name { font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 190px; }
+.mcb-name:hover { text-decoration: underline; }
+.mcb-team, .mcb-res {
+    font-size: 10px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex: 0 0 auto;
+}
+.mcb-team.mcb-blue { color: #fff; background: #0074B7; }
+.mcb-team.mcb-purple { color: #fff; background: #8A3FE6; }
+.mcb-res.mcb-win { color: #17754C; background: #E4F6EC; }
+.mcb-res.mcb-loss { color: #B14457; background: #FBEDEF; }
+.mcb-nav { margin-left: auto; display: flex; gap: 4px; }
+.mcb-nav button {
+    border: 0; background: transparent; font: inherit; font-size: 12.5px; font-weight: 600;
+    color: #3C4150; padding: 5px 10px; border-radius: 7px; cursor: pointer;
+}
+.mcb-nav button:hover { background: #F1F2F4; color: #14171F; }
+@media (max-width: 1200px) {
+    .mcb-nav { display: none; }
+}
+@media (max-width: 680px) {
+    .mcb-name { max-width: 110px; }
+    .mcb-res { display: none; }
+}
+
+/* Match Summary gold-lead chart (MatchStoryGraph.js). All `msg-` prefixed. */
+.msg-root { display: flex; flex-direction: column; height: 100%; min-height: 300px; width: 100%; }
+.msg-head {
+    font-size: 13px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #3C4150;
+    padding-bottom: 10px; border-bottom: 1px solid rgba(20, 23, 31, .09); margin-bottom: 12px;
+}
+/* position:relative + absolutely-positioned svg: the chart renders INTO the
+   measured box without contributing to its height — otherwise the
+   ResizeObserver->svg->taller-box cycle grows the card infinitely */
+.msg-wrap { flex: 1; min-height: 220px; position: relative; }
+.msg-wrap svg { position: absolute; inset: 0; display: block; }
+/* trace tooltip — follows the hovered minute along the line */
+.msg-tip {
+    position: absolute; transform: translate(-50%, -100%); z-index: 2; pointer-events: none;
+    background: #2C3140; color: #fff; font-size: 11px; font-weight: 600;
+    padding: 4px 9px; border-radius: 6px; white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .3); font-variant-numeric: tabular-nums;
+}
+.msg-tip-t { color: #B0B6C0; margin-right: 7px; }
+.msg-tip-blue { color: #8FB8FF; }
+.msg-tip-purple { color: #C9A6FF; }
+
+/* moment fragments (teamSpan / SummonerName) reuse the light-surface team
+   colors — brighten them when they render inside a dark MUI tooltip (the
+   chart's key-moment pins), where #8A3FE6 purple is too dark to read */
+.MuiTooltip-tooltip .ms-t-blue { color: #8FB8FF; }
+.MuiTooltip-tooltip .ms-t-purple { color: #C9A6FF; }
+.MuiTooltip-tooltip .ms-name { filter: brightness(1.75); }
+
+.msg-legend { display: flex; gap: 14px; justify-content: center; margin-top: 8px; flex-wrap: wrap; }
+.msg-legend span { font-size: 10.5px; font-weight: 600; color: #6B7280; display: inline-flex; align-items: center; gap: 5px; }
+.msg-swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+@media (max-width: 680px) {
+    .ms-headline { font-size: 19px; }
+}
+
+/* ============================================================================
+   Match header — name + verdict pill, role line, stat tiles. All `hd-` prefixed.
+   ========================================================================== */
+.hd-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 10px; }
+.hd-name { font-size: 26px; font-weight: 800; letter-spacing: -.4px; text-decoration: none; line-height: 1.2; }
+.hd-name:hover { text-decoration: underline; }
+.hd-vpill {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700;
+    letter-spacing: .7px; text-transform: uppercase; padding: 4px 11px; border-radius: 999px;
+}
+.hd-vpill.hd-win { color: #17754C; background: #E4F6EC; }
+.hd-vpill.hd-loss { color: #B14457; background: #FBEDEF; }
+
+.hd-subline { margin-top: 4px; font-size: 14.5px; color: #3C4150; }
+.hd-subline b { font-weight: 700; }
+.hd-t-blue { color: #0074B7; font-weight: 700; }
+.hd-t-purple { color: #8A3FE6; font-weight: 700; }
+
+.hd-chips { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+.hd-chip {
+    display: inline-flex; align-items: baseline; font-size: 12.5px; font-weight: 700;
+    padding: 4px 10px; border-radius: 999px; background: #F1F2F4; color: #3C4150;
+    border: 1px solid rgba(20, 23, 31, .08); font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.hd-sl { color: #9AA1AD; font-weight: 500; margin: 0 1.5px; }
+.hd-cl { font-size: 9.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: #6B7280; margin-left: 5px; }
+.hd-chip.hd-acc-win { background: #E4F6EC; border-color: #C8EAD6; color: #17754C; }
+.hd-chip.hd-acc-win .hd-cl { color: #17754C; opacity: .85; }
+.hd-chip.hd-acc-loss { background: #FBEDEF; border-color: #F2D4D9; color: #B14457; }
+.hd-chip.hd-acc-loss .hd-cl { color: #B14457; opacity: .85; }
+
+@media (max-width: 900px) {
+    .hd-top { justify-content: center; }
+    .hd-subline { text-align: center; }
+    .hd-chips { justify-content: center; }
+    .hd-name { font-size: 22px; }
+}

@@ -3,7 +3,7 @@ import { buildStandouts } from './standoutsPhase/standoutAdapter';
 import StandoutsCard from './standoutsPhase/StandoutsCard';
 
 const Standout = (props) => {
-  const { gameData, champsJSON, dataDragonVersion } = props;
+  const { gameData, champsJSON, dataDragonVersion, playerData } = props;
 
   const standouts = buildStandouts(gameData, champsJSON, dataDragonVersion);
   if (!standouts.length) return null;
@@ -13,6 +13,7 @@ const Standout = (props) => {
       standouts={standouts}
       version={dataDragonVersion}
       platformId={gameData.info.platformId}
+      viewerId={playerData?.participantId}
     />
   );
 };

@@ -5,6 +5,9 @@ import StyledTooltip from '../StyledTooltip';
 // shared center axis. Split bars for kills/gold on top, an objectives table of
 // discrete tally ticks (one tick per objective, shared unit scale, growing
 // outward from the center labels), and a bans card.
+//
+// Sides are VIEWER-RELATIVE: the viewed player's team renders on the LEFT
+// (like the lane cards); team colors still follow the actual team.
 
 // Reveal flag — uses setTimeout (NOT requestAnimationFrame, which is paused in
 // hidden/background iframes and left the bars stuck at width:0). End-state is
@@ -32,26 +35,28 @@ const Chk = (
   <span className="md-chk"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span>
 );
 
-// ---- top split bar (kills / gold) ----
-function SplitBar({ label, blue, purple, fmt }) {
+const TEAM_LABEL = { blue: 'Blue', purple: 'Purple' };
+
+// ---- top split bar (kills / gold); leftSide/rightSide are team names ----
+function SplitBar({ label, leftSide, rightSide, left, right, fmt }) {
   const grown = useGrown();
-  const total = blue + purple || 1;
-  const bp = grown ? (blue / total) * 100 : 50;
-  const pp = grown ? (purple / total) * 100 : 50;
+  const total = left + right || 1;
+  const lp = grown ? (left / total) * 100 : 50;
+  const rp = grown ? (right / total) * 100 : 50;
   const f = fmt || ((n) => n.toLocaleString());
-  const blueWin = blue >= purple;
+  const leftWin = left >= right;
   return (
     <div className="md-split">
-      <span className={'md-sv md-l' + (blueWin ? '' : ' md-dim')}>{f(blue)}</span>
+      <span className={`md-sv md-l md-t-${leftSide}` + (leftWin ? '' : ' md-dim')}>{f(left)}</span>
       <div className="md-split-mid">
         <div className="md-split-label">{label}</div>
         <div className="md-bar">
-          <div className="md-seg md-blue" style={{ width: bp + '%' }} />
+          <div className={`md-seg md-${leftSide}`} style={{ width: lp + '%' }} />
           <div className="md-seg md-gap" />
-          <div className="md-seg md-purple" style={{ width: pp + '%' }} />
+          <div className={`md-seg md-${rightSide}`} style={{ width: rp + '%' }} />
         </div>
       </div>
-      <span className={'md-sv md-r' + (!blueWin ? '' : ' md-dim')}>{f(purple)}</span>
+      <span className={`md-sv md-r md-t-${rightSide}` + (!leftWin ? '' : ' md-dim')}>{f(right)}</span>
     </div>
   );
 }
@@ -60,40 +65,43 @@ function SplitBar({ label, blue, purple, fmt }) {
 // Every row shares the same unit scale (1 tick = 1 objective), so tally length
 // is directly comparable across rows — unlike per-row-normalized bars. Ticks
 // grow outward from the center labels with a small inside-out stagger.
-function Tally({ n, side, grown, secured }) {
+// `pos` (l|r) controls justification/stagger; `team` controls tick color.
+function Tally({ n, pos, team, grown, secured }) {
   return (
-    <div className={'md-tally md-' + side}>
-      {side === 'l' && secured && Chk}
+    <div className={`md-tally md-${pos} md-team-${team}`}>
+      {pos === 'l' && secured && Chk}
       {Array.from({ length: n }, (_, i) => (
         <span
           key={i}
           className={'md-tick' + (grown ? ' md-on' : '')}
-          style={{ transitionDelay: (side === 'l' ? n - 1 - i : i) * 45 + 'ms' }}
+          style={{ transitionDelay: (pos === 'l' ? n - 1 - i : i) * 45 + 'ms' }}
         />
       ))}
-      {side === 'r' && secured && Chk}
+      {pos === 'r' && secured && Chk}
     </div>
   );
 }
 
 // ---- one objective row: [tallies] [count] [icon+label] [count] [tallies] ----
-function ObjRow({ obj }) {
+function ObjRow({ obj, leftSide, rightSide }) {
   const grown = useGrown();
-  const { blue, purple, label, key, kind } = obj;
-  const none = blue === 0 && purple === 0;
-  const securedSide = kind === 'binary' && !none ? (purple > blue ? 'purple' : 'blue') : null;
+  const { label, key, kind } = obj;
+  const left = obj[leftSide];
+  const right = obj[rightSide];
+  const none = left === 0 && right === 0;
+  const securedPos = kind === 'binary' && !none ? (right > left ? 'r' : 'l') : null;
   const dash = kind === 'binary' && none; // untaken binary objective reads as "–"
 
   return (
     <div className={'md-obj' + (kind === 'binary' ? ' md-binary' : '')}>
-      <Tally n={blue} side="l" grown={grown} secured={securedSide === 'blue'} />
-      <span className={'md-val md-l ' + (blue === 0 ? 'md-zero' : 'md-blue')}>{dash ? '–' : blue}</span>
+      <Tally n={left} pos="l" team={leftSide} grown={grown} secured={securedPos === 'l'} />
+      <span className={'md-val md-l ' + (left === 0 ? 'md-zero' : `md-${leftSide}`)}>{dash ? '–' : left}</span>
       <div className="md-obj-label">
         <span className="md-ic">{OBJ_ICON[key]}</span>
         <span className={'md-nm' + (none ? ' md-none' : '')}>{label}</span>
       </div>
-      <span className={'md-val md-r ' + (purple === 0 ? 'md-zero' : 'md-purple')}>{dash ? '–' : purple}</span>
-      <Tally n={purple} side="r" grown={grown} secured={securedSide === 'purple'} />
+      <span className={'md-val md-r ' + (right === 0 ? 'md-zero' : `md-${rightSide}`)}>{dash ? '–' : right}</span>
+      <Tally n={right} pos="r" team={rightSide} grown={grown} secured={securedPos === 'r'} />
     </div>
   );
 }
@@ -109,57 +117,61 @@ function Ban({ b, side }) {
   );
 }
 
-// Mirrors the diverging card above: blue bans on the left half, purple on the
-// right, with the label in the same 132px center spine as the objectives.
-function BansRow({ bans }) {
+// Mirrors the diverging card above: the viewer's team's bans on the left half,
+// the opponent's on the right, label in the same 132px center spine.
+function BansRow({ bans, leftSide, rightSide }) {
   if (!bans.blue.length && !bans.purple.length) return null;
   return (
     <div className="md-bans">
       <div className="md-ban-group md-l">
-        {bans.blue.map((b, i) => <Ban key={i} b={b} side="blue" />)}
+        {bans[leftSide].map((b, i) => <Ban key={i} b={b} side={leftSide} />)}
       </div>
       <span className="md-bl">Bans</span>
       <div className="md-ban-group md-r">
-        {bans.purple.map((b, i) => <Ban key={i} b={b} side="purple" />)}
+        {bans[rightSide].map((b, i) => <Ban key={i} b={b} side={rightSide} />)}
       </div>
     </div>
   );
 }
 
-export default function MatchDetails({ match }) {
-  const blueWin = match.winner === 'blue';
+export default function MatchDetails({ match, viewerTeam = 100 }) {
+  // viewer's team on the left, opponent on the right
+  const L = viewerTeam === 200 ? 'purple' : 'blue';
+  const R = L === 'blue' ? 'purple' : 'blue';
+  const leftWin = match.winner === L;
+
   return (
     <div className="md-wrap">
       <div className="md-card">
         <div className="md-teams">
-          <div className="md-team md-blue">
-            <span className="md-tname">Blue Team</span>
-            <span className={'md-tresult' + (blueWin ? ' md-win' : '')}>{blueWin ? 'Victory' : 'Defeat'}</span>
+          <div className={`md-team md-${L}`}>
+            <span className="md-tname">{TEAM_LABEL[L]} Team</span>
+            <span className={'md-tresult' + (leftWin ? ' md-win' : '')}>{leftWin ? 'Victory' : 'Defeat'}</span>
           </div>
           <span className="md-vs">VS</span>
-          <div className="md-team md-purple">
-            <span className="md-tname">Purple Team</span>
-            <span className={'md-tresult' + (!blueWin ? ' md-win' : '')}>{!blueWin ? 'Victory' : 'Defeat'}</span>
+          <div className={`md-team md-${R}`}>
+            <span className="md-tname">{TEAM_LABEL[R]} Team</span>
+            <span className={'md-tresult' + (!leftWin ? ' md-win' : '')}>{!leftWin ? 'Victory' : 'Defeat'}</span>
           </div>
         </div>
 
         <div className="md-splits">
-          <SplitBar label="Kills" blue={match.blue.kills} purple={match.purple.kills} fmt={(n) => n} />
-          <SplitBar label="Gold" blue={match.blue.gold} purple={match.purple.gold} fmt={(n) => n.toLocaleString() + 'g'} />
+          <SplitBar label="Kills" leftSide={L} rightSide={R} left={match[L].kills} right={match[R].kills} fmt={(n) => n} />
+          <SplitBar label="Gold" leftSide={L} rightSide={R} left={match[L].gold} right={match[R].gold} fmt={(n) => n.toLocaleString() + 'g'} />
         </div>
 
         <div className="md-obj-head">
-          <span className="md-h md-l">Blue</span>
+          <span className={`md-h md-l md-t-${L}`}>{TEAM_LABEL[L]}</span>
           <span className="md-h md-c">Objectives</span>
-          <span className="md-h md-r">Purple</span>
+          <span className={`md-h md-r md-t-${R}`}>{TEAM_LABEL[R]}</span>
         </div>
         <div className="md-objs">
-          {match.objectives.map((o) => <ObjRow key={o.key} obj={o} />)}
+          {match.objectives.map((o) => <ObjRow key={o.key} obj={o} leftSide={L} rightSide={R} />)}
         </div>
       </div>
 
       <div className="md-card">
-        <BansRow bans={match.bans} />
+        <BansRow bans={match.bans} leftSide={L} rightSide={R} />
       </div>
     </div>
   );

@@ -98,6 +98,7 @@ function toStandout(player, rank, gameData, champsJSON, version) {
     d: player.deaths,
     a: player.assists,
     kda: +((player.kills + player.assists) / Math.max(1, player.deaths)).toFixed(1),
+    cs: player.totalMinionsKilled + player.neutralMinionsKilled,
     kp: teamKills ? Math.round(((player.kills + player.assists) / teamKills) * 100) : null,
     summary: { lead, detail },
   };
