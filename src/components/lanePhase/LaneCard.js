@@ -32,26 +32,6 @@ function Portrait({ player, size, dim }) {
   );
 }
 
-function SeverityDots({ count, side, draw }) {
-  const mounted = useMounted();
-  const onCls = side === 100 ? ' lpr-on-blue' : side === 200 ? ' lpr-on-purple' : '';
-  return (
-    <span className="lpr-sev" aria-label={`severity ${count} of 5`}>
-      {[0, 1, 2, 3, 4].map((i) => (
-        <span
-          key={i}
-          className={'lpr-pip' + (i < count ? onCls : '')}
-          style={{
-            transform: mounted ? 'scale(1)' : 'scale(0)',
-            transition: `transform .26s cubic-bezier(.34,1.56,.64,1) ${i * 55}ms`,
-          }}
-        />
-      ))}
-      {draw && <span className="lpr-sev-label">Even</span>}
-    </span>
-  );
-}
-
 // Team color / name helpers + the shared gold breakdown shown by both the
 // header chip and the center tug-of-war bar on hover.
 const teamColor = (t) => (t === 100 ? '#568CFF' : '#A35BFF');
@@ -149,6 +129,7 @@ function PlayerRow({ player, sizeSm }) {
         <StyledTooltip placement="top" disableInteractive title={<NameTip player={player} />}>
           <a className={'lpr-pname' + nameCls} href={player.href}>{player.name}</a>
         </StyledTooltip>
+        {player.me && <span className={'lpr-you' + (player.side === 'blue' ? ' lpr-you-blue' : ' lpr-you-purple')}>you</span>}
         <span className="lpr-pchamp">
           {player.champ}{player.role ? <span className="lpr-role-tag"> · {player.role}</span> : null}
         </span>
@@ -392,7 +373,6 @@ export default function LaneCard({ lane }) {
       <div className="lpr-card-head">
         <div className="lpr-headline-wrap">
           <Headline lane={lane} />
-          <SeverityDots count={lane.bubbleCount} side={lane.teamWonLane} draw={draw} />
         </div>
         <GoldChip
           diff={lane.goldDifference}

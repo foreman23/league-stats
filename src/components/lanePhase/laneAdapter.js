@@ -166,6 +166,8 @@ export function toLaneVM(laneDef, statsAt15, ctx) {
   const laners = [...winners, ...losers].map((p) => {
     const vm = toPlayer(p, lr, platformId, champsJSON, dataDragonVersion);
     vm.profilePic = iconUrlById[vm.participantId];
+    // the viewed player gets a small "you" marker on their row
+    vm.me = String(p.participantId) === String(ctx.viewerParticipantId);
     return vm;
   });
 
