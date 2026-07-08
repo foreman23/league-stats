@@ -113,8 +113,12 @@ const Chev = (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
 );
 
-function Header({ battle }) {
+function Header({ battle, viewerTeam }) {
   const { winner, blueKills, purpleKills, noContest } = battle;
+  // score reads viewer's-team-first (colors still follow the actual teams)
+  const score = viewerTeam === 200
+    ? [{ n: purpleKills, cls: 'bcr-purple' }, { n: blueKills, cls: 'bcr-blue' }]
+    : [{ n: blueKills, cls: 'bcr-blue' }, { n: purpleKills, cls: 'bcr-purple' }];
   const outCls = winner === 'blue' ? 'bcr-t-blue' : winner === 'purple' ? 'bcr-t-purple' : 'bcr-t-even';
   const outcome = noContest ? 'No contest' : winner === 'even' ? 'Even trade' : winner === 'blue' ? 'Blue wins' : 'Purple wins';
 
@@ -134,9 +138,9 @@ function Header({ battle }) {
       <span className="bcr-result">
         <span className={'bcr-outcome ' + outCls}>{outcome}</span>
         <span className="bcr-score">
-          <span className="bcr-n bcr-blue">{blueKills}</span>
+          <span className={'bcr-n ' + score[0].cls}>{score[0].n}</span>
           <span className="bcr-dash">–</span>
-          <span className="bcr-n bcr-purple">{purpleKills}</span>
+          <span className={'bcr-n ' + score[1].cls}>{score[1].n}</span>
         </span>
       </span>
       <span className="bcr-title">
@@ -158,10 +162,12 @@ function Header({ battle }) {
   );
 }
 
-export default function BattleCard({ battle, ctx, defaultOpen }) {
+export default function BattleCard({ battle, ctx, defaultOpen, focusSignal }) {
   const [open, setOpen] = useState(!!defaultOpen);
   const [hovered, setHovered] = useState(null);
+  const [dim, setDim] = useState(false);
   const panelRef = useRef(null);
+  const rootRef = useRef(null);
   const [h, setH] = useState(defaultOpen ? 'none' : 0);
   const mounted = useMounted();
 
@@ -170,12 +176,43 @@ export default function BattleCard({ battle, ctx, defaultOpen }) {
     setH(open ? panelRef.current.scrollHeight : 0);
   }, [open]);
 
+  // A Key Moment tile requested this battle: expand and scroll to the card.
+  // The short delay lets the panel start expanding so the scroll lands near
+  // the card's final position.
+  useEffect(() => {
+    if (focusSignal == null) return;
+    setOpen(true);
+    setDim(true); // darken the instant the Key Moment tile is clicked
+    const el = rootRef.current;
+    const t = setTimeout(() => el?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+
+    // Release the dim only once the smooth scroll has actually settled: watch
+    // the card's viewport position each frame until it stops moving. If no
+    // movement ever starts (card already in place), release after a short beat.
+    let raf = 0, started = false, stable = 0, last = null, done = false;
+    const release = () => { if (!done) { done = true; setDim(false); } };
+    const watch = () => {
+      const top = el ? el.getBoundingClientRect().top : 0;
+      if (last !== null) {
+        if (Math.abs(top - last) > 0.5) { started = true; stable = 0; }
+        else if (started) stable += 1;
+      }
+      last = top;
+      if (started && stable >= 6) return release(); // still for ~6 frames
+      raf = requestAnimationFrame(watch);
+    };
+    raf = requestAnimationFrame(watch);
+    const noMove = setTimeout(() => { if (!started) release(); }, 700);
+    const hardStop = setTimeout(release, 2500);
+    return () => { clearTimeout(t); clearTimeout(noMove); clearTimeout(hardStop); cancelAnimationFrame(raf); };
+  }, [focusSignal]);
+
   const mapKills = battle.kills.map(toMapKill);
 
   return (
-    <div className={`bcr-card bcr-win-${battle.winner}${open ? ' bcr-open' : ''}`}>
+    <div ref={rootRef} className={`bcr-card bcr-win-${battle.winner}${open ? ' bcr-open' : ''}${dim ? ' bcr-dimmed' : ''}`}>
       <button className="bcr-head" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
-        <Header battle={battle} />
+        <Header battle={battle} viewerTeam={ctx.viewerTeam} />
       </button>
       <div className="bcr-panel" style={{ maxHeight: h === 'none' ? 'none' : h }}>
         <div className="bcr-body" ref={panelRef}>

@@ -1,7 +1,49 @@
 import { Typography, Grid } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import BattleCard from './battlesPhase/BattleCard';
 import { toBattleVM } from './battlesPhase/battleAdapter';
+import { useBattleFocusRequest } from '../hooks/useBattleFocus';
+
+// The battle-card list + Key Moment focus resolution live in this small
+// component ON PURPOSE: putting hooks directly inside the enormous Battles
+// component makes eslint's react-hooks scope analysis run out of memory.
+function BattleCardList({ teamfights, graphData, ctx }) {
+    // A Key Moment tile requested "the battle at timestamp X": resolve to the
+    // fight containing X (or the nearest within 90s); that card expands and
+    // scrolls itself via its focusSignal prop.
+    const focusReq = useBattleFocusRequest();
+    let focusIdx = null;
+    if (focusReq) {
+        let best = Infinity;
+        teamfights.forEach((f, i) => {
+            const ds = f.details || [];
+            if (!ds.length) return;
+            const s = ds[0].timestamp;
+            const e = ds[ds.length - 1].timestamp;
+            const d = focusReq.ms >= s && focusReq.ms <= e ? 0 : Math.min(Math.abs(focusReq.ms - s), Math.abs(focusReq.ms - e));
+            if (d < best) { best = d; focusIdx = i; }
+        });
+        if (best > 90000) focusIdx = null;
+    }
+    const noMatch = Boolean(focusReq) && focusIdx === null;
+    useEffect(() => {
+        if (noMatch) document.getElementById('TeamfightsAnchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, [focusReq, noMatch]);
+
+    return (
+        <>
+            {teamfights.map((fight, fightIndex) => (
+                <BattleCard
+                    key={fightIndex}
+                    battle={toBattleVM(fight, fightIndex, graphData)}
+                    ctx={ctx}
+                    defaultOpen={fightIndex === 0}
+                    focusSignal={focusIdx === fightIndex ? focusReq.seq : undefined}
+                />
+            ))}
+        </>
+    );
+}
 
 const Battles = (props) => {
 
@@ -1280,14 +1322,11 @@ const Battles = (props) => {
                 </Grid>
 
                 <Grid item xs={12} style={{ width: '100%', marginTop: '18px' }}>
-                    {teamfights.map((fight, fightIndex) => (
-                        <BattleCard
-                            key={fightIndex}
-                            battle={toBattleVM(fight, fightIndex, props.graphData)}
-                            ctx={{ champsJSON, dataDragonVersion, platformId: gameData.info.platformId }}
-                            defaultOpen={fightIndex === 0}
-                        />
-                    ))}
+                    <BattleCardList
+                        teamfights={teamfights}
+                        graphData={props.graphData}
+                        ctx={{ champsJSON, dataDragonVersion, platformId: gameData.info.platformId, viewerTeam: props.playerData?.teamId }}
+                    />
                 </Grid>
                             </Grid>
         </div>
