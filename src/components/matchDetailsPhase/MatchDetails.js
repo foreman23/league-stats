@@ -140,6 +140,10 @@ export default function MatchDetails({ match, viewerTeam = 100 }) {
 
   return (
     <div className="md-wrap">
+      <div className="md-head">
+        <h2>Team Objectives</h2>
+        <p className="md-sub">Kills, gold &amp; objectives, side by side</p>
+      </div>
       <div className="md-card">
         <div className="md-teams">
           <div className={`md-team md-${L}`}>

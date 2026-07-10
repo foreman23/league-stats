@@ -201,11 +201,9 @@ const DetailsTable = (props) => {
   if (playerData.teamId === 200) tables.reverse(); // viewed player's team first
 
   return (
+    // no group title of its own — the scoreboard sits directly under the
+    // "Match Details" section header, which already introduces it
     <div className="sb-wrap">
-      <div className="sb-head">
-        <h2>Match Scoreboard</h2>
-        <p className="sb-sub">Per-player results at the end of the game</p>
-      </div>
       {tables}
     </div>
   );
