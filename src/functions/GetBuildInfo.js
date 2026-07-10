@@ -67,6 +67,11 @@ const getBuildInfo = async (gameData, timelineData, champsJSON, dataDragonVersio
             }
 
             if (event.type === 'SKILL_LEVEL_UP') {
+                // Skip skill events not tied to a tracked player (e.g. participantId 0)
+                if (!skillTimeline[event.participantId - 1]) {
+                    return;
+                }
+
                 const skillObj = {
                     participantId: event.participantId,
                     timestamp: event.timestamp,
