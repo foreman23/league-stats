@@ -142,8 +142,11 @@ const SummonerProfile = () => {
           }
 
           let dateRetrieved = new Date()
-          // get match information
-          const matchResponse = await getMatchInfo(matchRegion, matchId);
+          // get match information — axios rejects on non-2xx (e.g. matches past
+          // Riot's retention 400 at the proxy), so catch and skip that match
+          // instead of letting one bad id reject the whole Promise.all
+          const matchResponse = await getMatchInfo(matchRegion, matchId)
+            .catch((err) => err.response ?? { status: 0 });
           if (matchResponse.status !== 200) {
             return null;
           }
@@ -190,8 +193,9 @@ const SummonerProfile = () => {
           }
 
           let dateRetrieved = new Date()
-          // get match information
-          const matchResponse = await getMatchInfo(matchRegion, matchId);
+          // get match information — catch non-2xx like the initial load above
+          const matchResponse = await getMatchInfo(matchRegion, matchId)
+            .catch((err) => err.response ?? { status: 0 });
           if (matchResponse.status !== 200) {
             return null;
           }
