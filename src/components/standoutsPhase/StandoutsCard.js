@@ -34,7 +34,7 @@ function RankPill({ rank }) {
   return <span className={'so-rankpill' + (m.silver ? ' so-silver' : '')}>{m.pill}</span>;
 }
 
-function StandoutDetail({ s, version, platformId, isMe }) {
+function StandoutDetail({ s, version, platformId }) {
   const m = RANK_META[s.rank];
   return (
     <div className="so-detail">
@@ -45,7 +45,6 @@ function StandoutDetail({ s, version, platformId, isMe }) {
         <SummonerName participant={s.player} version={version} platformId={platformId} className="so-name">
           {s.name}
         </SummonerName>
-        {isMe && <span className={'you-chip ' + (s.side === 'blue' ? 'you-blue' : 'you-purple')}>you</span>}
         <span className="so-champ">{s.champ}</span>
       </div>
       <div className="so-stats">
@@ -98,7 +97,7 @@ export default function StandoutsCard({ standouts, version, platformId, viewerId
             </button>
           ))}
         </div>
-        <StandoutDetail s={cur} version={version} platformId={platformId} isMe={isMe(cur)} />
+        <StandoutDetail s={cur} version={version} platformId={platformId} />
       </div>
     </div>
   );
