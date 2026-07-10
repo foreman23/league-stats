@@ -93,15 +93,19 @@ const generateMatchStory = (gameData, playerData, stats15, graphData, dataDragon
     else if (lr.teamWonLane === viewerTeam) wonL += 1;
     else lostL += 1;
   });
-  let lanePhrase;
-  if (lostL === 4) lanePhrase = 'dropped all four lanes in the opening';
-  else if (wonL === 4) lanePhrase = 'swept all four lanes in the opening';
-  else if (wonL === 3) lanePhrase = 'took three of four lanes in the opening';
-  else if (lostL === 3) lanePhrase = 'dropped three of four lanes in the opening';
-  else if (drawL === 4) lanePhrase = 'laned dead even everywhere';
-  else if (wonL > lostL) lanePhrase = 'came out of the lanes ahead';
-  else if (lostL > wonL) lanePhrase = 'came out of the lanes behind';
-  else lanePhrase = 'split the lanes';
+  // laneOpen is the full start of sentence one — the even cases talk about
+  // the laning phase itself rather than the team
+  const evenLanes = wonL === lostL;
+  let laneOpen;
+  if (lostL === 4) laneOpen = `${teamName} dropped all four lanes in the opening`;
+  else if (wonL === 4) laneOpen = `${teamName} swept all four lanes in the opening`;
+  else if (wonL === 3) laneOpen = `${teamName} took three of four lanes in the opening`;
+  else if (lostL === 3) laneOpen = `${teamName} dropped three of four lanes in the opening`;
+  else if (drawL === 4) laneOpen = 'The laning phase was dead even in every lane';
+  else if (wonL > lostL) laneOpen = `${teamName} came out of the lanes ahead`;
+  else if (lostL > wonL) laneOpen = `${teamName} came out of the lanes behind`;
+  // not "split the lanes" — reads as split-pushing to a League audience
+  else laneOpen = 'The laning phase was even';
 
   // ---- the viewed player's own matchup, woven into the lane clause ----
   const playerRole = playerData.teamPosition === 'UTILITY' ? 'BOTTOM' : playerData.teamPosition;
@@ -138,56 +142,128 @@ const generateMatchStory = (gameData, playerData, stats15, graphData, dataDragon
         gameData={gameData}
         champsJSON={champsJSON}
         dataDragonVersion={dataDragonVersion}
+        viewerTeam={viewerTeam}
         onClick={() => scrollTo(LANE_ANCHOR[playerRole])}
         // the lane chip below covers this role in the hover store; without this
         // opt-out, hovering either one would open both tooltips
         hoverSync={false}
       />
     );
+    // a 2k+ gold gap at 15 (the lane cards' "dominates"/"obliterates" tiers)
+    // upgrades the phrasing from plain won/lost to a stomp
+    const stomped = lr.resTag === 'dominates' || lr.resTag === 'obliterates';
+    const laneGold = fmtGold(lr.goldDifference);
+    // "leading the way" is only earned when this was the team's biggest lane
+    // win — a +900 top lane doesn't lead the way past a +2k bot lane
+    const biggestWin = ROLES.every((r) => {
+      const o = lanes[r];
+      return o.resTag === 'draw' || o.teamWonLane !== viewerTeam || o.goldDifference <= lr.goldDifference;
+    });
     if (playerDrewLane) {
-      weave = <> — {nameLink}{'’'}s matchup with {oppLink} ({oppChamp}) {lanePhraseLink(`stayed even in ${laneNoun}`)}</>;
-    } else if (playerWonLane && wonL >= lostL) {
-      weave = <> — {nameLink} leading the way, {lanePhraseLink(`taking ${laneNoun}`)} from {oppLink} ({oppChamp})</>;
+      // after an "even" opener, "X and Y stayed even" would just repeat the
+      // opening clause — fold the player in as one more example instead
+      weave = evenLanes
+        ? <>, {nameLink}{'’'}s matchup with {oppLink} ({oppChamp}) {lanePhraseLink(`in ${laneNoun}`)} included</>
+        : <>, while {nameLink} and {oppLink} ({oppChamp}) {lanePhraseLink(`stayed even in ${laneNoun}`)}</>;
+    } else if (playerWonLane && wonL > lostL && biggestWin) {
+      weave = stomped
+        ? <> — {nameLink} leading the way, {lanePhraseLink(`running away with ${laneNoun}`)} against {oppLink} ({oppChamp}), up {laneGold} gold by 15</>
+        : <> — {nameLink} leading the way, {lanePhraseLink(`taking ${laneNoun}`)} from {oppLink} ({oppChamp})</>;
+    } else if (playerWonLane && wonL > lostL) {
+      // won their lane, but another lane won bigger — credit without the crown
+      weave = stomped
+        ? <>, with {nameLink} {lanePhraseLink(`running away with ${laneNoun}`)} against {oppLink} ({oppChamp}), up {laneGold} gold by 15</>
+        : <>, with {nameLink} {lanePhraseLink(`taking ${laneNoun}`)} from {oppLink} ({oppChamp})</>;
     } else if (playerWonLane) {
-      weave = <>, though {nameLink} {lanePhraseLink(`got the better of ${laneNoun}`)} against {oppLink} ({oppChamp})</>;
-    } else if (lostL >= wonL) {
-      weave = <> — {nameLink} included, {lanePhraseLink(`giving up ${laneNoun}`)} to {oppLink} ({oppChamp})</>;
+      weave = stomped
+        ? <>, though {nameLink} {lanePhraseLink(`ran away with ${laneNoun}`)} against {oppLink} ({oppChamp}), up {laneGold} gold by 15</>
+        : <>, though {nameLink} {lanePhraseLink(`got the better of ${laneNoun}`)} against {oppLink} ({oppChamp})</>;
+    } else if (lostL > wonL) {
+      weave = stomped
+        ? <> — {nameLink} included, {lanePhraseLink(`falling ${laneGold} gold behind`)} {oppLink} ({oppChamp}) in {laneNoun}</>
+        : <> — {nameLink} included, {lanePhraseLink(`giving up ${laneNoun}`)} to {oppLink} ({oppChamp})</>;
     } else {
-      weave = <>, though {nameLink} {lanePhraseLink(`came up short in ${laneNoun}`)} against {oppLink} ({oppChamp})</>;
+      weave = stomped
+        ? <>, though {nameLink} {lanePhraseLink(`fell ${laneGold} gold behind`)} {oppLink} ({oppChamp}) in {laneNoun}</>
+        : <>, though {nameLink} {lanePhraseLink(`came up short in ${laneNoun}`)} against {oppLink} ({oppChamp})</>;
     }
   }
 
-  // ---- arc clause ----
-  let arc;
+  // ---- second sentence: gold arc + finish. The team is restated as the
+  // subject so the arc can't read as being about the player named in the
+  // lane sentence (the old single-sentence chain lost its subject there) ----
+  const wonAt = surrendered ? `forced the surrender at ${endClock}` : `closed it out at ${endClock}`;
+  const lostAt = surrendered ? `surrendered at ${endClock}` : null; // null -> the opponent finished it
+  let arcSentence;
   if (comeback) {
-    arc = `dug out of a ${fmtGold(maxDeficit)} gold hole after ${minutes[maxDeficitIdx]}:00`;
+    arcSentence = `Down ${fmtGold(maxDeficit)} gold at ${minutes[maxDeficitIdx]}:00, ${teamName} dug all the way back and ${wonAt}.`;
   } else if (slip) {
-    arc = `led by ${fmtGold(maxLead)} gold before the game turned around ${minutes[maxLeadIdx]}:00`;
+    arcSentence = `${teamName} led by ${fmtGold(maxLead)} gold at ${minutes[maxLeadIdx]}:00, but the game flipped and ${lostAt ? `they ${lostAt}` : `${oppTeamName} closed it out at ${endClock}`}.`;
   } else if (wire && win) {
-    arc = fromMin !== null ? `pulled ahead by ${fromMin}:00 and never let go` : 'led from the opening minutes on';
+    arcSentence = fromMin !== null
+      ? `${teamName} pulled ahead by ${fromMin}:00, never let go, and ${wonAt}.`
+      : `${teamName} led from the opening minutes and ${wonAt}.`;
   } else if (wire && !win) {
     const from = fromMin !== null ? `trailed from ${fromMin}:00 on` : 'trailed from the opening minutes on';
-    arc = rallySize >= 2500 ? `${from}, rallying once around ${minutes[rallyIdx]}:00` : from;
+    const joiner = rallySize >= 2500 ? `, rallied briefly around ${minutes[rallyIdx]}:00, but ` : (lostAt ? ' and ' : ', and ');
+    arcSentence = `${teamName} ${from}${joiner}${lostAt ?? `${oppTeamName} closed it out at ${endClock}`}.`;
   } else if (seesaw) {
-    arc = `traded the lead ${leadChanges} times`;
+    const closer = win ? `${teamName} ${wonAt}` : lostAt ? `${teamName} ${lostAt}` : `${oppTeamName} closed it out at ${endClock}`;
+    arcSentence = `The lead changed hands ${leadChanges} times before ${closer}.`;
   } else if (closeGame) {
-    arc = 'stayed within arm’s reach the whole way';
+    const closer = win
+      ? `${teamName} ${surrendered ? `forced the surrender at ${endClock}` : `edged it out at ${endClock}`}`
+      : lostAt ? `${teamName} ${lostAt}` : `${oppTeamName} edged it out at ${endClock}`;
+    arcSentence = `Neither side ever pulled away, but ${closer}.`;
+  } else if (win) {
+    arcSentence = `${teamName} edged ahead in the mid game, held on, and ${wonAt}.`;
   } else {
-    arc = win ? 'edged ahead in the mid game and held on' : 'fell behind in the mid game and never closed the gap';
+    arcSentence = lostAt
+      ? `${teamName} fell behind in the mid game, never closed the gap, and ${lostAt}.`
+      : `${teamName} fell behind in the mid game and never closed the gap — ${oppTeamName} finished it at ${endClock}.`;
   }
 
-  // ---- finish clause ----
-  let finish;
-  if (win) finish = surrendered ? `${oppTeamName} surrendered at ${endClock}` : `closed it out at ${endClock}`;
-  else finish = surrendered ? `surrendered at ${endClock}` : `${oppTeamName} closed it out at ${endClock}`;
-  const finishJoined = win || surrendered ? `, and ${finish}.` : `, before ${finish}.`;
+  // ---- 1v9 detection: a winner who cleared every carry bar gets a closing
+  // sentence. Bars are strict on purpose — this should stay rare enough to
+  // feel special (the Standouts card already handles ordinary MVPs) ----
+  const winners = gameData.info.participants.filter((p) => p.win);
+  const wTeamKills = winners.reduce((t, p) => t + p.kills, 0);
+  const wTeamDamage = winners.reduce((t, p) => t + p.totalDamageDealtToChampions, 0);
+  const carries = winners.filter((p) => {
+    const kda = (p.kills + p.assists) / Math.max(1, p.deaths);
+    const kp = wTeamKills > 0 ? (p.kills + p.assists) / wTeamKills : 0;
+    const dmgShare = wTeamDamage > 0 ? p.totalDamageDealtToChampions / wTeamDamage : 0;
+    return kda >= 6 && kp >= 0.65 && dmgShare >= 0.3;
+  });
+  let carry = null;
+  if (carries.length) {
+    const star = carries.reduce((a, b) => (b.totalDamageDealtToChampions > a.totalDamageDealtToChampions ? b : a));
+    const kp = Math.round(((star.kills + star.assists) / wTeamKills) * 100);
+    const dmgShare = Math.round((star.totalDamageDealtToChampions / wTeamDamage) * 100);
+    const starChamp = Object.values(champsJSON.data).find((c) => c.key === String(star.championId))?.name;
+    const starTeam = star.teamId === 100 ? 'Blue' : 'Purple';
+    const statLine = dmgShare >= 33
+      ? `${star.kills}/${star.deaths}/${star.assists} and ${dmgShare}% of ${starTeam}’s damage`
+      : `${star.kills}/${star.deaths}/${star.assists} with ${kp}% kill participation`;
+    const starLink = (
+      <SummonerName participant={star} version={dataDragonVersion} platformId={gameData.info.platformId} className="ms-name">
+        {star.riotIdGameName}
+      </SummonerName>
+    );
+    carry = star.puuid === playerData.puuid
+      ? <>{' '}{starLink} put the team on their back — {statLine}.</>
+      : star.teamId === viewerTeam
+        ? <>{' '}{starLink} ({starChamp}) carried it — {statLine}.</>
+        : <>{' '}{starLink} ({starChamp}) was the difference — {statLine}.</>;
+  }
 
   const lede = (
     <>
-      {teamName} {lanePhrase}
+      {laneOpen}
       {weave}
-      {' — '}{arc}
-      {finishJoined}
+      {'. '}
+      {arcSentence}
+      {carry}
     </>
   );
 
@@ -212,6 +288,7 @@ const generateMatchStory = (gameData, playerData, stats15, graphData, dataDragon
         gameData={gameData}
         champsJSON={champsJSON}
         dataDragonVersion={dataDragonVersion}
+        viewerTeam={viewerTeam}
         onClick={() => scrollTo(LANE_ANCHOR[r])}
       />
     );

@@ -4,9 +4,9 @@ import { setHoveredLane, useHoveredLane } from '../hooks/useLaneHover';
 import StyledTooltip from './StyledTooltip';
 
 // Hover card for the summary lane phrases/chips: a header naming the lane and
-// its verdict, then the winning side stacked above the losing side, each player
-// a ringed champ portrait + name/champion + their KDA and CS at 15.
-// BOTTOM is a 2v2 (two player rows per side).
+// its verdict, then the viewer's side stacked above the opponent's (losing
+// side dimmed), each player a ringed champ portrait + name/champion + their
+// KDA and CS at 15. BOTTOM is a 2v2 (two player rows per side).
 
 const TEAM_COLOR = { 100: '#568CFF', 200: '#A35BFF' };
 // lighter team tints for text on the dark tooltip surface
@@ -60,6 +60,8 @@ export default function LaneMatchupTooltip({
   // Pass false when another instance for the same role exists on the page
   // (e.g. the lede's lane phrase), or hovering one would open both.
   hoverSync = true,
+  // The viewed player's teamId — their side renders on top of the comparison.
+  viewerTeam = 100,
 }) {
   const lane = lanes?.[role];
   const platformId = gameData?.info?.platformId?.toLowerCase();
@@ -87,6 +89,12 @@ export default function LaneMatchupTooltip({
   const winners = [].concat(lane.laneWinner);
   const losers = [].concat(lane.laneLoser);
   const tied = lane.bubbleCount === 0;
+  // viewer's side on top regardless of who won; dim whichever side lost
+  const winnersAreViewer = (winners[0]?.teamId ?? 100) === viewerTeam;
+  const topSide = winnersAreViewer ? winners : losers;
+  const bottomSide = winnersAreViewer ? losers : winners;
+  const topLost = !tied && !winnersAreViewer;
+  const bottomLost = !tied && winnersAreViewer;
   // Tint the phrase with the winning team's color so it's clear at a glance
   // which team won the lane (neutral when the lane was even).
   const wonColor = tied ? undefined : TEAM_COLOR[lane.teamWonLane];
@@ -104,15 +112,15 @@ export default function LaneMatchupTooltip({
           </span>
         )}
       </span>
-      <span className="lmt-side">
-        {winners.map((p, i) => (
-          <PlayerRow key={`w${i}`} player={p} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} platformId={platformId} />
+      <span className={'lmt-side' + (topLost ? ' lmt-lost' : '')}>
+        {topSide.map((p, i) => (
+          <PlayerRow key={`t${i}`} player={p} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} platformId={platformId} />
         ))}
       </span>
       <span className="lmt-vs">vs</span>
-      <span className={'lmt-side' + (tied ? '' : ' lmt-lost')}>
-        {losers.map((p, i) => (
-          <PlayerRow key={`l${i}`} player={p} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} platformId={platformId} />
+      <span className={'lmt-side' + (bottomLost ? ' lmt-lost' : '')}>
+        {bottomSide.map((p, i) => (
+          <PlayerRow key={`b${i}`} player={p} champsJSON={champsJSON} dataDragonVersion={dataDragonVersion} platformId={platformId} />
         ))}
       </span>
     </span>
