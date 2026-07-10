@@ -287,6 +287,7 @@ function SummonerSearch() {
               value={dropdownDefaultValue}
               onChange={(event) => handleRegionChange(event)}
               MenuProps={{
+                disableScrollLock: true,
                 PaperProps: {
                   style: {
                     maxHeight: '50vh'

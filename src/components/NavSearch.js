@@ -128,7 +128,7 @@ export default function NavSearch({ dataDragonVersion, compact }) {
         }}
         value={dropdownDefaultValue}
         onChange={handleRegionChange}
-        MenuProps={{ PaperProps: { style: { maxHeight: '50vh' } } }}
+        MenuProps={{ disableScrollLock: true, PaperProps: { style: { maxHeight: '50vh' } } }}
       >
         {REGIONS.map(([value, label, aria]) => (
           <MenuItem key={value} value={value} aria-label={aria}>{label}</MenuItem>
@@ -188,6 +188,7 @@ export default function NavSearch({ dataDragonVersion, compact }) {
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
+        disableScrollLock
         onClose={() => setAnchorEl(null)}
         MenuListProps={{ 'aria-labelledby': 'basic-button' }}
       >
