@@ -47,14 +47,12 @@ function SplitBar({ label, leftSide, rightSide, left, right, fmt }) {
   const leftWin = left >= right;
   return (
     <div className="md-split">
+      <div className="md-split-label">{label}</div>
       <span className={`md-sv md-l md-t-${leftSide}` + (leftWin ? '' : ' md-dim')}>{f(left)}</span>
-      <div className="md-split-mid">
-        <div className="md-split-label">{label}</div>
-        <div className="md-bar">
-          <div className={`md-seg md-${leftSide}`} style={{ width: lp + '%' }} />
-          <div className="md-seg md-gap" />
-          <div className={`md-seg md-${rightSide}`} style={{ width: rp + '%' }} />
-        </div>
+      <div className="md-bar">
+        <div className={`md-seg md-${leftSide}`} style={{ width: lp + '%' }} />
+        <div className="md-seg md-gap" />
+        <div className={`md-seg md-${rightSide}`} style={{ width: rp + '%' }} />
       </div>
       <span className={`md-sv md-r md-t-${rightSide}` + (!leftWin ? '' : ' md-dim')}>{f(right)}</span>
     </div>

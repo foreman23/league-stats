@@ -6,10 +6,11 @@ import React from 'react';
 // is flipped against the (top-left origin) image.
 const MAP_MAX = 14870;
 
+// pins follow the acting team; gold only for unattributed events
 function pinColor(k) {
-  if (k.type === 'monster') return '#C9A227';
-  if (k.type === 'tower') return '#9AA1AD';
-  return k.side === 'blue' ? '#568CFF' : '#A35BFF';
+  if (k.side === 'blue') return '#568CFF';
+  if (k.side === 'purple') return '#A35BFF';
+  return '#C9A227';
 }
 
 export default function BattleMinimap({ kills, hoveredIndex, onHover }) {

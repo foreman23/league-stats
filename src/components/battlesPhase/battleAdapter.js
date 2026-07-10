@@ -23,6 +23,32 @@ function objectiveOf(fight) {
   return null;
 }
 
+// which team actually took the tagged objective, from the fight's own events
+// (majority when there were several, e.g. grubs; tie/unattributed -> null)
+const OBJ_EVENT = {
+  dragon: (ev) => ev.eventType === 'MONSTER_KILL' && (ev.monsterType || '').includes('DRAGON'),
+  herald: (ev) => ev.eventType === 'MONSTER_KILL' && (ev.monsterType || '').includes('HERALD'),
+  baron: (ev) => ev.eventType === 'MONSTER_KILL' && (ev.monsterType || '').includes('BARON'),
+  'void grubs': (ev) => ev.eventType === 'MONSTER_KILL' && (ev.monsterType || '').includes('GRUB'),
+  structures: (ev) => ev.eventType === 'BUILDING_DESTROY',
+};
+function objectiveTeamOf(objective, details) {
+  const match = OBJ_EVENT[objective];
+  if (!match) return null;
+  let blue = 0, purple = 0;
+  details.forEach((ev) => {
+    if (!match(ev)) return;
+    // buildings: ev.teamId is the losing owner, so the taker is the other team
+    const team = ev.eventType === 'BUILDING_DESTROY'
+      ? (ev.killer?.teamId ?? (ev.teamId === 100 ? 200 : 100))
+      : ev.killer?.teamId;
+    if (team === 100) blue += 1;
+    else if (team === 200) purple += 1;
+  });
+  if (blue === purple) return null;
+  return blue > purple ? 'blue' : 'purple';
+}
+
 // the lane/location word to emphasize in the title (if present)
 function locationOf(fight) {
   const loc = (fight.battleLocation || '').trim();
@@ -68,6 +94,7 @@ export function toBattleVM(fight, index, graphData) {
   const purpleKills = fight.redKills || 0;
   const series = goldSeries(fight, graphData);
   const goldSwing = Math.round(series[series.length - 1].diff);
+  const objective = objectiveOf(fight);
 
   return {
     id: index,
@@ -79,7 +106,8 @@ export function toBattleVM(fight, index, graphData) {
     title: fight.battleName || 'Teamfight',
     location: locationOf(fight),
     firstBlood: (fight.battleName || '').toLowerCase().includes('first blood'),
-    objective: objectiveOf(fight),
+    objective,
+    objectiveTeam: objectiveTeamOf(objective, fight.details || []),
     summary: fight.battleDesc,
     goldSwing,
     kills: fight.details || [],

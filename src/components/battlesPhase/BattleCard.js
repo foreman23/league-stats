@@ -26,15 +26,22 @@ const fmtClock = (ms) =>
 
 // one event -> a map pin descriptor (position + color)
 function toMapKill(ev) {
-  if (ev.eventType === 'BUILDING_DESTROY') return { position: ev.position, type: 'tower', side: 'neutral' };
-  if (ev.eventType === 'MONSTER_KILL') return { position: ev.position, type: 'monster', side: 'neutral' };
+  if (ev.eventType === 'BUILDING_DESTROY') {
+    // ev.teamId is the team that LOST the building; the destroyer is the other
+    const side = ev.killer ? sideOfTeam(ev.killer.teamId) : sideOfTeam(ev.teamId === 100 ? 200 : 100);
+    return { position: ev.position, type: 'tower', side };
+  }
+  if (ev.eventType === 'MONSTER_KILL') {
+    return { position: ev.position, type: 'monster', side: ev.killer ? sideOfTeam(ev.killer.teamId) : 'neutral' };
+  }
   const side = ev.killer ? sideOfTeam(ev.killer.teamId) : sideOfTeam((ev.victim?.teamId) === 200 ? 100 : 200);
   return { position: ev.position, type: 'champ', side };
 }
+// pins/bubbles follow the acting team; gold only for unattributed events
 function pinColor(k) {
-  if (k.type === 'monster') return '#C9A227';
-  if (k.type === 'tower') return '#9AA1AD';
-  return k.side === 'blue' ? '#568CFF' : '#A35BFF';
+  if (k.side === 'blue') return '#568CFF';
+  if (k.side === 'purple') return '#A35BFF';
+  return '#C9A227';
 }
 
 // gold-swing chip text + which side is ahead
@@ -87,7 +94,8 @@ function BattleKill({ ev, i, mounted, ctx, hoveredIndex, onHover }) {
     const isTower = ev.buildingType === 'TOWER_BUILDING';
     mark = <img className="bcr-mark" src="/images/hammer.svg" alt="" />;
     rightAv = <Avatar src={`/images/monsterIcons/${isTower ? 'turret' : 'inhibitor'}_${ev.teamId === 100 ? 'blue' : 'red'}_square.webp`} ring="#9AA1AD" alt={isTower ? 'Tower' : 'Inhibitor'} />;
-    text = <>{killerName} <span className="bcr-verb">destroyed</span> <span className="bcr-obj-text">{isTower ? 'a tower' : 'an inhibitor'}</span></>;
+    // the building name reads in the losing team's color (ev.teamId = owner)
+    text = <>{killerName} <span className="bcr-verb">destroyed</span> <span className={'bcr-obj-text ' + (ev.teamId === 100 ? 'bcr-obj-blue' : 'bcr-obj-purple')}>{isTower ? 'a tower' : 'an inhibitor'}</span></>;
   } else {
     mark = <img className="bcr-mark" src="/images/bow.svg" alt="" />;
     rightAv = <Avatar src={`/images/monsterIcons/${ev.monsterType}.webp`} ring="#C9A227" alt={prettyEnum(ev.monsterType)} />;
@@ -113,7 +121,7 @@ const Chev = (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
 );
 
-function Header({ battle, viewerTeam }) {
+function Header({ battle, viewerTeam, hideGold }) {
   const { winner, blueKills, purpleKills, noContest } = battle;
   // score reads viewer's-team-first (colors still follow the actual teams)
   const score = viewerTeam === 200
@@ -148,13 +156,14 @@ function Header({ battle, viewerTeam }) {
         <span className="bcr-tags">
           {battle.firstBlood && <span className="bcr-tag bcr-fb"><span className="bcr-gd-diamond" />First blood</span>}
           {battle.objective && (
-            <span className={'bcr-tag bcr-objtag ' + (winner === 'blue' ? 'bcr-blue' : '')}>{battle.objective}</span>
+            // colored by the team that actually took the objective, not the fight winner
+            <span className={'bcr-tag bcr-objtag' + (battle.objectiveTeam ? ' bcr-' + battle.objectiveTeam : '')}>{battle.objective}</span>
           )}
           <span className="bcr-tag bcr-neutral">{totalKills} {totalKills === 1 ? 'kill' : 'kills'}</span>
         </span>
       </span>
       <span className="bcr-right">
-        <span className={'bcr-gd-chip bcr-' + chip.ahead}>{chip.txt}</span>
+        {!hideGold && <span className={'bcr-gd-chip bcr-' + chip.ahead}>{chip.txt}</span>}
         <span className="bcr-time">{battle.timeLabel}</span>
         <span className="bcr-chev">{Chev}</span>
       </span>
@@ -162,7 +171,7 @@ function Header({ battle, viewerTeam }) {
   );
 }
 
-export default function BattleCard({ battle, ctx, defaultOpen, focusSignal }) {
+export default function BattleCard({ battle, ctx, defaultOpen, focusSignal, hideGold }) {
   const [open, setOpen] = useState(!!defaultOpen);
   const [hovered, setHovered] = useState(null);
   const [dim, setDim] = useState(false);
@@ -212,7 +221,7 @@ export default function BattleCard({ battle, ctx, defaultOpen, focusSignal }) {
   return (
     <div ref={rootRef} className={`bcr-card bcr-win-${battle.winner}${open ? ' bcr-open' : ''}${dim ? ' bcr-dimmed' : ''}`}>
       <button className="bcr-head" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
-        <Header battle={battle} viewerTeam={ctx.viewerTeam} />
+        <Header battle={battle} viewerTeam={ctx.viewerTeam} hideGold={hideGold} />
       </button>
       <div className="bcr-panel" style={{ maxHeight: h === 'none' ? 'none' : h }}>
         <div className="bcr-body" ref={panelRef}>

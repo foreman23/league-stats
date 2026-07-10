@@ -3985,6 +3985,27 @@ li {
 /* ============================================================================
    Battles (BETA) — redesigned collapsible cards. All `bcr-` prefixed.
    ========================================================================== */
+/* Concurrent fights band — a slim label + left rail bracketing battles whose
+   timespans overlap (simultaneous fights on different parts of the map).
+   The child cards stay ordinary cards. */
+/* cards keep the same left margin as non-concurrent ones; the connecting
+   rail hangs just outside the left edge in the gutter */
+.bcr-band { position: relative; margin-bottom: 12px; }
+.bcr-band::before {
+    /* 28px = below the head label + the same 6px inset the bottom arm gets */
+    content: ''; position: absolute; left: -11px; top: 28px; bottom: 6px;
+    width: 9px;
+    border: 3px solid rgba(20, 23, 31, .16);
+    border-right: none;
+    border-radius: 7px 0 0 7px;
+}
+.bcr-band-head {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase;
+    color: #6B7280; margin: 0 0 8px;
+}
+.bcr-band .bcr-card:last-child { margin-bottom: 0; }
+
 .bcr-card, .bcr-card * { box-sizing: border-box; }
 .bcr-card {
     width: 100%;
@@ -4031,7 +4052,9 @@ li {
     letter-spacing: .5px; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; white-space: nowrap;
 }
 .bcr-tag.bcr-fb { color: #8A6D1F; background: #FBF4DE; border: 1px solid #EBD9A3; }
-.bcr-tag.bcr-objtag { color: #8A3FE6; background: #F6EFFF; border: 1px solid #E4D3FB; }
+/* base = neutral (objective taker unknown/split); team classes color it */
+.bcr-tag.bcr-objtag { color: #6B7280; background: #F4F5F7; border: 1px solid rgba(20, 23, 31, .09); }
+.bcr-tag.bcr-objtag.bcr-purple { color: #8A3FE6; background: #F6EFFF; border: 1px solid #E4D3FB; }
 .bcr-tag.bcr-objtag.bcr-blue { color: #0074B7; background: #EEF4FF; border: 1px solid #D4E4FF; }
 .bcr-tag.bcr-neutral { color: #6B7280; background: #F4F5F7; border: 1px solid rgba(20, 23, 31, .09); }
 .bcr-gd-diamond { width: 7px; height: 7px; background: currentColor; transform: rotate(45deg); opacity: .85; }
@@ -4099,6 +4122,9 @@ li {
 .bcr-verb { color: #6B7280; }
 .bcr-minion { font-weight: 700; color: #6B7280; }
 .bcr-obj-text { font-weight: 700; color: #8A6D1F; }
+/* destroyed buildings read in the losing team's color (monsters stay gold) */
+.bcr-obj-text.bcr-obj-blue { color: #0074B7; }
+.bcr-obj-text.bcr-obj-purple { color: #8A3FE6; }
 
 @media (max-width: 680px) {
     .bcr-grid { grid-template-columns: 1fr; gap: 18px; }
@@ -4228,16 +4254,21 @@ li {
 
 /* top stat split bars */
 .md-splits { display: flex; flex-direction: column; gap: 14px; margin: 18px 0 6px; }
-.md-split { display: grid; grid-template-columns: 92px 1fr 92px; align-items: center; gap: 14px; }
-.md-sv { font-size: 17px; font-weight: 700; letter-spacing: -.3px; font-variant-numeric: tabular-nums; }
-.md-sv.md-l { text-align: right; }
-.md-sv.md-r { text-align: left; }
+/* label on its own row above; values center against the bar row alone so
+   they sit on the bar's vertical axis */
+.md-split {
+    display: grid; grid-template-columns: 92px 1fr 92px;
+    grid-template-areas: '. label .' 'lv bar rv';
+    align-items: center; column-gap: 14px;
+}
+.md-sv { font-size: 17px; font-weight: 700; letter-spacing: -.3px; font-variant-numeric: tabular-nums; line-height: 1; }
+.md-sv.md-l { grid-area: lv; text-align: right; }
+.md-sv.md-r { grid-area: rv; text-align: left; }
 .md-sv.md-t-blue { color: #0074B7; }
 .md-sv.md-t-purple { color: #8A3FE6; }
 .md-sv.md-dim { color: #6B7280; font-weight: 600; }
-.md-split-mid { position: relative; }
-.md-split-label { text-align: center; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #6B7280; margin-bottom: 6px; }
-.md-bar { display: flex; height: 12px; border-radius: 7px; overflow: hidden; background: #E7E9EE; }
+.md-split-label { grid-area: label; text-align: center; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #6B7280; margin-bottom: 6px; }
+.md-bar { grid-area: bar; display: flex; height: 12px; border-radius: 7px; overflow: hidden; background: #E7E9EE; }
 .md-seg { height: 100%; transition: width 1s cubic-bezier(.22, 1, .36, 1); }
 .md-seg.md-blue { background: #568CFF; }
 .md-seg.md-purple { background: #A35BFF; }
@@ -4308,7 +4339,7 @@ li {
 
 @media (max-width: 680px) {
     .md-card { padding: 18px; }
-    .md-split { grid-template-columns: 64px 1fr 64px; gap: 8px; }
+    .md-split { grid-template-columns: 64px 1fr 64px; column-gap: 8px; }
     .md-sv { font-size: 14px; }
     .md-obj { grid-template-columns: 1fr 24px 96px 24px 1fr; gap: 6px; }
     .md-obj-head { grid-template-columns: 1fr 96px 1fr; }
