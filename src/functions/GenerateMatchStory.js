@@ -1,5 +1,6 @@
 import SummonerName from '../components/SummonerName';
 import LaneMatchupTooltip from '../components/LaneMatchupTooltip';
+import { focusLaneCard } from '../hooks/useLaneFocus';
 
 // The Match Summary story: a verdict headline, one tight lede paragraph, and a
 // row of storyline chips — replacing the old three-bullet template summary.
@@ -30,11 +31,6 @@ const fmtClock = (secs) => `${Math.floor(secs / 60)}:${String(Math.floor(secs % 
 const fmtGold = (g) => {
   const a = Math.abs(g);
   return a >= 1000 ? `${(a / 1000).toFixed(1)}k` : String(a);
-};
-
-const scrollTo = (id) => {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
 const generateMatchStory = (gameData, playerData, stats15, graphData, dataDragonVersion, champsJSON, timelineData) => {
@@ -143,7 +139,7 @@ const generateMatchStory = (gameData, playerData, stats15, graphData, dataDragon
         champsJSON={champsJSON}
         dataDragonVersion={dataDragonVersion}
         viewerTeam={viewerTeam}
-        onClick={() => scrollTo(LANE_ANCHOR[playerRole])}
+        onClick={() => focusLaneCard(LANE_ANCHOR[playerRole])}
         // the lane chip below covers this role in the hover store; without this
         // opt-out, hovering either one would open both tooltips
         hoverSync={false}
@@ -289,7 +285,7 @@ const generateMatchStory = (gameData, playerData, stats15, graphData, dataDragon
         champsJSON={champsJSON}
         dataDragonVersion={dataDragonVersion}
         viewerTeam={viewerTeam}
-        onClick={() => scrollTo(LANE_ANCHOR[r])}
+        onClick={() => focusLaneCard(LANE_ANCHOR[r])}
       />
     );
   });

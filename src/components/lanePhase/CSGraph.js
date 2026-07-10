@@ -19,6 +19,8 @@ export default function CSGraph({ lane }) {
     tag: p.tag,
     href: p.href,
     profilePic: p.profilePic,
+    portrait: p.portrait,
+    champ: p.champ,
     side: p.side,
     color: p.side === 'blue' ? '#568CFF' : '#A35BFF',
     finalColor: p.side === 'blue' ? '#0074B7' : '#8A3FE6',
@@ -186,6 +188,7 @@ export default function CSGraph({ lane }) {
         {series.map((s) => (
           <span key={s.key} className="lpr-lg2" style={{ color: s.finalColor }}>
             <span className={'lpr-ln' + (s.sup ? ' lpr-sup' : '')} />
+            <img className="lpr-lgic" src={s.portrait} alt={s.champ} />
             <StyledTooltip placement="top" disableInteractive title={<NameTip player={s} />}>
               <a className="lpr-csg-legend-name" href={s.href} style={{ color: 'inherit' }}>{s.name}</a>
             </StyledTooltip>

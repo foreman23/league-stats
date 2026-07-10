@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { goldLabel } from './laneAdapter';
 import CSGraph from './CSGraph';
 import LaneMinimap from './LaneMinimap';
 import StyledTooltip from '../StyledTooltip';
 import NameTip from './NameTip';
+import { useLaneFocusRequest } from '../../hooks/useLaneFocus';
 
 // Redesigned Laning Phase card — one parameterized component for all four lanes
 // (TOP/JUNGLE/MID 1v1, BOTTOM 2v2). Header (outcome headline + severity meter +
@@ -124,7 +125,7 @@ function PlayerRow({ player, sizeSm }) {
   const nameCls = player.side === 'blue' ? ' lpr-blue' : ' lpr-purple';
   return (
     <div className="lpr-player">
-      <Portrait player={player} size={sizeSm ? 'sm' : null} dim={player.lost} />
+      <Portrait player={player} size={sizeSm ? 'sm' : null} />
       <div className="lpr-pmeta">
         <StyledTooltip placement="top" disableInteractive title={<NameTip player={player} />}>
           <a className={'lpr-pname' + nameCls} href={player.href}>{player.name}</a>
@@ -246,21 +247,54 @@ function KillList({ kills, hoveredIndex, onHover }) {
   );
 }
 
+// Who's laning here — shown atop the kill feed so the tab identifies the
+// matchup even before (or without) any kills.
+function FeedWho({ lane }) {
+  const side = (arr) => arr.map((p) => <FeedActor key={p.participantId} actor={p} />);
+  // 2v2 bot lane: one row per duo so four names don't run together
+  if (lane.duo) {
+    return (
+      <div className="lpr-feed-who lpr-feed-who-duo">
+        <div className="lpr-feed-who-row">{side(lane.left)}</div>
+        <div className="lpr-feed-who-row">
+          <span className="lpr-feed-vs">vs</span>
+          {side(lane.right)}
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="lpr-feed-who">
+      {side(lane.left)}
+      <span className="lpr-feed-vs">vs</span>
+      {side(lane.right)}
+    </div>
+  );
+}
+
 // Kill-feed tab: the feed list beside a Summoner's Rift minimap, sharing a
 // single hovered-event index so the two stay cross-highlighted.
 function KillFeedPanel({ lane }) {
   const [hovered, setHovered] = useState(null);
   const kills = lane.kills;
   if (!kills.length) {
-    return <div className="lpr-feed-empty">No kills or objectives before 15:00 — a quiet, even lane.</div>;
+    return (
+      <>
+        <FeedWho lane={lane} />
+        <div className="lpr-feed-empty">No kills or objectives before 15:00 — a quiet, even lane.</div>
+      </>
+    );
   }
   return (
-    <div className="lpr-feed">
-      <div className="lpr-kf-main">
-        <KillList kills={kills} hoveredIndex={hovered} onHover={setHovered} />
+    <>
+      <FeedWho lane={lane} />
+      <div className="lpr-feed">
+        <div className="lpr-kf-main">
+          <KillList kills={kills} hoveredIndex={hovered} onHover={setHovered} />
+        </div>
+        <LaneMinimap kills={kills} hoveredIndex={hovered} onHover={setHovered} />
       </div>
-      <LaneMinimap kills={kills} hoveredIndex={hovered} onHover={setHovered} />
-    </div>
+    </>
   );
 }
 
@@ -367,9 +401,45 @@ export default function LaneCard({ lane }) {
     { id: 'graph', label: 'CS graph' },
   ];
   const [tab, setTab] = useState('summary');
+  const [dim, setDim] = useState(false);
+  const rootRef = useRef(null);
 
+  // A summary chip / slope-chart row requested this lane: darken instantly,
+  // scroll here, release the dim once the smooth scroll settles — the same
+  // interaction as the battle cards' Key Moment focus.
+  const focusReq = useLaneFocusRequest();
+  const focusSignal = focusReq && focusReq.anchor === lane.anchor ? focusReq.seq : null;
+  useEffect(() => {
+    if (focusSignal == null) return;
+    setDim(true);
+    const el = rootRef.current;
+    const t = setTimeout(() => el?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+
+    // watch the card's viewport position each frame until it stops moving; if
+    // no movement ever starts (already in place), release after a short beat
+    let raf = 0, started = false, stable = 0, last = null, done = false;
+    const release = () => { if (!done) { done = true; setDim(false); } };
+    const watch = () => {
+      const top = el ? el.getBoundingClientRect().top : 0;
+      if (last !== null) {
+        if (Math.abs(top - last) > 0.5) { started = true; stable = 0; }
+        else if (started) stable += 1;
+      }
+      last = top;
+      if (started && stable >= 6) return release();
+      raf = requestAnimationFrame(watch);
+    };
+    raf = requestAnimationFrame(watch);
+    const noMove = setTimeout(() => { if (!started) release(); }, 700);
+    const hardStop = setTimeout(release, 2500);
+    return () => { clearTimeout(t); clearTimeout(noMove); clearTimeout(hardStop); cancelAnimationFrame(raf); };
+  }, [focusSignal]);
+
+  // dim tint + edge accent are the VIEWER's verdict (green won / rose lost /
+  // gray draw), per the page's color grammar — leftTeam is the viewer's team
+  const winCls = draw ? ' lpr-drew-viewer' : lane.teamWonLane === lane.leftTeam ? ' lpr-won-viewer' : ' lpr-lost-viewer';
   return (
-    <div className={'lpr-lane-card' + (draw ? ' lpr-is-draw' : '')} id={lane.anchor}>
+    <div ref={rootRef} className={'lpr-lane-card' + (draw ? ' lpr-is-draw' : '') + winCls + (dim ? ' lpr-dimmed' : '')} id={lane.anchor}>
       <div className="lpr-card-head">
         <div className="lpr-headline-wrap">
           <Headline lane={lane} />
