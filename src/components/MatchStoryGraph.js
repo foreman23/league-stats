@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useId } from 'react';
 import StyledTooltip from './StyledTooltip';
 import { MOMENT_ICONS } from '../functions/GenerateMatchStory';
 import { focusBattleAt } from '../hooks/useBattleFocus';
@@ -27,8 +27,13 @@ const fmtGold = (g) => {
   return a >= 1000 ? `${(a / 1000).toFixed(1)}k` : String(a);
 };
 
-export default function MatchStoryGraph({ graphData, moments, viewerTeam = 100 }) {
+export default function MatchStoryGraph({ graphData, moments, viewerTeam = 100, hideHead = false }) {
   const oppTeam = viewerTeam === 100 ? 200 : 100;
+  // unique clip ids — the component renders more than once per page (summary
+  // + Gold Advantage card); shared ids would clip every instance to the first
+  const uid = useId().replace(/:/g, '');
+  const upId = `msg-up-${uid}`;
+  const dnId = `msg-dn-${uid}`;
   const wrapRef = useRef(null);
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [hover, setHover] = useState(null); // index into the series
@@ -102,8 +107,8 @@ export default function MatchStoryGraph({ graphData, moments, viewerTeam = 100 }
     svg = (
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Team gold lead over time">
         <defs>
-          <clipPath id="msg-up"><rect x="0" y="0" width={W} height={Y(0)} /></clipPath>
-          <clipPath id="msg-dn"><rect x="0" y={Y(0)} width={W} height={H - Y(0)} /></clipPath>
+          <clipPath id={upId}><rect x="0" y="0" width={W} height={Y(0)} /></clipPath>
+          <clipPath id={dnId}><rect x="0" y={Y(0)} width={W} height={H - Y(0)} /></clipPath>
         </defs>
         {yTicks.map((g) => (
           <g key={g}>
@@ -113,8 +118,8 @@ export default function MatchStoryGraph({ graphData, moments, viewerTeam = 100 }
             </text>
           </g>
         ))}
-        <path d={area} fill={TEAM_FILL[viewerTeam]} opacity=".8" clipPath="url(#msg-up)" />
-        <path d={area} fill={TEAM_FILL[oppTeam]} opacity=".8" clipPath="url(#msg-dn)" />
+        <path d={area} fill={TEAM_FILL[viewerTeam]} opacity=".8" clipPath={`url(#${upId})`} />
+        <path d={area} fill={TEAM_FILL[oppTeam]} opacity=".8" clipPath={`url(#${dnId})`} />
         <path d={line} fill="none" stroke={TEAM_LINE[viewerTeam]} strokeWidth="2" strokeLinejoin="round" />
         {xTicks.map((m) => (
           <text key={m} x={X(m)} y={H - 7} fontSize="9.5" fill="#9AA1AD" textAnchor="middle">
@@ -179,7 +184,7 @@ export default function MatchStoryGraph({ graphData, moments, viewerTeam = 100 }
 
   return (
     <div className="msg-root">
-      <div className="msg-head">Team Gold Lead</div>
+      {!hideHead && <div className="msg-head">Team Gold Lead</div>}
       <div className="msg-wrap" ref={wrapRef}>{svg}{tip}</div>
       <div className="msg-legend">
         <span><span className="msg-swatch" style={{ background: TEAM_FILL[viewerTeam] }} />{TEAM_WORD[viewerTeam]} ahead</span>
